@@ -2,11 +2,10 @@ from dataclasses import dataclass
 
 
 @dataclass
-class Chamado:
+class RespostaChamado:
+    id_resposta: int
     id_duvida: int
-    id_usuario_criador: str
-    id_administrador_responsavel: str
-    titulo: str
+    id_usuario: str
     descricao: str
     dataCriacao: str
     status: str
