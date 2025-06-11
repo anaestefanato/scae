@@ -23,7 +23,7 @@ OBTER_POR_ID = """
 SELECT 
 id_usuario, nome, email, senha, tipo_usuario 
 FROM usuario
-WHERE id = ?
+WHERE id_usuario = ?
 """ 
 
 ATUALIZAR = """
