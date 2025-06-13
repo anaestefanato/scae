@@ -32,7 +32,7 @@ WHERE id_usuario = ?
 
 ATUALIZAR = """
 UPDATE aluno
-SET cpf = ?, data_nascimento = ?, filiacao = ?, endereco = ?, nome_banco = ?, numero_conta_bancaria = ?, renda_familiar = ?, matricula = ?
+SET cpf = ?, data_nascimento = ?, filiacao = ?, endereco = ?, nome_banco = ?, numero_conta_bancaria = ?, renda_familiar = ?
 WHERE id_usuario = ?
 """
 
