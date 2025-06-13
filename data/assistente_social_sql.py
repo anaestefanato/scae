@@ -5,7 +5,7 @@ matricula TEXT NOT NULL)
 """
 
 INSERIR = """
-INSERT INTO usuario (nome, email, senha, tipo_usuario) 
+INSERT INTO assistente_social (matricula) 
 VALUES (?)
 """
 
