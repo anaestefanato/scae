@@ -1,4 +1,4 @@
-CREATE_TABLE = """
+CRIAR_TABELA = """
 CREATE TABLE IF NOT EXISTS auxilio_moradia (
 id_auxilio_moradia INTEGER FOREIGN KEY REFERENCES auxilio(id_auxilio) ON DELETE CASCADE,
 url_CompResidenciaFixa TEXT NOT NULL,
@@ -17,6 +17,13 @@ SELECT
 id_auxilio_moradia, url_CompResidenciaFixa, url_CompResidenciaAlugada, url_ContratoAluguelCidCampus, url_ContratoAluguelCidNatal
 FROM auxilio_moradia
 ORDER BY id_auxilio_moradia
+"""
+
+OBTER_POR_ID = """
+SELECT
+id_auxilio_moradia, url_CompResidenciaFixa, url_CompResidenciaAlugada, url_ContratoAluguelCidCampus, url_ContratoAluguelCidNatal
+FROM auxilio_moradia
+WHERE id_auxilio_moradia = ?
 """
 
 ATUALIZAR = """

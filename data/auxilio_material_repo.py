@@ -1,6 +1,6 @@
 from typing import Optional
-from data.administrador_model import Administrador
-from data.administrador_sql import *
+from data.auxilio_material_model import AuxilioMaterial
+from data.auxilio_material_sql import *
 from data.util import get_connection
 
 def criar_tabela() -> bool:
@@ -9,41 +9,36 @@ def criar_tabela() -> bool:
         cursor.execute(CRIAR_TABELA)
         return cursor.rowcount > 0
 
-def inserir(administrador: Administrador) -> Optional[int]:
+def inserir(auxilioMaterial: AuxilioMaterial) -> Optional[int]:
     with get_connection() as conn:
         cursor = conn.cursor()
-        cursor.execute(INSERIR, (
-            administrador.id_usuario, 
-            administrador.matricula))
+        cursor.execute(INSERIR, (auxilioMaterial.id_auxilio_alimentacao,))
         return cursor.lastrowid
 
-def obter_todos() -> list[Administrador]:
+def obter_todos() -> list[AuxilioMaterial]:
     with get_connection() as conn:
         cursor = conn.cursor()
         cursor.execute(OBTER_TODOS)
         rows = cursor.fetchall()
-        administradores = [
-            Administrador(
-                id_usuario=row["id_usuario"], 
-                matricula=row["matricula"])
+        auxilios = [
+            AuxilioMaterial(id_auxilio_material=row["id_auxilio_material"])
             for row in rows]
-        return administradores
+        return auxilios
 
-def obter_por_id(self, id: int) -> Optional[Administrador]:
+def obter_por_id(self, id: int) -> Optional[AuxilioMaterial]:
     with self._connect() as conn:
         cursor = conn.cursor()
         cursor.execute(OBTER_POR_ID, (id,))
         row = cursor.fetchone()
         if row:
-            return Administrador(**row)
+            return AuxilioMaterial(**row)
         return None
     
-def atualizar(self, administrador: Administrador) -> bool:
+def atualizar(self, auxilioMaterial: AuxilioMaterial) -> bool:
     with self._connect() as conn:
         cursor = conn.cursor()
         cursor.execute(ATUALIZAR, (
-            administrador.matricula, 
-            administrador.id_usuario))
+            auxilioMaterial.id_auxilio_material,))
         return cursor.rowcount > 0
     
 def excluir(self, id: int) -> bool:

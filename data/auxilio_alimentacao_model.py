@@ -2,5 +2,5 @@ from dataclasses import dataclass
 
 
 @dataclass
-class AuxilioAlimentacao:
+class AuxilioMaterial:
     id_auxilio: int

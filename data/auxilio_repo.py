@@ -1,6 +1,6 @@
 from typing import Optional
-from data.administrador_model import Administrador
-from data.administrador_sql import *
+from data.auxilio_model import Auxilio
+from data.auxilio_sql import *
 from data.util import get_connection
 
 def criar_tabela() -> bool:
@@ -9,41 +9,52 @@ def criar_tabela() -> bool:
         cursor.execute(CRIAR_TABELA)
         return cursor.rowcount > 0
 
-def inserir(administrador: Administrador) -> Optional[int]:
+def inserir(auxilio: Auxilio) -> Optional[int]:
     with get_connection() as conn:
         cursor = conn.cursor()
         cursor.execute(INSERIR, (
-            administrador.id_usuario, 
-            administrador.matricula))
+            auxilio.id_auxilio,
+            auxilio.tipo_auxilio,
+            auxilio.descricao,
+            auxilio.valor,
+            auxilio.data_inicio,
+            auxilio.data_fim))
         return cursor.lastrowid
-
-def obter_todos() -> list[Administrador]:
+    
+def obter_todos() -> list[Auxilio]:
     with get_connection() as conn:
         cursor = conn.cursor()
         cursor.execute(OBTER_TODOS)
         rows = cursor.fetchall()
-        administradores = [
-            Administrador(
-                id_usuario=row["id_usuario"], 
-                matricula=row["matricula"])
+        auxilios = [
+            Auxilio(id_auxilio=row["id_auxilio"],
+                   tipo_auxilio=row["tipo_auxilio"],
+                   descricao=row["descricao"],
+                   valor=row["valor"],
+                   data_inicio=row["data_inicio"],
+                   data_fim=row["data_fim"])
             for row in rows]
-        return administradores
+        return auxilios
 
-def obter_por_id(self, id: int) -> Optional[Administrador]:
+def obter_por_id(self, id: int) -> Optional[Auxilio]:
     with self._connect() as conn:
         cursor = conn.cursor()
         cursor.execute(OBTER_POR_ID, (id,))
         row = cursor.fetchone()
         if row:
-            return Administrador(**row)
+            return Auxilio(**row)
         return None
     
-def atualizar(self, administrador: Administrador) -> bool:
+def atualizar(self, auxilio: Auxilio) -> bool:
     with self._connect() as conn:
         cursor = conn.cursor()
         cursor.execute(ATUALIZAR, (
-            administrador.matricula, 
-            administrador.id_usuario))
+            auxilio.tipo_auxilio,
+            auxilio.descricao,
+            auxilio.valor,
+            auxilio.data_inicio,
+            auxilio.data_fim,
+            auxilio.id_auxilio))
         return cursor.rowcount > 0
     
 def excluir(self, id: int) -> bool:
