@@ -31,7 +31,7 @@ WHERE id_duvida = ?
 
 ATUALIZAR = """
 UPDATE duvida_edital
-SET pergunta = ?, resposta = ?, data_pergunta = ?, data_resposta = ?, status = ?
+SET pergunta = ?, resposta = ?, status = ?
 WHERE id_duvida = ?
 """
 

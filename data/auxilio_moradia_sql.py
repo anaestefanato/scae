@@ -28,7 +28,7 @@ WHERE id_auxilio_moradia = ?
 
 ATUALIZAR = """
 UPDATE auxilio_moradia
-SET id_auxilio_moradia = ?, url_CompResidenciaFixa = ?, url_CompResidenciaAlugada = ?, url_ContratoAluguelCidCampus = ?, url_ContratoAluguelCidNatal = ?
+SET url_CompResidenciaFixa = ?, url_CompResidenciaAlugada = ?, url_ContratoAluguelCidCampus = ?, url_ContratoAluguelCidNatal = ?
 WHERE id_auxilio_moradia = ?
 """
 

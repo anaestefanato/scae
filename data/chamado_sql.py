@@ -30,7 +30,7 @@ WHERE id_duvida = ?
 
 ATUALIZAR = """
 UPDATE chamado
-SET titulo = ?, descricao = ?, data_criacao = ?, status = ?
+SET titulo = ?, descricao = ?, status = ?
 WHERE id_duvida = ?
 """
 

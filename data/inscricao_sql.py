@@ -31,7 +31,7 @@ WHERE id_inscricao = ?
 
 ATUALIZAR = """
 UPDATE inscricao
-SET data_inscricao = ?, status = ?, url_Documento_Identificacao = ?, urlDeclaracaoRenda = ?, url_Termo_Responsabilidade = ?
+SET status = ?, url_Documento_Identificacao = ?, urlDeclaracaoRenda = ?, url_Termo_Responsabilidade = ?
 WHERE id_inscricao = ?
 """
 

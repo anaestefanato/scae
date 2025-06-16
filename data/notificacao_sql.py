@@ -28,7 +28,7 @@ WHERE id_notificacao = ?
 
 ATUALIZAR = """
 UPDATE notificacao
-SET titulo = ?, data_envio = ?, tipo = ?
+SET titulo = ?, tipo = ?
 WHERE id_notificacao = ?
 """
 

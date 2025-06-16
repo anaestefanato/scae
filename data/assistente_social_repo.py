@@ -42,8 +42,7 @@ def atualizar(self, assistenteSocial: AssistenteSocial) -> bool:
     with self._connect() as conn:
         cursor = conn.cursor()
         cursor.execute(ATUALIZAR, (
-            assistenteSocial.matricula, 
-            assistenteSocial.id_usuario))
+            assistenteSocial.matricula))
         return cursor.rowcount > 0
     
 def excluir(self, id: int) -> bool:

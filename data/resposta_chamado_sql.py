@@ -1,5 +1,5 @@
 CRIAR_TABELA = """
-CRATE TABLE IF NOT EXISTS resposta_chamado (
+CREATE TABLE IF NOT EXISTS resposta_chamado (
 id_resposta_chamado INTEGER PRIMARY KEY AUTOINCREMENT,
 id_chamado INTEGER FOREIGN KEY REFERENCES chamado(id_duvida) ON DELETE CASCADE,
 id_usuario_autor INTEGER FOREIGN KEY REFERENCES usuario(id_usuario) ON DELETE CASCADE,
@@ -28,7 +28,7 @@ WHERE id_resposta_chamado = ?
 
 ATUALIZAR = """
 UPDATE resposta_chamado
-SET mensagem = ?, data_resposta = ?
+SET mensagem = ?
 WHERE id_resposta_chamado = ?
 """
 

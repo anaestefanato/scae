@@ -47,7 +47,6 @@ def atualizar(self, auxilioMoradia: AuxilioMoradia) -> bool:
     with self._connect() as conn:
         cursor = conn.cursor()
         cursor.execute(ATUALIZAR, (
-            auxilioMoradia.id_auxilio_moradia,
             auxilioMoradia.urlCompResidenciaAlugada,
             auxilioMoradia.urlComprovanteResidenciaFixa,
             auxilioMoradia.urlContratoAluguelCidCampus,

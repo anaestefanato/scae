@@ -1,6 +1,6 @@
 from typing import Optional
-from data.chamado_model import Chamado
-from data.chamado_sql import *
+from data.edital_model import Edital
+from data.edital_sql import *
 from data.util import get_connection
 
 def criar_tabela() -> bool:
@@ -9,57 +9,58 @@ def criar_tabela() -> bool:
         cursor.execute(CRIAR_TABELA)
         return cursor.rowcount > 0
 
-def inserir(chamado: Chamado) -> Optional[int]:
+def inserir(edital: Edital) -> Optional[int]:
     with get_connection() as conn:
         cursor = conn.cursor()
         cursor.execute(INSERIR, (
-            chamado.id_duvida,
-            chamado.id_usuario_criador,
-            chamado.id_administrador_responsavel,
-            chamado.titulo,
-            chamado.descricao,
-            chamado.data_criacao,
-            chamado.status))
+            edital.id_edital,
+            edital.titulo,
+            edital.descricao,
+            edital.resposta,
+            edital.data_publicacao,
+            edital.data_encerramento,
+            edital.arquivo,
+            edital.status))
         return cursor.lastrowid
 
-def obter_todos() -> list[Chamado]:
+def obter_todos() -> list[Edital]:
     with get_connection() as conn:
         cursor = conn.cursor()
         cursor.execute(OBTER_TODOS)
         rows = cursor.fetchall()
-        chamados = [
-            Chamado(
-                id_duvida=row["id_duvida"],
-                id_usuario_criador=row["id_usuario_criador"],
-                id_administrador_responsavel=row["id_administrador_responsavel"],
+        editais = [
+            Edital(
+                id_edital=row["id_edital"],
                 titulo=row["titulo"],
                 descricao=row["descricao"],
-                data_criacao=row["data_criacao"],
+                data_publicacao=row["data_publicacao"],
+                data_encerramento=row["data_encerramento"],
+                arquivo=row["arquivo"],
                 status=row["status"])
             for row in rows]
-        return chamados
+        return editais
 
-def obter_por_id(id: int) -> Optional[Chamado]:
+def obter_por_id(id: int) -> Optional[Edital]:
     with get_connection() as conn:
         cursor = conn.cursor()
         cursor.execute(OBTER_POR_ID, (id,))
         row = cursor.fetchone()
         if row:
-            chamado = Chamado(
-                id_duvida=row["id_duvida"],
-                id_usuario_criador=row["id_usuario_criador"],
-                id_administrador_responsavel=row["id_administrador_responsavel"],
+            edital = Edital(
+                id_edital=row["id_edital"],
                 titulo=row["titulo"],
                 descricao=row["descricao"],
-                data_criacao=row["data_criacao"],
+                data_publicacao=row["data_publicacao"],
+                data_encerramento=row["data_encerramento"],
+                arquivo=row["arquivo"],
                 status=row["status"])
-            return chamado
+            return edital
         return None
 
-def atualizar(self, chamado: Chamado) -> bool:
+def atualizar(self, edital: Edital) -> bool:
     with self._connect() as conn:
         cursor = conn.cursor()
-        cursor.execute(ATUALIZAR, (chamado.titulo, chamado.descricao, chamado.status))
+        cursor.execute(ATUALIZAR, (edital.titulo, edital.descricao, edital.data_encerramento, edital.arquivo, edital.status))
         return cursor.rowcount > 0
 
 def excluir(self, id: int) -> bool:

@@ -30,7 +30,7 @@ WHERE id_edital = ?
 
 ATUALIZAR = """
 UPDATE edital
-SET titulo = ?, descricao = ?, data_publicacao = ?, data_encerramento = ?, arquivo = ?, status = ?
+SET titulo = ?, descricao = ?, data_encerramento = ?, arquivo = ?, status = ?
 WHERE id_edital = ?
 """
 

@@ -30,6 +30,10 @@ WHERE id_recurso = ?
 
 ATUALIZAR = """
 UPDATE recurso
-SET descricao = ?, data_envio = ?, data_resposta = ?, status = ?
+SET descricao = ?, status = ?
+WHERE id_recurso = ?
+"""
+EXCLUIR = """
+DELETE FROM recurso
 WHERE id_recurso = ?
 """

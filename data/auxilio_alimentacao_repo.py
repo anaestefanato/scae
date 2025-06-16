@@ -1,5 +1,5 @@
 from typing import Optional
-from data.auxilio_alimentacao_model import AuxilioMaterial
+from data.auxilio_alimentacao_model import AuxilioAlimentacao
 from data.auxilio_alimentacao_sql import *
 from data.util import get_connection
 
@@ -9,32 +9,32 @@ def criar_tabela() -> bool:
         cursor.execute(CRIAR_TABELA)
         return cursor.rowcount > 0
 
-def inserir(auxilioAlimentacao: AuxilioMaterial) -> Optional[int]:
+def inserir(auxilioAlimentacao: AuxilioAlimentacao) -> Optional[int]:
     with get_connection() as conn:
         cursor = conn.cursor()
         cursor.execute(INSERIR, (auxilioAlimentacao.id_auxilio_alimentacao,))
         return cursor.lastrowid
 
-def obter_todos() -> list[AuxilioMaterial]:
+def obter_todos() -> list[AuxilioAlimentacao]:
     with get_connection() as conn:
         cursor = conn.cursor()
         cursor.execute(OBTER_TODOS)
         rows = cursor.fetchall()
         auxilios = [
-            AuxilioMaterial(id_auxilio_alimentacao=row["id_auxilio_alimentacao"])
+            AuxilioAlimentacao(id_auxilio_alimentacao=row["id_auxilio_alimentacao"])
             for row in rows]
         return auxilios
 
-def obter_por_id(self, id: int) -> Optional[AuxilioMaterial]:
+def obter_por_id(self, id: int) -> Optional[AuxilioAlimentacao]:
     with self._connect() as conn:
         cursor = conn.cursor()
         cursor.execute(OBTER_POR_ID, (id,))
         row = cursor.fetchone()
         if row:
-            return AuxilioMaterial(**row)
+            return AuxilioAlimentacao(**row)
         return None
-    
-def atualizar(self, auxilioAlimentacao: AuxilioMaterial) -> bool:
+
+def atualizar(self, auxilioAlimentacao: AuxilioAlimentacao) -> bool:
     with self._connect() as conn:
         cursor = conn.cursor()
         cursor.execute(ATUALIZAR, (

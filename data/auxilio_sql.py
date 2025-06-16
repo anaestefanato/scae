@@ -31,7 +31,7 @@ WHERE id_auxilio = ?
 
 ATUALIZAR = """
 UPDATE auxilio
-SET id_edital = descricao = ?, valor_mensal = ?, data_inicio = ?, data_fim = ?, tipo_auxilio = ?
+SET descricao = ?, valor_mensal = ?, data_fim = ?, tipo_auxilio = ?
 WHERE id_auxilio = ?
 """
 

@@ -1,8 +1,10 @@
 from dataclasses import dataclass
 
+from data.usuario_model import Usuario
+
 
 @dataclass
-class Aluno:
+class Aluno(Usuario):
     id_usuario: int
     cpf: str
     data_nascimento: str

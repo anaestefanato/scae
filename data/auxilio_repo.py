@@ -52,9 +52,7 @@ def atualizar(self, auxilio: Auxilio) -> bool:
             auxilio.tipo_auxilio,
             auxilio.descricao,
             auxilio.valor,
-            auxilio.data_inicio,
-            auxilio.data_fim,
-            auxilio.id_auxilio))
+            auxilio.data_fim))
         return cursor.rowcount > 0
     
 def excluir(self, id: int) -> bool:
