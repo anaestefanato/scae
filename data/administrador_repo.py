@@ -1,5 +1,5 @@
 from typing import Optional
-from data.administrador_model import Produto
+from data.administrador_model import Administrador
 from data.administrador_sql import *
 from data.util import get_connection
 
@@ -9,42 +9,34 @@ def criar_tabela() -> bool:
         cursor.execute(CRIAR_TABELA)
         return cursor.rowcount > 0
 
-def inserir(produto: Produto) -> Optional[int]:
+def inserir(administrador: Administrador) -> Optional[int]:
     with get_connection() as conn:
         cursor = conn.cursor()
         cursor.execute(INSERIR, (
-            produto.nome, 
-            produto.descricao, 
-            produto.preco, 
-            produto.quantidade))
+            administrador.id_usuario, 
+            administrador.matricula))
         return cursor.lastrowid
 
-def obter_todos() -> list[Produto]:
+def obter_todos() -> list[Administrador]:
     with get_connection() as conn:
         cursor = conn.cursor()
         cursor.execute(OBTER_TODOS)
         rows = cursor.fetchall()
-        produtos = [
-            Produto(
-                id=row["id"], 
-                nome=row["nome"], 
-                descricao=row["descricao"], 
-                preco=row["preco"], 
-                quantidade=row["quantidade"])
+        administradores = [
+            Administrador(
+                id_usuario=row["id_usuario"], 
+                matricula=row["matricula"])
             for row in rows]
-        return produtos
-    
+        return administradores
 
-
-def obter_por_id(id: int) -> Optional[Produto]:
+def obter_por_id(id: int) -> Optional[Administrador]:
     with get_connection() as conn:
         cursor = conn.cursor()
         cursor.execute(OBTER_POR_ID, (id,))
         row = cursor.fetchone()
-        produto = Produto(
+        administrador = Administrador(
             id=row["id"],
             nome=row["nome"],
-            descricao=row["descricao"],
-            preco=row["preco"],
-            quantidade=row["quantidade"])
-        return produto
+            email=row["email"],
+            senha=row["senha"])
+        return administrador
