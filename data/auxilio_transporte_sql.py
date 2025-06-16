@@ -7,8 +7,8 @@ url_CompTransporte TEXT NOT NULL
 """
 
 INSERIR = """
-INSERT INTO auxilio_transporte (id_auxilio_transporte, url_CompResidencia, url_CompTransporte)
-VALUES (?)
+INSERT INTO auxilio_transporte (url_CompResidencia, url_CompTransporte)
+VALUES (?, ?)
 """
 
 OBTER_TODOS = """
