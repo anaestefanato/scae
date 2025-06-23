@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>SCAE - Acesso ao sistema</title>
+        <!-- Bootstrap CSS -->
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+        <!-- Bootstrap Icons -->
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+        <!-- Google Fonts -->
+        <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+        <link rel="icon" type="image/png" href="logo.png">
+        <!-- Custom CSS -->
+        <link rel="stylesheet" href="styles.css">
+    </head>
+    <body>
+        <!-- Navbar -->
+        <nav class="navbar navbar-expand-lg navbar-light bg-white fixed-top shadow-sm">
+            <div class="container">
+                <a class="" href="#">
+                    <img
+                        src="cor.png"
+                        alt="Logo SisAssist"
+                        height="55"
+                        class="me-2"
+                    >
+                </a>
+                <button
+                    class="navbar-toggler"
+                    type="button"
+                    data-bs-toggle="offcanvas"
+                    data-bs-target="#navbarOffcanvas"
+                    aria-controls="navbarOffcanvas"
+                    aria-expanded="false"
+                    aria-label="Toggle navigation"
+                >
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div
+                    class="offcanvas offcanvas-end"
+                    tabindex="-1"
+                    id="navbarOffcanvas"
+                    aria-labelledby="navbarOffcanvasLabel"
+                >
+                    <div class="offcanvas-header">
+                        <h5 class="offcanvas-title" id="navbarOffcanvasLabel">Menu</h5>
+                        <button
+                            type="button"
+                            class="btn-close text-reset"
+                            data-bs-dismiss="offcanvas"
+                            aria-label="Close"
+                        ></button>
+                    </div>
+                    <div class="offcanvas-body">
+                        <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+                            <li class="nav-item">
+                                <a class="nav-link active" aria-current="page" href="#">Início</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="#">Sobre</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="#">Contato</a>
+                            </li>
+                            <li class="nav-item ms-lg-3">
+                                <a class="btn btn-success rounded-pill px-4" href="../../login/login.html">
+                                    <i class="bi bi-box-arrow-in-right me-1"></i>
+                                    Login
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </nav>
+        <!-- Hero Section -->
+        <section class="hero py-5">
+            <div class="container py-5">
+                <div class="row align-items-center">
+                    <div class="col-lg-6 mb- mb-lg-0">
+                        <h1 class="display-4 fw-bold mb-3">Bem-vindo ao Sistema de Controle da
+                            <span class="text-success">Assistência Estudantil</span>
+                        </h1>
+                        <p class="lead mb-4">Facilitando o acesso aos programas de assistência e acompanhamento do seu recebimento.</p>
+                        <div class="d-grid gap-3 d-sm-flex">
+                            <a href="../../login/login.html" class="btn btn-success btn-lg px-4 rounded-pill">
+                                <i class="bi bi-person-check me-2"></i>
+                                Acessar Sistema
+                            </a>
+                            <a href="#" class="btn btn-outline-success btn-lg px-4 rounded-pill">
+                                <i class="bi bi-info-circle me-2"></i>
+                                Saiba Mais
+                            </a>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="text-center text-lg-end">
+                            <img src="logo.png" alt="Logo" class="logo-rotativa" width="600"/>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="hero-wave">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320">
+                    <path fill="#ffffff" fill-opacity="1" d="M0,160L60,149.3C120,139,240,117,360,106.7C480,96,600,96,720,106.7C840,117,960,139,1080,138.7C1200,139,1320,117,1380,106.7L1440,96L1440,320L1380,320C1320,320,1200,320,1080,320C960,320,840,320,720,320C600,320,480,320,360,320C240,320,120,320,60,320L0,320Z"></path>
+                </svg>
+            </div>
+        </section>
+        <!-- Benefits Section -->
+        <section class="benefits bg-suave-verde py-5">
+        <div class="container py-4">
+            <div class="row text-center mb-5">
+                <div class="col-lg-8 mx-auto">
+                    <h2 class="fw-bold">Benefícios do Sistema</h2>
+                    <p class="lead text-muted">Conheça as vantagens de utilizar nossa plataforma</p>
+                </div>
+            </div>
+            <div class="row g-4">
+                <div class="col-md-6 col-lg-3">
+                    <div class="card h-100 border-0 shadow-sm">
+                        <div class="card-body text-center p-4">
+                            <div class="feature-icon bg-success bg-gradient text-white mb-3">
+                                <i class="bi bi-graph-up"></i>
+                            </div>
+                            <h5 class="card-title">Acompanhamento Acadêmico</h5>
+                            <p class="card-text">Monitore suas inscrições e receba orientações personalizadas.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 col-lg-3">
+                    <div class="card h-100 border-0 shadow-sm">
+                        <div class="card-body text-center p-4">
+                            <div class="feature-icon bg-success bg-gradient text-white mb-3">
+                                <i class="bi bi-calendar-check"></i>
+                            </div>
+                            <h5 class="card-title">Gestão de Benefícios</h5>
+                            <p class="card-text">Acesse e confirme mensalmente todos os seus auxílios em um só lugar.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 col-lg-3">
+                    <div class="card h-100 border-0 shadow-sm">
+                        <div class="card-body text-center p-4">
+                            <div class="feature-icon bg-success bg-gradient text-white mb-3">
+                                <i class="bi bi-chat-dots"></i>
+                            </div>
+                            <h5 class="card-title">Comunicação Direta</h5>
+                            <p class="card-text">Canal direto com toda equipe da Assistência para tirar dúvidas.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 col-lg-3">
+                    <div class="card h-100 border-0 shadow-sm">
+                        <div class="card-body text-center p-4">
+                            <div class="feature-icon bg-success bg-gradient text-white mb-3">
+                                <i class="bi bi-file-earmark-text"></i>
+                            </div>
+                            <h5 class="card-title">Documentação Digital</h5>
+                            <p class="card-text">Envie e acompanhe os documentos necessários sem precisar se deslocar.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+        <!-- Access Section -->
+         <section class="access py-5 bg-tertiary">
+        <div class="container py-4">
+            <div class="row text-center mb-5">
+                <div class="col-lg-8 mx-auto">
+                    <h2 class="fw-bold section-title-underline">Acesso Rápido</h2>
+                </div>
+            </div>
+            <div class="row justify-content-center g-4">
+                <!-- Card de Login -->
+                <div class="col-md-6 col-lg-4">
+                    <div class="card h-100 border-0 shadow-sm text-center p-4">
+                        <div class="card-body">
+                            <div class="access-icon mb-3">
+                                <i class="bi bi-box-arrow-in-right"></i>
+                            </div>
+                            <h5 class="card-title fw-bold">Login</h5>
+                            <p class="card-text text-muted mb-4">Já possui cadastro? Acesse o sistema com suas credenciais.</p>
+                            <a href="../../login/login.html" class="btn btn-success w-100">Fazer Login</a>
+                        </div>
+                    </div>
+                </div>
+                <!-- Card de Cadastro -->
+                <div class="col-md-6 col-lg-4">
+                    <div class="card h-100 border-0 shadow-sm text-center p-4">
+                        <div class="card-body">
+                            <div class="access-icon mb-3">
+                                <i class="bi bi-person-plus"></i>
+                            </div>
+                            <h5 class="card-title fw-bold">Cadastre-se</h5>
+                            <p class="card-text text-muted mb-4">Novo por aqui? Crie sua conta para acessar todos os recursos.</p>
+                            <a href="../../cadastro/cadastro.html" class="btn btn-success w-100">Cadastrar</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+        <!-- Testimonials Section -->
+        <section class="testimonials bg-light py-5">
+            <div class="container py-4">
+                <div class="row text-center mb-5">
+                    <div class="col-lg-8 mx-auto">
+                        <h2 class="fw-bold">O que dizem nossos usuários</h2>
+                        <p class="lead text-muted">Depoimentos de estudantes que utilizam o sistema</p>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-12">
+                        <div id="testimonialCarousel" class="carousel slide" data-bs-ride="carousel">
+                            <div class="carousel-inner">
+                                <div class="carousel-item active">
+                                    <div class="card border-0 shadow-sm mx-auto" style="max-width: 700px;">
+                                        <div class="card-body p-4 p-md-5">
+                                            <div class="d-flex justify-content-center mb-4">
+                                                <div class="testimonial-avatar">
+                                                    <i class="bi bi-person-circle display-4 text-success"></i>
+                                                </div>
+                                            </div>
+                                            <blockquote class="blockquote text-center mb-4">
+                                                <p>"O sistema facilitou muito o acompanhamento dos meus auxílios e sinto que tornou até os pagamentos mais rápidos. A interface é intuitiva e consigo encontrar tudo o que preciso rapidamente."</p>
+                                            </blockquote>
+                                            <div class="text-center">
+                                                <h5 class="fw-bold mb-1">Maria Silva</h5>
+                                                <p class="text-muted mb-0">Estudante de Engenharia de Minas</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="carousel-item">
+                                    <div class="card border-0 shadow-sm mx-auto" style="max-width: 700px;">
+                                        <div class="card-body p-4 p-md-5">
+                                            <div class="d-flex justify-content-center mb-4">
+                                                <div class="testimonial-avatar">
+                                                    <i class="bi bi-person-circle display-4 text-success"></i>
+                                                </div>
+                                            </div>
+                                            <blockquote class="blockquote text-center mb-4">
+                                                <p>"Antes eu perdia muito tempo indo pessoalmente resolver questões relacionadas aos meus benefícios. Agora consigo fazer tudo online, de forma rápida e eficiente. Recomendo a todos os estudantes!"</p>
+                                            </blockquote>
+                                            <div class="text-center">
+                                                <h5 class="fw-bold mb-1">João Santos</h5>
+                                                <p class="text-muted mb-0">Estudante do Téc. Integrado em Informática</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="d-flex justify-content-center mt-4">
+                                <button
+                                    class="carousel-control-prev position-relative mx-2"
+                                    type="button"
+                                    data-bs-target="#testimonialCarousel"
+                                    data-bs-slide="prev"
+                                >
+                                    <span class="carousel-control-prev-icon bg-success rounded-circle" aria-hidden="true"></span>
+                                    <span class="visually-hidden">Anterior</span>
+                                </button>
+                                <button
+                                    class="carousel-control-next position-relative mx-2"
+                                    type="button"
+                                    data-bs-target="#testimonialCarousel"
+                                    data-bs-slide="next"
+                                >
+                                    <span class="carousel-control-next-icon bg-success rounded-circle" aria-hidden="true"></span>
+                                    <span class="visually-hidden">Próximo</span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section> 
+        <!-- Footer -->
+        <footer class="footer bg-dark text-white py-5">
+            <div class="container py-4">
+                <div class="row">
+                    <div class="col-lg-4 mb-4 mb-lg-0">
+                        <div class="d-flex align-items-center mb-3">
+                            <img
+                                src="p&b.png"
+                                alt="Logo SisAssist"
+                                height="120"
+                                class="me-2"
+                            >
+
+                        </div>
+                        <p class="mb-4">Sistema de Controle de Assistência Estudantil, facilitando o acesso aos programas de assistência e acompanhamento acadêmico.</p>
+                        <div class="d-flex gap-3">
+                            <a href="#" class="text-white social-icon">
+                                <i class="bi bi-facebook"></i>
+                            </a>
+                            <a href="#" class="text-white social-icon">
+                                <i class="bi bi-instagram"></i>
+                            </a>
+                            <a href="#" class="text-white social-icon">
+                                <i class="bi bi-twitter"></i>
+                            </a>
+                            <a href="#" class="text-white social-icon">
+                                <i class="bi bi-youtube"></i>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="col-md-4 col-lg-2 mb-4 mb-md-0">
+                        <h5 class="mb-3">Links Rápidos</h5>
+                        <ul class="list-unstyled">
+                            <li class="mb-2">
+                                <a href="#" class="text-white-50 text-decoration-none">Início</a>
+                            </li>
+                            <li class="mb-2">
+                                <a href="#" class="text-white-50 text-decoration-none">Sobre</a>
+                            </li>
+                            <li class="mb-2">
+                                <a href="#" class="text-white-50 text-decoration-none">Contato</a>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="col-md-4 col-lg-2 mb-4 mb-md-0">
+                        <h5 class="mb-3">Suporte</h5>
+                        <ul class="list-unstyled">
+                            <li class="mb-2">
+                                <a href="#" class="text-white-50 text-decoration-none">Ajuda</a>
+                            </li>
+                            <li class="mb-2">
+                                <a href="#" class="text-white-50 text-decoration-none">Termos de Uso</a>
+                            </li>
+                            <li class="mb-2">
+                                <a href="#" class="text-white-50 text-decoration-none">Privacidade</a>
+                            </li>
+                            <li class="mb-2">
+                                <a href="#" class="text-white-50 text-decoration-none">Acessibilidade</a>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="col-md-4 col-lg-4">
+                        <h5 class="mb-3">Receba Novidades</h5>
+                        <p class="mb-3 text-white-50">Inscreva-se para receber atualizações e novidades sobre o sistema.</p>
+                        <form>
+                            <div class="input-group mb-3">
+                                <input
+                                    type="email"
+                                    class="form-control"
+                                    placeholder="Seu email"
+                                    aria-label="Seu email"
+                                    aria-describedby="button-addon2"
+                                >
+                                <button class="btn btn-success" type="button" id="button-addon2">Inscrever</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                <hr class="my-4 bg-secondary">
+                <div class="row align-items-center">
+                    <div class="col-md-6 text-center text-md-start mb-3 mb-md-0">
+                        <p class="mb-0 text-white-50">&copy; 2025 Sistema de Controle de Assistência Estudantil. Todos os direitos reservados.</p>
+                    </div>
+                    <div class="col-md-6 text-center text-md-end">
+                        <a href="#" class="text-white-50 text-decoration-none me-3">Termos</a>
+                        <a href="#" class="text-white-50 text-decoration-none">Privacidade</a>
+                    </div>
+                </div>
+            </div>
+        </footer>
+        <!-- Bootstrap JS Bundle with Popper -->
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+        <!-- Custom JS -->
+        <script src="script.js"></script>
+    </body>
+</html>

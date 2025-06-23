@@ -1,0 +1,485 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SCAE - Dashboard Aluno</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+    <style>
+        :root {
+            --ifes-green: #2E7D32;
+            --ifes-red: #C62828;
+            --ifes-light-green: #4CAF50;
+            --ifes-light-gray: #f5f5f5;
+            --ifes-dark-gray: #333333;
+        }
+        
+        body {
+            background-color: var(--ifes-light-gray);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        .sidebar {
+            background-color: white;
+            height: 100vh;
+            position: fixed;
+            box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
+            width: 250px;
+            z-index: 1000;
+            transition: all 0.3s;
+            left: 0;
+        }
+        
+        .sidebar.collapsed {
+            left: -250px;
+        }
+        
+        .sidebar-header {
+            padding: 20px 15px;
+            border-bottom: 1px solid #eee;
+            position: relative;
+        }
+        
+        .sidebar-header img {
+            max-width: 100%;
+            height: auto;
+        }
+        
+        .nav-link {
+            color: var(--ifes-dark-gray);
+            padding: 12px 20px;
+            margin: 5px 0;
+            border-radius: 5px;
+        }
+        
+        .nav-link:hover, .nav-link.active {
+            background-color: var(--ifes-light-green);
+            color: white;
+        }
+        
+        .nav-link i {
+            margin-right: 10px;
+        }
+        
+        .main-content {
+            margin-left: 270px;
+            padding: 30px;
+            transition: all 0.3s;
+        }
+        
+        .main-content.expanded {
+            margin-left: 20px;
+        }
+        
+        .card {
+            border: none;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+            margin-bottom: 20px;
+            transition: transform 0.3s;
+        }
+        
+        .card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .card-header {
+            background-color: var(--ifes-green);
+            color: white;
+            border-radius: 10px 10px 0 0 !important;
+            padding: 15px 20px;
+            font-weight: 600;
+        }
+        
+        .card-body {
+            padding: 20px;
+        }
+        
+        .status-badge {
+            padding: 8px 15px;
+            border-radius: 20px;
+            font-weight: 500;
+            font-size: 0.9rem;
+        }
+        
+        .status-pendente {
+            background-color: #FFF3CD;
+            color: #856404;
+        }
+        
+        .status-deferido {
+            background-color: #D4EDDA;
+            color: #155724;
+        }
+        
+        .status-indeferido {
+            background-color: #F8D7DA;
+            color: #721C24;
+        }
+        
+        .calendar-card {
+            height: 100%;
+        }
+        
+        .calendar-event {
+            background-color: #E8F5E9;
+            border-left: 4px solid var(--ifes-green);
+            padding: 10px 15px;
+            margin-bottom: 10px;
+            border-radius: 5px;
+        }
+        
+        .calendar-event .date {
+            font-weight: 600;
+            color: var(--ifes-green);
+        }
+        
+        .calendar-event .description {
+            margin-top: 5px;
+            font-size: 0.9rem;
+        }
+        
+        .welcome-banner {
+            background-color: white;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+        }
+        
+        .welcome-banner h2 {
+            color: var(--ifes-dark-gray);
+            margin-bottom: 10px;
+        }
+        
+        .welcome-banner p {
+            color: #666;
+            margin-bottom: 0;
+        }
+        
+        .user-profile {
+            display: flex;
+            align-items: center;
+            margin-left: auto;
+        }
+        
+        .user-profile img {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            margin-right: 10px;
+        }
+        
+        .notification-badge {
+            position: absolute;
+            top: 5px;
+            right: 5px;
+            background-color: var(--ifes-red);
+            color: white;
+            border-radius: 50%;
+            width: 18px;
+            height: 18px;
+            font-size: 0.7rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .menu-toggle {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            z-index: 1100;
+            background-color: var(--ifes-green);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+            display: none;
+        }
+        
+        .menu-toggle.visible {
+            display: flex;
+        }
+        
+        .close-sidebar {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: none;
+            border: none;
+            color: var(--ifes-dark-gray);
+            cursor: pointer;
+            font-size: 1.2rem;
+        }
+        
+        @media (max-width: 992px) {
+            .sidebar {
+                width: 70px;
+                overflow: hidden;
+            }
+            
+            .sidebar .nav-link span {
+                display: none;
+            }
+            
+            .sidebar .nav-link i {
+                margin-right: 0;
+                font-size: 1.2rem;
+            }
+            
+            .main-content {
+                margin-left: 90px;
+            }
+            
+            .sidebar-header, .sidebar-footer {
+                text-align: center;
+                padding: 10px;
+            }
+            
+            .sidebar-header h6, .sidebar-header small {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Menu Toggle Button (visible when sidebar is collapsed) -->
+    <button class="menu-toggle" id="menuToggle">
+        <i class="bi bi-list"></i>
+    </button>
+
+    <!-- Sidebar -->
+    <div class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <button class="close-sidebar" id="closeSidebar">
+                <i class="bi bi-x-lg"></i>
+            </button>
+            <img src="logoifes.png" alt="Logo IFES" width="180">
+        </div>
+        <div class="d-flex flex-column p-3">
+            <div class="mb-4 text-center">
+                <h6 class="mb-0">Sistema de Controle de</h6>
+                <h6>Assistência Estudantil</h6>
+            </div>
+            <ul class="nav nav-pills flex-column mb-auto">
+                <li class="nav-item">
+                    <a href="#" class="nav-link active">
+                        <i class="bi bi-house-door"></i> <span>Início</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="#" class="nav-link">
+                        <i class="bi bi-file-earmark-text"></i> <span>Editais</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="#" class="nav-link">
+                        <i class="bi bi-clipboard-check"></i> <span>Minhas Inscrições</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="#" class="nav-link">
+                        <i class="bi bi-currency-dollar"></i> <span>Confirmação de Recebimento</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="#" class="nav-link">
+                        <i class="bi bi-person"></i> <span>Meu Perfil</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="#" class="nav-link">
+                        <i class="bi bi-question-circle"></i> <span>Suporte</span>
+                    </a>
+                </li>
+            </ul>
+            <hr>
+            <div class="text-center">
+                <a href="login.html" class="btn btn-outline-danger">
+                    <i class="bi bi-box-arrow-right"></i> <span>Sair</span>
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content" id="mainContent">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h2>Olá, João Silva!</h2>
+            <div class="user-profile">
+                <img src="perfil.jpg" alt="Perfil">
+                <div>
+                    <small class="text-muted">Aluno</small>
+                    <div class="fw-bold">João Silva</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="welcome-banner">
+            <div class="row">
+                <div class="col-md-9">
+                    <h4>Bem-vindo ao Sistema de Controle de Assistência Estudantil</h4>
+                    <p>Aqui você pode acompanhar seus auxílios, inscrever-se em editais e confirmar recebimentos mensais.</p>
+                </div>
+                <div class="col-md-3 d-flex align-items-center justify-content-end">
+                    <a href="#" class="btn btn-success">Ver Editais Abertos</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-8">
+                <h4 class="mb-4">Meus Auxílios</h4>
+                
+                <div class="card">
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                        <span>Auxílio Alimentação</span>
+                        <span class="status-badge status-deferido">Deferido</span>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <p><strong>Edital:</strong> 01/2025</p>
+                                <p><strong>Valor:</strong> R$ 200,00</p>
+                            </div>
+                            <div class="col-md-6">
+                                <p><strong>Data de Aprovação:</strong> 15/03/2025</p>
+                                <p><strong>Último Recebimento:</strong> 10/04/2025</p>
+                            </div>
+                        </div>
+                        <div class="d-flex justify-content-end mt-3">
+                            <a href="#" class="btn btn-sm btn-outline-success me-2">Confirmar Recebimento</a>
+                            <a href="#" class="btn btn-sm btn-outline-secondary">Detalhes</a>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                        <span>Auxílio Transporte</span>
+                        <span class="status-badge status-pendente">Em Análise</span>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <p><strong>Edital:</strong> 01/2025</p>
+                                <p><strong>Valor Previsto:</strong> R$ 150,00</p>
+                            </div>
+                            <div class="col-md-6">
+                                <p><strong>Data de Inscrição:</strong> 01/04/2025</p>
+                                <p><strong>Previsão de Resposta:</strong> 30/04/2025</p>
+                            </div>
+                        </div>
+                        <div class="d-flex justify-content-end mt-3">
+                            <a href="#" class="btn btn-sm btn-outline-secondary">Acompanhar</a>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="mt-4">
+                    <h4 class="mb-4">Editais Abertos</h4>
+                    <div class="card">
+                        <div class="card-header">
+                            Edital 02/2025 - Auxílio Material Didático
+                        </div>
+                        <div class="card-body">
+                            <p><strong>Período de Inscrição:</strong> 20/04/2025 a 05/05/2025</p>
+                            <p><strong>Valor do Auxílio:</strong> R$ 300,00 (parcela única)</p>
+                            <p>Auxílio destinado à aquisição de materiais didáticos necessários para as atividades acadêmicas.</p>
+                            <div class="d-flex justify-content-end mt-3">
+                                <a href="#" class="btn btn-success">Inscrever-se</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-4">
+                <h4 class="mb-4">Calendário</h4>
+                <div class="card calendar-card">
+                    <div class="card-body">
+                        <div class="calendar-event">
+                            <div class="date">20/04/2025</div>
+                            <div class="description">Início das inscrições para Auxílio Material Didático</div>
+                        </div>
+                        <div class="calendar-event">
+                            <div class="date">30/04/2025</div>
+                            <div class="description">Resultado da análise do Auxílio Transporte</div>
+                        </div>
+                        <div class="calendar-event">
+                            <div class="date">05/05/2025</div>
+                            <div class="description">Fim das inscrições para Auxílio Material Didático</div>
+                        </div>
+                        <div class="calendar-event">
+                            <div class="date">10/05/2025</div>
+                            <div class="description">Prazo para confirmação de recebimento do Auxílio Alimentação</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <h4 class="mb-4 mt-4">Notificações</h4>
+                <div class="card">
+                    <div class="card-body p-0">
+                        <div class="list-group list-group-flush">
+                            <a href="#" class="list-group-item list-group-item-action p-3">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <h6 class="mb-1">Documento pendente</h6>
+                                    <small class="text-muted">Hoje</small>
+                                </div>
+                                <p class="mb-1 small">Você precisa enviar o comprovante de residência atualizado para o Auxílio Transporte.</p>
+                            </a>
+                            <a href="#" class="list-group-item list-group-item-action p-3">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <h6 class="mb-1">Auxílio aprovado</h6>
+                                    <small class="text-muted">2 dias atrás</small>
+                                </div>
+                                <p class="mb-1 small">Seu Auxílio Alimentação foi aprovado. Confira os detalhes.</p>
+                            </a>
+                            <a href="#" class="list-group-item list-group-item-action p-3">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <h6 class="mb-1">Novo edital disponível</h6>
+                                    <small class="text-muted">1 semana atrás</small>
+                                </div>
+                                <p class="mb-1 small">O edital para Auxílio Material Didático está aberto para inscrições.</p>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Menu toggle functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            const sidebar = document.getElementById('sidebar');
+            const mainContent = document.getElementById('mainContent');
+            const menuToggle = document.getElementById('menuToggle');
+            const closeSidebar = document.getElementById('closeSidebar');
+            
+            // Close sidebar button
+            closeSidebar.addEventListener('click', function() {
+                sidebar.classList.add('collapsed');
+                mainContent.classList.add('expanded');
+                menuToggle.classList.add('visible');
+            });
+            
+            // Open sidebar button
+            menuToggle.addEventListener('click', function() {
+                sidebar.classList.remove('collapsed');
+                mainContent.classList.remove('expanded');
+                menuToggle.classList.remove('visible');
+            });
+        });
+    </script>
+</body>
+</html>
