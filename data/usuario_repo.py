@@ -56,6 +56,12 @@ def atualizar(self, usuario: Usuario) -> bool:
         cursor.execute(ATUALIZAR, (usuario.nome, usuario.email, usuario.senha, usuario.tipo_usuario))
         return cursor.rowcount > 0
 
+def atualizar_senha(self, id: int, nova_senha: str) -> bool:
+    with self._connect() as conn:
+        cursor = conn.cursor()
+        cursor.execute(ATUALIZAR_SENHA, (nova_senha, id))
+        return cursor.rowcount > 0
+
 def excluir(self, id: int) -> bool:
     with self._connect() as conn:
         cursor = conn.cursor()

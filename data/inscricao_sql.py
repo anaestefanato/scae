@@ -19,6 +19,8 @@ OBTER_TODOS = """
 SELECT
 id_inscricao, id_aluno, id_edital, data_inscricao, status, url_Documento_Identificacao, urlDeclaracaoRenda, url_Termo_Responsabilidade 
 FROM inscricao
+JOIN edital ON inscricao.id_edital = edital.id_edital
+JOIN aluno ON inscricao.id_aluno = aluno.id_usuario
 ORDER BY data_inscricao
 """ 
 
@@ -26,6 +28,8 @@ OBTER_POR_ID = """
 SELECT
 id_inscricao, id_aluno, id_edital, data_inscricao, status, url_Documento_Identificacao, urlDeclaracaoRenda, url_Termo_Responsabilidade
 FROM inscricao
+JOIN aluno ON inscricao.id_aluno = aluno.id_usuario
+JOIN edital ON inscricao.id_edital = edital.id_edital
 WHERE id_inscricao = ?
 """ 
 

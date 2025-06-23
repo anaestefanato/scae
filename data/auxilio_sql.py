@@ -19,6 +19,8 @@ OBTER_TODOS = """
 SELECT
 id_auxilio, id_edital, id_inscricao, descricao, valor_mensal, data_inicio, data_fim, tipo_auxilio
 FROM auxilio
+JOIN edital ON auxilio.id_edital = edital.id_edital
+JOIN inscricao ON auxilio.id_inscricao = inscricao.id_inscricao
 ORDER BY tipo_auxilio
 """
 

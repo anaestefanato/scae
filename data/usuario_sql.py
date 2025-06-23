@@ -28,7 +28,13 @@ WHERE id_usuario = ?
 
 ATUALIZAR = """
 UPDATE usuario
-SET nome = ?, email = ?, senha = ?, tipo_usuario = ?
+SET nome = ?, email = ?, tipo_usuario = ?
+WHERE id_usuario = ?
+"""
+
+ATUALIZAR_SENHA = """
+UPDATE usuario
+SET senha = ?
 WHERE id_usuario = ?
 """
 
