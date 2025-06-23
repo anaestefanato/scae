@@ -1,7 +1,7 @@
 CRIAR_TABELA = """
 CREATE TABLE IF NOT EXISTS administrador (
-id_usuario INTEGER FOREIGN KEY REFERENCES usuario(id_usuario) ON DELETE CASCADE,
-matricula TEXT NOT NULL)
+matricula TEXT PRIMARY KEY,
+FOREIGN KEY (id_usuario) REFERENCES usuario(id_usuario))
 """
 
 INSERIR = """

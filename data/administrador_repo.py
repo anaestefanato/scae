@@ -1,6 +1,8 @@
 from typing import Optional
+from data import usuario_repo
 from data.administrador_model import Administrador
 from data.administrador_sql import *
+from data.usuario_model import Usuario
 from data.util import get_connection
 
 def criar_tabela() -> bool:
@@ -39,15 +41,19 @@ def obter_por_id(self, id: int) -> Optional[Administrador]:
         return None
     
 def atualizar(self, administrador: Administrador) -> bool:
-    with self._connect() as conn:
+    with get_connection() as conn:
         cursor = conn.cursor()
+        usuario = Usuario(administrador.id_usuario,
+                          administrador.matricula)
+        usuario.repo.atualizar(usuario, cursor)
         cursor.execute(ATUALIZAR, (
             administrador.matricula, 
             administrador.id_usuario))
-        return cursor.rowcount > 0
+        return (cursor.rowcount > 0)
     
 def excluir(self, id: int) -> bool:
-    with self._connect() as conn:
+    with get_connection() as conn:
         cursor = conn.cursor()
+        usuario_repo.excluir(id, cursor)
         cursor.execute(EXCLUIR, (id,))
-        return cursor.rowcount > 0
+        return (cursor.rowcount > 0)
