@@ -17,7 +17,9 @@ VALUES (?, ?, ?, ?, ?, ?)
 OBTER_TODOS = """
 SELECT
 id_duvida, id_usuario_criador, id_administrador_responsavel, titulo, descricao, data_criacao, status
-FROM chamado
+FROM chamado c
+INNER JOIN usuario u ON c.id_usuario_criador = u.id_usuario
+INNER JOIN administrador ad ON c.id_administrador_responsavel = ad.id_usuario
 ORDER BY id_usuario_criador
 """
 

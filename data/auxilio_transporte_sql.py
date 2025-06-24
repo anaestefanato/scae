@@ -14,14 +14,16 @@ VALUES (?, ?)
 OBTER_TODOS = """
 SELECT
 id_auxilio_transporte, url_CompResidencia, url_CompTransporte
-FROM auxilio_transporte
+FROM auxilio_transporte at
+INNER JOIN auxilio a ON at.id_auxilio_transporte = a.id_auxilio
 ORDER BY id_auxilio_transporte
 """
 
 OBTER_POR_ID = """
 SELECT
 id_auxilio_transporte, url_CompResidencia, url_CompTransporte
-FROM auxilio_transporte
+FROM auxilio_transporte at
+INNER JOIN auxilio a ON at.id_auxilio_transporte = a.id_auxilio
 WHERE id_auxilio_transporte = ?
 """
 

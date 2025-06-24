@@ -18,14 +18,18 @@ VALUES (?, ?, ?, ?, ?, ?, ?)
 OBTER_TODOS = """
 SELECT
 id_duvida, id_edital, id_aluno, pergunta, resposta, data_pergunta, data_resposta, status
-FROM duvida_edital
+FROM duvida_edital de
+INNER JOIN edital e ON de.id_edital = e.id_edital
+INNER JOIN usuario u ON de.id_aluno = u.id_usuario
 ORDER BY status
 """
 
 OBTER_POR_ID = """
 SELECT
 id_duvida, id_edital, id_aluno, pergunta, resposta, data_pergunta, data_resposta, status
-FROM duvida_edital
+FROM duvida_edital de
+INNER JOIN edital e ON de.id_edital = e.id_edital
+INNER JOIN usuario u ON de.id_aluno = u.id_usuario
 WHERE id_duvida = ?
 """
 

@@ -15,14 +15,16 @@ VALUES (?, ?, ?, ?)
 OBTER_TODOS = """
 SELECT
 id_notificacao, id_usuario_destinatario, titulo, data_envio, tipo
-FROM notificacao
+FROM notificacao n
+INNER JOIN usuario u ON n.id_usuario_destinatario = u.id_usuario
 ORDER BY tipo
 """
 
 OBTER_POR_ID = """
 SELECT
 id_notificacao, id_usuario_destinatario, titulo, data_envio, tipo
-FROM notificacao
+FROM notificacao n
+INNER JOIN usuario u ON n.id_usuario_destinatario = u.id_usuario
 WHERE id_notificacao = ?
 """
 

@@ -19,14 +19,16 @@ VALUES (?,?, ?, ?, ?, ?, ?, ?)
 OBTER_TODOS = """
 SELECT 
 id_usuario, cpf, data_nascimento, filiacao, endereco, nome_banco, numero_conta_bancaria, renda_familiar, matricula 
-FROM aluno
+FROM aluno al 
+INNER JOIN usuario u ON al.id_usuario = u.id_usuario    
 ORDER BY matricula
 """ 
 
 OBTER_POR_ID = """
 SELECT 
 id_usuario, cpf, data_nascimento, filiacao, endereco, nome_banco, numero_conta_bancaria, renda_familiar, matricula
-FROM aluno
+FROM aluno al
+INNER JOIN usuario u ON al.id_usuario = u.id_usuario
 WHERE id_usuario = ?
 """ 
 

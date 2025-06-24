@@ -15,14 +15,16 @@ VALUES (?, ?, ?, ?)
 OBTER_TODOS = """
 SELECT
 id_auxilio_moradia, url_CompResidenciaFixa, url_CompResidenciaAlugada, url_ContratoAluguelCidCampus, url_ContratoAluguelCidNatal
-FROM auxilio_moradia
+FROM auxilio_moradia am
+INNER JOIN auxilio a ON am.id_auxilio_moradia = a.id_auxilio
 ORDER BY id_auxilio_moradia
 """
 
 OBTER_POR_ID = """
 SELECT
 id_auxilio_moradia, url_CompResidenciaFixa, url_CompResidenciaAlugada, url_ContratoAluguelCidCampus, url_ContratoAluguelCidNatal
-FROM auxilio_moradia
+FROM auxilio_moradia am
+INNER JOIN auxilio a ON am.id_auxilio_moradia = a.id_auxilio
 WHERE id_auxilio_moradia = ?
 """
 
