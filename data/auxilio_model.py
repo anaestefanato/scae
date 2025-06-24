@@ -7,7 +7,7 @@ class Auxilio:
     id_edital: int
     id_inscricao: int
     descricao: str
-    valorMensal: float
-    dataInicio: str
-    dataFim: str
+    valor_mensal: float
+    data_inicio: str
+    data_fim: str
     tipo_auxilio: str

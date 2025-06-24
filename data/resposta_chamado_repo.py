@@ -13,9 +13,9 @@ def inserir(resposta: RespostaChamado) -> Optional[int]:
     with get_connection() as conn:
         cursor = conn.cursor()
         cursor.execute(INSERIR, (
-            resposta.id_resposta_chamado,
-            resposta.id_chamado,
-            resposta.id_usuario_autor,
+            resposta.id_resposta,
+            resposta.id_duvida,
+            resposta.id_usuario,
             resposta.mensagem,
             resposta.data_resposta))
         return cursor.lastrowid
@@ -42,7 +42,7 @@ def obter_por_id(id: int) -> Optional[RespostaChamado]:
         row = cursor.fetchone()
         resposta = RespostaChamado(
             id_resposta_chamado=row["id_resposta_chamado"],
-            id_chamado=row["id_chamado"],
+            id_duvida=row["id_chamado"],
             id_usuario_autor=row["id_usuario_autor"],
             mensagem=row["mensagem"],
             data_resposta=row["data_resposta"])

@@ -6,7 +6,7 @@ class Inscricao:
     id_inscricao: int
     id_aluno: int
     id_edital: int
-    dataInscricao: str
+    data_inscricao: str
     status: str
     urlDocumentoIdentificacao: str
     urlDeclaracaoRenda: str

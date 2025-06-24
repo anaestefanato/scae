@@ -25,8 +25,8 @@ def inserir(auxilioTransporte: AuxilioTransporte) -> Optional[int]:
         id_auxilio = auxilio.inserir(auxilio, cursor)
         cursor.execute(INSERIR, (
             auxilioTransporte.id_auxilio_transporte,
-            auxilioTransporte.url_CompTransporte,
-            auxilioTransporte.url_CompResidencia))
+            auxilioTransporte.urlCompTransporte,
+            auxilioTransporte.urlCompResidencia))
         return id_auxilio
 
 def obter_todos() -> list[AuxilioTransporte]:
@@ -81,8 +81,8 @@ def atualizar(auxilioTransporte: AuxilioTransporte) -> bool:
         auxilio.atualizar(auxilio, cursor)
         cursor.execute(ATUALIZAR, (
             auxilioTransporte.id_auxilio_transporte,
-            auxilioTransporte.url_CompTransporte,
-            auxilioTransporte.url_CompResidencia))
+            auxilioTransporte.urlCompTransporte,
+            auxilioTransporte.urlCompResidencia))
         return (cursor.rowcount > 0)
     
 def excluir(id: int) -> bool:

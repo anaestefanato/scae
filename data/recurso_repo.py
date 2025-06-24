@@ -17,8 +17,8 @@ def inserir(recurso: Recurso) -> Optional[int]:
             recurso.id_inscricao,
             recurso.id_assistente,
             recurso.descricao,
-            recurso.dataEnvio,
-            recurso.dataResposta,
+            recurso.data_envio,
+            recurso.data_resposta,
             recurso.status))
         return cursor.lastrowid
 
@@ -33,8 +33,8 @@ def obter_todos() -> list[Recurso]:
                 id_inscricao=row["id_inscricao"],
                 id_assistente=row["id_assistente"],
                 descricao=row["descricao"],
-                dataEnvio=row["dataEnvio"],
-                dataResposta=row["dataResposta"],
+                data_envio=row["dataEnvio"],
+                data_resposta=row["dataResposta"],
                 status=row["status"])
             for row in rows]
         return recursos
@@ -49,8 +49,8 @@ def obter_por_id(id: int) -> Optional[Recurso]:
             id_inscricao=row["id_inscricao"],
             id_assistente=row["id_assistente"],
             descricao=row["descricao"],
-            dataEnvio=row["dataEnvio"],
-            dataResposta=row["dataResposta"],
+            data_envio=row["dataEnvio"],
+            data_resposta=row["dataResposta"],
             status=row["status"])
         return recurso
 

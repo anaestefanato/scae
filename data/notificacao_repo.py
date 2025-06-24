@@ -16,7 +16,7 @@ def inserir(notificacao: Notificacao) -> Optional[int]:
             notificacao.id_notificacao,
             notificacao.id_usuario_destinatario,
             notificacao.titulo,
-            notificacao.dataEnvio,
+            notificacao.data_envio,
             notificacao.tipo))
         return cursor.lastrowid
 
@@ -44,7 +44,7 @@ def obter_por_id(id: int) -> Optional[Notificacao]:
             id_notificacao=row["id_notificacao"],
             id_usuario_destinatario=row["id_usuario_destinatario"],
             titulo=row["titulo"],
-            dataEnvio=row["dataEnvio"],
+            data_envio=row["data_envio"],
             tipo=row["tipo"])
         return notificacao
 

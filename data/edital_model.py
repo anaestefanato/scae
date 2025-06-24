@@ -6,7 +6,7 @@ class Edital:
     id_edital: int
     titulo: str
     descricao: str
-    dataPublicacao: str
-    dataEncerramento: str
+    data_publicacao: str
+    data_encerramento: str
     arquivo: str
     status: str

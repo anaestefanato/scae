@@ -5,9 +5,9 @@ id_aluno INTEGER FOREIGN KEY REFERENCES aluno(id_usuario) ON DELETE CASCADE,
 id_edital INTEGER FOREIGN KEY REFERENCES edital(id_edital) ON DELETE CASCADE,
 data_inscricao DATE NOT NULL,
 status TEXT NOT NULL CHECK (status IN ('pendente', 'daferido', 'indeferido')),
-url_Documento_Identificacao TEXT NOT NULL,
+urlDocumentoIdentificacao TEXT NOT NULL,
 urlDeclaracaoRenda TEXT NOT NULL,
-url_Termo_Responsabilidade TEXT NOT NULL)
+urlTermoResponsabilidade TEXT NOT NULL)
 """
 
 INSERIR = """

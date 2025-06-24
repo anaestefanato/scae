@@ -18,7 +18,7 @@ def inserir(assistenteSocial: AssistenteSocial) -> Optional[int]:
                 assistenteSocial.nome, 
                 assistenteSocial.email, 
                 assistenteSocial.senha, 
-                assistenteSocial.tipo)
+                assistenteSocial.tipo_usuario)
         id_usuario = usuario.inserir(usuario, cursor)
         cursor.execute(INSERIR, (
             assistenteSocial.id_usuario, 
@@ -36,7 +36,7 @@ def obter_todos() -> list[AssistenteSocial]:
                 nome=row["nome"],
                 email=row["email"],
                 senha=row["senha"],
-                tipo=row["tipo"],
+                tipo_usuario=row["tipo"],
                 matricula=row["matricula"])
             for row in rows]
         return assistentes
@@ -51,7 +51,7 @@ def obter_por_id( id: int) -> Optional[AssistenteSocial]:
             nome=row["nome"],
             email=row["email"],
             senha=row["senha"],
-            tipo=row["tipo"],
+            tipo_usuario=row["tipo"],
             matricula=row["matricula"])
         return assistentes
     
@@ -62,7 +62,7 @@ def atualizar(assistenteSocial: AssistenteSocial) -> bool:
                 assistenteSocial.nome, 
                 assistenteSocial.email, 
                 assistenteSocial.senha, 
-                assistenteSocial.tipo)
+                assistenteSocial.tipo_usuario)
         usuario.repo.atualizar(usuario, cursor)
         cursor.execute(ATUALIZAR, (
             assistenteSocial.matricula))

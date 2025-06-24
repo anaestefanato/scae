@@ -7,6 +7,6 @@ class Recurso:
     id_inscricao: int
     id_assistente_social: int
     descricao: str
-    dataEnvio: str
-    dataResposta: str
+    data_envio: str
+    data_resposta: str
     status: str

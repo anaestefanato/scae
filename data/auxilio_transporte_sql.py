@@ -1,8 +1,8 @@
 CRIAR_TABELA = """
 CREATE TABLE IF NOT EXISTS auxilio_transporte (
 id_auxilio_transporte INTEGER FOREIGN KEY REFERENCES auxilio(id_auxilio) ON DELETE CASCADE,
-url_CompResidencia TEXT NOT NULL,
-url_CompTransporte TEXT NOT NULL
+urlCompResidencia TEXT NOT NULL,
+urlCompTransporte TEXT NOT NULL
 )
 """
 

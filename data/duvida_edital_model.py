@@ -8,6 +8,6 @@ class DuvidaEdital:
     id_aluno: int
     pergunta: str
     resposta: str
-    dataPergunta: str
-    dataResposta: str
+    data_pergunta: str
+    data_resposta: str
     status: str

@@ -6,6 +6,6 @@ class RespostaChamado:
     id_resposta: int
     id_duvida: int
     id_usuario: str
-    descricao: str
-    dataCriacao: str
+    mensagem: str
+    data_resposta: str
     status: str

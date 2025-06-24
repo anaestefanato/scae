@@ -8,5 +8,5 @@ class Chamado:
     id_administrador_responsavel: str
     titulo: str
     descricao: str
-    dataCriacao: str
+    data_criacao: str
     status: str

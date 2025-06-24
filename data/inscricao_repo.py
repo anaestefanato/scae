@@ -18,9 +18,9 @@ def inserir(inscricao: Inscricao) -> Optional[int]:
             inscricao.id_edital,
             inscricao.data_inscricao,
             inscricao.status,
-            inscricao.url_Documento_Identificacao,
+            inscricao.urlDocumentoIdentificacao,
             inscricao.urlDeclaracaoRenda,
-            inscricao.url_Termo_Responsabilidade))
+            inscricao.urlTermoResponsabilidade))
         return cursor.lastrowid
 
 def obter_todos() -> list[Inscricao]:
@@ -35,9 +35,9 @@ def obter_todos() -> list[Inscricao]:
                 id_edital=row["id_edital"],
                 data_inscricao=row["data_inscricao"],
                 status=row["status"],
-                url_Documento_Identificacao=row["url_Documento_Identificacao"],
+                urlDocumentoIdentificacao=row["urlDocumentoIdentificacao"],
                 urlDeclaracaoRenda=row["urlDeclaracaoRenda"],
-                url_Termo_Responsabilidade=row["url_Termo_Responsabilidade"])
+                urlTermoResponsabilidade=row["urlTermoResponsabilidade"])
             for row in rows]
         return inscricoes
 
@@ -52,15 +52,15 @@ def obter_por_id(id: int) -> Optional[Inscricao]:
             id_edital=row["id_edital"],
             data_inscricao=row["data_inscricao"],
             status=row["status"],
-            url_Documento_Identificacao=row["url_Documento_Identificacao"],
+            url_Documento_Identificacao=row["urlDocumentoIdentificacao"],
             urlDeclaracaoRenda=row["urlDeclaracaoRenda"],
-            url_Termo_Responsabilidade=row["url_Termo_Responsabilidade"])
+            url_Termo_Responsabilidade=row["urlTermoResponsabilidade"])
         return inscricao
 
 def atualizar(inscricao: Inscricao) -> bool:
     with get_connection() as conn:
         cursor = conn.cursor()
-        cursor.execute(ATUALIZAR, (inscricao.status, inscricao.url_Documento_Identificacao, inscricao.urlDeclaracaoRenda, inscricao.url_Termo_Responsabilidade))
+        cursor.execute(ATUALIZAR, (inscricao.status, inscricao.urlDocumentoIdentificacao, inscricao.urlDeclaracaoRenda, inscricao.urlTermoResponsabilidade))
         return (cursor.rowcount > 0)
 
 def excluir(id: int) -> bool:

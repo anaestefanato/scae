@@ -18,7 +18,7 @@ def inserir(administrador: Administrador) -> Optional[int]:
                 administrador.nome, 
                 administrador.email, 
                 administrador.senha, 
-                administrador.tipo)
+                administrador.tipo_usuario)
         id_usuario = usuario_repo.inserir(usuario, cursor)
         cursor.execute(INSERIR, (
             administrador.id_usuario, 
@@ -37,7 +37,7 @@ def obter_todos() -> list[Administrador]:
                 nome=row["nome"],
                 email=row["email"],
                 senha=row["senha"],
-                tipo=row["tipo"])
+                tipo_usuario=row["tipo"])
             for row in rows]
         return administradores
 
@@ -52,7 +52,7 @@ def obter_por_id(id: int) -> Optional[Administrador]:
             nome=row["nome"],
             email=row["email"],
             senha=row["senha"],
-            tipo=row["tipo"]) 
+            tipo_usuario=row["tipo"]) 
         return administrador 
     
 def atualizar(administrador: Administrador) -> bool:

@@ -6,5 +6,5 @@ class Notificacao:
     id_notificacao: int
     id_usuario_destinatario: int
     titulo: str
-    dataEnvio: str
+    data_envio: str
     tipo: str

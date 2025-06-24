@@ -18,8 +18,8 @@ def inserir(duvida: DuvidaEdital) -> Optional[int]:
             duvida.id_aluno,
             duvida.pergunta,
             duvida.resposta,
-            duvida.dataPergunta,
-            duvida.dataResposta,
+            duvida.data_pergunta,
+            duvida.data_resposta,
             duvida.status))
         return cursor.lastrowid
     
@@ -52,8 +52,8 @@ def obter_por_id(id: int) -> Optional[DuvidaEdital]:
             id_aluno=row["id_aluno"],
             pergunta=row["pergunta"],
             resposta=row["resposta"],
-            dataPergunta=row["dataPergunta"],
-            dataResposta=row["dataResposta"],
+            data_pergunta=row["dataPergunta"],
+            data_resposta=row["dataResposta"],
             status=row["status"])
         return duvida
 

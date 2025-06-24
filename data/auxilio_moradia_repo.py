@@ -25,7 +25,7 @@ def inserir(auxilioMoradia: AuxilioMoradia) -> Optional[int]:
         cursor.execute(INSERIR, (
             auxilioMoradia.id_auxilio_moradia,
             auxilioMoradia.urlCompResidenciaAlugada,
-            auxilioMoradia.urlComprovanteResidenciaFixa,
+            auxilioMoradia.urlCompResidenciaFixa,
             auxilioMoradia.urlContratoAluguelCidCampus,
             auxilioMoradia.urlContratoAluguelCidNatal))
         return id_auxilio
@@ -46,7 +46,7 @@ def obter_todos() -> list[AuxilioMoradia]:
                         data_fim=row["data_fim"],
                         tipo_auxilio=row["tipo_auxilio"],
                         urlCompResidenciaAlugada=row["urlCompResidenciaAlugada"],
-                        urlComprovanteResidenciaFixa=row["urlComprovanteResidenciaFixa"],
+                        urlComprovanteResidenciaFixa=row["urlCompResidenciaFixa"],
                         urlContratoAluguelCidCampus=row["urlContratoAluguelCidCampus"],
                         urlContratoAluguelCidNatal=row["urlContratoAluguelCidNatal"])
             for row in rows]
@@ -68,7 +68,7 @@ def obter_por_id(id: int) -> Optional[AuxilioMoradia]:
             data_fim=row["data_fim"],
             tipo_auxilio=row["tipo_auxilio"],
             urlCompResidenciaAlugada=row["urlCompResidenciaAlugada"],
-            urlComprovanteResidenciaFixa=row["urlComprovanteResidenciaFixa"],
+            urlComprovanteResidenciaFixa=row["urlCompResidenciaFixa"],
             urlContratoAluguelCidCampus=row["urlContratoAluguelCidCampus"],
             urlContratoAluguelCidNatal=row["urlContratoAluguelCidNatal"])
         return auxilio
@@ -87,7 +87,7 @@ def atualizar(auxilioMoradia: AuxilioMoradia) -> bool:
         auxilio_repo.atualizar(auxilio, cursor)
         cursor.execute(ATUALIZAR, (
             auxilioMoradia.urlCompResidenciaAlugada,
-            auxilioMoradia.urlComprovanteResidenciaFixa,
+            auxilioMoradia.urlCompResidenciaFixa,
             auxilioMoradia.urlContratoAluguelCidCampus,
             auxilioMoradia.urlContratoAluguelCidNatal))
         return (cursor.rowcount > 0)

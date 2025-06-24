@@ -16,7 +16,7 @@ def inserir(auxilio: Auxilio) -> Optional[int]:
             auxilio.id_auxilio,
             auxilio.tipo_auxilio,
             auxilio.descricao,
-            auxilio.valor,
+            auxilio.valor_mensal,
             auxilio.data_inicio,
             auxilio.data_fim))
         return cursor.lastrowid
@@ -45,7 +45,7 @@ def obter_por_id(id: int) -> Optional[Auxilio]:
             id_auxilio=row["id_auxilio"],
             tipo_auxilio=row["tipo_auxilio"],
             descricao=row["descricao"],
-            valor=row["valor"],
+            valor=row["valor_mensal"],
             data_inicio=row["data_inicio"],
             data_fim=row["data_fim"])
         return auxilio  
@@ -57,7 +57,7 @@ def atualizar(auxilio: Auxilio) -> bool:
         cursor.execute(ATUALIZAR, (
             auxilio.tipo_auxilio,
             auxilio.descricao,
-            auxilio.valor,
+            auxilio.valor_mensal,
             auxilio.data_fim))
         return (cursor.rowcount > 0)
     

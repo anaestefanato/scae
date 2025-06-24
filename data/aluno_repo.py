@@ -18,7 +18,7 @@ def inserir(aluno: Aluno) -> Optional[int]:
                 aluno.nome,
                 aluno.email,
                 aluno.senha,
-                aluno.tipo)
+                aluno.tipo_usuario)
         id_usuario = usuario_repo.inserir(usuario, cursor)
         cursor.execute(INSERIR, (
             aluno.id_usuario, 
@@ -36,7 +36,7 @@ def obter_todos() -> list[Aluno]:
                 nome=row["nome"],
                 email=row["email"],
                 senha=row["senha"],
-                tipo=row["tipo"], 
+                tipo_usuario=row["tipo"], 
                 cpf=row["cpf"],
                 data_nascimento=row["data_nascimento"],
                 filiacao=row["filiacao"],
@@ -60,7 +60,7 @@ def obter_por_id(id: int) -> Optional[Aluno]:
                 nome=row["nome"],
                 email=row["email"], 
                 senha=row["senha"],
-                tipo=row["tipo"],
+                tipo_usuario=row["tipo"],
                 cpf=row["cpf"],
                 data_nascimento=row["data_nascimento"],
                 filiacao=row["filiacao"],
@@ -80,7 +80,7 @@ def atualizar(aluno: Aluno) -> bool:
                           aluno.nome, 
                           aluno.email, 
                           aluno.senha, 
-                          aluno.tipo)
+                          aluno.tipo_usuario)
         usuario_repo.atualizar(usuario, cursor)
         cursor.execute(ATUALIZAR, (
             aluno.cpf, 

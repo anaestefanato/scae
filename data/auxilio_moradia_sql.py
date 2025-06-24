@@ -1,10 +1,10 @@
 CRIAR_TABELA = """
 CREATE TABLE IF NOT EXISTS auxilio_moradia (
 id_auxilio_moradia INTEGER FOREIGN KEY REFERENCES auxilio(id_auxilio) ON DELETE CASCADE,
-url_CompResidenciaFixa TEXT NOT NULL,
-url_CompResidenciaAlugada TEXT NOT NULL,
-url_ContratoAluguelCidCampus TEXT NOT NULL,
-url_ContratoAluguelCidNatal TEXT NOT NULL)
+urlCompResidenciaFixa TEXT NOT NULL,
+urlCompResidenciaAlugada TEXT NOT NULL,
+urlContratoAluguelCidCampus TEXT NOT NULL,
+urlContratoAluguelCidNatal TEXT NOT NULL)
 """
 
 INSERIR = """
