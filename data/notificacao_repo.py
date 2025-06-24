@@ -52,11 +52,11 @@ def atualizar(notificacao: Notificacao) -> bool:
     with get_connection() as conn:
         cursor = conn.cursor()
         cursor.execute(ATUALIZAR, (notificacao.titulo, notificacao.tipo))
-        return cursor.rowcount > 0
+        return (cursor.rowcount > 0)
 
 def excluir(id: int) -> bool:
     with get_connection() as conn:
         cursor = conn.cursor()
         cursor.execute(EXCLUIR, (id,))
-        return cursor.rowcount > 0
+        return (cursor.rowcount > 0)
                 

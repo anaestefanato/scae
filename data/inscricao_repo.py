@@ -61,10 +61,10 @@ def atualizar(inscricao: Inscricao) -> bool:
     with get_connection() as conn:
         cursor = conn.cursor()
         cursor.execute(ATUALIZAR, (inscricao.status, inscricao.url_Documento_Identificacao, inscricao.urlDeclaracaoRenda, inscricao.url_Termo_Responsabilidade))
-        return cursor.rowcount > 0
+        return (cursor.rowcount > 0)
 
 def excluir(id: int) -> bool:
     with get_connection() as conn:
         cursor = conn.cursor()
         cursor.execute(EXCLUIR, (id,))
-        return cursor.rowcount > 0
+        return (cursor.rowcount > 0)

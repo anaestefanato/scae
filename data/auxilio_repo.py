@@ -36,27 +36,33 @@ def obter_todos() -> list[Auxilio]:
             for row in rows]
         return auxilios
 
-def obter_por_id(self, id: int) -> Optional[Auxilio]:
-    with self._connect() as conn:
+def obter_por_id(id: int) -> Optional[Auxilio]:
+    with get_connection() as conn:
         cursor = conn.cursor()
         cursor.execute(OBTER_POR_ID, (id,))
         row = cursor.fetchone()
-        if row:
-            return Auxilio(**row)
-        return None
+        auxilio = Auxilio(
+            id_auxilio=row["id_auxilio"],
+            tipo_auxilio=row["tipo_auxilio"],
+            descricao=row["descricao"],
+            valor=row["valor"],
+            data_inicio=row["data_inicio"],
+            data_fim=row["data_fim"])
+        return auxilio  
+        
     
-def atualizar(self, auxilio: Auxilio) -> bool:
-    with self._connect() as conn:
+def atualizar(auxilio: Auxilio) -> bool:
+    with get_connection() as conn:
         cursor = conn.cursor()
         cursor.execute(ATUALIZAR, (
             auxilio.tipo_auxilio,
             auxilio.descricao,
             auxilio.valor,
             auxilio.data_fim))
-        return cursor.rowcount > 0
+        return (cursor.rowcount > 0)
     
-def excluir(self, id: int) -> bool:
-    with self._connect() as conn:
+def excluir(id: int) -> bool:
+    with get_connection() as conn:
         cursor = conn.cursor()
         cursor.execute(EXCLUIR, (id,))
-        return cursor.rowcount > 0
+        return (cursor.rowcount > 0)
