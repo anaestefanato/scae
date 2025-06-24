@@ -46,27 +46,25 @@ def obter_por_id(id: int) -> Optional[Inscricao]:
         cursor = conn.cursor()
         cursor.execute(OBTER_POR_ID, (id,))
         row = cursor.fetchone()
-        if row:
-            inscricao = Inscricao(
-                id_inscricao=row["id_inscricao"],
-                id_aluno=row["id_aluno"],
-                id_edital=row["id_edital"],
-                data_inscricao=row["data_inscricao"],
-                status=row["status"],
-                url_Documento_Identificacao=row["url_Documento_Identificacao"],
-                urlDeclaracaoRenda=row["urlDeclaracaoRenda"],
-                url_Termo_Responsabilidade=row["url_Termo_Responsabilidade"])
-            return inscricao
-        return None
+        inscricao = Inscricao(
+            id_inscricao=row["id_inscricao"],
+            id_aluno=row["id_aluno"],
+            id_edital=row["id_edital"],
+            data_inscricao=row["data_inscricao"],
+            status=row["status"],
+            url_Documento_Identificacao=row["url_Documento_Identificacao"],
+            urlDeclaracaoRenda=row["urlDeclaracaoRenda"],
+            url_Termo_Responsabilidade=row["url_Termo_Responsabilidade"])
+        return inscricao
 
-def atualizar(self, inscricao: Inscricao) -> bool:
-    with self._connect() as conn:
+def atualizar(inscricao: Inscricao) -> bool:
+    with get_connection() as conn:
         cursor = conn.cursor()
         cursor.execute(ATUALIZAR, (inscricao.status, inscricao.url_Documento_Identificacao, inscricao.urlDeclaracaoRenda, inscricao.url_Termo_Responsabilidade))
         return cursor.rowcount > 0
 
-def excluir(self, id: int) -> bool:
-    with self._connect() as conn:
+def excluir(id: int) -> bool:
+    with get_connection() as conn:
         cursor = conn.cursor()
         cursor.execute(EXCLUIR, (id,))
         return cursor.rowcount > 0

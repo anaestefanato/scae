@@ -46,27 +46,26 @@ def obter_por_id(id: int) -> Optional[DuvidaEdital]:
         cursor = conn.cursor()
         cursor.execute(OBTER_POR_ID, (id,))
         row = cursor.fetchone()
-        if row:
-            duvida = DuvidaEdital(
-                id_duvida=row["id_duvida"],
-                id_edital=row["id_edital"],
-                id_aluno=row["id_aluno"],
-                pergunta=row["pergunta"],
-                resposta=row["resposta"],
-                dataPergunta=row["dataPergunta"],
-                dataResposta=row["dataResposta"],
-                status=row["status"])
-            return duvida
-        return None
+        duvida = DuvidaEdital(
+            id_duvida=row["id_duvida"],
+            id_edital=row["id_edital"],
+            id_aluno=row["id_aluno"],
+            pergunta=row["pergunta"],
+            resposta=row["resposta"],
+            dataPergunta=row["dataPergunta"],
+            dataResposta=row["dataResposta"],
+            status=row["status"])
+        return duvida
 
-def atualizar(self, duvida: DuvidaEdital) -> bool:
-    with self._connect() as conn:
+
+def atualizar(duvida: DuvidaEdital) -> bool:
+    with get_connection() as conn:
         cursor = conn.cursor()
         cursor.execute(ATUALIZAR, (duvida.pergunta, duvida.resposta, duvida.status))
-        return cursor.rowcount > 0
+        return (cursor.rowcount > 0)
 
-def excluir(self, id: int) -> bool:
-    with self._connect() as conn:
+def excluir(id: int) -> bool:
+    with get_connection() as conn:
         cursor = conn.cursor()
         cursor.execute(EXCLUIR, (id,))
-        return cursor.rowcount > 0
+        return (cursor.rowcount > 0)

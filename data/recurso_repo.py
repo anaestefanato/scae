@@ -44,26 +44,24 @@ def obter_por_id(id: int) -> Optional[Recurso]:
         cursor = conn.cursor()
         cursor.execute(OBTER_POR_ID, (id,))
         row = cursor.fetchone()
-        if row:
-            recurso = Recurso(
-                id_recurso=row["id_recurso"],
-                id_inscricao=row["id_inscricao"],
-                id_assistente=row["id_assistente"],
-                descricao=row["descricao"],
-                dataEnvio=row["dataEnvio"],
-                dataResposta=row["dataResposta"],
-                status=row["status"])
-            return recurso
-        return None
+        recurso = Recurso(
+            id_recurso=row["id_recurso"],
+            id_inscricao=row["id_inscricao"],
+            id_assistente=row["id_assistente"],
+            descricao=row["descricao"],
+            dataEnvio=row["dataEnvio"],
+            dataResposta=row["dataResposta"],
+            status=row["status"])
+        return recurso
 
-def atualizar(self, recurso: Recurso) -> bool:
-    with self._connect() as conn:
+def atualizar(recurso: Recurso) -> bool:
+    with get_connection() as conn:
         cursor = conn.cursor()
         cursor.execute(ATUALIZAR, (recurso.descricao, recurso.status))
         return cursor.rowcount > 0
 
-def excluir(self, id: int) -> bool:
-    with self._connect() as conn:
+def excluir(id: int) -> bool:
+    with get_connection() as conn:
         cursor = conn.cursor()
         cursor.execute(EXCLUIR, (id,))
         return cursor.rowcount > 0

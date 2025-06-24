@@ -40,30 +40,28 @@ def obter_por_id(id: int) -> Optional[Usuario]:
         cursor = conn.cursor()
         cursor.execute(OBTER_POR_ID, (id,))
         row = cursor.fetchone()
-        if row:
-            usuario = Usuario(
-                id_usuario=row["id_usuario"],
-                nome=row["nome"],
-                email=row["email"],
-                senha=row["senha"],
-                tipo_usuario=row["tipo_usuario"])
-            return usuario
-        return None
+        usuario = Usuario(
+            id_usuario=row["id_usuario"],
+            nome=row["nome"],
+            email=row["email"],
+            senha=row["senha"],
+            tipo_usuario=row["tipo_usuario"])
+        return usuario
 
-def atualizar(self, usuario: Usuario) -> bool:
-    with self._connect() as conn:
+def atualizar(usuario: Usuario) -> bool:
+    with get_connection() as conn:
         cursor = conn.cursor()
         cursor.execute(ATUALIZAR, (usuario.nome, usuario.email, usuario.senha, usuario.tipo_usuario))
         return cursor.rowcount > 0
 
-def atualizar_senha(self, id: int, nova_senha: str) -> bool:
-    with self._connect() as conn:
+def atualizar_senha(id: int, nova_senha: str) -> bool:
+    with get_connection() as conn:
         cursor = conn.cursor()
         cursor.execute(ATUALIZAR_SENHA, (nova_senha, id))
         return cursor.rowcount > 0
 
-def excluir(self, id: int) -> bool:
-    with self._connect() as conn:
+def excluir(id: int) -> bool:
+    with get_connection() as conn:
         cursor = conn.cursor()
         cursor.execute(EXCLUIR, (id,))
         return cursor.rowcount > 0

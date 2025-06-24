@@ -14,10 +14,16 @@ def criar_tabela() -> bool:
 def inserir(administrador: Administrador) -> Optional[int]:
     with get_connection() as conn:
         cursor = conn.cursor()
+        usuario = Usuario(0,
+                administrador.nome, 
+                administrador.email, 
+                administrador.senha, 
+                administrador.tipo)
+        id_usuario = usuario_repo.inserir(usuario, cursor)
         cursor.execute(INSERIR, (
             administrador.id_usuario, 
             administrador.matricula))
-        return cursor.lastrowid
+        return id_usuario
 
 def obter_todos() -> list[Administrador]:
     with get_connection() as conn:
@@ -27,20 +33,29 @@ def obter_todos() -> list[Administrador]:
         administradores = [
             Administrador(
                 id_usuario=row["id_usuario"], 
-                matricula=row["matricula"])
+                matricula=row["matricula"],
+                nome=row["nome"],
+                email=row["email"],
+                senha=row["senha"],
+                tipo=row["tipo"])
             for row in rows]
         return administradores
 
-def obter_por_id(self, id: int) -> Optional[Administrador]:
-    with self._connect() as conn:
+def obter_por_id(id: int) -> Optional[Administrador]:
+    with get_connection() as conn:
         cursor = conn.cursor()
         cursor.execute(OBTER_POR_ID, (id,))
         row = cursor.fetchone()
-        if row:
-            return Administrador(**row)
-        return None
+        administrador = Administrador(
+            id_usuario=row["id_usuario"], 
+            matricula=row["matricula"],
+            nome=row["nome"],
+            email=row["email"],
+            senha=row["senha"],
+            tipo=row["tipo"]) 
+        return administrador 
     
-def atualizar(self, administrador: Administrador) -> bool:
+def atualizar(administrador: Administrador) -> bool:
     with get_connection() as conn:
         cursor = conn.cursor()
         usuario = Usuario(administrador.id_usuario,
@@ -51,9 +66,9 @@ def atualizar(self, administrador: Administrador) -> bool:
             administrador.id_usuario))
         return (cursor.rowcount > 0)
     
-def excluir(self, id: int) -> bool:
+def excluir(id: int) -> bool:
     with get_connection() as conn:
         cursor = conn.cursor()
-        usuario_repo.excluir(id, cursor)
         cursor.execute(EXCLUIR, (id,))
+        usuario_repo.excluir(id, cursor)
         return (cursor.rowcount > 0)

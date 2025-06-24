@@ -40,24 +40,22 @@ def obter_por_id(id: int) -> Optional[Notificacao]:
         cursor = conn.cursor()
         cursor.execute(OBTER_POR_ID, (id,))
         row = cursor.fetchone()
-        if row:
-            notificacao = Notificacao(
-                id_notificacao=row["id_notificacao"],
-                id_usuario_destinatario=row["id_usuario_destinatario"],
-                titulo=row["titulo"],
-                dataEnvio=row["dataEnvio"],
-                tipo=row["tipo"])
-            return notificacao
-        return None
+        notificacao = Notificacao(
+            id_notificacao=row["id_notificacao"],
+            id_usuario_destinatario=row["id_usuario_destinatario"],
+            titulo=row["titulo"],
+            dataEnvio=row["dataEnvio"],
+            tipo=row["tipo"])
+        return notificacao
 
-def atualizar(self, notificacao: Notificacao) -> bool:
-    with self._connect() as conn:
+def atualizar(notificacao: Notificacao) -> bool:
+    with get_connection() as conn:
         cursor = conn.cursor()
         cursor.execute(ATUALIZAR, (notificacao.titulo, notificacao.tipo))
         return cursor.rowcount > 0
 
-def excluir(self, id: int) -> bool:
-    with self._connect() as conn:
+def excluir(id: int) -> bool:
+    with get_connection() as conn:
         cursor = conn.cursor()
         cursor.execute(EXCLUIR, (id,))
         return cursor.rowcount > 0

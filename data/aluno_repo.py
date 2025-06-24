@@ -1,6 +1,8 @@
 from typing import Optional
+from data import usuario_repo
 from data.aluno_model import Aluno
 from data.aluno_sql import *
+from data.usuario_model import Usuario
 from data.util import get_connection
 
 def criar_tabela() -> bool:
@@ -12,10 +14,16 @@ def criar_tabela() -> bool:
 def inserir(aluno: Aluno) -> Optional[int]:
     with get_connection() as conn:
         cursor = conn.cursor()
+        usuario = Usuario(0,
+                aluno.nome,
+                aluno.email,
+                aluno.senha,
+                aluno.tipo)
+        id_usuario = usuario_repo.inserir(usuario, cursor)
         cursor.execute(INSERIR, (
             aluno.id_usuario, 
             aluno.matricula))
-        return cursor.lastrowid
+        return id_usuario
     
 def obter_todos() -> list[Aluno]:
     with get_connection() as conn:
@@ -24,7 +32,11 @@ def obter_todos() -> list[Aluno]:
         rows = cursor.fetchall()
         alunos = [
             Aluno(
-                id_usuario=row["id_usuario"], 
+                id_usuario=row["id_usuario"],
+                nome=row["nome"],
+                email=row["email"],
+                senha=row["senha"],
+                tipo=row["tipo"], 
                 cpf=row["cpf"],
                 data_nascimento=row["data_nascimento"],
                 filiacao=row["filiacao"],
@@ -45,6 +57,10 @@ def obter_por_id(id: int) -> Optional[Aluno]:
         if row:
             aluno = Aluno(
                 id_usuario=row["id_usuario"], 
+                nome=row["nome"],
+                email=row["email"], 
+                senha=row["senha"],
+                tipo=row["tipo"],
                 cpf=row["cpf"],
                 data_nascimento=row["data_nascimento"],
                 filiacao=row["filiacao"],
@@ -57,9 +73,15 @@ def obter_por_id(id: int) -> Optional[Aluno]:
             return aluno(**row)
         return None
     
-def atualizar(self, aluno: Aluno) -> bool:
-    with self._connect() as conn:
+def atualizar(aluno: Aluno) -> bool:
+    with get_connection() as conn:
         cursor = conn.cursor()
+        usuario = Usuario(aluno.id_usuario,
+                          aluno.nome, 
+                          aluno.email, 
+                          aluno.senha, 
+                          aluno.tipo)
+        usuario_repo.atualizar(usuario, cursor)
         cursor.execute(ATUALIZAR, (
             aluno.cpf, 
             aluno.data_nascimento,
@@ -71,10 +93,11 @@ def atualizar(self, aluno: Aluno) -> bool:
             aluno.renda_familiar,
             aluno.matricula, 
             aluno.id_usuario))
-        return cursor.rowcount > 0
+        return (cursor.rowcount > 0)
     
-def excluir(self, id: int) -> bool:
-    with self._connect() as conn:
+def excluir(id: int) -> bool:
+    with get_connection() as conn:
         cursor = conn.cursor()
         cursor.execute(EXCLUIR, (id,))
-        return cursor.rowcount > 0
+        usuario_repo.excluir(id, cursor)
+        return (cursor.rowcount > 0)

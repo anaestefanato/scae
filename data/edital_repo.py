@@ -45,26 +45,24 @@ def obter_por_id(id: int) -> Optional[Edital]:
         cursor = conn.cursor()
         cursor.execute(OBTER_POR_ID, (id,))
         row = cursor.fetchone()
-        if row:
-            edital = Edital(
-                id_edital=row["id_edital"],
-                titulo=row["titulo"],
-                descricao=row["descricao"],
-                data_publicacao=row["data_publicacao"],
-                data_encerramento=row["data_encerramento"],
-                arquivo=row["arquivo"],
-                status=row["status"])
-            return edital
-        return None
+        edital = Edital(
+            id_edital=row["id_edital"],
+            titulo=row["titulo"],
+            descricao=row["descricao"],
+            data_publicacao=row["data_publicacao"],
+            data_encerramento=row["data_encerramento"],
+            arquivo=row["arquivo"],
+            status=row["status"])
+        return edital
 
-def atualizar(self, edital: Edital) -> bool:
-    with self._connect() as conn:
+def atualizar(edital: Edital) -> bool:
+    with get_connection() as conn:
         cursor = conn.cursor()
         cursor.execute(ATUALIZAR, (edital.titulo, edital.descricao, edital.data_encerramento, edital.arquivo, edital.status))
         return cursor.rowcount > 0
 
-def excluir(self, id: int) -> bool:
-    with self._connect() as conn:
+def excluir(id: int) -> bool:
+    with get_connection() as conn:
         cursor = conn.cursor()
         cursor.execute(EXCLUIR, (id,))
         return cursor.rowcount > 0

@@ -30,11 +30,11 @@ INNER JOIN usuario u ON rc.id_usuario_autor = u.id_usuario
 WHERE id_resposta_chamado = ?
 """
 
-# ATUALIZAR = """
-# UPDATE resposta_chamado
-# SET mensagem = ?
-# WHERE id_resposta_chamado = ?
-# """
+ATUALIZAR = """
+UPDATE resposta_chamado
+SET mensagem = ?
+WHERE id_resposta_chamado = ?
+"""
 
 EXCLUIR = """
 DELETE FROM resposta_chamado
