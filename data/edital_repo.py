@@ -16,7 +16,6 @@ def inserir(edital: Edital) -> Optional[int]:
             edital.id_edital,
             edital.titulo,
             edital.descricao,
-            edital.resposta,
             edital.data_publicacao,
             edital.data_encerramento,
             edital.arquivo,

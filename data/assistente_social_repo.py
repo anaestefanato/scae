@@ -19,7 +19,7 @@ def inserir(assistenteSocial: AssistenteSocial) -> Optional[int]:
                 assistenteSocial.email, 
                 assistenteSocial.senha, 
                 assistenteSocial.tipo_usuario)
-        id_usuario = usuario.inserir(usuario, cursor)
+        id_usuario = usuario_repo.inserir(usuario, cursor)
         cursor.execute(INSERIR, (
             assistenteSocial.id_usuario, 
             assistenteSocial.matricula))

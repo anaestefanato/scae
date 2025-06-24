@@ -15,7 +15,7 @@ def inserir(recurso: Recurso) -> Optional[int]:
         cursor.execute(INSERIR, (
             recurso.id_recurso,
             recurso.id_inscricao,
-            recurso.id_assistente,
+            recurso.id_assistente_social,
             recurso.descricao,
             recurso.data_envio,
             recurso.data_resposta,
@@ -31,7 +31,7 @@ def obter_todos() -> list[Recurso]:
             Recurso(
                 id_recurso=row["id_recurso"],
                 id_inscricao=row["id_inscricao"],
-                id_assistente=row["id_assistente"],
+                id_assistente_social=row["id_assistente"],
                 descricao=row["descricao"],
                 data_envio=row["dataEnvio"],
                 data_resposta=row["dataResposta"],
@@ -47,7 +47,7 @@ def obter_por_id(id: int) -> Optional[Recurso]:
         recurso = Recurso(
             id_recurso=row["id_recurso"],
             id_inscricao=row["id_inscricao"],
-            id_assistente=row["id_assistente"],
+            id_assistente_social=row["id_assistente"],
             descricao=row["descricao"],
             data_envio=row["dataEnvio"],
             data_resposta=row["dataResposta"],

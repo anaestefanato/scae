@@ -24,7 +24,7 @@ def inserir(auxilioTransporte: AuxilioTransporte) -> Optional[int]:
             auxilioTransporte.tipo_auxilio)
         id_auxilio = auxilio.inserir(auxilio, cursor)
         cursor.execute(INSERIR, (
-            auxilioTransporte.id_auxilio_transporte,
+            auxilioTransporte.id_auxilio,
             auxilioTransporte.urlCompTransporte,
             auxilioTransporte.urlCompResidencia))
         return id_auxilio
@@ -36,7 +36,7 @@ def obter_todos() -> list[AuxilioTransporte]:
         rows = cursor.fetchall()
         auxilios = [
             AuxilioTransporte(
-                id_auxilio_transporte=row["id_auxilio_transporte"],
+                id_auxilio=row["id_auxilio_transporte"],
                 id_edital=row["id_edital"],
                 id_inscricao=row["id_inscricao"],
                 descricao=row["descricao"],
@@ -55,7 +55,7 @@ def obter_por_id(id: int) -> Optional[AuxilioTransporte]:
         cursor.execute(OBTER_POR_ID, (id,))
         row = cursor.fetchone()
         auxilio = AuxilioTransporte(
-            id_auxilio_transporte=row["id_auxilio_transporte"],
+            id_auxilio=row["id_auxilio_transporte"],
             id_edital=row["id_edital"],
             id_inscricao=row["id_inscricao"],
             descricao=row["descricao"],
@@ -70,7 +70,7 @@ def obter_por_id(id: int) -> Optional[AuxilioTransporte]:
 def atualizar(auxilioTransporte: AuxilioTransporte) -> bool:
     with get_connection() as conn:
         cursor = conn.cursor()
-        auxilio = AuxilioTransporte(auxilioTransporte.id_auxilio_transporte,
+        auxilio = AuxilioTransporte(auxilioTransporte.id_auxilio,
             auxilioTransporte.id_edital,
             auxilioTransporte.id_inscricao,
             auxilioTransporte.descricao,
@@ -80,7 +80,7 @@ def atualizar(auxilioTransporte: AuxilioTransporte) -> bool:
             auxilioTransporte.tipo_auxilio)
         auxilio.atualizar(auxilio, cursor)
         cursor.execute(ATUALIZAR, (
-            auxilioTransporte.id_auxilio_transporte,
+            auxilioTransporte.id_auxilio,
             auxilioTransporte.urlCompTransporte,
             auxilioTransporte.urlCompResidencia))
         return (cursor.rowcount > 0)

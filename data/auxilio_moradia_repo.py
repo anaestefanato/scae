@@ -23,7 +23,7 @@ def inserir(auxilioMoradia: AuxilioMoradia) -> Optional[int]:
             auxilioMoradia.tipo_auxilio)
         id_auxilio = auxilio_repo.inserir(auxilio, cursor)
         cursor.execute(INSERIR, (
-            auxilioMoradia.id_auxilio_moradia,
+            auxilioMoradia.id_auxilio,
             auxilioMoradia.urlCompResidenciaAlugada,
             auxilioMoradia.urlCompResidenciaFixa,
             auxilioMoradia.urlContratoAluguelCidCampus,
@@ -58,7 +58,7 @@ def obter_por_id(id: int) -> Optional[AuxilioMoradia]:
         cursor.execute(OBTER_POR_ID, (id,))
         row = cursor.fetchone()
         auxilio = AuxilioMoradia(
-            id_auxilio_moradia=row["id_auxilio_moradia"],
+            id_auxilio=row["id_auxilio_moradia"],
             id_auxilio=row["id_auxilio"],
             id_edital=row["id_edital"],
             id_inscricao=row["id_inscricao"],
@@ -76,7 +76,7 @@ def obter_por_id(id: int) -> Optional[AuxilioMoradia]:
 def atualizar(auxilioMoradia: AuxilioMoradia) -> bool:
     with get_connection() as conn:
         cursor = conn.cursor()
-        auxilio = AuxilioMoradia(auxilioMoradia.id_auxilio_moradia,
+        auxilio = AuxilioMoradia(auxilioMoradia.id_auxilio,
             auxilioMoradia.id_edital,
             auxilioMoradia.id_inscricao,
             auxilioMoradia.descricao,
