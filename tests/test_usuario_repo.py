@@ -49,14 +49,12 @@ class TestUsuarioRepo:
         criar_tabela()
         usuario_teste = Usuario(0, "Usuario Teste", "fulano@gmail.com", "12345", "administrador")
         id_usuario_inserido = inserir(usuario_teste)
-        usuario_inserido = obter_por_id(id_usuario_inserido)
         # Act
-        usuario_inserido.senha = "nova_senha_123"
-        resultado = atualizar_senha(usuario_inserido)
+        resultado = atualizar_senha(id_usuario_inserido, "54321")
         #assert
+        usuario_inserido = obter_por_id(id_usuario_inserido)
         assert resultado == True, "A atualização da senha do usuário falhou."
-        usuario_db = obter_por_id(id_usuario_inserido)
-        assert usuario_db.senha == "nova_senha_123", "A senha do usuário atualizado não corresponde ao esperado."
+        assert usuario_inserido.senha == "54321", "A senha do usuário atualizado não corresponde ao esperado."
 
     def test_excluir_usuario(self, test_db):
         # Arrange
