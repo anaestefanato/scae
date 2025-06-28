@@ -44,6 +44,11 @@ UPDATE usuario
 SET senha = ?
 WHERE id_usuario = ?
 """
+ATUALIZAR_TIPO_USUARIO = """
+UPDATE usuario
+SET tipo_usuario = ?
+WHERE id_usuario = ?
+"""
 
 EXCLUIR = """
 DELETE FROM usuario

@@ -116,20 +116,58 @@ class TestUsuarioRepo:
         # Assert
         assert resultado == False, "A exclusão de um usuário inexistente deveria retornar False."
 
+    def test_atualizar_tipo_usuario(self, test_db, usuario_exemplo):
+        # Arrange
+        usuario_repo.criar_tabela()
+        id_usuario_inserido = usuario_repo.inserir(usuario_exemplo)
+        # Act
+        resultado = usuario_repo.atualizar_tipo_usuario(id_usuario_inserido, 1)
+        # Assert
+        assert resultado == True, "A atualização do tipo de usuário deveria retornar True"
+        usuario_db = usuario_repo.obter_por_id(id_usuario_inserido)
+        assert usuario_db.tipo == 1, "O tipo do usuário atualizado não confere"
 
+    def test_atualizar_senha_usuario_existente(self, test_db, usuario_exemplo):
+        # Arrange
+        usuario_repo.criar_tabela()
+        id_usuario_inserido = usuario_repo.inserir(usuario_exemplo)
+        # Act
+        resultado = usuario_repo.atualizar_senha(id_usuario_inserido, "nova_senha")
+        # Assert
+        assert resultado == True, "A atualização da senha deveria retornar True"
+        usuario_db = usuario_repo.obter_por_id(id_usuario_inserido)
+        assert usuario_db.senha == "nova_senha", "A senha do usuário atualizado não confere"
 
-    # def test_obter_por_pagina(self, test_db):
-    #     # Arrange
-    #     criar_tabela()
-    #     for i in range(10):
-    #         usuario = Usuario(0, f"Usuario {i+1}")
-    #         inserir(usuario)
-    #     # Act
-    #     usuario1 = obter_por_pagina(1, 10)
-    #     usuario2 = obter_por_pagina(2, 4)
-    #     usuario3 = obter_por_pagina(3, 4)
-    #     # Assert
-    #     assert len(usuario1) == 10, "A primeira página deve conter 10 usuários."
-    #     assert len(usuario2) == 4, "A segunda página deve conter 4 usuários."
-    #     assert len(usuario3) == 2, "A terceira página deve conter 2 usuários."
-    #     assert usuario3[0].nome == 8, "O primeiro usuário da terceira página deve ser o 8."
+    def test_atualizar_senha_usuario_inexistente(self, test_db, usuario_exemplo):
+        # Arrange
+        usuario_repo.criar_tabela()
+        usuario_exemplo.id = 999
+        # Act
+        resultado = usuario_repo.atualizar_senha(usuario_exemplo.id, "nova_senha")
+        # Assert
+        assert resultado == False, "A atualização da senha de um usuário inexistente deveria retornar False"
+
+    def test_obter_usuarios_por_pagina_primeira_pagina(self, test_db, lista_usuarios_exemplo):
+        # Arrange
+        usuario_repo.criar_tabela()
+        for usuario in lista_usuarios_exemplo:
+            usuario_repo.inserir(usuario)
+        # Act
+        pagina_usuarios = usuario_repo.obter_por_pagina(1, 4)
+        # Assert
+        assert len(pagina_usuarios) == 4, "Deveria retornar 4 usuários na primeira página"
+        assert all(isinstance(u, Usuario) for u in pagina_usuarios), "Todos os itens da página devem ser do tipo Usuario"
+        ids_esperados = [1, 2, 3, 4]
+        ids_retornados = [u.id for u in pagina_usuarios]
+        assert ids_esperados == ids_retornados, "Os IDs dos usuários na primeira página não estão corretos"
+    
+    def test_obter_usuarios_por_pagina_terceira_pagina(self, test_db, lista_usuarios_exemplo):
+        # Arrange
+        usuario_repo.criar_tabela()
+        for usuario in lista_usuarios_exemplo:
+            usuario_repo.inserir(usuario)
+        # Act: busca a terceira página com 4 usuários por página
+        pagina_usuarios = usuario_repo.obter_por_pagina(3, 4)
+        # Assert: verifica se retornou a quantidade correta (2 usuários na terceira página)
+        assert len(pagina_usuarios) == 2, "Deveria retornar 2 usuários na terceira página"
+        assert (isinstance(u, Usuario) for u in pagina_usuarios), "Todos os itens da página devem ser do tipo Usuario"

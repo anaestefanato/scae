@@ -30,6 +30,16 @@ def usuario_exemplo():
     usuario = Usuario(0, "Usuário Teste", "joaosilva@email.com", "123456", "administrador")
     return usuario
 
+@pytest.fixture
+def lista_usuarios_exemplo():
+    # Cria uma lista de 10 usuários de exemplo para os testes
+    from data.usuario_model import Usuario
+    usuarios = []
+    for i in range(1, 11):
+        usuario = Usuario(0, f"Usuário {i:02d}", f"usuario{i:02d}@email.com", "123456", 0)
+        usuarios.append(usuario)
+    return usuarios
+
 # @pytest.fixture
 # def lista_categorias_exemplo():
 #     # Cria uma lista de 10 categorias de exemplo para os testes

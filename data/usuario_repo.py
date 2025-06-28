@@ -37,6 +37,22 @@ def obter_todos() -> list[Usuario]:
                 tipo_usuario=row["tipo_usuario"])
             for row in rows]
         return usuarios
+    
+def obter_por_pagina(pagina: int, limite: int) -> list[Usuario]:
+    offset = (pagina - 1) * limite
+    with get_connection() as conn:
+        cursor = conn.cursor()
+        cursor.execute(OBTER_TODOS + " LIMIT ? OFFSET ?", (limite, offset))
+        rows = cursor.fetchall()
+        usuarios = [
+            Usuario(
+                id_usuario=row["id_usuario"],
+                nome=row["nome"],
+                email=row["email"],
+                senha=row["senha"],
+                tipo_usuario=row["tipo_usuario"])
+            for row in rows]
+        return usuarios
 
 def obter_por_id(id: int) -> Optional[Usuario]:
     with get_connection() as conn:
@@ -78,6 +94,12 @@ def atualizar_senha(id: int, senha: str, cursor: Any) -> bool:
     with get_connection() as conn:
         cursor = conn.cursor()
         cursor.execute(ATUALIZAR_SENHA, (senha, id))
+        return cursor.rowcount > 0
+
+def atualizar_tipo_usuario(id: int, tipo_usuario: int) -> bool:
+    with get_connection() as conn:
+        cursor = conn.cursor()
+        cursor.execute(ATUALIZAR_TIPO_USUARIO, (tipo_usuario, id))
         return cursor.rowcount > 0
 
 def excluir(id: int) -> bool:
