@@ -33,6 +33,13 @@ FROM usuario
 WHERE email = ?
 """
 
+OBTER_USUARIOS_POR_PAGINA = """
+SELECT id_usuario, nome, email, senha, tipo_usuario
+FROM Usuario
+ORDER BY nome ASC
+LIMIT ? OFFSET ?;
+"""
+
 ATUALIZAR = """
 UPDATE usuario
 SET nome = ?, email = ?, tipo_usuario = ?

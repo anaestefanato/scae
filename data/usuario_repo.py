@@ -38,7 +38,7 @@ def obter_todos() -> list[Usuario]:
             for row in rows]
         return usuarios
     
-def obter_por_pagina(pagina: int, limite: int) -> list[Usuario]:
+def obter_usuarios_por_pagina(pagina: int, limite: int) -> list[Usuario]:
     offset = (pagina - 1) * limite
     with get_connection() as conn:
         cursor = conn.cursor()
@@ -90,7 +90,7 @@ def atualizar(usuario: Usuario) -> bool:
         cursor.execute(ATUALIZAR, (usuario.nome, usuario.email, usuario.tipo_usuario, usuario.id_usuario))
         return cursor.rowcount > 0
 
-def atualizar_senha(id: int, senha: str, cursor: Any) -> bool:
+def atualizar_senha(id: int, senha: str) -> bool:
     with get_connection() as conn:
         cursor = conn.cursor()
         cursor.execute(ATUALIZAR_SENHA, (senha, id))

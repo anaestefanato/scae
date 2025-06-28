@@ -121,13 +121,13 @@ class TestUsuarioRepo:
         usuario_repo.criar_tabela()
         id_usuario_inserido = usuario_repo.inserir(usuario_exemplo)
         # Act
-        resultado = usuario_repo.atualizar_tipo_usuario(id_usuario_inserido, 1)
+        resultado = usuario_repo.atualizar_tipo_usuario(id_usuario_inserido, 'aluno')
         # Assert
         assert resultado == True, "A atualização do tipo de usuário deveria retornar True"
         usuario_db = usuario_repo.obter_por_id(id_usuario_inserido)
-        assert usuario_db.tipo == 1, "O tipo do usuário atualizado não confere"
+        assert usuario_db.tipo_usuario == 'aluno', "O tipo do usuário atualizado não confere"
 
-    def test_atualizar_senha_usuario_existente(self, test_db, usuario_exemplo):
+    def test_atualizar_senha(self, test_db, usuario_exemplo):
         # Arrange
         usuario_repo.criar_tabela()
         id_usuario_inserido = usuario_repo.inserir(usuario_exemplo)
@@ -138,36 +138,54 @@ class TestUsuarioRepo:
         usuario_db = usuario_repo.obter_por_id(id_usuario_inserido)
         assert usuario_db.senha == "nova_senha", "A senha do usuário atualizado não confere"
 
-    def test_atualizar_senha_usuario_inexistente(self, test_db, usuario_exemplo):
+    def test_atualizar_senha_usuario_inexistente(self, test_db):
         # Arrange
         usuario_repo.criar_tabela()
-        usuario_exemplo.id = 999
         # Act
-        resultado = usuario_repo.atualizar_senha(usuario_exemplo.id, "nova_senha")
+        resultado = usuario_repo.atualizar_senha(999, "nova_senha")
         # Assert
         assert resultado == False, "A atualização da senha de um usuário inexistente deveria retornar False"
 
     def test_obter_usuarios_por_pagina_primeira_pagina(self, test_db, lista_usuarios_exemplo):
         # Arrange
         usuario_repo.criar_tabela()
+        lista_usuarios_exemplo = [
+            Usuario(1, "Usuario 1", "usuario1@email.com", "senha1", "administrador"),
+            Usuario(2, "Usuario 2", "usuario2@email.com", "senha2", "aluno"),
+            Usuario(3, "Usuario 3", "usuario3@email.com", "senha3", "assistente"),
+            Usuario(4, "Usuario 4", "usuario4@email.com", "senha4", "administrador"),
+            Usuario(5, "Usuario 5", "usuario5@email.com", "senha5", "aluno"),
+        ]
         for usuario in lista_usuarios_exemplo:
             usuario_repo.inserir(usuario)
         # Act
-        pagina_usuarios = usuario_repo.obter_por_pagina(1, 4)
+        pagina_usuarios = usuario_repo.obter_usuarios_por_pagina(1, 4)
         # Assert
         assert len(pagina_usuarios) == 4, "Deveria retornar 4 usuários na primeira página"
         assert all(isinstance(u, Usuario) for u in pagina_usuarios), "Todos os itens da página devem ser do tipo Usuario"
         ids_esperados = [1, 2, 3, 4]
-        ids_retornados = [u.id for u in pagina_usuarios]
+        ids_retornados = [u.id_usuario for u in pagina_usuarios]
         assert ids_esperados == ids_retornados, "Os IDs dos usuários na primeira página não estão corretos"
     
     def test_obter_usuarios_por_pagina_terceira_pagina(self, test_db, lista_usuarios_exemplo):
         # Arrange
         usuario_repo.criar_tabela()
+        lista_usuarios_exemplo = [
+            Usuario(1, "Usuario 1", "usuario1@email.com", "senha1", "administrador"),
+            Usuario(2, "Usuario 2", "usuario2@email.com", "senha2", "aluno"),
+            Usuario(3, "Usuario 3", "usuario3@email.com", "senha3", "assistente"),
+            Usuario(4, "Usuario 4", "usuario4@email.com", "senha4", "administrador"),
+            Usuario(5, "Usuario 5", "usuario5@email.com", "senha5", "aluno"),
+            Usuario(6, "Usuario 6", "usuario6@email.com", "senha6", "assistente"),
+            Usuario(7, "Usuario 7", "usuario7@email.com", "senha7", "administrador"),
+            Usuario(8, "Usuario 8", "usuario8@email.com", "senha8", "aluno"),
+            Usuario(9, "Usuario 9", "usuario9@email.com", "senha9", "assistente"),
+            Usuario(10, "Usuario 10", "usuario10@email.com", "senha10", "administrador")
+        ]
         for usuario in lista_usuarios_exemplo:
             usuario_repo.inserir(usuario)
         # Act: busca a terceira página com 4 usuários por página
-        pagina_usuarios = usuario_repo.obter_por_pagina(3, 4)
+        pagina_usuarios = usuario_repo.obter_usuarios_por_pagina(3, 4)
         # Assert: verifica se retornou a quantidade correta (2 usuários na terceira página)
         assert len(pagina_usuarios) == 2, "Deveria retornar 2 usuários na terceira página"
         assert (isinstance(u, Usuario) for u in pagina_usuarios), "Todos os itens da página devem ser do tipo Usuario"
