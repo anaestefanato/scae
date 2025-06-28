@@ -26,6 +26,13 @@ FROM usuario
 WHERE id_usuario = ?
 """ 
 
+OBTER_POR_EMAIL = """
+SELECT
+id_usuario, nome, email, senha, tipo_usuario
+FROM usuario
+WHERE email = ?
+"""
+
 ATUALIZAR = """
 UPDATE usuario
 SET nome = ?, email = ?, tipo_usuario = ?

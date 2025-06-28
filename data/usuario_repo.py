@@ -52,6 +52,21 @@ def obter_por_id(id: int) -> Optional[Usuario]:
                 tipo_usuario=row["tipo_usuario"])
             return usuario
         return None
+    
+def obter_usuario_por_email(email: str) -> Optional[Usuario]:
+    with get_connection() as conn:
+        cursor = conn.cursor()
+        cursor.execute(OBTER_POR_EMAIL, (email,))
+        row = cursor.fetchone()
+        if row:
+            usuario = Usuario(
+                id_usuario=row["id_usuario"],
+                nome=row["nome"],
+                email=row["email"],
+                senha=row["senha"],
+                tipo_usuario=row["tipo_usuario"])
+            return usuario
+        return None
 
 def atualizar(usuario: Usuario) -> bool:
     with get_connection() as conn:
