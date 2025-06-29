@@ -64,8 +64,17 @@ def obter_por_id(id: int) -> Optional[Edital]:
 def atualizar(edital: Edital) -> bool:
     with get_connection() as conn:
         cursor = conn.cursor()
-        cursor.execute(ATUALIZAR, (edital.id_edital, edital.titulo, edital.descricao, edital.data_encerramento, edital.arquivo, edital.status))
-        return (cursor.rowcount > 0)
+        cursor.execute(ATUALIZAR, (
+            edital.titulo,
+            edital.descricao,
+            edital.data_encerramento,
+            edital.arquivo,
+            edital.status,
+            edital.id_edital
+        ))
+        conn.commit()
+        return cursor.rowcount > 0
+
 
 def excluir(id: int) -> bool:
     with get_connection() as conn:

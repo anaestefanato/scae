@@ -70,3 +70,40 @@ class TestEditalRepo:
         assert resultado == True, "A atualização do edital deveria ter sido bem-sucedida."
         edital_db = obter_por_id(id_edital_inserido)
         assert edital_db.titulo == "Edital Teste Atualizado", "O título do edital atualizado não corresponde ao esperado."
+
+
+    def test_atualizar_edital_inexistente(self, test_db):
+        # Arrange
+        criar_tabela()
+        edital_teste = Edital(999, "Edital Inexistente", "Descrição do edital inexistente", "2023-01-01", "2023-12-31", "arquivo_inexistente.pdf", "ativo")
+        # Act
+        resultado = atualizar(edital_teste)
+        # Assert
+        assert resultado == False, "A atualização de um edital inexistente deveria falhar."
+        edital_db = obter_por_id(edital_teste.id_edital)
+        assert edital_db is None, "O edital inexistente não deveria ter sido encontrado no banco de dados."
+
+
+    def test_excluir_edital_existente(self, test_db):
+        # Arrange
+        criar_tabela()
+        edital_teste = Edital(0, "Edital Teste", "Descrição do edital teste", "2023-01-01", "2023-12-31", "arquivo_teste.pdf", "ativo")
+        id_edital_inserido = inserir(edital_teste)
+        # Act
+        resultado = excluir(id_edital_inserido)
+        # Assert
+        assert resultado == True, "A exclusão do edital deveria ter sido bem-sucedida."
+        edital_db = obter_por_id(id_edital_inserido)
+        assert edital_db is None, "O edital ainda existe no banco de dados após a exclusão."
+
+
+    def test_excluir_edital_inexistente(self, test_db):
+        # Arrange
+        criar_tabela()
+        id_edital_inexistente = 999
+        # Act
+        resultado = excluir(id_edital_inexistente)
+        # Assert
+        assert resultado == False, "A exclusão de um edital inexistente deveria falhar."
+        edital_db = obter_por_id(id_edital_inexistente)
+        assert edital_db is None, "O edital inexistente não deveria ter sido encontrado no banco de dados."
