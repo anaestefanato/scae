@@ -52,7 +52,7 @@ def lista_alunos_exemplo():
     from data.aluno_model import Aluno
     alunos = []
     for i in range(1, 11):
-        aluno = Aluno(0, f"Aluno {i:02d}", f"1234567890{i:02d}", datetime(2000, 1, i).date(), f"Pai {i:02d}", "Rua A", "Banco A", "1234", "56789", 1500.00, f"ALUNO{i:02d}")
+        aluno = Aluno(0, f"Aluno {i:02d}", f"aluno{i:02d}@email.com", f"123456{i:02d}", "aluno", f"1234567890{i:02d}", datetime(2000, 1, i).date(), f"Pai {i:02d}", "Rua A", "Banco A", "1234", "56789", 1500.00, f"ALUNO{i:02d}")
         alunos.append(aluno)
     return alunos
 

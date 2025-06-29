@@ -16,39 +16,45 @@ def criar_tabela() -> bool:
         print("Erro ao criar tabela aluno:", e)
         return False
     
-def inserir(aluno: Usuario) -> Optional[int]:
+def inserir(aluno: Aluno) -> Optional[int]:
     with get_connection() as conn:
         cursor = conn.cursor()
-        usuario = Usuario(0,
-                aluno.nome,
-                aluno.email,
-                aluno.senha,
-                aluno.tipo_usuario)
-        id_usuario = usuario_repo.inserir(usuario)
+        # Primeiro insere o usuário
+        id_usuario = usuario_repo.inserir(Usuario(
+            id_usuario=0,
+            nome=aluno.nome,
+            email=aluno.email,
+            senha=aluno.senha,
+            tipo_usuario=aluno.tipo_usuario
+        ))
+        # Depois insere na tabela aluno
         cursor.execute(INSERIR, (
-            aluno.cpf,
+            aluno.id_usuario if aluno.id_usuario else id_usuario,
+            aluno.cpf ,
             aluno.data_nascimento,
             aluno.filiacao,
             aluno.endereco,
             aluno.nome_banco,
             aluno.agencia_bancaria,
             aluno.numero_conta_bancaria,
-            aluno.renda_familiar
-            ))
+            aluno.renda_familiar,
+            aluno.matricula
+        ))
         return id_usuario
     
-def obter_todos() -> list[Usuario]:
+def obter_todos() -> list[Aluno]:
     with get_connection() as conn:
         cursor = conn.cursor()
         cursor.execute(OBTER_TODOS)
         rows = cursor.fetchall()
-        alunos = [
-            Usuario(
+        alunos = []
+        for row in rows:
+            aluno = Aluno(
                 id_usuario=row["id_usuario"],
                 nome=row["nome"],
                 email=row["email"],
                 senha=row["senha"],
-                tipo_usuario=row["tipo_usuario"], 
+                tipo_usuario=row["tipo_usuario"],
                 cpf=row["cpf"],
                 data_nascimento=row["data_nascimento"],
                 filiacao=row["filiacao"],
@@ -57,20 +63,35 @@ def obter_todos() -> list[Usuario]:
                 agencia_bancaria=row["agencia_bancaria"],
                 numero_conta_bancaria=row["numero_conta_bancaria"],
                 renda_familiar=row["renda_familiar"],
-                matricula=row["matricula"])
-            for row in rows]
+                matricula=row["matricula"]
+            )
+            alunos.append(aluno)
         return alunos
     
-def obter_por_id(id: int) -> Optional[Usuario]:
+def obter_por_id(id: int) -> Optional[Aluno]:
     with get_connection() as conn:
         cursor = conn.cursor()
         cursor.execute(OBTER_POR_ID, (id,))
         row = cursor.fetchone()
         if row:
-            aluno = Usuario(
-                id_usuario=row["id_usuario"])
-            return aluno(**row)
+            return Aluno(
+                id_usuario=row["id_usuario"],
+                nome=row["nome"],
+                email=row["email"],
+                senha=row["senha"],
+                tipo_usuario=row["tipo_usuario"],
+                cpf=row["cpf"],
+                data_nascimento=row["data_nascimento"],
+                filiacao=row["filiacao"],
+                endereco=row["endereco"],
+                nome_banco=row["nome_banco"],
+                agencia_bancaria=row["agencia_bancaria"],
+                numero_conta_bancaria=row["numero_conta_bancaria"],
+                renda_familiar=row["renda_familiar"],
+                matricula=row["matricula"]
+            )
         return None
+
 
 def obter_alunos_por_pagina(pagina: int, limite: int) -> list[Usuario]:
     offset = (pagina - 1) * limite
@@ -79,12 +100,12 @@ def obter_alunos_por_pagina(pagina: int, limite: int) -> list[Usuario]:
         cursor.execute(OBTER_POR_PAGINA, (limite, offset))
         rows = cursor.fetchall()
         alunos = [
-            Usuario(
+            Aluno(
                 id_usuario=row["id_usuario"],
                 nome=row["nome"],
                 email=row["email"],
                 senha=row["senha"],
-                tipo_usuario=row["tipo"],
+                tipo_usuario=row["tipo_usuario"],
                 cpf=row["cpf"],
                 data_nascimento=row["data_nascimento"],
                 filiacao=row["filiacao"],
@@ -105,7 +126,7 @@ def atualizar(aluno: Usuario) -> bool:
                           aluno.email, 
                           aluno.senha, 
                           aluno.tipo_usuario)
-        usuario_repo.atualizar(usuario, cursor)
+        usuario_repo.atualizar(usuario)
         cursor.execute(ATUALIZAR, (
             aluno.cpf, 
             aluno.data_nascimento,
@@ -115,7 +136,6 @@ def atualizar(aluno: Usuario) -> bool:
             aluno.agencia_bancaria,
             aluno.numero_conta_bancaria,
             aluno.renda_familiar,
-            aluno.matricula, 
             aluno.id_usuario))
         return (cursor.rowcount > 0)
     
