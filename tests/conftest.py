@@ -60,6 +60,16 @@ def lista_auxilios_moradia_exemplo():
         auxilios_moradia.append(auxilio)
     return auxilios_moradia
 
+@pytest.fixture
+def lista_auxilios_transporte_exemplo():
+    # Cria uma lista de 10 auxílios de transporte de exemplo para os testes
+    from data.auxilio_transporte_model import AuxilioTransporte
+    auxilios_transporte = []
+    for i in range(1, 11):
+        auxilio = AuxilioTransporte(0, f"Auxilio Transporte {i:02d}", 500.00 * i)
+        auxilios_transporte.append(auxilio)
+    return auxilios_transporte
+
 # @pytest.fixture
 # def lista_categorias_exemplo():
 #     # Cria uma lista de 10 categorias de exemplo para os testes
