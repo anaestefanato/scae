@@ -10,8 +10,8 @@ status TEXT NOT NULL CHECK (status IN ('ativo', 'inativo')))
 """
 
 INSERIR = """
-INSERT INTO edital (titulo, descricao, data_publicacao, data_encerramento, arquivo, status) 
-VALUES (?, ?, ?, ?,? ?)
+INSERT INTO edital (id_edital, titulo, descricao, data_publicacao, data_encerramento, arquivo, status) 
+VALUES (?, ?, ?, ?, ?, ?, ?)
 """
 
 OBTER_TODOS = """

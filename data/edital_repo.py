@@ -4,10 +4,14 @@ from data.edital_sql import *
 from data.util import get_connection
 
 def criar_tabela() -> bool:
-    with get_connection() as conn:
-        cursor = conn.cursor()
-        cursor.execute(CRIAR_TABELA)
-        return cursor.rowcount > 0
+    try:
+        with get_connection() as conn:
+            cursor = conn.cursor()
+            cursor.execute(CRIAR_TABELA)
+        return True
+    except Exception as e:
+        print("Erro ao criar tabela aluno:", e)
+        return False
 
 def inserir(edital: Edital) -> Optional[int]:
     with get_connection() as conn:
@@ -44,6 +48,8 @@ def obter_por_id(id: int) -> Optional[Edital]:
         cursor = conn.cursor()
         cursor.execute(OBTER_POR_ID, (id,))
         row = cursor.fetchone()
+        if row is None:
+            return None  # Não encontrou o edital
         edital = Edital(
             id_edital=row["id_edital"],
             titulo=row["titulo"],
@@ -51,13 +57,14 @@ def obter_por_id(id: int) -> Optional[Edital]:
             data_publicacao=row["data_publicacao"],
             data_encerramento=row["data_encerramento"],
             arquivo=row["arquivo"],
-            status=row["status"])
+            status=row["status"]
+        )
         return edital
 
 def atualizar(edital: Edital) -> bool:
     with get_connection() as conn:
         cursor = conn.cursor()
-        cursor.execute(ATUALIZAR, (edital.titulo, edital.descricao, edital.data_encerramento, edital.arquivo, edital.status))
+        cursor.execute(ATUALIZAR, (edital.id_edital, edital.titulo, edital.descricao, edital.data_encerramento, edital.arquivo, edital.status))
         return (cursor.rowcount > 0)
 
 def excluir(id: int) -> bool:
