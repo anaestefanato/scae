@@ -50,6 +50,16 @@ def lista_alunos_exemplo():
         alunos.append(aluno)
     return alunos
 
+@pytest.fixture
+def lista_auxilios_moradia_exemplo():
+    # Cria uma lista de 10 auxílios de moradia de exemplo para os testes
+    from data.auxilio_moradia_model import AuxilioMoradia
+    auxilios_moradia = []
+    for i in range(1, 11):
+        auxilio = AuxilioMoradia(0, f"Auxilio Moradia {i:02d}", 1000.00 * i)
+        auxilios_moradia.append(auxilio)
+    return auxilios_moradia
+
 # @pytest.fixture
 # def lista_categorias_exemplo():
 #     # Cria uma lista de 10 categorias de exemplo para os testes
