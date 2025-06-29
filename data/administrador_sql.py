@@ -1,7 +1,10 @@
 CRIAR_TABELA = """
 CREATE TABLE IF NOT EXISTS administrador (
-matricula TEXT PRIMARY KEY,
-FOREIGN KEY (id_usuario) REFERENCES usuario(id_usuario))
+id_usuario INTEGER PRIMARY KEY,
+matricula TEXT NOT NULL,
+FOREIGN KEY (id_usuario) REFERENCES usuario(id_usuario)
+);
+
 """
 
 INSERIR = """

@@ -2,9 +2,10 @@ CRIAR_TABELA = """
 CREATE TABLE IF NOT EXISTS usuario (
 id_usuario INTEGER PRIMARY KEY AUTOINCREMENT,
 nome TEXT NOT NULL,
-email TEXT NOT NULL,
+email TEXT UNIQUE NOT NULL,
 senha TEXT NOT NULL,
-tipo_usuario TEXT NOT NULL CHECK (tipo_usuario IN ('administrador', 'aluno', 'assistente')))
+tipo TEXT NOT NULL
+);
 """
 
 INSERIR = """

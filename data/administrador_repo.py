@@ -6,6 +6,7 @@ from data.usuario_model import Usuario
 from data.util import get_connection
 
 def criar_tabela() -> bool:
+    usuario_repo.criar_tabela()  # <- garante que a tabela base exista primeiro
     with get_connection() as conn:
         cursor = conn.cursor()
         cursor.execute(CRIAR_TABELA)
