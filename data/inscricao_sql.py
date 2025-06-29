@@ -10,7 +10,7 @@ CREATE TABLE IF NOT EXISTS inscricao (
     urlTermoResponsabilidade TEXT NOT NULL,
     FOREIGN KEY (id_aluno) REFERENCES aluno(id_usuario) ON DELETE CASCADE,
     FOREIGN KEY (id_edital) REFERENCES edital(id_edital) ON DELETE CASCADE
-)
+);
 """
 
 

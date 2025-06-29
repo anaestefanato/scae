@@ -3,10 +3,13 @@ import os
 from data import auxilio_transporte_repo
 from data.auxilio_transporte_repo import *
 from data.auxilio_transporte_model import AuxilioTransporte
+from data import auxilio_repo
+from data.auxilio_repo import Auxilio
 
 class TestAuxilioTransporteRepo:
     def test_criar_tabela_auxilio_transporte(self, test_db):
         # Arrange
+        auxilio_repo.criar_tabela()
         # Act
         resultado = criar_tabela()
         # Assert

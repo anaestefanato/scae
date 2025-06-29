@@ -1,9 +1,11 @@
 CRIAR_TABELA = """
 CREATE TABLE IF NOT EXISTS auxilio_transporte (
-id_auxilio_transporte INTEGER FOREIGN KEY REFERENCES auxilio(id_auxilio) ON DELETE CASCADE,
-urlCompResidencia TEXT NOT NULL,
-urlCompTransporte TEXT NOT NULL
+    id_auxilio_transporte INTEGER PRIMARY KEY,
+    urlCompResidencia TEXT NOT NULL,
+    urlCompTransporte TEXT NOT NULL,
+    FOREIGN KEY (id_auxilio_transporte) REFERENCES auxilio(id_auxilio) ON DELETE CASCADE
 )
+
 """
 
 INSERIR = """
