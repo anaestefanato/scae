@@ -4,7 +4,7 @@ id_usuario INTEGER PRIMARY KEY AUTOINCREMENT,
 nome TEXT NOT NULL,
 email TEXT UNIQUE NOT NULL,
 senha TEXT NOT NULL,
-tipo TEXT NOT NULL
+tipo_usuario TEXT NOT NULL
 );
 """
 

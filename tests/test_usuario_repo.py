@@ -149,13 +149,6 @@ class TestUsuarioRepo:
     def test_obter_usuarios_por_pagina_primeira_pagina(self, test_db, lista_usuarios_exemplo):
         # Arrange
         usuario_repo.criar_tabela()
-        lista_usuarios_exemplo = [
-            Usuario(1, "Usuario 1", "usuario1@email.com", "senha1", "administrador"),
-            Usuario(2, "Usuario 2", "usuario2@email.com", "senha2", "aluno"),
-            Usuario(3, "Usuario 3", "usuario3@email.com", "senha3", "assistente"),
-            Usuario(4, "Usuario 4", "usuario4@email.com", "senha4", "administrador"),
-            Usuario(5, "Usuario 5", "usuario5@email.com", "senha5", "aluno"),
-        ]
         for usuario in lista_usuarios_exemplo:
             usuario_repo.inserir(usuario)
         # Act
@@ -170,18 +163,6 @@ class TestUsuarioRepo:
     def test_obter_usuarios_por_pagina_terceira_pagina(self, test_db, lista_usuarios_exemplo):
         # Arrange
         usuario_repo.criar_tabela()
-        lista_usuarios_exemplo = [
-            Usuario(1, "Usuario 1", "usuario1@email.com", "senha1", "administrador"),
-            Usuario(2, "Usuario 2", "usuario2@email.com", "senha2", "aluno"),
-            Usuario(3, "Usuario 3", "usuario3@email.com", "senha3", "assistente"),
-            Usuario(4, "Usuario 4", "usuario4@email.com", "senha4", "administrador"),
-            Usuario(5, "Usuario 5", "usuario5@email.com", "senha5", "aluno"),
-            Usuario(6, "Usuario 6", "usuario6@email.com", "senha6", "assistente"),
-            Usuario(7, "Usuario 7", "usuario7@email.com", "senha7", "administrador"),
-            Usuario(8, "Usuario 8", "usuario8@email.com", "senha8", "aluno"),
-            Usuario(9, "Usuario 9", "usuario9@email.com", "senha9", "assistente"),
-            Usuario(10, "Usuario 10", "usuario10@email.com", "senha10", "administrador")
-        ]
         for usuario in lista_usuarios_exemplo:
             usuario_repo.inserir(usuario)
         # Act: busca a terceira página com 4 usuários por página
