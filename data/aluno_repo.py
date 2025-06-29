@@ -24,10 +24,17 @@ def inserir(aluno: Usuario) -> Optional[int]:
                 aluno.email,
                 aluno.senha,
                 aluno.tipo_usuario)
-        id_usuario = usuario_repo.inserir(usuario, cursor)
+        id_usuario = usuario_repo.inserir(usuario)
         cursor.execute(INSERIR, (
-            aluno.id_usuario, 
-            aluno.matricula))
+            aluno.cpf,
+            aluno.data_nascimento,
+            aluno.filiacao,
+            aluno.endereco,
+            aluno.nome_banco,
+            aluno.agencia_bancaria,
+            aluno.numero_conta_bancaria,
+            aluno.renda_familiar
+            ))
         return id_usuario
     
 def obter_todos() -> list[Usuario]:
@@ -41,7 +48,7 @@ def obter_todos() -> list[Usuario]:
                 nome=row["nome"],
                 email=row["email"],
                 senha=row["senha"],
-                tipo_usuario=row["tipo"], 
+                tipo_usuario=row["tipo_usuario"], 
                 cpf=row["cpf"],
                 data_nascimento=row["data_nascimento"],
                 filiacao=row["filiacao"],
@@ -61,20 +68,7 @@ def obter_por_id(id: int) -> Optional[Usuario]:
         row = cursor.fetchone()
         if row:
             aluno = Usuario(
-                id_usuario=row["id_usuario"], 
-                nome=row["nome"],
-                email=row["email"], 
-                senha=row["senha"],
-                tipo_usuario=row["tipo"],
-                cpf=row["cpf"],
-                data_nascimento=row["data_nascimento"],
-                filiacao=row["filiacao"],
-                endereco=row["endereco"],
-                nome_banco=row["nome_banco"],
-                agencia_bancaria=row["agencia_bancaria"],
-                numero_conta_bancaria=row["numero_conta_bancaria"],
-                renda_familiar=row["renda_familiar"],
-                matricula=row["matricula"])
+                id_usuario=row["id_usuario"])
             return aluno(**row)
         return None
 

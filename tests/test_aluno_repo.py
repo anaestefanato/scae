@@ -17,7 +17,7 @@ class TestAlunoRepo:
     def test_inserir_aluno(self, test_db):
         # Arrange
         criar_tabela()
-        aluno_teste = Usuario(0, "aluno_teste")
+        aluno_teste = Aluno(0, "Nome", "fulanp@gmail.com", "123456", "aluno", "12345678901", "2000-01-01", "Pai Teste", "Rua Teste", "Banco Teste", "1", "1234-5", 1500.00, "ALUNO_TESTE")
         # Act
         id_aluno_inserido = inserir(aluno_teste)
         # Assert
