@@ -15,7 +15,7 @@ class TestAuxilioRepo:
     def test_inserir_auxilio(self, test_db):
         # Arrange
         criar_tabela()
-        auxilio_teste = Auxilio(0, "auxilio_teste", 1000.00)
+        auxilio_teste = Auxilio(0, "auxilio_teste", 1000.00, "2023-01-01", "2023-12-31", "moradia", "descrição do auxílio")
         # Act
         id_auxilio_inserido = inserir(auxilio_teste)
         # Assert

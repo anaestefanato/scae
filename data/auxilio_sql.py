@@ -1,13 +1,18 @@
 CRIAR_TABELA = """
 CREATE TABLE IF NOT EXISTS auxilio (
-id_auxilio INTEGER PRIMARY KEY AUTOINCREMENT,
-id_edital INTEGER FOREIGN KEY REFERENCES edital(id_edital) ON DELETE CASCADE,
-id_inscricao INTEGER FOREIGN KEY REFERENCES inscricao(id_inscricao) ON DELETE CASCADE,
-descricao TEXT NOT NULL,
-valor_mensal REAL NOT NULL,
-data_inicio DATE NOT NULL,
-data_fim DATE NOT NULL,
-tipo_auxilio TEXT NOT NULL CHECK (tipo_auxilio IN ("auxilio alimantacao, 'auxilio material', 'auxilio moradia', 'auxilio transporte')))
+    id_auxilio INTEGER PRIMARY KEY AUTOINCREMENT,
+    id_edital INTEGER FOREIGN KEY REFERENCES edital(id_edital) ON DELETE CASCADE,
+    id_inscricao INTEGER FOREIGN KEY REFERENCES inscricao(id_inscricao) ON DELETE CASCADE,
+    descricao TEXT NOT NULL,
+    valor_mensal REAL NOT NULL,
+    data_inicio DATE NOT NULL,
+    data_fim DATE NOT NULL,
+    tipo_auxilio TEXT NOT NULL CHECK (
+        tipo_auxilio IN ('auxilio alimentacao', 'auxilio material', 'auxilio moradia', 'auxilio transporte')
+    ),
+    FOREIGN KEY (id_edital) REFERENCES edital(id_edital) ON DELETE CASCADE,
+    FOREIGN KEY (id_inscricao) REFERENCES inscricao(id_inscricao) ON DELETE CASCADE
+)
 """
 
 INSERIR = """
