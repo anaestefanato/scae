@@ -3,10 +3,16 @@ import os
 from data import auxilio_repo
 from data.auxilio_repo import *
 from data.auxilio_model import Auxilio
+from data import usuario_repo
+from data import edital_repo
+from data import inscricao_repo
+from data.edital_model import Edital
+from data.inscricao_model import Inscricao
 
 class TestAuxilioRepo:
     def test_criar_tabela_auxilio(self, test_db):
         # Arrange
+
         # Act
         resultado = criar_tabela()
         # Assert

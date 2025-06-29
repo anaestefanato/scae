@@ -76,6 +76,43 @@ def lista_auxilios_transporte_exemplo():
         auxilios_transporte.append(auxilio)
     return auxilios_transporte
 
+@pytest.fixture
+def lista_editais_exemplo():
+    # Cria uma lista de 10 editais de exemplo para os testes
+    from data.edital_model import Edital
+    editais = []
+    for i in range(1, 11):
+        edital = Edital(
+            id_edital=i,
+            titulo=f"Edital {i:02d}",
+            descricao=f"Descrição do edital {i:02d}",
+            data_publicacao=datetime(2023, 1, i).date(),
+            data_encerramento=datetime(2023, 12, i).date(),
+            arquivo=f"http://example.com/edital{i}.pdf",
+            status="ativo"
+        )
+        editais.append(edital)
+    return editais
+
+@pytest.fixture
+def lista_inscricoes_exemplo():
+    # Cria uma lista de 10 inscrições de exemplo para os testes
+    from data.inscricao_model import Inscricao
+    inscricoes = []
+    for i in range(1, 11):
+        inscricao = Inscricao(
+            id_inscricao=i,
+            id_aluno=i,
+            id_edital=i,
+            data_inscricao=datetime(2023, 1, i).date(),
+            status="pendente",
+            urlDocumentoIdentificacao=f"http://example.com/doc{i}.pdf",
+            urlDeclaracaoRenda=f"http://example.com/renda{i}.pdf",
+            urlTermoResponsabilidade=f"http://example.com/termo{i}.pdf"
+        )
+        inscricoes.append(inscricao)
+    return inscricoes
+
 # @pytest.fixture
 # def lista_categorias_exemplo():
 #     # Cria uma lista de 10 categorias de exemplo para os testes
