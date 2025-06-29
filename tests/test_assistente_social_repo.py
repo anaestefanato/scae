@@ -3,10 +3,12 @@ import os
 from data import assistente_social_repo
 from data.assistente_social_repo import *
 from data.assistente_social_model import AssistenteSocial
+from data import usuario_repo
 
 class TestAssistenteSocialRepo:
     def test_criar_tabela_assistente_social(self, test_db):
         # Arrange
+        usuario_repo.criar_tabela()
         # Act
         resultado = criar_tabela()
         # Assert
@@ -14,8 +16,9 @@ class TestAssistenteSocialRepo:
 
     def test_inserir_assistente_social(self, test_db):
         # Arrange
+        usuario_repo.criar_tabela()
         criar_tabela()
-        assistente_social_teste = AssistenteSocial(0, "assistente_teste")
+        assistente_social_teste = AssistenteSocial(0, "Usuário Teste", "fulano@email.com", "123456", "assistente", "assistente_teste")
         # Act
         id_assistente_social_inserido = inserir(assistente_social_teste)
         # Assert
@@ -26,7 +29,7 @@ class TestAssistenteSocialRepo:
     def test_obter_por_id_existente(self, test_db):
         # Arrange
         criar_tabela()
-        assistente_social_teste = AssistenteSocial(0, "assistente_teste")
+        assistente_social_teste = AssistenteSocial(0, "Usuário Teste", "fulano@email.com", "123456", "assistente", "assistente_teste")
         id_assistente_social_inserido = inserir(assistente_social_teste)
         # Act
         assistente_social_db = obter_por_id(id_assistente_social_inserido)
@@ -47,8 +50,8 @@ class TestAssistenteSocialRepo:
     def test_obter_todos_assistentes_sociais(self, test_db):
         # Arrange
         criar_tabela()
-        assistente_social1 = AssistenteSocial(0, "assistente1")
-        assistente_social2 = AssistenteSocial(0, "assistente2")
+        assistente_social1 = AssistenteSocial(0, " Teste 1", "fulano@email.com", "123456", "assistente", "assistente1")
+        assistente_social2 = AssistenteSocial(1, "Teste 2", "ciclano@email.com", "123456", "assistente", "assistente2")
         inserir(assistente_social1)
         inserir(assistente_social2)
         # Act
@@ -61,7 +64,7 @@ class TestAssistenteSocialRepo:
     def test_atualizar_assistente_social_existente(self, test_db):
         # Arrange
         criar_tabela()
-        assistente_social_teste = AssistenteSocial(0, "assistente_teste")
+        assistente_social_teste = AssistenteSocial(0, "Usuário Teste", "fulano@email.com", "123456", "assistente", "assistente_teste")
         id_assistente_social_inserido = inserir(assistente_social_teste)
         assistente_social_teste.id_usuario = id_assistente_social_inserido
         assistente_social_teste.matricula = "assistente_atualizado"
@@ -75,7 +78,7 @@ class TestAssistenteSocialRepo:
     def test_atualizar_assistente_social_inexistente(self, test_db):
         # Arrange
         criar_tabela()
-        assistente_social_teste = AssistenteSocial(999, "assistente_inexistente")
+        assistente_social_teste = AssistenteSocial(999, "Teste", "fulano@email.com", "123456", "assistente", "assistente_inexistente")
         # Act
         resultado = atualizar(assistente_social_teste)
         # Assert
@@ -84,7 +87,7 @@ class TestAssistenteSocialRepo:
     def test_excluir_assistente_social_existente(self, test_db):
         # Arrange
         criar_tabela()
-        assistente_social_teste = AssistenteSocial(0, "assistente_teste")
+        assistente_social_teste = AssistenteSocial(0, "Teste", "fulano@email.com", "123456", "assistente", "assistente_teste")
         id_assistente_social_inserido = inserir(assistente_social_teste)
         # Act
         resultado = excluir(id_assistente_social_inserido)

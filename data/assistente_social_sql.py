@@ -1,29 +1,30 @@
 CRIAR_TABELA = """
 CREATE TABLE IF NOT EXISTS assistente_social (
-id_usuario INTEGER FOREIGN KEY REFERENCES usuario(id_usuario) ON DELETE CASCADE,
-matricula TEXT NOT NULL)
+    id_usuario INTEGER,
+    matricula TEXT NOT NULL,
+    FOREIGN KEY (id_usuario) REFERENCES usuario(id_usuario) ON DELETE CASCADE
+)
 """
 
 INSERIR = """
-INSERT INTO assistente_social (matricula) 
-VALUES (?)
+INSERT INTO assistente_social (id_usuario, matricula) VALUES (?, ?)
 """
 
 OBTER_TODOS = """
 SELECT 
-id_usuario, matricula 
-FROM assistente_social as
-INNER JOIN usuario u ON as.id_usuario = u.id_usuario
-ORDER BY matricula
+a.id_usuario, u.nome, u.email, u.senha, u.tipo_usuario, a.matricula
+FROM assistente_social a
+INNER JOIN usuario u ON a.id_usuario = u.id_usuario
+ORDER BY a.matricula
 """ 
 
 OBTER_POR_ID = """
 SELECT 
-id_usuario, matricula 
-FROM assistente_social as
-INNER JOIN usuario u ON as.id_usuario = u.id_usuario
-WHERE id_usuario = ?
-""" 
+a.id_usuario, u.nome, u.email, u.senha, u.tipo_usuario, a.matricula
+FROM assistente_social a
+INNER JOIN usuario u ON a.id_usuario = u.id_usuario
+WHERE a.id_usuario = ?
+"""
 
 ATUALIZAR = """
 UPDATE assistente_social

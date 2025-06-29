@@ -6,23 +6,34 @@ from data.usuario_model import Usuario
 from data.util import get_connection
 
 def criar_tabela() -> bool:
-    with get_connection() as conn:
-        cursor = conn.cursor()
-        cursor.execute(CRIAR_TABELA)
-        return cursor.rowcount > 0
+    usuario_repo.criar_tabela()  # <- garante que a tabela base exista primeiro
+    try:
+        with get_connection() as conn:
+            cursor = conn.cursor()
+            cursor.execute(CRIAR_TABELA)
+            return True
+    except Exception as e:
+        print(f"Erro ao criar tabela: {e}")
+        return False
 
 def inserir(assistenteSocial: AssistenteSocial) -> Optional[int]:
     with get_connection() as conn:
         cursor = conn.cursor()
-        usuario = Usuario(0,
-                assistenteSocial.nome, 
-                assistenteSocial.email, 
-                assistenteSocial.senha, 
-                assistenteSocial.tipo_usuario)
-        id_usuario = usuario_repo.inserir(usuario, cursor)
+        usuario = Usuario(
+            0,
+            assistenteSocial.nome,
+            assistenteSocial.email,
+            assistenteSocial.senha,
+            assistenteSocial.tipo_usuario
+        )
+        id_usuario = usuario_repo.inserir(usuario)
+        if not id_usuario:
+            return None
         cursor.execute(INSERIR, (
-            assistenteSocial.id_usuario, 
-            assistenteSocial.matricula))
+            id_usuario,  # usa o id retornado da inserção do usuário
+            assistenteSocial.matricula
+        ))
+        conn.commit()
         return id_usuario
 
 def obter_todos() -> list[AssistenteSocial]:
@@ -36,7 +47,7 @@ def obter_todos() -> list[AssistenteSocial]:
                 nome=row["nome"],
                 email=row["email"],
                 senha=row["senha"],
-                tipo_usuario=row["tipo"],
+                tipo_usuario=row["tipo_usuario"],
                 matricula=row["matricula"])
             for row in rows]
         return assistentes
@@ -46,12 +57,14 @@ def obter_por_id( id: int) -> Optional[AssistenteSocial]:
         cursor = conn.cursor()
         cursor.execute(OBTER_POR_ID, (id,))
         row = cursor.fetchone()
+        if row is None:
+            return None
         assistentes = AssistenteSocial(
             id_usuario=row["id_usuario"],
             nome=row["nome"],
             email=row["email"],
             senha=row["senha"],
-            tipo_usuario=row["tipo"],
+            tipo_usuario=row["tipo_usuario"],
             matricula=row["matricula"])
         return assistentes
     
@@ -63,9 +76,10 @@ def atualizar(assistenteSocial: AssistenteSocial) -> bool:
                 assistenteSocial.email, 
                 assistenteSocial.senha, 
                 assistenteSocial.tipo_usuario)
-        usuario.repo.atualizar(usuario, cursor)
+        usuario_repo.atualizar(usuario)
         cursor.execute(ATUALIZAR, (
-            assistenteSocial.matricula))
+            assistenteSocial.matricula,  # usa o id do usuário já existente
+            assistenteSocial.id_usuario))
         return (cursor.rowcount > 0)
     
 def excluir(id: int) -> bool:

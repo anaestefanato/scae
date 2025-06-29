@@ -9,19 +9,25 @@ import tempfile
 project_root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.insert(0, project_root)
 
-# Fixture para criar um banco de dados temporário para testes
 @pytest.fixture
 def test_db():
-    # Cria um arquivo temporário para o banco de dados
+    import tempfile, os
+
     db_fd, db_path = tempfile.mkstemp(suffix='.db')
-    # Configura a variável de ambiente para usar o banco de teste
     os.environ['TEST_DATABASE_PATH'] = db_path
-    # Retorna o caminho do banco de dados temporário
-    yield db_path    
-    # Remove o arquivo temporário ao concluir o teste
+
+    # Fecha o descritor do arquivo antes de usar
     os.close(db_fd)
+
+    yield db_path
+
+    # Após o teste, remove o arquivo se ele existir
     if os.path.exists(db_path):
-        os.unlink(db_path)
+        try:
+            os.unlink(db_path)
+        except PermissionError:
+            print(f"⚠️  Arquivo {db_path} ainda está em uso.")
+
 
 @pytest.fixture
 def usuario_exemplo():
