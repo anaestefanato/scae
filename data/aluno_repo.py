@@ -6,11 +6,15 @@ from data.usuario_model import Usuario
 from data.util import get_connection
 
 def criar_tabela() -> bool:
-    usuario_repo.criar_tabela()  # <- garante que a tabela base exista primeiro
-    with get_connection() as conn:
-        cursor = conn.cursor()
-        cursor.execute(CRIAR_TABELA)
-        return cursor.rowcount > 0
+    usuario_repo.criar_tabela()
+    try:
+        with get_connection() as conn:
+            cursor = conn.cursor()
+            cursor.execute(CRIAR_TABELA)
+        return True
+    except Exception as e:
+        print("Erro ao criar tabela aluno:", e)
+        return False
     
 def inserir(aluno: Usuario) -> Optional[int]:
     with get_connection() as conn:

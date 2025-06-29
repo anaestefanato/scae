@@ -3,10 +3,12 @@ import os
 from data import aluno_repo
 from data.aluno_repo import *
 from data.aluno_model import Aluno
+from data import usuario_repo
 
 class TestAlunoRepo:
     def test_criar_tabela_aluno(self, test_db):
         # Arrange
+        usuario_repo.criar_tabela()
         # Act
         resultado = criar_tabela()
         # Assert
