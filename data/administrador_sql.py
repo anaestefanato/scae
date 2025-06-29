@@ -13,8 +13,13 @@ VALUES (?, ?)
 """
 
 OBTER_TODOS = """
-SELECT 
-id_usuario, matricula 
+SELECT
+ad.id_usuario, 
+    u.nome, 
+    u.email, 
+    u.senha, 
+    u.tipo_usuario, 
+    ad.matricula 
 FROM administrador ad
 INNER JOIN usuario u ON ad.id_usuario = u.id_usuario
 ORDER BY matricula

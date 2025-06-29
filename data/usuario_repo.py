@@ -102,8 +102,12 @@ def atualizar_tipo_usuario(id: int, tipo_usuario: int) -> bool:
         cursor.execute(ATUALIZAR_TIPO_USUARIO, (tipo_usuario, id))
         return cursor.rowcount > 0
 
-def excluir(id: int) -> bool:
-    with get_connection() as conn:
-        cursor = conn.cursor()
+def excluir(id: int, cursor=None) -> bool:
+    if cursor is None:
+        with get_connection() as conn:
+            cursor = conn.cursor()
+            cursor.execute(EXCLUIR, (id,))
+            return cursor.rowcount > 0
+    else:
         cursor.execute(EXCLUIR, (id,))
-        return (cursor.rowcount > 0)
+        return cursor.rowcount > 0

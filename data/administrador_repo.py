@@ -48,7 +48,7 @@ def obter_todos() -> list[Administrador]:
                 nome=row["nome"],
                 email=row["email"],
                 senha=row["senha"],
-                tipo_usuario=row["tipo"])
+                tipo_usuario=row["tipo_usuario"])
             for row in rows]
         return administradores
 
@@ -71,9 +71,8 @@ def obter_por_id(id_usuario: int) -> Optional[Administrador]:
 def atualizar(administrador: Administrador) -> bool:
     with get_connection() as conn:
         cursor = conn.cursor()
-        usuario = Usuario(administrador.id_usuario,
-                          administrador.matricula)
-        usuario.repo.atualizar(usuario, cursor)
+        usuario = Usuario(administrador.id_usuario, administrador.nome, administrador.email, administrador.senha, administrador.tipo_usuario)
+        usuario_repo.atualizar(usuario)
         cursor.execute(ATUALIZAR, (
             administrador.matricula, 
             administrador.id_usuario))

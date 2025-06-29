@@ -28,7 +28,7 @@ class TestAdministradorRepo:
     def test_obter_por_id_existente(self, test_db):
         # Arrange
         criar_tabela()
-        administrador_teste = Administrador(0, "admin_teste")
+        administrador_teste = Administrador(0, "Usuario Teste", "fulano@gmail.com", "123456", "administrador", "admin_teste")
         id_administrador_inserido = inserir(administrador_teste)
         # Act
         administrador_db = obter_por_id(id_administrador_inserido)
@@ -49,21 +49,22 @@ class TestAdministradorRepo:
     def test_obter_todos_administradores(self, test_db):
         # Arrange
         criar_tabela()
-        administrador1 = Administrador(0, "admin1")
-        administrador2 = Administrador(0, "admin2")
+        administrador1 = Administrador(0, "Usuario Teste", "fulano@gmail.com", "123456", "administrador", "admin_teste")
+        administrador2 = Administrador(1, "Usuario Teste 2", "ciclano@gmail.com", "654321", "administrador", "admin_teste_2")
         inserir(administrador1)
         inserir(administrador2)
         # Act
         administradores_db = obter_todos()
         # Assert
         assert len(administradores_db) >= 2, "Deveria haver pelo menos dois administradores no banco de dados."
-        assert any(a.matricula == "admin1" for a in administradores_db), "O administrador 'admin1' não foi encontrado na lista."
-        assert any(a.matricula == "admin2" for a in administradores_db), "O administrador 'admin2' não foi encontrado na lista."
+        assert any(a.matricula == "admin_teste" for a in administradores_db), "O administrador 'admin_teste' não foi encontrado na lista."
+        assert any(a.matricula == "admin_teste_2" for a in administradores_db), "O administrador 'admin_teste_2' não foi encontrado na lista."
+
 
     def test_atualizar_administrador_existente(self, test_db):
         # Arrange
         criar_tabela()
-        administrador_teste = Administrador(0, "admin_teste")
+        administrador_teste = Administrador(0, "Usuario Teste", "fulano@gmail.com", "123456", "administrador", "admin_teste")
         id_administrador_inserido = inserir(administrador_teste)
         administrador_teste.id_usuario = id_administrador_inserido
         administrador_teste.matricula = "admin_atualizado"
@@ -77,7 +78,7 @@ class TestAdministradorRepo:
     def test_atualizar_administrador_inexistente(self, test_db):
         # Arrange
         criar_tabela()
-        administrador_teste = Administrador(999, "admin_inexistente")
+        administrador_teste = Administrador(999, "Inexistente", "fulano@gmail.com", "123456", "administrador", "admin_inexistente")
         # Act
         resultado = atualizar(administrador_teste)
         # Assert
@@ -86,7 +87,7 @@ class TestAdministradorRepo:
     def test_excluir_administrador_existente(self, test_db):
         # Arrange
         criar_tabela()
-        administrador_teste = Administrador(0, "admin_teste")
+        administrador_teste = Administrador(0, "Usuario Teste", "fulano@gmail.com", "123456", "administrador", "admin_teste")
         id_administrador_inserido = inserir(administrador_teste)
         # Act
         resultado = excluir(id_administrador_inserido)
