@@ -32,6 +32,15 @@ INNER JOIN usuario u ON al.id_usuario = u.id_usuario
 WHERE id_usuario = ?
 """ 
 
+OBTER_POR_PAGINA = """
+SELECT
+id_usuario, cpf, data_nascimento, filiacao, endereco, nome_banco, numero_conta_bancaria, renda_familiar, matricula
+FROM aluno al
+INNER JOIN usuario u ON al.id_usuario = u.id_usuario
+ORDER BY matricula
+LIMIT ? OFFSET ?
+"""
+
 ATUALIZAR = """
 UPDATE aluno
 SET cpf = ?, data_nascimento = ?, filiacao = ?, endereco = ?, nome_banco = ?, numero_conta_bancaria = ?, renda_familiar = ?

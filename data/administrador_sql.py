@@ -28,6 +28,7 @@ INNER JOIN usuario u ON ad.id_usuario = u.id_usuario
 WHERE id_usuario = ?
 """ 
 
+
 ATUALIZAR = """
 UPDATE administrador
 SET matricula = ?

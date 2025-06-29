@@ -4,7 +4,7 @@ from data.usuario_model import Usuario
 
 
 @dataclass
-class Aluno(Usuario):
+class Usuario(Usuario):
     id_usuario: int
     cpf: str
     data_nascimento: str
