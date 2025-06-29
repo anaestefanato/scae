@@ -3,10 +3,12 @@ import os
 from data import administrador_repo
 from data.administrador_repo import *
 from data.administrador_model import Administrador
+from data import usuario_repo
 
 class TestAdministradorRepo:
     def test_criar_tabela_administrador(self, test_db):
         # Arrange
+        usuario_repo.criar_tabela()  
         # Act
         resultado = criar_tabela()
         # Assert
@@ -15,7 +17,7 @@ class TestAdministradorRepo:
     def test_inserir_administrador(self, test_db):
         # Arrange
         criar_tabela()
-        administrador_teste = Administrador(0, "admin_teste")
+        administrador_teste = Administrador(0, "Usuario Teste", "fulano@gmail.com", "123456", "administrador", "admin_teste")
         # Act
         id_administrador_inserido = inserir(administrador_teste)
         # Assert

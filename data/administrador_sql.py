@@ -8,8 +8,8 @@ FOREIGN KEY (id_usuario) REFERENCES usuario(id_usuario)
 """
 
 INSERIR = """
-INSERT INTO administrador (matricula) 
-VALUES (?)
+INSERT INTO administrador (id_usuario, matricula) 
+VALUES (?, ?)
 """
 
 OBTER_TODOS = """
@@ -22,11 +22,16 @@ ORDER BY matricula
 
 OBTER_POR_ID = """
 SELECT 
-id_usuario, matricula 
+    ad.id_usuario, 
+    u.nome, 
+    u.email, 
+    u.senha, 
+    u.tipo_usuario, 
+    ad.matricula 
 FROM administrador ad
 INNER JOIN usuario u ON ad.id_usuario = u.id_usuario
-WHERE id_usuario = ?
-""" 
+WHERE ad.id_usuario = ?
+"""
 
 
 ATUALIZAR = """

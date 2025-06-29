@@ -7,23 +7,33 @@ from data.util import get_connection
 
 def criar_tabela() -> bool:
     usuario_repo.criar_tabela()  # <- garante que a tabela base exista primeiro
-    with get_connection() as conn:
-        cursor = conn.cursor()
-        cursor.execute(CRIAR_TABELA)
-        return cursor.rowcount > 0
+    try:
+        with get_connection() as conn:
+            cursor = conn.cursor()
+            cursor.execute(CRIAR_TABELA)
+            return True
+    except Exception as e:
+        print(f"Erro ao criar tabela: {e}")
+        return False
 
 def inserir(administrador: Administrador) -> Optional[int]:
     with get_connection() as conn:
         cursor = conn.cursor()
-        usuario = Usuario(0,
-                administrador.nome, 
-                administrador.email, 
-                administrador.senha, 
-                administrador.tipo_usuario)
-        id_usuario = usuario_repo.inserir(usuario, cursor)
+        usuario = Usuario(
+            0,
+            administrador.nome, 
+            administrador.email, 
+            administrador.senha, 
+            administrador.tipo_usuario
+        )
+        id_usuario = usuario_repo.inserir(usuario)
+        
         cursor.execute(INSERIR, (
-            administrador.id_usuario, 
-            administrador.matricula))
+            id_usuario,  
+            administrador.matricula
+        ))
+        
+        conn.commit()
         return id_usuario
 
 def obter_todos() -> list[Administrador]:
@@ -42,19 +52,21 @@ def obter_todos() -> list[Administrador]:
             for row in rows]
         return administradores
 
-def obter_por_id(id: int) -> Optional[Administrador]:
+def obter_por_id(id_usuario: int) -> Optional[Administrador]:
     with get_connection() as conn:
         cursor = conn.cursor()
-        cursor.execute(OBTER_POR_ID, (id,))
+        cursor.execute(OBTER_POR_ID, (id_usuario,))
         row = cursor.fetchone()
-        administrador = Administrador(
-            id_usuario=row["id_usuario"], 
-            matricula=row["matricula"],
+        if row is None:
+            return None
+        return Administrador(
+            id_usuario=row["id_usuario"],
             nome=row["nome"],
             email=row["email"],
             senha=row["senha"],
-            tipo_usuario=row["tipo"]) 
-        return administrador 
+            tipo_usuario=row["tipo_usuario"],
+            matricula=row["matricula"]
+        )
     
 def atualizar(administrador: Administrador) -> bool:
     with get_connection() as conn:
