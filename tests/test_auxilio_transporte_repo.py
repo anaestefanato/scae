@@ -67,7 +67,7 @@ class TestAuxilioTransporteRepo:
         criar_tabela()
         
         for auxilio in lista_auxilios_transporte_exemplo:
-            auxilio.inserir(auxilio)
+            auxilio_transporte_repo.inserir(auxilio)
         # Act
         pagina_auxilios_transporte = auxilio_transporte_repo.obter_auxilios_transporte_por_pagina(1, 4)
         # Assert

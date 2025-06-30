@@ -16,24 +16,30 @@ class AuxilioTransporteRepo:
             print(f"Erro ao criar tabela: {e}")
             return False
 
-    def inserir(auxilioTransporte: AuxilioTransporte) -> Optional[int]:
-        with get_connection() as conn:
-            cursor = conn.cursor()
-            auxilio = Auxilio(auxilio.id_edital,
-                auxilio.id_inscricao,
-                auxilio.descricao,
-                auxilio.valor_mensal,
-                auxilio.data_inicio,
-                auxilio.data_fim,
-                auxilio.tipo_auxilio)
-            id_auxilio = auxilio.inserir(auxilio, cursor)
-            if id_auxilio is None:
-                return None
-            cursor.execute(INSERIR, (
-                id_auxilio,
-                auxilioTransporte.urlCompResidencia,
-                auxilioTransporte.urlCompTransporte))
-            return cursor.lastrowid
+def inserir(auxilioTransporte: AuxilioTransporte) -> Optional[int]:
+    with get_connection() as conn:
+        cursor = conn.cursor()
+        auxilio = Auxilio(
+            0,  # id_auxilio
+            auxilioTransporte.id_edital,
+            auxilioTransporte.id_inscricao,
+            auxilioTransporte.descricao,
+            auxilioTransporte.valor_mensal,
+            auxilioTransporte.data_inicio,
+            auxilioTransporte.data_fim,
+            auxilioTransporte.tipo_auxilio
+        )
+        id_auxilio = auxilio_repo.inserir(auxilio)
+        if id_auxilio is None:
+            return None
+        cursor.execute(INSERIR, (
+            id_auxilio,
+            auxilioTransporte.urlCompResidencia,
+            auxilioTransporte.urlCompTransporte
+        ))
+        return cursor.lastrowid
+
+
 
 
     def obter_todos() -> list[AuxilioTransporte]:

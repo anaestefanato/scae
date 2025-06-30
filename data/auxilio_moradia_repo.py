@@ -58,7 +58,7 @@ def obter_por_id(id: int) -> Optional[AuxilioMoradia]:
         cursor.execute(OBTER_POR_ID, (id,))
         row = cursor.fetchone()
         auxilio = AuxilioMoradia(
-            id_auxilio=row["id_auxilio_moradia"],
+            id_auxilio_moradia=row["id_auxilio_moradia"],
             id_auxilio=row["id_auxilio"],
             id_edital=row["id_edital"],
             id_inscricao=row["id_inscricao"],

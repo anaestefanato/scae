@@ -88,26 +88,6 @@ def lista_auxilios_transporte_exemplo():
         auxilios_transporte.append(auxilio)
     return auxilios_transporte
 
-
-@pytest.fixture
-def lista_auxilios_transporte_exemplo():
-    auxilios_transporte = []
-    for i in range(1, 11):
-        auxilio = AuxilioTransporte(
-            id_auxilio=0,
-            id_edital=1,
-            id_inscricao=1,
-            descricao=f"Auxilio Transporte {i:02d}",
-            valor_mensal=500.00 * i,
-            data_inicio="2023-01-01",
-            data_fim="2023-12-31",
-            tipo_auxilio="auxilio transporte",
-            urlCompResidencia=f"http://example.com/res{i}",
-            urlCompTransporte=f"http://example.com/trans{i}"
-        )
-        auxilios_transporte.append(auxilio)
-    return auxilios_transporte
-
 @pytest.fixture
 def lista_inscricoes_exemplo():
     # Cria uma lista de 10 inscrições de exemplo para os testes
@@ -128,23 +108,22 @@ def lista_inscricoes_exemplo():
     return inscricoes
 
 @pytest.fixture
-def lista_auxilios_transporte_exemplo():
-    auxilios_transporte = []
+def lista_editais_exemplo():
+    # Cria uma lista de 10 editais de exemplo para os testes
+    from data.edital_model import Edital
+    editais = []
     for i in range(1, 11):
-        auxilio = AuxilioTransporte(
-            id_auxilio=0,
-            id_edital=1,
-            id_inscricao=1,
-            descricao=f"Auxilio Transporte {i:02d}",
-            valor_mensal=500.00 * i,
-            data_inicio="2023-01-01",
-            data_fim="2023-12-31",
-            tipo_auxilio="Transporte",
-            urlCompResidencia="http://example.com/residencia",
-            urlCompTransporte="http://example.com/transporte"
+        edital = Edital(
+            id_edital=i,
+            titulo=f"Edital {i:02d}",
+            descricao=f"Descrição do edital {i:02d}",
+            data_publicacao=datetime(2023, 1, i).date(),
+            data_encerramento=datetime(2023, 12, i).date(),
+            arquivo=f"http://example.com/edital{i}.pdf",
+            status="ativo"
         )
-        auxilios_transporte.append(auxilio)
-    return auxilios_transporte
+        editais.append(edital)
+    return editais
 
 # @pytest.fixture
 # def lista_categorias_exemplo():
