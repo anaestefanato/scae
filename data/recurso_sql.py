@@ -14,13 +14,20 @@ INSERT INTO recurso (id_inscricao, id_assistente, descricao, data_envio, data_re
 VALUES (?, ?, ?, ?, ?, ?)
 """
 
-OBTER_TODOS = """
+OBTER_POR_PAGINA = """
 SELECT
-id_recurso, id_inscricao, id_assistente, descricao, data_envio, data_resposta, status
+    r.id_recurso,
+    r.id_inscricao,
+    r.id_assistente,
+    r.descricao,
+    r.data_envio,
+    r.data_resposta,
+    r.status
 FROM recurso r
 INNER JOIN inscricao i ON r.id_inscricao = i.id_inscricao
 INNER JOIN usuario u ON r.id_assistente = u.id_usuario
-ORDER BY data_envio
+ORDER BY r.data_envio
+LIMIT ? OFFSET ?
 """
 
 OBTER_POR_ID = """

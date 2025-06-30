@@ -22,21 +22,24 @@ def inserir(recurso: Recurso) -> Optional[int]:
             recurso.status))
         return cursor.lastrowid
 
-def obter_todos() -> list[Recurso]:
+def obter_por_pagina(pagina: int, limit: int) -> list[Recurso]:
+    offset = (pagina - 1) * limit
     with get_connection() as conn:
         cursor = conn.cursor()
-        cursor.execute(OBTER_TODOS)
+        cursor.execute(OBTER_POR_PAGINA, (limit, offset))
         rows = cursor.fetchall()
-        recursos = [
-            Recurso(
+        recursos = []
+        for row in rows:
+            recurso = Recurso(
                 id_recurso=row["id_recurso"],
                 id_inscricao=row["id_inscricao"],
                 id_assistente_social=row["id_assistente"],
                 descricao=row["descricao"],
                 data_envio=row["dataEnvio"],
                 data_resposta=row["dataResposta"],
-                status=row["status"])
-            for row in rows]
+                status=row["status"]
+            )
+            recursos.append(recurso)
         return recursos
 
 def obter_por_id(id: int) -> Optional[Recurso]:
