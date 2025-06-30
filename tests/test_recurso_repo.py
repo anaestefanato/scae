@@ -31,6 +31,6 @@ class TestInscricaoRepo:
             status='pendente'
         )
     # Act
-    resultado = inserir(recurso)
+    resultado = inserir()
     # Assert
     assert resultado == True, "O recurso não foi inserida com sucesso."
