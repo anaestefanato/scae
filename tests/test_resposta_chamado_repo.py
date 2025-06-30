@@ -6,7 +6,6 @@ from data import chamado_repo
 from data.resposta_chamado_repo import *
 from usuario_model import Usuario
 
-
 class TestRespostaChamadoRepo:
     def test_criar_tabela_resposta_chamado(self, test_db):
         # Arrange

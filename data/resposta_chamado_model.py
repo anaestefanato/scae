@@ -1,6 +1,5 @@
 from dataclasses import dataclass
 
-
 @dataclass
 class RespostaChamado:
     id_resposta: int

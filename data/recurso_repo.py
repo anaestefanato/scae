@@ -7,19 +7,19 @@ def criar_tabela() -> bool:
     with get_connection() as conn:
         cursor = conn.cursor()
         cursor.execute(CRIAR_TABELA)
-        return cursor.rowcount > 0
+        return cursor.rowcount >= 0
 
 def inserir(recurso: Recurso) -> Optional[int]:
     with get_connection() as conn:
         cursor = conn.cursor()
         cursor.execute(INSERIR, (
-            recurso.id_recurso,
             recurso.id_inscricao,
-            recurso.id_assistente_social,
+            recurso.id_assistente,
             recurso.descricao,
             recurso.data_envio,
             recurso.data_resposta,
-            recurso.status))
+            recurso.status
+        ))
         return cursor.lastrowid
 
 def obter_por_pagina(pagina: int, limit: int) -> list[Recurso]:
@@ -33,10 +33,10 @@ def obter_por_pagina(pagina: int, limit: int) -> list[Recurso]:
             recurso = Recurso(
                 id_recurso=row["id_recurso"],
                 id_inscricao=row["id_inscricao"],
-                id_assistente_social=row["id_assistente"],
+                id_assistente=row["id_assistente"],
                 descricao=row["descricao"],
-                data_envio=row["dataEnvio"],
-                data_resposta=row["dataResposta"],
+                data_envio=row["data_envio"],
+                data_resposta=row["data_resposta"],
                 status=row["status"]
             )
             recursos.append(recurso)
@@ -47,24 +47,26 @@ def obter_por_id(id: int) -> Optional[Recurso]:
         cursor = conn.cursor()
         cursor.execute(OBTER_POR_ID, (id,))
         row = cursor.fetchone()
-        recurso = Recurso(
-            id_recurso=row["id_recurso"],
-            id_inscricao=row["id_inscricao"],
-            id_assistente_social=row["id_assistente"],
-            descricao=row["descricao"],
-            data_envio=row["dataEnvio"],
-            data_resposta=row["dataResposta"],
-            status=row["status"])
-        return recurso
+        if row:
+            return Recurso(
+                id_recurso=row["id_recurso"],
+                id_inscricao=row["id_inscricao"],
+                id_assistente=row["id_assistente"],
+                descricao=row["descricao"],
+                data_envio=row["data_envio"],
+                data_resposta=row["data_resposta"],
+                status=row["status"]
+            )
+        return None
 
 def atualizar(recurso: Recurso) -> bool:
     with get_connection() as conn:
         cursor = conn.cursor()
-        cursor.execute(ATUALIZAR, (recurso.descricao, recurso.status))
-        return (cursor.rowcount > 0)
+        cursor.execute(ATUALIZAR, (recurso.descricao, recurso.status, recurso.id_recurso))
+        return cursor.rowcount > 0
 
 def excluir(id: int) -> bool:
     with get_connection() as conn:
         cursor = conn.cursor()
         cursor.execute(EXCLUIR, (id,))
-        return (cursor.rowcount > 0)
+        return cursor.rowcount > 0
