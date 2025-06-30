@@ -12,15 +12,19 @@ INSERT INTO resposta_chamado (id_chamado, id_usuario_autor, mensagem, data_respo
 VALUES (?, ?, ?, ?)
 """
 
-OBTER_TODOS = """
+OBTER_POR_PAGINA = """
 SELECT
-id_resposta_chamado, id_chamado, id_usuario_autor, mensagem, data_resposta
+    rc.id_resposta_chamado,
+    rc.id_chamado,
+    rc.id_usuario_autor,
+    rc.mensagem,
+    rc.data_resposta,
 FROM resposta_chamado rc
 INNER JOIN chamado c ON rc.id_chamado = c.id_duvida
 INNER JOIN usuario u ON rc.id_usuario_autor = u.id_usuario
-ORDER BY data_resposta
+ORDER BY r.data_resposta
+LIMIT ? OFFSET ?
 """
-
 OBTER_POR_ID = """
 SELECT
 id_resposta_chamado, id_chamado, id_usuario_autor, mensagem, data_resposta

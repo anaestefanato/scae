@@ -20,19 +20,22 @@ def inserir(resposta: RespostaChamado) -> Optional[int]:
             resposta.data_resposta))
         return cursor.lastrowid
 
-def obter_todos() -> list[RespostaChamado]:
+def obter_por_pagina(pagina: int, limit: int) -> list[RespostaChamado]:
+    offset = (pagina - 1) * limit
     with get_connection() as conn:
         cursor = conn.cursor()
-        cursor.execute(OBTER_TODOS)
+        cursor.execute(OBTER_POR_PAGINA, (limit, offset))
         rows = cursor.fetchall()
-        respostas = [
-            RespostaChamado(
+        respostas = []
+        for row in rows:
+            resposta = RespostaChamado(
                 id_resposta_chamado=row["id_resposta_chamado"],
-                id_chamado=row["id_chamado"],
+                id_duvida=row["id_chamado"],
                 id_usuario_autor=row["id_usuario_autor"],
                 mensagem=row["mensagem"],
-                data_resposta=row["data_resposta"])
-            for row in rows]
+                data_resposta=row["data_resposta"]   
+            )
+            respostas.append(resposta)
         return respostas
 
 def obter_por_id(id: int) -> Optional[RespostaChamado]:
@@ -40,13 +43,15 @@ def obter_por_id(id: int) -> Optional[RespostaChamado]:
         cursor = conn.cursor()
         cursor.execute(OBTER_POR_ID, (id,))
         row = cursor.fetchone()
-        resposta = RespostaChamado(
-            id_resposta_chamado=row["id_resposta_chamado"],
-            id_duvida=row["id_chamado"],
-            id_usuario_autor=row["id_usuario_autor"],
-            mensagem=row["mensagem"],
-            data_resposta=row["data_resposta"])
-        return resposta
+        if row: 
+            resposta = RespostaChamado(
+                id_resposta_chamado=row["id_resposta_chamado"],
+                id_duvida=row["id_chamado"],
+                id_usuario_autor=row["id_usuario_autor"],
+                mensagem=row["mensagem"],
+                data_resposta=row["data_resposta"])
+            return resposta
+        return None
 
 def atualizar(resposta: RespostaChamado) -> bool:
     with get_connection() as conn:

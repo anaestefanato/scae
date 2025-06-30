@@ -1,6 +1,5 @@
 import sys 
 import os 
-from data import edital_repo
 from data.edital_repo import *
 from data.edital_model import Edital
 
