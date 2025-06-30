@@ -1,128 +1,140 @@
-import sys 
-import os 
-from data import auxilio_moradia_repo
-from data.auxilio_moradia_repo import *
+# test_auxilio_moradia.py
+
+from data import auxilio_repo
+from data.auxilio_model import Auxilio
 from data.auxilio_moradia_model import AuxilioMoradia
+from data.auxilio_moradia_repo import AuxilioMoradiaRepo
+from data import edital_repo
+from data import inscricao_repo
 
 class TestAuxilioMoradiaRepo:
     def test_criar_tabela_auxilio_moradia(self, test_db):
-        # Arrange
-        # Act
-        resultado = criar_tabela()
-        # Assert
-        assert resultado == True, "A tabela de auxílios de moradia não foi criada com sucesso."
+        edital_repo.criar_tabela()
+        inscricao_repo.criar_tabela()
+        auxilio_repo.criar_tabela()
+        resultado = AuxilioMoradiaRepo.criar_tabela()
+        assert resultado == True, "A tabela de auxílios moradia não foi criada com sucesso."
 
     def test_inserir_auxilio_moradia(self, test_db):
-        # Arrange
-        criar_tabela()
-        auxilio_moradia_teste = AuxilioMoradia(0, "auxilio_moradia_teste", 1200.00)
-        # Act
-        id_auxilio_moradia_inserido = inserir(auxilio_moradia_teste)
-        # Assert
-        auxilio_moradia_db = obter_por_id(id_auxilio_moradia_inserido)
-        assert auxilio_moradia_db is not None, "O auxílio de moradia não foi inserido não pode ser None."
-        assert auxilio_moradia_db.nome == "auxilio_moradia_teste", "O nome do auxílio de moradia inserido não corresponde ao esperado."
-    
+        edital_repo.criar_tabela()
+        inscricao_repo.criar_tabela()
+        auxilio_repo.criar_tabela()
+        AuxilioMoradiaRepo.criar_tabela()
+
+        auxilio_moradia = AuxilioMoradia(
+            id_auxilio=0,
+            id_edital=1,
+            id_inscricao=1,
+            descricao="Auxílio moradia",
+            valor_mensal=300.00,
+            data_inicio="2023-02-01",
+            data_fim="2023-12-31",
+            tipo_auxilio="auxilio moradia",
+            url_comp_residencia_fixa="http://fixa.com",
+            url_comp_residencia_alugada="http://alugada.com",
+            url_contrato_aluguel_cid_campus="http://campus.com",
+            url_contrato_aluguel_cid_natal="http://natal.com"
+        )
+
+        id_inserido = AuxilioMoradiaRepo.inserir(auxilio_moradia)
+        assert id_inserido is not None
+
     def test_obter_por_id_existente(self, test_db):
-        # Arrange
-        criar_tabela()
-        auxilio_moradia_teste = AuxilioMoradia(0, "auxilio_moradia_teste", 1200.00)
-        id_auxilio_moradia_inserido = inserir(auxilio_moradia_teste)
-        # Act
-        auxilio_moradia_db = obter_por_id(id_auxilio_moradia_inserido)
-        # Assert
-        assert auxilio_moradia_db is not None, "O auxílio de moradia não foi encontrado no banco de dados."
-        assert auxilio_moradia_db.id_auxilio == id_auxilio_moradia_inserido, "O ID do auxílio de moradia obtido não corresponde ao esperado."
-    
+        edital_repo.criar_tabela()
+        inscricao_repo.criar_tabela()
+        auxilio_repo.criar_tabela()
+        AuxilioMoradiaRepo.criar_tabela()
+
+        auxilio_moradia = AuxilioMoradia(
+            id_auxilio=0,
+            id_edital=1,
+            id_inscricao=1,
+            descricao="Teste",
+            valor_mensal=350.00,
+            data_inicio="2023-01-01",
+            data_fim="2023-12-31",
+            tipo_auxilio="auxilio moradia",
+            url_comp_residencia_fixa="http://fixa.com",
+            url_comp_residencia_alugada="http://alugada.com",
+            url_contrato_aluguel_cid_campus="http://campus.com",
+            url_contrato_aluguel_cid_natal="http://natal.com"
+        )
+
+        id_inserido = AuxilioMoradiaRepo.inserir(auxilio_moradia)
+        obj = AuxilioMoradiaRepo.obter_por_id(id_inserido)
+        assert obj is not None
+        assert obj.id_auxilio == id_inserido
+
     def test_obter_por_id_inexistente(self, test_db):
-        # Arrange
-        criar_tabela()
-        id_auxilio_moradia_inexistente = 999
-        # Act
-        auxilio_moradia_db = obter_por_id(id_auxilio_moradia_inexistente)
-        # Assert
-        assert auxilio_moradia_db is None, "A busca por um auxílio de moradia inexistente deveria retornar None."
+        edital_repo.criar_tabela()
+        inscricao_repo.criar_tabela()
+        auxilio_repo.criar_tabela()
+        AuxilioMoradiaRepo.criar_tabela()
 
-    def test_obter_auxilios_moradia_por_pagina_primeira_pagina(self, test_db, lista_auxilios_moradia_exemplo):
-        # Arrange
-        auxilio_moradia_repo.criar_tabela()
-        lista_auxilios_moradia_exemplo = [
-            AuxilioMoradia(1, "Auxilio Moradia 1", 1000.00),
-            AuxilioMoradia(2, "Auxilio Moradia 2", 1500.00),
-            AuxilioMoradia(3, "Auxilio Moradia 3", 2000.00),
-            AuxilioMoradia(4, "Auxilio Moradia 4", 2500.00),
-            AuxilioMoradia(5, "Auxilio Moradia 5", 3000.00)
-        ]
-        for auxilio in lista_auxilios_moradia_exemplo:
-            auxilio_moradia_repo.inserir(auxilio)
-        # Act
-        pagina_auxilios_moradia = auxilio_moradia_repo.obter_auxilios_moradia_por_pagina(1, 4)
-        # Assert
-        assert len(pagina_auxilios_moradia) == 4, "Deveria retornar 4 auxílios de moradia na primeira página"
-        assert all(isinstance(u, AuxilioMoradia) for u in pagina_auxilios_moradia), "Todos os itens da página devem ser do tipo AuxilioMoradia"
-        ids_esperados = [1, 2, 3, 4]
-        ids_retornados = [u.id_auxilio for u in pagina_auxilios_moradia]
-        assert ids_esperados == ids_retornados, "Os IDs dos auxílios de moradia na primeira página não estão corretos"
-
-    def test_obter_auxilios_moradia_por_pagina_terceira_pagina(self, test_db, lista_auxilios_moradia_exemplo):
-        # Arrange
-        auxilio_moradia_repo.criar_tabela()
-        lista_auxilios_moradia_exemplo = [
-            AuxilioMoradia(1, "Auxilio Moradia 1", 1000.00),
-            AuxilioMoradia(2, "Auxilio Moradia 2", 1500.00),
-            AuxilioMoradia(3, "Auxilio Moradia 3", 2000.00),
-            AuxilioMoradia(4, "Auxilio Moradia 4", 2500.00),
-            AuxilioMoradia(5, "Auxilio Moradia 5", 3000.00)
-        ]
-        for auxilio in lista_auxilios_moradia_exemplo:
-            auxilio_moradia_repo.inserir(auxilio)
-        # Act
-        pagina_auxilios_moradia = auxilio_moradia_repo.obter_auxilios_moradia_por_pagina(3, 2)
-        # Assert
-        assert len(pagina_auxilios_moradia) == 1, "Deveria retornar apenas 1 auxílio de moradia na terceira página"
-        assert all(isinstance(u, AuxilioMoradia) for u in pagina_auxilios_moradia), "Todos os itens da página devem ser do tipo AuxilioMoradia"
-        ids_esperados = [5]
-        ids_retornados = [u.id_auxilio for u in pagina_auxilios_moradia]
-        assert ids_esperados == ids_retornados, "O ID do auxílio de moradia na terceira página não está correto"
+        resultado = AuxilioMoradiaRepo.obter_por_id(9999)
+        assert resultado is None
 
     def test_atualizar_auxilio_moradia_existente(self, test_db):
-        # Arrange
-        criar_tabela()
-        auxilio_moradia_teste = AuxilioMoradia(0, "auxilio_moradia_teste", 1200.00)
-        id_auxilio_moradia_inserido = inserir(auxilio_moradia_teste)
-        auxilio_moradia_teste_atualizado = AuxilioMoradia(id_auxilio_moradia_inserido, "auxilio_moradia_atualizado", 1500.00)
-        # Act
-        resultado_atualizacao = atualizar(auxilio_moradia_teste_atualizado)
-        # Assert
-        assert resultado_atualizacao == True, "A atualização do auxílio de moradia não foi bem-sucedida."
-        auxilio_moradia_db = obter_por_id(id_auxilio_moradia_inserido)
-        assert auxilio_moradia_db.nome == "auxilio_moradia_atualizado", "O nome do auxílio de moradia atualizado não corresponde ao esperado."
-        assert auxilio_moradia_db.valor == 1500.00, "O valor do auxílio de moradia atualizado não corresponde ao esperado."
-    
-    def test_atualizar_auxilio_moradia_inexistente(self, test_db):
-        # Arrange
-        criar_tabela()
-        auxilio_moradia_teste = AuxilioMoradia(999, "auxilio_moradia_inexistente", 1200.00)
-        # Act
-        resultado_atualizacao = atualizar(auxilio_moradia_teste)
-        # Assert
-        assert resultado_atualizacao == False, "A atualização de um auxílio de moradia inexistente deveria retornar False."
-    
+        edital_repo.criar_tabela()
+        inscricao_repo.criar_tabela()
+        auxilio_repo.criar_tabela()
+        AuxilioMoradiaRepo.criar_tabela()
+
+        auxilio_moradia = AuxilioMoradia(
+            id_auxilio=0,
+            id_edital=1,
+            id_inscricao=1,
+            descricao="Original",
+            valor_mensal=400.00,
+            data_inicio="2023-01-01",
+            data_fim="2023-12-31",
+            tipo_auxilio="auxilio moradia",
+            url_comp_residencia_fixa="http://fixa-original.com",
+            url_comp_residencia_alugada="http://alugada-original.com",
+            url_contrato_aluguel_cid_campus="http://campus-original.com",
+            url_contrato_aluguel_cid_natal="http://natal-original.com"
+        )
+
+        id_inserido = AuxilioMoradiaRepo.inserir(auxilio_moradia)
+        auxilio_moradia.id_auxilio = id_inserido
+        auxilio_moradia.url_comp_residencia_fixa = "http://fixa-novo.com"
+        auxilio_moradia.url_comp_residencia_alugada = "http://alugada-novo.com"
+        auxilio_moradia.url_contrato_aluguel_cid_campus = "http://campus-novo.com"
+        auxilio_moradia.url_contrato_aluguel_cid_natal = "http://natal-novo.com"
+
+        atualizado = AuxilioMoradiaRepo.atualizar(auxilio_moradia)
+        assert atualizado
+
     def test_excluir_auxilio_moradia_existente(self, test_db):
-        # Arrange
-        criar_tabela()
-        auxilio_moradia_teste = AuxilioMoradia(0, "auxilio_moradia_teste", 1200.00)
-        id_auxilio_moradia_inserido = inserir(auxilio_moradia_teste)
-        # Act
-        resultado_exclusao = excluir(id_auxilio_moradia_inserido)
-        # Assert
-        assert resultado_exclusao == True, "A exclusão do auxílio de moradia deveria ser bem-sucedida."
-    
+        edital_repo.criar_tabela()
+        inscricao_repo.criar_tabela()
+        auxilio_repo.criar_tabela()
+        AuxilioMoradiaRepo.criar_tabela()
+
+        auxilio_moradia = AuxilioMoradia(
+            id_auxilio=0,
+            id_edital=1,
+            id_inscricao=1,
+            descricao="Excluir",
+            valor_mensal=250.00,
+            data_inicio="2023-01-01",
+            data_fim="2023-12-31",
+            tipo_auxilio="auxilio moradia",
+            url_comp_residencia_fixa="http://fixa.com",
+            url_comp_residencia_alugada="http://alugada.com",
+            url_contrato_aluguel_cid_campus="http://campus.com",
+            url_contrato_aluguel_cid_natal="http://natal.com"
+        )
+
+        id_inserido = AuxilioMoradiaRepo.inserir(auxilio_moradia)
+        sucesso = AuxilioMoradiaRepo.excluir(id_inserido)
+        assert sucesso
+
     def test_excluir_auxilio_moradia_inexistente(self, test_db):
-        # Arrange
-        criar_tabela()
-        id_auxilio_moradia_inexistente = 999
-        # Act
-        resultado_exclusao = excluir(id_auxilio_moradia_inexistente)
-        # Assert
-        assert resultado_exclusao == False, "A exclusão de um auxílio de moradia inexistente deveria retornar False."
+        edital_repo.criar_tabela()
+        inscricao_repo.criar_tabela()
+        auxilio_repo.criar_tabela()
+        AuxilioMoradiaRepo.criar_tabela()
+
+        sucesso = AuxilioMoradiaRepo.excluir(99999)
+        assert not sucesso

@@ -22,18 +22,17 @@ INSERT INTO auxilio_moradia (
 OBTER_TODOS = """
 SELECT
     am.id_auxilio_moradia,
-    a.id_auxilio,
+    am.url_comp_residencia_fixa,
+    am.url_comp_residencia_alugada,
+    am.url_contrato_aluguel_cid_campus,
+    am.url_contrato_aluguel_cid_natal,
     a.id_edital,
     a.id_inscricao,
     a.descricao,
     a.valor_mensal,
     a.data_inicio,
     a.data_fim,
-    a.tipo_auxilio,
-    am.url_comp_residencia_fixa,
-    am.url_comp_residencia_alugada,
-    am.url_contrato_aluguel_cid_campus,
-    am.url_contrato_aluguel_cid_natal
+    a.tipo_auxilio
 FROM auxilio_moradia am
 INNER JOIN auxilio a ON am.id_auxilio_moradia = a.id_auxilio
 ORDER BY am.id_auxilio_moradia
@@ -42,18 +41,17 @@ ORDER BY am.id_auxilio_moradia
 OBTER_POR_ID = """
 SELECT
     am.id_auxilio_moradia,
-    a.id_auxilio,
+    am.url_comp_residencia_fixa,
+    am.url_comp_residencia_alugada,
+    am.url_contrato_aluguel_cid_campus,
+    am.url_contrato_aluguel_cid_natal,
     a.id_edital,
     a.id_inscricao,
     a.descricao,
     a.valor_mensal,
     a.data_inicio,
     a.data_fim,
-    a.tipo_auxilio,
-    am.url_comp_residencia_fixa,
-    am.url_comp_residencia_alugada,
-    am.url_contrato_aluguel_cid_campus,
-    am.url_contrato_aluguel_cid_natal
+    a.tipo_auxilio
 FROM auxilio_moradia am
 INNER JOIN auxilio a ON am.id_auxilio_moradia = a.id_auxilio
 WHERE am.id_auxilio_moradia = ?
@@ -70,5 +68,6 @@ WHERE id_auxilio_moradia = ?
 """
 
 EXCLUIR = """
-DELETE FROM auxilio_moradia WHERE id_auxilio_moradia = ?
+DELETE FROM auxilio_moradia
+WHERE id_auxilio_moradia = ?
 """
