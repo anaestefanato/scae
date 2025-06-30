@@ -1,6 +1,5 @@
 from dataclasses import dataclass
 
-
 @dataclass
 class Edital:
     id_edital: int
