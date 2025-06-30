@@ -13,7 +13,7 @@ class TestNotificacaoRepo:
         # Act
     resultado = criar_tabela()
     # Assert
-    assert resultado == True, "A tabela de inscrições não foi criada com sucesso."
+    assert resultado == True, "A tabela de notificações não foi criada com sucesso."
 
     def test_inserir_notificacao(self, test_db):
         # Arrange
@@ -25,12 +25,12 @@ class TestNotificacaoRepo:
             id_usuario='user123',
             mensagem='Teste de notificação',
             data_envio='2023-10-01',
-            status='pendente'
+            tipo='pendente'
         )
         # Act
         resultado = inserir(notificacao)
         # Assert
-        assert resultado == True, "A inscrição não foi inserida com sucesso."
+        assert resultado == True, "A notificação não foi inserida com sucesso."
     
     def test_obter_por_id_existente(self, test_db):
         # Arrange
@@ -43,7 +43,7 @@ class TestNotificacaoRepo:
             id_usuario=id_usuario,
             mensagem='Notificação de teste',
             data_envio='2023-10-01',
-            status='pendente'
+            tipo='pendente'
         )
         id_notificacao = inserir(notificacao)
         # Act
@@ -95,7 +95,7 @@ class TestNotificacaoRepo:
                 
         for i, notificacao in enumerate(lista_notificacoes_exemplo, start=1):
             notificacao.id_usuario = i
-            notificacao.id_inscricao = i
+            notificacao.id_notificacao = i
             inserir(notificacao)
         
         # Act
@@ -120,7 +120,7 @@ class TestNotificacaoRepo:
             id_usuario=id_usuario,
             mensagem='Notificação de teste',
             data_envio='2023-10-01',
-            status='pendente'
+            tipo='pendente'
         )
         id_notificacao = inserir(notificacao)
         notificacao_atualizado = Notificacao(
@@ -128,7 +128,7 @@ class TestNotificacaoRepo:
             id_usuario=id_usuario,
             mensagem='Notificação de teste atualizada',
             data_envio='2023-10-02',
-            status='enviada'
+            tipo='enviada'
         )
   
         # Act
@@ -146,7 +146,7 @@ class TestNotificacaoRepo:
             id_usuario=1,   
             mensagem='Notificação inexistente',
             data_envio='2023-10-01',
-            status='pendente'
+            tipo='pendente'
         )
         # Act
         resultado = atualizar(notificacao_inexistente)
@@ -165,7 +165,7 @@ class TestNotificacaoRepo:
             id_usuario=id_usuario,
             mensagem='Notificação de teste',
             data_envio='2023-10-01',
-            status='pendente'
+            tipo='pendente'
         )
         id_notificacao = inserir(notificacao)
         # Act

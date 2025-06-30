@@ -20,33 +20,38 @@ def inserir(notificacao: Notificacao) -> Optional[int]:
             notificacao.tipo))
         return cursor.lastrowid
 
-def obter_todos() -> list[Notificacao]:
+def obter_por_pagina(pagina: int, limit: int) -> list[Notificacao]:
+    offset = (pagina - 1) * limit
     with get_connection() as conn:
         cursor = conn.cursor()
-        cursor.execute(OBTER_TODOS)
+        cursor.execute(OBTER_POR_PAGINA, (limit, offset))
         rows = cursor.fetchall()
-        notificacoes = [
-            Notificacao(
+        notificacoes = []
+        for row in rows:
+            notificacao = Notificacao(
                 id_notificacao=row["id_notificacao"],
                 id_usuario_destinatario=row["id_usuario_destinatario"],
                 titulo=row["titulo"],
-                dataEnvio=row["dataEnvio"],
+                data_envio=row["data_envio"],
                 tipo=row["tipo"])
-            for row in rows]
+            notificacoes.append(notificacao)
         return notificacoes
+
 
 def obter_por_id(id: int) -> Optional[Notificacao]:
     with get_connection() as conn:
         cursor = conn.cursor()
         cursor.execute(OBTER_POR_ID, (id,))
         row = cursor.fetchone()
-        notificacao = Notificacao(
-            id_notificacao=row["id_notificacao"],
-            id_usuario_destinatario=row["id_usuario_destinatario"],
-            titulo=row["titulo"],
-            data_envio=row["data_envio"],
-            tipo=row["tipo"])
-        return notificacao
+        if row:
+            notificacao = Notificacao(
+                id_notificacao=row["id_notificacao"],
+                id_usuario_destinatario=row["id_usuario_destinatario"],
+                titulo=row["titulo"],
+                data_envio=row["data_envio"],
+                tipo=row["tipo"])
+            return notificacao
+        return None
 
 def atualizar(notificacao: Notificacao) -> bool:
     with get_connection() as conn:

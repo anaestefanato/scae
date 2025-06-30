@@ -22,13 +22,15 @@ def inserir(chamado: Chamado) -> Optional[int]:
             chamado.status))
         return cursor.lastrowid
 
-def obter_todos() -> list[Chamado]:
+def obter_por_pagina(pagina: int, limit: int) -> list[Chamado]:
+    offset = (pagina - 1) * limit
     with get_connection() as conn:
         cursor = conn.cursor()
-        cursor.execute(OBTER_TODOS)
+        cursor.execute(OBTER_POR_PAGINA, (limit, offset))
         rows = cursor.fetchall()
-        chamados = [
-            Chamado(
+        chamados = []
+        for row in rows:
+            chamado = Chamado(
                 id_duvida=row["id_duvida"],
                 id_usuario_criador=row["id_usuario_criador"],
                 id_administrador_responsavel=row["id_administrador_responsavel"],
@@ -36,7 +38,7 @@ def obter_todos() -> list[Chamado]:
                 descricao=row["descricao"],
                 data_criacao=row["data_criacao"],
                 status=row["status"])
-            for row in rows]
+            chamados.append(chamado)
         return chamados
 
 def obter_por_id(id: int) -> Optional[Chamado]:
@@ -44,15 +46,17 @@ def obter_por_id(id: int) -> Optional[Chamado]:
         cursor = conn.cursor()
         cursor.execute(OBTER_POR_ID, (id,))
         row = cursor.fetchone()
-        chamado = Chamado(
-            id_duvida=row["id_duvida"],
-            id_usuario_criador=row["id_usuario_criador"],
-            id_administrador_responsavel=row["id_administrador_responsavel"],
-            titulo=row["titulo"],
-            descricao=row["descricao"],
-            data_criacao=row["data_criacao"],
-            status=row["status"])
-        return chamado
+        if row:
+            chamado = Chamado(
+                id_duvida=row["id_duvida"],
+                id_usuario_criador=row["id_usuario_criador"],
+                id_administrador_responsavel=row["id_administrador_responsavel"],
+                titulo=row["titulo"],
+                descricao=row["descricao"],
+                data_criacao=row["data_criacao"],
+                status=row["status"])
+            return chamado
+        return None
 
 def atualizar(chamado: Chamado) -> bool:
     with get_connection() as conn:
