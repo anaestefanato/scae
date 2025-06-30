@@ -8,26 +8,33 @@ def criar_tabela() -> bool:
     with get_connection() as conn:
         cursor = conn.cursor()
         cursor.execute(CRIAR_TABELA)
-        return cursor.rowcount > 0
+        return True
 
-def inserir(auxilioMoradia: AuxilioMoradia) -> Optional[int]:
+def inserir(auxilio_moradia: AuxilioMoradia) -> Optional[int]:
     with get_connection() as conn:
         cursor = conn.cursor()
-        auxilio = AuxilioMoradia(0,
-            auxilioMoradia.id_edital,
-            auxilioMoradia.id_inscricao,
-            auxilioMoradia.descricao,
-            auxilioMoradia.valor_mensal,
-            auxilioMoradia.data_inicio,
-            auxilioMoradia.data_fim,
-            auxilioMoradia.tipo_auxilio)
+        auxilio = AuxilioMoradia(
+            id_auxilio=0,
+            id_edital=auxilio_moradia.id_edital,
+            id_inscricao=auxilio_moradia.id_inscricao,
+            descricao=auxilio_moradia.descricao,
+            valor_mensal=auxilio_moradia.valor_mensal,
+            data_inicio=auxilio_moradia.data_inicio,
+            data_fim=auxilio_moradia.data_fim,
+            tipo_auxilio=auxilio_moradia.tipo_auxilio,
+            url_comp_residencia_fixa="",
+            url_comp_residencia_alugada="",
+            url_contrato_aluguel_cid_campus="",
+            url_contrato_aluguel_cid_natal=""
+        )
         id_auxilio = auxilio_repo.inserir(auxilio, cursor)
         cursor.execute(INSERIR, (
-            auxilioMoradia.id_auxilio,
-            auxilioMoradia.urlCompResidenciaAlugada,
-            auxilioMoradia.urlCompResidenciaFixa,
-            auxilioMoradia.urlContratoAluguelCidCampus,
-            auxilioMoradia.urlContratoAluguelCidNatal))
+            id_auxilio,
+            auxilio_moradia.url_comp_residencia_fixa,
+            auxilio_moradia.url_comp_residencia_alugada,
+            auxilio_moradia.url_contrato_aluguel_cid_campus,
+            auxilio_moradia.url_contrato_aluguel_cid_natal
+        ))
         return id_auxilio
 
 def obter_todos() -> list[AuxilioMoradia]:
@@ -36,20 +43,23 @@ def obter_todos() -> list[AuxilioMoradia]:
         cursor.execute(OBTER_TODOS)
         rows = cursor.fetchall()
         auxilios = [
-            AuxilioMoradia(id_auxilio_moradia=row["id_auxilio_moradia"],
-                        id_auxilio=row["id_auxilio"],
-                        id_edital=row["id_edital"],
-                        id_inscricao=row["id_inscricao"],
-                        descricao=row["descricao"],
-                        valor_mensal=row["valor_mensal"],
-                        data_inicio=row["data_inicio"],
-                        data_fim=row["data_fim"],
-                        tipo_auxilio=row["tipo_auxilio"],
-                        urlCompResidenciaAlugada=row["urlCompResidenciaAlugada"],
-                        urlComprovanteResidenciaFixa=row["urlCompResidenciaFixa"],
-                        urlContratoAluguelCidCampus=row["urlContratoAluguelCidCampus"],
-                        urlContratoAluguelCidNatal=row["urlContratoAluguelCidNatal"])
-            for row in rows]
+            AuxilioMoradia(
+                id_auxilio=row["id_auxilio"],
+                id_edital=row["id_edital"],
+                id_inscricao=row["id_inscricao"],
+                descricao=row["descricao"],
+                valor_mensal=row["valor_mensal"],
+                data_inicio=row["data_inicio"],
+                data_fim=row["data_fim"],
+                tipo_auxilio=row["tipo_auxilio"],
+                url_comp_residencia_fixa=row["url_comp_residencia_fixa"],
+                url_comp_residencia_alugada=row["url_comp_residencia_alugada"],
+                url_contrato_aluguel_cid_campus=row["url_contrato_aluguel_cid_campus"],
+                url_contrato_aluguel_cid_natal=row["url_contrato_aluguel_cid_natal"],
+                id_auxilio= row["id_auxilio_moradia"]
+            )
+            for row in rows
+        ]
         return auxilios
 
 def obter_por_id(id: int) -> Optional[AuxilioMoradia]:
@@ -57,8 +67,9 @@ def obter_por_id(id: int) -> Optional[AuxilioMoradia]:
         cursor = conn.cursor()
         cursor.execute(OBTER_POR_ID, (id,))
         row = cursor.fetchone()
+        if row is None:
+            return None
         auxilio = AuxilioMoradia(
-            id_auxilio_moradia=row["id_auxilio_moradia"],
             id_auxilio=row["id_auxilio"],
             id_edital=row["id_edital"],
             id_inscricao=row["id_inscricao"],
@@ -67,31 +78,41 @@ def obter_por_id(id: int) -> Optional[AuxilioMoradia]:
             data_inicio=row["data_inicio"],
             data_fim=row["data_fim"],
             tipo_auxilio=row["tipo_auxilio"],
-            urlCompResidenciaAlugada=row["urlCompResidenciaAlugada"],
-            urlComprovanteResidenciaFixa=row["urlCompResidenciaFixa"],
-            urlContratoAluguelCidCampus=row["urlContratoAluguelCidCampus"],
-            urlContratoAluguelCidNatal=row["urlContratoAluguelCidNatal"])
+            url_comp_residencia_fixa=row["url_comp_residencia_fixa"],
+            url_comp_residencia_alugada=row["url_comp_residencia_alugada"],
+            url_contrato_aluguel_cid_campus=row["url_contrato_aluguel_cid_campus"],
+            url_contrato_aluguel_cid_natal=row["url_contrato_aluguel_cid_natal"],
+            id_auxilio=row["id_auxilio_moradia"]
+        )
         return auxilio
-    
-def atualizar(auxilioMoradia: AuxilioMoradia) -> bool:
+
+def atualizar(auxilio_moradia: AuxilioMoradia) -> bool:
     with get_connection() as conn:
         cursor = conn.cursor()
-        auxilio = AuxilioMoradia(auxilioMoradia.id_auxilio,
-            auxilioMoradia.id_edital,
-            auxilioMoradia.id_inscricao,
-            auxilioMoradia.descricao,
-            auxilioMoradia.valor_mensal,
-            auxilioMoradia.data_inicio,
-            auxilioMoradia.data_fim,
-            auxilioMoradia.tipo_auxilio)
+        auxilio = AuxilioMoradia(
+            id_auxilio=auxilio_moradia.id_auxilio,
+            id_edital=auxilio_moradia.id_edital,
+            id_inscricao=auxilio_moradia.id_inscricao,
+            descricao=auxilio_moradia.descricao,
+            valor_mensal=auxilio_moradia.valor_mensal,
+            data_inicio=auxilio_moradia.data_inicio,
+            data_fim=auxilio_moradia.data_fim,
+            tipo_auxilio=auxilio_moradia.tipo_auxilio,
+            url_comp_residencia_fixa="",
+            url_comp_residencia_alugada="",
+            url_contrato_aluguel_cid_campus="",
+            url_contrato_aluguel_cid_natal=""
+        )
         auxilio_repo.atualizar(auxilio, cursor)
         cursor.execute(ATUALIZAR, (
-            auxilioMoradia.urlCompResidenciaAlugada,
-            auxilioMoradia.urlCompResidenciaFixa,
-            auxilioMoradia.urlContratoAluguelCidCampus,
-            auxilioMoradia.urlContratoAluguelCidNatal))
-        return (cursor.rowcount > 0)
-    
+            auxilio_moradia.url_comp_residencia_fixa,
+            auxilio_moradia.url_comp_residencia_alugada,
+            auxilio_moradia.url_contrato_aluguel_cid_campus,
+            auxilio_moradia.url_contrato_aluguel_cid_natal,
+            auxilio_moradia.id_auxilio
+        ))
+        return cursor.rowcount > 0
+
 def excluir(id: int) -> bool:
     with get_connection() as conn:
         cursor = conn.cursor()

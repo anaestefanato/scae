@@ -1,4 +1,4 @@
-from typing import Optional
+from typing import Optional, List
 from data import auxilio_repo
 from data.auxilio_model import Auxilio
 from data.auxilio_transporte_model import AuxilioTransporte
@@ -6,6 +6,8 @@ from data.auxilio_transporte_sql import *
 from data.util import get_connection
 
 class AuxilioTransporteRepo:
+
+    @staticmethod
     def criar_tabela() -> bool:
         try:
             with get_connection() as conn:
@@ -16,38 +18,37 @@ class AuxilioTransporteRepo:
             print(f"Erro ao criar tabela: {e}")
             return False
 
-def inserir(auxilioTransporte: AuxilioTransporte) -> Optional[int]:
-    with get_connection() as conn:
-        cursor = conn.cursor()
-        auxilio = Auxilio(
-            0,  # id_auxilio
-            auxilioTransporte.id_edital,
-            auxilioTransporte.id_inscricao,
-            auxilioTransporte.descricao,
-            auxilioTransporte.valor_mensal,
-            auxilioTransporte.data_inicio,
-            auxilioTransporte.data_fim,
-            auxilioTransporte.tipo_auxilio
-        )
-        id_auxilio = auxilio_repo.inserir(auxilio)
-        if id_auxilio is None:
-            return None
-        cursor.execute(INSERIR, (
-            id_auxilio,
-            auxilioTransporte.urlCompResidencia,
-            auxilioTransporte.urlCompTransporte
-        ))
-        return cursor.lastrowid
+    @staticmethod
+    def inserir(auxilioTransporte: AuxilioTransporte) -> Optional[int]:
+        with get_connection() as conn:
+            cursor = conn.cursor()
+            auxilio = Auxilio(
+                id_auxilio=0,
+                id_edital=auxilioTransporte.id_edital,
+                id_inscricao=auxilioTransporte.id_inscricao,
+                descricao=auxilioTransporte.descricao,
+                valor_mensal=auxilioTransporte.valor_mensal,
+                data_inicio=auxilioTransporte.data_inicio,
+                data_fim=auxilioTransporte.data_fim,
+                tipo_auxilio=auxilioTransporte.tipo_auxilio
+            )
+            id_auxilio = auxilio_repo.inserir(auxilio)
+            if id_auxilio is None:
+                return None
+            cursor.execute(INSERIR, (
+                id_auxilio,
+                auxilioTransporte.urlCompResidencia,
+                auxilioTransporte.urlCompTransporte
+            ))
+            return id_auxilio
 
-
-
-
-    def obter_todos() -> list[AuxilioTransporte]:
+    @staticmethod
+    def obter_todos() -> List[AuxilioTransporte]:
         with get_connection() as conn:
             cursor = conn.cursor()
             cursor.execute(OBTER_TODOS)
             rows = cursor.fetchall()
-            auxilios = [
+            return [
                 AuxilioTransporte(
                     id_auxilio=row["id_auxilio_transporte"],
                     id_edital=row["id_edital"],
@@ -57,17 +58,20 @@ def inserir(auxilioTransporte: AuxilioTransporte) -> Optional[int]:
                     data_inicio=row["data_inicio"],
                     data_fim=row["data_fim"],
                     tipo_auxilio=row["tipo_auxilio"],
-                    url_CompTransporte=row["url_CompTransporte"],   
-                    url_CompResidencia=row["url_CompResidencia"])
-                for row in rows]
-            return auxilios
+                    urlCompResidencia=row["urlCompResidencia"],
+                    urlCompTransporte=row["urlCompTransporte"]
+                ) for row in rows
+            ]
 
+    @staticmethod
     def obter_por_id(id: int) -> Optional[AuxilioTransporte]:
         with get_connection() as conn:
             cursor = conn.cursor()
             cursor.execute(OBTER_POR_ID, (id,))
             row = cursor.fetchone()
-            auxilio = AuxilioTransporte(
+            if row is None:
+                return None
+            return AuxilioTransporte(
                 id_auxilio=row["id_auxilio_transporte"],
                 id_edital=row["id_edital"],
                 id_inscricao=row["id_inscricao"],
@@ -76,31 +80,30 @@ def inserir(auxilioTransporte: AuxilioTransporte) -> Optional[int]:
                 data_inicio=row["data_inicio"],
                 data_fim=row["data_fim"],
                 tipo_auxilio=row["tipo_auxilio"],
-                url_CompTransporte=row["url_CompTransporte"],
-                url_CompResidencia=row["url_CompResidencia"])
-            return auxilio
-        
+                urlCompResidencia=row["urlCompResidencia"],
+                urlCompTransporte=row["urlCompTransporte"]
+            )
+
+    @staticmethod
     def atualizar(auxilioTransporte: AuxilioTransporte) -> bool:
         with get_connection() as conn:
             cursor = conn.cursor()
-            auxilio = AuxilioTransporte(auxilioTransporte.id_auxilio,
-                auxilioTransporte.id_edital,
-                auxilioTransporte.id_inscricao,
-                auxilioTransporte.descricao,
-                auxilioTransporte.valor_mensal,
-                auxilioTransporte.data_inicio,
-                auxilioTransporte.data_fim,
-                auxilioTransporte.tipo_auxilio)
-            auxilio.atualizar(auxilio, cursor)
             cursor.execute(ATUALIZAR, (
-                auxilioTransporte.id_auxilio,
+                auxilioTransporte.urlCompResidencia,
                 auxilioTransporte.urlCompTransporte,
-                auxilioTransporte.urlCompResidencia))
-            return (cursor.rowcount > 0)
-        
+                auxilioTransporte.id_auxilio
+            ))
+            return cursor.rowcount > 0
+
+    @staticmethod
     def excluir(id: int) -> bool:
         with get_connection() as conn:
             cursor = conn.cursor()
-            cursor.execute(EXCLUIR, (id,))
-            auxilio_repo.excluir(id, cursor)
-            return (cursor.rowcount > 0)
+            # Primeiro exclui da tabela derivada
+            cursor.execute("DELETE FROM auxilio_transporte WHERE id_auxilio_transporte = ?", (id,))
+            if cursor.rowcount == 0:
+                return False            
+            # Agora exclui da tabela base
+            cursor.execute("DELETE FROM auxilio WHERE id_auxilio = ?", (id,))           
+            conn.commit()  # força commit para liberar lock
+            return True

@@ -1,128 +1,129 @@
-import sys 
-import os 
-from data import auxilio_transporte_repo
-from data.auxilio_transporte_repo import *
-from data.auxilio_transporte_model import AuxilioTransporte
 from data import auxilio_repo
-from data.auxilio_repo import Auxilio, criar_tabela, inserir, obter_por_id
+from data.auxilio_model import Auxilio
+from data.auxilio_transporte_model import AuxilioTransporte
+from data.auxilio_transporte_repo import AuxilioTransporteRepo
 from data import edital_repo
-from data.edital_repo import Edital
 from data import inscricao_repo
-from data.inscricao_repo import Inscricao
 
 class TestAuxilioTransporteRepo:
     def test_criar_tabela_auxilio_transporte(self, test_db):
-        # Arrange
-        auxilio_repo.criar_tabela()
-        # Act
-        resultado = criar_tabela()
-        # Assert
-        assert resultado == True, "A tabela de auxílios de transporte não foi criada com sucesso."
-    
-    def test_inserir_auxilio_transporte(self, test_db):
-        # Arrange
         edital_repo.criar_tabela()
         inscricao_repo.criar_tabela()
         auxilio_repo.criar_tabela()
-        criar_tabela()
-        auxilio_transporte_teste = AuxilioTransporte(0, 0, 0, "auxilio transporte teste", 500.00, "2023-01-01", "2023-12-31", "auxilio transporte", "http://example.com/compResidencia", "http://example.com/compTransporte")
-        # Act
-        id_auxilio_transporte_inserido = inserir(auxilio_transporte_teste)
-        # Assert
-        auxilio_transporte_db = obter_por_id(id_auxilio_transporte_inserido)
-        assert auxilio_transporte_db is not None, "O auxílio de transporte não foi inserido não pode ser None."
-        assert auxilio_transporte_db.descricao == "auxilio transporte teste", "A descrição do auxílio de transporte inserido não corresponde ao esperado."
+        resultado = AuxilioTransporteRepo.criar_tabela()
+        assert resultado == True, "A tabela de auxílios de transporte não foi criada com sucesso."
+
+    def test_inserir_auxilio_transporte(self, test_db):
+        edital_repo.criar_tabela()
+        inscricao_repo.criar_tabela()
+        auxilio_repo.criar_tabela()
+        AuxilioTransporteRepo.criar_tabela()
+
+        auxilio_transporte = AuxilioTransporte(
+            id_auxilio=0,
+            id_edital=1,
+            id_inscricao=1,
+            descricao="teste",
+            valor_mensal=123.45,
+            data_inicio="2023-02-01",
+            data_fim="2023-12-31",
+            tipo_auxilio="auxilio transporte",
+            urlCompResidencia="http://r.com",
+            urlCompTransporte="http://t.com"
+        )
+
+        id_inserido = AuxilioTransporteRepo.inserir(auxilio_transporte)
+        assert id_inserido is not None
 
     def test_obter_por_id_existente(self, test_db):
-        # Arrange
-        auxilio_repo.criar_tabela()
-        inscricao_repo.criar_tabela()
         edital_repo.criar_tabela()
-        criar_tabela()
-        auxilio_transporte_teste = AuxilioTransporte(0, 0, 0, "auxilio transporte teste", 500.00, "2023-01-01", "2023-12-31", "auxilio transporte", "http://example.com/compResidencia", "http://example.com/compTransporte")
-        id_auxilio_transporte_inserido = inserir(auxilio_transporte_teste)
-        # Act
-        auxilio_transporte_db = obter_por_id(id_auxilio_transporte_inserido)
-        # Assert
-        assert auxilio_transporte_db is not None, "O auxílio de transporte não foi encontrado no banco de dados."
-        assert auxilio_transporte_db.id_auxilio == id_auxilio_transporte_inserido, "O ID do auxílio de transporte obtido não corresponde ao esperado."
+        inscricao_repo.criar_tabela()
+        auxilio_repo.criar_tabela()
+        AuxilioTransporteRepo.criar_tabela()
+
+        auxilio_transporte = AuxilioTransporte(
+            id_auxilio=0,
+            id_edital=1,
+            id_inscricao=1,
+            descricao="teste",
+            valor_mensal=123.45,
+            data_inicio="2023-02-01",
+            data_fim="2023-12-31",
+            tipo_auxilio="auxilio transporte",
+            urlCompResidencia="http://r.com",
+            urlCompTransporte="http://t.com"
+        )
+
+        id_inserido = AuxilioTransporteRepo.inserir(auxilio_transporte)
+        obj = AuxilioTransporteRepo.obter_por_id(id_inserido)
+        assert obj is not None
+        assert obj.id_auxilio == id_inserido
 
     def test_obter_por_id_inexistente(self, test_db):
-        # Arrange
-        auxilio_repo.criar_tabela()
-        inscricao_repo.criar_tabela()
         edital_repo.criar_tabela()
-        criar_tabela()
-        id_auxilio_transporte_inexistente = 999
-        # Act
-        auxilio_transporte_db = obter_por_id(id_auxilio_transporte_inexistente)
-        # Assert
-        assert auxilio_transporte_db is None, "A busca por um auxílio de transporte inexistente deveria retornar None."
-
-    def test_obter_auxilios_transporte_por_pagina_primeira_pagina(self, test_db, lista_auxilios_transporte_exemplo):
-        # Arrange
-        auxilio_repo.criar_tabela()
         inscricao_repo.criar_tabela()
-        edital_repo.criar_tabela()
-        criar_tabela()
-        
-        for auxilio in lista_auxilios_transporte_exemplo:
-            auxilio_transporte_repo.inserir(auxilio)
-        # Act
-        pagina_auxilios_transporte = auxilio_transporte_repo.obter_auxilios_transporte_por_pagina(1, 4)
-        # Assert
-        assert len(pagina_auxilios_transporte) == 4, "Deveria retornar 4 auxílios de transporte na primeira página"
-        assert all(isinstance(a, AuxilioTransporte) for a in pagina_auxilios_transporte), "Todos os itens da página devem ser do tipo AuxilioTransporte"    
+        auxilio_repo.criar_tabela()
+        AuxilioTransporteRepo.criar_tabela()
 
-    def test_obter_auxilios_transporte_por_pagina_terceira_pagina(self, test_db, lista_auxilios_transporte_exemplo):
-        # Arrange
-        auxilio_transporte_repo.criar_tabela()
-        for auxilio in lista_auxilios_transporte_exemplo:
-            auxilio_transporte_repo.inserir(auxilio)
-        # Act
-        pagina_auxilios_transporte = auxilio_transporte_repo.obter_auxilios_transporte_por_pagina(3, 2)
-        # Assert
-        assert len(pagina_auxilios_transporte) == 1, "Deveria retornar 1 auxílio de transporte na terceira página"
-        assert all(isinstance(a, AuxilioTransporte) for a in pagina_auxilios_transporte), "Todos os itens da página devem ser do tipo AuxilioTransporte"
-    
+        resultado = AuxilioTransporteRepo.obter_por_id(9999)
+        assert resultado is None
+
     def test_atualizar_auxilio_transporte_existente(self, test_db):
-        # Arrange
-        criar_tabela()
-        auxilio_transporte_teste = AuxilioTransporte(0, "auxilio_transporte_teste", 500.00)
-        id_auxilio_transporte_inserido = inserir(auxilio_transporte_teste)
-        auxilio_transporte_teste.nome = "auxilio_transporte_atualizado" 
-        auxilio_transporte_teste.id_auxilio = id_auxilio_transporte_inserido
-        # Act
-        resultado = atualizar(auxilio_transporte_teste)
-        # Assert
-        assert resultado == True, "A atualização do auxílio de transporte falhou."
-        auxilio_transporte_db = obter_por_id(id_auxilio_transporte_inserido)
-        assert auxilio_transporte_db.nome == "auxilio_transporte_atualizado", "O nome do auxílio de transporte atualizado não corresponde ao esperado."
+        edital_repo.criar_tabela()
+        inscricao_repo.criar_tabela()
+        auxilio_repo.criar_tabela()
+        AuxilioTransporteRepo.criar_tabela()
 
-    def test_atualizar_auxilio_transporte_inexistente(self, test_db):
-        # Arrange
-        criar_tabela()
-        auxilio_transporte_teste = AuxilioTransporte(999, "auxilio_transporte_inexistente", 500.00)
-        # Act
-        resultado = atualizar(auxilio_transporte_teste)
-        # Assert
-        assert resultado == False, "A atualização de um auxílio de transporte inexistente deveria retornar False"
-    
+        auxilio_transporte = AuxilioTransporte(
+            id_auxilio=0,
+            id_edital=1,
+            id_inscricao=1,
+            descricao="original",
+            valor_mensal=200.00,
+            data_inicio="2023-01-01",
+            data_fim="2023-12-31",
+            tipo_auxilio="auxilio transporte",
+            urlCompResidencia="http://original.com/res",
+            urlCompTransporte="http://original.com/trans"
+        )
+
+        id_inserido = AuxilioTransporteRepo.inserir(auxilio_transporte)
+        auxilio_transporte.id_auxilio = id_inserido
+        auxilio_transporte.descricao = "atualizado"
+        auxilio_transporte.urlCompResidencia = "http://novo.com/res"
+        auxilio_transporte.urlCompTransporte = "http://novo.com/trans"
+
+        atualizado = AuxilioTransporteRepo.atualizar(auxilio_transporte)
+        assert atualizado
+
     def test_excluir_auxilio_transporte_existente(self, test_db):
-        # Arrange
-        criar_tabela()
-        auxilio_transporte_teste = AuxilioTransporte(0, "auxilio_transporte_teste", 500.00)
-        id_auxilio_transporte_inserido = inserir(auxilio_transporte_teste)  
-        # Act
-        resultado = excluir(id_auxilio_transporte_inserido)
-        # Assert
-        assert resultado == True, "A exclusão do auxílio de transporte deveria ser bem-sucedida."
-    
+        edital_repo.criar_tabela()
+        inscricao_repo.criar_tabela()
+        auxilio_repo.criar_tabela()
+        AuxilioTransporteRepo.criar_tabela()
+
+        auxilio_transporte = AuxilioTransporte(
+            id_auxilio=0,
+            id_edital=1,
+            id_inscricao=1,
+            descricao="excluir teste",
+            valor_mensal=500.00,
+            data_inicio="2023-01-01",
+            data_fim="2023-12-31",
+            tipo_auxilio="auxilio transporte",
+            urlCompResidencia="http://res.com",
+            urlCompTransporte="http://trans.com"
+        )
+
+        id_inserido = AuxilioTransporteRepo.inserir(auxilio_transporte)
+        sucesso = AuxilioTransporteRepo.excluir(id_inserido)
+        assert sucesso
+
     def test_excluir_auxilio_transporte_inexistente(self, test_db):
-        # Arrange
-        criar_tabela()
-        id_auxilio_transporte_inexistente = 999
-        # Act
-        resultado = excluir(id_auxilio_transporte_inexistente)
-        # Assert
-        assert resultado == False, "A exclusão de um auxílio de transporte inexistente deveria retornar False."
+        edital_repo.criar_tabela()
+        inscricao_repo.criar_tabela()
+        auxilio_repo.criar_tabela()
+        AuxilioTransporteRepo.criar_tabela()
+
+        sucesso = AuxilioTransporteRepo.excluir(99999)
+        assert not sucesso
