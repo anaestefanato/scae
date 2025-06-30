@@ -1,217 +1,117 @@
-import sys 
-import os
-
-from administrador_model import Administrador
-from data import administrador_repo
-from data import usuario_repo
-from chamado_repo import *
-from usuario_model import Usuario
-
+from data import chamado_repo
+from data.chamado_model import Chamado
+from data import chamado_repo, usuario_repo, administrador_repo
+from data.usuario_model import Usuario
+from data.administrador_model import Administrador
 
 class TestChamadoRepo:
+
     def test_criar_tabela_chamado(self, test_db):
-        # Arrange
         usuario_repo.criar_tabela()
         administrador_repo.criar_tabela()
-        # Act
-    resultado = criar_tabela()
-    # Assert
-    assert resultado == True, "A tabela de chamados não foi criada com sucesso."
+        resultado = chamado_repo.criar_tabela()
+        assert resultado == True
 
     def test_inserir_chamado(self, test_db):
-        # Arrange
         usuario_repo.criar_tabela()
         administrador_repo.criar_tabela()
-        criar_tabela()
-        chamado = Chamado(
-            id_duvida=1,
-            id_usuario_criador=1,
-            id_administrador=1,
-            titulo='Teste de Chamado',
-            descricao='Descrição do chamado teste',
-            data_criacao='2023-10-01',
-            status='em_andamento'
-        )
-        # Act
-        resultado = inserir(chamado)
-        # Assert
-        assert resultado == True, "O chamado não foi inserida com sucesso."
+        chamado_repo.criar_tabela()
+
+        usuario = Usuario(1, "Fulano", "fulano@ifes.edu.br", "123", "aluno")
+        admin = Administrador(2, "Ciclano", "ciclano@ifes.edu.br", "123", "admin", "CHAVE")
+
+        id_usuario = usuario_repo.inserir(usuario)
+        id_admin = administrador_repo.inserir(admin)
+
+        chamado = Chamado(0, id_usuario, id_admin, "Teste", "Chamado Teste", "2023-10-01", "em_andamento")
+        id_chamado = chamado_repo.inserir(chamado)
+        assert id_chamado is not None
 
     def test_obter_por_id_existente(self, test_db):
-        # Arrange
         usuario_repo.criar_tabela()
         administrador_repo.criar_tabela()
-        criar_tabela()
-        usuario = Usuario(1, "Usuario Teste", "fulano@gmail.com", "senha123", "aluno")
+        chamado_repo.criar_tabela()
+
+        usuario = Usuario(1, "Fulano", "fulano@ifes.edu.br", "123", "aluno")
+        admin = Administrador(2, "Ciclano", "ciclano@ifes.edu.br", "123", "admin", "CHAVE")
+
         id_usuario = usuario_repo.inserir(usuario)
-        administrador = Administrador(2, "Admin Teste", "ciclano@gmail.com", "senha123", "admin", "ADMIN1234")
-        id_admin = administrador_repo.inserir(administrador)
-        chamado = chamado(
-            id_chamado=0,  
-            id_usuario_criador=id_usuario,
-            id_administrador_responsavel=id_admin,
-            titulo='Chamado de Teste',
-            descricao='Descrição do chamado teste',
-            data_criacao='2023-10-01',
-            status='em_andamento'
-        )
-        id_chamado = inserir(chamado)
-        # Act
-        resultado = obter_por_id(id_chamado)
-        # Assert
-        assert resultado is not None, "O chamado não foi encontrado pelo ID."
-        assert resultado.id_chamado == 1, "O ID do chamado retornado não é o esperado."
+        id_admin = administrador_repo.inserir(admin)
+
+        chamado = Chamado(0, id_usuario, id_admin, "Teste", "Chamado Teste", "2023-10-01", "em_andamento")
+        id_chamado = chamado_repo.inserir(chamado)
+
+        resultado = chamado_repo.obter_por_id(id_chamado)
+        assert resultado is not None
+        assert resultado.id_duvida == id_chamado
 
     def test_obter_por_id_inexistente(self, test_db):
-        # Arrange
         usuario_repo.criar_tabela()
         administrador_repo.criar_tabela()
-        criar_tabela()
-        # Act
-        id_inexistente = 999
-        resultado = obter_por_id(id_inexistente)
-        # Assert
-        assert resultado is None, "A busca por um chamado inexistente deveria retornar None."
+        chamado_repo.criar_tabela()
 
-    def test_obter_chamados_por_pagina_primeira_pagina(self, test_db, lista_chamados_exemplo, lista_usuarios_exemplo, lista_admin_exemplo):
-        # Arrange
+        resultado = chamado_repo.obter_por_id(9999)
+        assert resultado is None
+
+    def test_obter_por_pagina(self, test_db):
         usuario_repo.criar_tabela()
         administrador_repo.criar_tabela()
-        criar_tabela()
+        chamado_repo.criar_tabela()
 
-        for usuario in lista_usuarios_exemplo:
-            usuario_repo.inserir(usuario)
-        
-        for admin in lista_admin_exemplo:
-            administrador_repo.inserir(admin)
-        
-        for i, chamado in enumerate(lista_chamados_exemplo, start=1):
-            chamado.id_usuario_criador = i
-            chamado.id_administrador_responsavel = i
-            inserir(chamado)
-        
-        # Act
-        pagina_chamados = obter_por_pagina(1, 4)
-
-        # Assert
-        assert len(pagina_chamados) == 4, "Deveria retornar 4 chamados na primeira página"
-        assert all(isinstance(i, chamado) for i in pagina_chamados), "Todos os itens da página devem ser do tipo Chamado"
-        ids_esperados = [1, 2, 3, 4]
-        ids_retornados = [i.id_chamado for i in pagina_chamados]
-        assert ids_retornados == ids_esperados, "Os IDs dos chamados retornados não são os esperados."
-
-    def test_obter_chamados_por_pagina_terceira_pagina(self, test_db, lista_chamados_exemplo, lista_usuarios_exemplo, lista_admin_exemplo):
-        # Arrange
-        usuario_repo.criar_tabela()
-        administrador_repo.criar_tabela()
-        criar_tabela()
-
-        for usuario in lista_usuarios_exemplo:
-            usuario_repo.inserir(usuario)
-        
-        for admin in lista_admin_exemplo:
-            administrador_repo.inserir(admin)
-        
-        for i, chamado in enumerate(lista_chamados_exemplo, start=1):
-            chamado.id_usuario_criador = i
-            chamado.id_administrador_responsavel = i
-            inserir(chamado)
-        
-        # Act
-        pagina_chamados= obter_por_pagina(3, 4)
-
-        # Assert
-        assert len(pagina_chamados) == 2, "Deveria retornar 2 chamados na terceira página"
-        assert all(isinstance(i, chamado) for i in pagina_chamados), "Todos os itens da página devem ser do tipo Chamado"
-        ids_esperados = [9, 10]
-        ids_retornados = [i.id_chamado for i in pagina_chamados]
-        assert ids_retornados == ids_esperados, "Os IDs dos chamados retornados na terceira página não são os esperados."
-
-    def test_atualizar_chamado_existente(self, test_db):
-        # Arrange
-        usuario_repo.criar_tabela()
-        administrador_repo.criar_tabela()
-        criar_tabela()
-        
-        usuario = Usuario(1, "Usuario Teste", "fulano@gmail.com", "senha123", "aluno")
+        usuario = Usuario(1, "Usu1", "a1@ifes.edu.br", "123", "aluno")
+        admin = Administrador(2, "Adm1", "b1@ifes.edu.br", "123", "admin", "CH1")
         id_usuario = usuario_repo.inserir(usuario)
-        administrador = Administrador(2, "Admin Teste", "ciclano@gmail.com", "senha123", "admin", "ADMIN1234")
-        id_administrador = administrador_repo.inserir(administrador)
-        chamado = Chamado(
-            id_chamado=id_chamado,
-            id_usuario_criador=id_usuario,
-            id_administrador_responsavel=id_administrador,
-            titulo='Chamado de Teste',
-            descricao='Descrição do chamado teste',
-            data_criacao='2023-10-01',
-            status='pendente',
-        )
-        id_chamado = inserir(chamado)
-        chamado_atualizado = Chamado(
-            id_chamado=id_chamado,
-            id_usuario_criador=id_usuario,
-            id_administrador_responsavel=id_administrador,
-            titulo='Chamado Atualizado',
-            descricao='Descrição do chamado atualizado',
-            data_criacao='2023-10-01',
-            status='concluído'
-        )
-        # Act
-        resultado = atualizar(chamado_atualizado)
-        # Assert
-        assert resultado == True, "O chamado não foi atualizado com sucesso."
-        chamado_db = obter_por_id(id_chamado)
-        assert chamado_db is not None, "O chamado atualizado não foi encontrada no banco de dados."
+        id_admin = administrador_repo.inserir(admin)
 
-    
-    def test_atualizar_chamado_inexistente(self, test_db):
-        # Arrange
-        chamado_inexistente = Chamado(
-            id_chamado=9999,  # ID que não existe
-            id_usuario_criador=1,
-            id_administrador_responsavel=1,
-            titulo='Chamado Inexistente',
-            descricao='Descrição do chamado inexistente',
-            data_criacao='2023-10-01',
-            status='pendente'
-        )
-        # Act
-        resultado = atualizar(chamado_inexistente)
-        # Assert
-        assert resultado == False, "A atualização do chamado inexistente deveria ter falhado."
+        for i in range(1, 6):
+            chamado = Chamado(0, id_usuario, id_admin, f"Titulo {i}", "Descricao", "2023-10-01", "em_andamento")
+            chamado_repo.inserir(chamado)
 
-    def test_excluir_chamado_existente(self, test_db):
-        # Arrange
+        resultados = chamado_repo.obter_por_pagina(1, 3)
+        assert len(resultados) == 3
+        assert all(isinstance(c, Chamado) for c in resultados)
+
+    def test_atualizar_chamado(self, test_db):
         usuario_repo.criar_tabela()
         administrador_repo.criar_tabela()
-        criar_tabela()
-        
-        usuario = Usuario(1, "Usuario Teste", "fulano@gmail.com", "senha123", "aluno")
+        chamado_repo.criar_tabela()
+
+        usuario = Usuario(1, "Fulano", "fulano@ifes.edu.br", "123", "aluno")
+        admin = Administrador(2, "Ciclano", "ciclano@ifes.edu.br", "123", "admin", "CHAVE")
+
         id_usuario = usuario_repo.inserir(usuario)
-        administrador = Administrador(2, "Admin Teste", "ciclano@gmail.com", "senha123", "admin", "ADMIN1234")
-        id_administrador = administrador_repo.inserir(administrador)
-        chamado = chamado(
-            id_chamado=0,  
-            id_usuario_criador=id_usuario,
-            id_administrador_responsavel=id_administrador,
-            titulo='Chamado de Teste',
-            descricao='Descrição do chamado teste',
-            data_criacao='2023-10-01',
-            status='em_andamento'  
-        )
-        id_chamado = inserir(chamado)
-        # Act
-        resultado = excluir(id_chamado)
-        # Assert
-        assert resultado == True, "O chamado não foi deletado com sucesso."
+        id_admin = administrador_repo.inserir(admin)
+
+        chamado = Chamado(0, id_usuario, id_admin, "Antigo", "Desc antiga", "2023-10-01", "em_andamento")
+        id_chamado = chamado_repo.inserir(chamado)
+
+        chamado_atualizado = Chamado(id_chamado, id_usuario, id_admin, "Novo", "Desc nova", "2023-10-01", "concluído")
+        resultado = chamado_repo.atualizar(chamado_atualizado)
+        assert resultado == True
+
+        chamado_db = chamado_repo.obter_por_id(id_chamado)
+        assert chamado_db.titulo == "Novo"
+        assert chamado_db.status == "concluído"
+
+    def test_excluir_chamado(self, test_db):
+        usuario_repo.criar_tabela()
+        administrador_repo.criar_tabela()
+        chamado_repo.criar_tabela()
+
+        usuario = Usuario(1, "Fulano", "fulano@ifes.edu.br", "123", "aluno")
+        admin = Administrador(2, "Ciclano", "ciclano@ifes.edu.br", "123", "admin", "CHAVE")
+
+        id_usuario = usuario_repo.inserir(usuario)
+        id_admin = administrador_repo.inserir(admin)
+
+        chamado = Chamado(0, id_usuario, id_admin, "Excluir", "Teste excluir", "2023-10-01", "em_andamento")
+        id_chamado = chamado_repo.inserir(chamado)
+
+        resultado = chamado_repo.excluir(id_chamado)
+        assert resultado == True
+        assert chamado_repo.obter_por_id(id_chamado) is None
 
     def test_excluir_chamado_inexistente(self, test_db):
-        # Arrange
-        usuario_repo.criar_tabela()
-        administrador_repo.criar_tabela()
-        criar_tabela()
-        id_inexistente = 9999  
-        # Act   
-        resultado = excluir(id_inexistente)
-        # Assert
-        assert resultado == False, "A exclusão de um chamado inexistente deveria ter falhado."
+        chamado_repo.criar_tabela()
+        resultado = chamado_repo.excluir(9999)
+        assert resultado == False
