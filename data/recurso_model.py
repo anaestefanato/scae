@@ -1,7 +1,8 @@
 from dataclasses import dataclass
+from typing import Optional
 @dataclass
 class Recurso:
-    id_recurso: int
+    id_recurso: Optional[int]
     id_inscricao: int
     id_assistente: int
     descricao: str

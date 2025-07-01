@@ -12,9 +12,9 @@ class TestRespostaChamadoRepo:
         usuario_repo.criar_tabela()
         chamado_repo.criar_tabela()
         # Act
-    resultado = criar_tabela()
-    # Assert
-    assert resultado == True, "A tabela de respostas de chamados não foi criada com sucesso."
+        resultado = criar_tabela()
+        # Assert
+        assert resultado == True, "A tabela de respostas de chamados não foi criada com sucesso."
 
     def test_inserir_resposta_chamado(self, test_db):
         # Arrange

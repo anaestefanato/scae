@@ -125,6 +125,24 @@ def lista_editais_exemplo():
         editais.append(edital)
     return editais
 
+@pytest.fixture
+def lista_recursos_exemplo():
+    # Cria uma lista de 10 recursos de exemplo para os testes
+    from data.recurso_model import Recurso
+    recursos = []
+    for i in range(1, 11):
+        recurso = Recurso(
+            id_recurso=i,
+            id_inscricao=i,
+            id_assistente=i,
+            descricao=f"Recurso {i:02d}",
+            data_envio=datetime(2023, 1, i).date(),
+            data_resposta=datetime(2023, 2, i).date(),
+            status="pendente"
+        )
+        recursos.append(recurso)
+    return recursos
+
 # @pytest.fixture
 # def lista_categorias_exemplo():
 #     # Cria uma lista de 10 categorias de exemplo para os testes

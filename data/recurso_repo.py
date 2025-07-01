@@ -4,10 +4,14 @@ from data.recurso_sql import *
 from data.util import get_connection
 
 def criar_tabela() -> bool:
-    with get_connection() as conn:
-        cursor = conn.cursor()
-        cursor.execute(CRIAR_TABELA)
-        return cursor.rowcount >= 0
+    try:
+        with get_connection() as conn:
+            cursor = conn.cursor()
+            cursor.execute(CRIAR_TABELA)
+        return True
+    except Exception as e:
+        print(f"Erro ao criar tabela recurso: {e}")
+        return False
 
 def inserir(recurso: Recurso) -> Optional[int]:
     with get_connection() as conn:
@@ -59,11 +63,37 @@ def obter_por_id(id: int) -> Optional[Recurso]:
             )
         return None
 
+    def obter_por_id(id: int) -> Optional[Recurso]:
+        with get_connection() as conn:
+            cursor = conn.cursor()
+            cursor.execute(OBTER_POR_ID, (id,))
+            row = cursor.fetchone()
+            if row:
+                return Recurso(
+                    id_recurso=row["id_recurso"],
+                    id_inscricao=row["id_inscricao"],
+                    id_assistente=row["id_assistente"],
+                    descricao=row["descricao"],
+                    data_envio=row["data_envio"],
+                    data_resposta=row["data_resposta"],
+                    status=row["status"]
+                )
+            return None
+
 def atualizar(recurso: Recurso) -> bool:
-    with get_connection() as conn:
-        cursor = conn.cursor()
-        cursor.execute(ATUALIZAR, (recurso.descricao, recurso.status, recurso.id_recurso))
-        return cursor.rowcount > 0
+    try:
+        with get_connection() as conn:
+            cursor = conn.cursor()
+            cursor.execute(ATUALIZAR, (
+                recurso.descricao,
+                recurso.status,
+                recurso.id_recurso
+            ))
+            conn.commit()
+            return cursor.rowcount > 0
+    except Exception as e:
+        print("Erro ao atualizar recurso:", e)
+        return False
 
 def excluir(id: int) -> bool:
     with get_connection() as conn:
