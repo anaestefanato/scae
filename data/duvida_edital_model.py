@@ -1,6 +1,5 @@
 from dataclasses import dataclass
 
-
 @dataclass
 class DuvidaEdital:
     id_duvida: int

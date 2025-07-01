@@ -1,71 +1,89 @@
-from typing import Optional
+from typing import Optional, List
 from data.duvida_edital_model import DuvidaEdital
 from data.duvida_edital_sql import *
 from data.util import get_connection
 
 def criar_tabela() -> bool:
-    with get_connection() as conn:
-        cursor = conn.cursor()
-        cursor.execute(CRIAR_TABELA)
-        return cursor.rowcount > 0
+    try:
+        with get_connection() as conn:
+            cursor = conn.cursor()
+            cursor.execute(CRIAR_TABELA)
+        return True
+    except Exception as e:
+        print("Erro ao criar tabela duvida_edital:", e)
+        return False
 
 def inserir(duvida: DuvidaEdital) -> Optional[int]:
     with get_connection() as conn:
         cursor = conn.cursor()
         cursor.execute(INSERIR, (
-            duvida.id_duvida,
             duvida.id_edital,
             duvida.id_aluno,
             duvida.pergunta,
             duvida.resposta,
             duvida.data_pergunta,
             duvida.data_resposta,
-            duvida.status))
+            duvida.status
+        ))
+        conn.commit()
         return cursor.lastrowid
-    
-def obter_todos() -> list[DuvidaEdital]:
-    with get_connection() as conn:
-        cursor = conn.cursor()
-        cursor.execute(OBTER_TODOS)
-        rows = cursor.fetchall()
-        duvidas = [
-            DuvidaEdital(
-                id_duvida=row["id_duvida"],
-                id_edital=row["id_edital"],
-                id_aluno=row["id_aluno"],
-                pergunta=row["pergunta"],
-                resposta=row["resposta"],
-                dataPergunta=row["dataPergunta"],
-                dataResposta=row["dataResposta"],
-                status=row["status"])
-            for row in rows]
-        return duvidas
 
-def obter_por_id(id: int) -> Optional[DuvidaEdital]:
+def obter_por_id(id_duvida: int) -> Optional[DuvidaEdital]:
     with get_connection() as conn:
         cursor = conn.cursor()
-        cursor.execute(OBTER_POR_ID, (id,))
+        cursor.execute(OBTER_POR_ID, (id_duvida,))
         row = cursor.fetchone()
-        duvida = DuvidaEdital(
+        if row is None:
+            return None
+        return DuvidaEdital(
             id_duvida=row["id_duvida"],
             id_edital=row["id_edital"],
             id_aluno=row["id_aluno"],
             pergunta=row["pergunta"],
             resposta=row["resposta"],
-            data_pergunta=row["dataPergunta"],
-            data_resposta=row["dataResposta"],
-            status=row["status"])
-        return duvida
+            data_pergunta=row["data_pergunta"],
+            data_resposta=row["data_resposta"],
+            status=row["status"]
+        )
 
+def obter_por_pagina(pagina: int, limite: int) -> List[DuvidaEdital]:
+    offset = (pagina - 1) * limite
+    with get_connection() as conn:
+        cursor = conn.cursor()
+        cursor.execute(OBTER_POR_PAGINA, (limite, offset))
+        rows = cursor.fetchall()
+        duvidas = []
+        for row in rows:
+            duvida = DuvidaEdital(
+                id_duvida=row["id_duvida"],
+                id_edital=row["id_edital"],
+                id_aluno=row["id_aluno"],
+                pergunta=row["pergunta"],
+                resposta=row["resposta"],
+                data_pergunta=row["data_pergunta"],
+                data_resposta=row["data_resposta"],
+                status=row["status"]
+            )
+            duvidas.append(duvida)
+        return duvidas
 
 def atualizar(duvida: DuvidaEdital) -> bool:
     with get_connection() as conn:
         cursor = conn.cursor()
-        cursor.execute(ATUALIZAR, (duvida.pergunta, duvida.resposta, duvida.status))
-        return (cursor.rowcount > 0)
+        cursor.execute(ATUALIZAR, (
+            duvida.pergunta,
+            duvida.resposta,
+            duvida.data_pergunta,
+            duvida.data_resposta,
+            duvida.status,
+            duvida.id_duvida
+        ))
+        conn.commit()
+        return cursor.rowcount > 0
 
-def excluir(id: int) -> bool:
+def excluir(id_duvida: int) -> bool:
     with get_connection() as conn:
         cursor = conn.cursor()
-        cursor.execute(EXCLUIR, (id,))
-        return (cursor.rowcount > 0)
+        cursor.execute(EXCLUIR, (id_duvida,))
+        conn.commit()
+        return cursor.rowcount > 0
