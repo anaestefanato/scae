@@ -4,11 +4,15 @@ from data.chamado_sql import *
 from data.util import get_connection
 
 def criar_tabela() -> bool:
-    with get_connection() as conn:
-        cursor = conn.cursor()
-        cursor.execute(CRIAR_TABELA)
+    try:
+        with get_connection() as conn:
+            cursor = conn.cursor()
+            cursor.execute(CRIAR_TABELA)
         return True
-
+    except Exception as e:
+        print(f"Erro ao criar tabela recurso: {e}")
+        return False
+    
 def inserir(chamado: Chamado) -> Optional[int]:
     with get_connection() as conn:
         cursor = conn.cursor()
@@ -29,7 +33,7 @@ def obter_por_id(id: int) -> Optional[Chamado]:
         row = cursor.fetchone()
         if row:
             return Chamado(
-                id_duvida=row["id_duvida"],
+                id_chamado=row["id_chamado"],
                 id_usuario_criador=row["id_usuario_criador"],
                 id_administrador_responsavel=row["id_administrador_responsavel"],
                 titulo=row["titulo"],
@@ -47,7 +51,7 @@ def obter_por_pagina(pagina: int, limit: int) -> List[Chamado]:
         rows = cursor.fetchall()
         return [
             Chamado(
-                id_duvida=row["id_duvida"],
+                id_chamado=row["id_chamado"],
                 id_usuario_criador=row["id_usuario_criador"],
                 id_administrador_responsavel=row["id_administrador_responsavel"],
                 titulo=row["titulo"],
@@ -65,7 +69,7 @@ def atualizar(chamado: Chamado) -> bool:
             chamado.titulo,
             chamado.descricao,
             chamado.status,
-            chamado.id_duvida
+            chamado.id_chamado
         ))
         return cursor.rowcount > 0
 

@@ -143,6 +143,59 @@ def lista_recursos_exemplo():
         recursos.append(recurso)
     return recursos
 
+@pytest.fixture
+def lista_duvidas_exemplo():
+    # Cria uma lista de 10 dúvidas de exemplo para os testes
+    from data.duvida_edital_model import Duvida
+    duvidas = []
+    for i in range(1, 11):
+        duvida = Duvida(
+            id_duvida=i,
+            id_usuario_criador=i,
+            id_administrador_responsavel=i,
+            titulo=f"Dúvida {i:02d}",
+            descricao=f"Descrição da dúvida {i:02d}",
+            data_criacao=datetime(2023, 1, i).date(),
+            status="pendente"
+        )
+        duvidas.append(duvida)
+    return duvidas
+
+@pytest.fixture
+def lista_chamados_exemplo():
+    # Cria uma lista de 10 chamados de exemplo para os testes
+    from data.chamado_model import Chamado
+    chamados = []
+    for i in range(1, 11):
+        chamado = Chamado(
+            id_chamado=i,
+            id_usuario_criador=i,
+            id_administrador_responsavel=i,
+            titulo=f"Chamado {i:02d}",
+            descricao=f"Descrição do chamado {i:02d}",
+            data_criacao=datetime(2023, 1, i).date(),
+            status="em_andamento"
+        )
+        chamados.append(chamado)
+    return chamados
+
+@pytest.fixture
+def lista_respostas_chamado_exemplo():
+    # Cria uma lista de 10 respostas de chamado de exemplo para os testes
+    from data.resposta_chamado_model import RespostaChamado
+    respostas = []
+    for i in range(1, 11):
+        resposta = RespostaChamado(
+            id_resposta=i,
+            id_chamado=i,
+            id_usuario=i,
+            mensagem=f"Resposta {i:02d}",
+            data_resposta=datetime(2023, 1, i).date(),
+            status="pendente"
+        )
+        respostas.append(resposta)
+    return respostas
+
 # @pytest.fixture
 # def lista_categorias_exemplo():
 #     # Cria uma lista de 10 categorias de exemplo para os testes

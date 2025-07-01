@@ -1,10 +1,13 @@
-CRIAR_TABELA = """
+CRIAR_TABELA = """ 
 CREATE TABLE IF NOT EXISTS resposta_chamado (
-id_resposta_chamado INTEGER PRIMARY KEY AUTOINCREMENT,
-id_chamado INTEGER FOREIGN KEY REFERENCES chamado(id_duvida) ON DELETE CASCADE,
-id_usuario_autor INTEGER FOREIGN KEY REFERENCES usuario(id_usuario) ON DELETE CASCADE,
-mensagem TEXT NOT NULL,
-data_resposta DATE NOT NULL)
+    id_resposta_chamado INTEGER PRIMARY KEY AUTOINCREMENT,
+    id_chamado INTEGER,
+    id_usuario_autor INTEGER,
+    mensagem TEXT NOT NULL,
+    data_resposta DATE NOT NULL,
+    FOREIGN KEY (id_chamado) REFERENCES chamado(id_duvida) ON DELETE CASCADE,
+    FOREIGN KEY (id_usuario_autor) REFERENCES usuario(id_usuario) ON DELETE CASCADE
+)
 """
 
 INSERIR = """
@@ -18,20 +21,25 @@ SELECT
     rc.id_chamado,
     rc.id_usuario_autor,
     rc.mensagem,
-    rc.data_resposta,
+    rc.data_resposta
 FROM resposta_chamado rc
-INNER JOIN chamado c ON rc.id_chamado = c.id_duvida
+INNER JOIN chamado c ON rc.id_chamado = c.id_chamado
 INNER JOIN usuario u ON rc.id_usuario_autor = u.id_usuario
-ORDER BY r.data_resposta
+ORDER BY rc.data_resposta
 LIMIT ? OFFSET ?
 """
+
 OBTER_POR_ID = """
 SELECT
-id_resposta_chamado, id_chamado, id_usuario_autor, mensagem, data_resposta
+    rc.id_resposta_chamado,
+    rc.id_chamado,
+    rc.id_usuario_autor,
+    rc.mensagem,
+    rc.data_resposta
 FROM resposta_chamado rc
-INNER JOIN chamado c ON rc.id_chamado = c.id_duvida
+INNER JOIN chamado c ON rc.id_chamado = c.id_chamado
 INNER JOIN usuario u ON rc.id_usuario_autor = u.id_usuario
-WHERE id_resposta_chamado = ?
+WHERE rc.id_resposta_chamado = ?
 """
 
 ATUALIZAR = """

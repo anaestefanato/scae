@@ -1,6 +1,6 @@
 CRIAR_TABELA = """
 CREATE TABLE IF NOT EXISTS chamado (
-    id_duvida INTEGER PRIMARY KEY AUTOINCREMENT,
+    id_chamado INTEGER PRIMARY KEY AUTOINCREMENT,
     id_usuario_criador INTEGER NOT NULL,
     id_administrador_responsavel INTEGER NOT NULL,
     titulo TEXT NOT NULL,
@@ -26,7 +26,7 @@ VALUES (?, ?, ?, ?, ?, ?)
 
 OBTER_POR_ID = """
 SELECT
-    id_duvida,
+    id_chamado,
     id_usuario_criador,
     id_administrador_responsavel,
     titulo,
@@ -34,12 +34,12 @@ SELECT
     data_criacao,
     status
 FROM chamado
-WHERE id_duvida = ?
+WHERE id_chamado = ?
 """
 
 OBTER_POR_PAGINA = """
 SELECT
-    c.id_duvida,
+    c.id_chamado,
     c.id_usuario_criador,
     c.id_administrador_responsavel,
     c.titulo,
@@ -54,10 +54,10 @@ LIMIT ? OFFSET ?
 ATUALIZAR = """
 UPDATE chamado
 SET titulo = ?, descricao = ?, status = ?
-WHERE id_duvida = ?
+WHERE id_chamado = ?
 """
 
 EXCLUIR = """
 DELETE FROM chamado
-WHERE id_duvida = ?
+WHERE id_chamado = ?
 """

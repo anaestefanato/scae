@@ -1,69 +1,77 @@
 import sys
 import os
-from chamado_model import Chamado
-from data import usuario_repo
-from data import chamado_repo
+from data import resposta_chamado_repo
 from data.resposta_chamado_repo import *
-from usuario_model import Usuario
+from data.resposta_chamado_model import RespostaChamado
+from data import chamado_repo
+from data import usuario_repo
+from data.usuario_model import Usuario
+from data.chamado_model import Chamado
+from data.administrador_model import Administrador
+from data import administrador_repo
 
 class TestRespostaChamadoRepo:
+    
     def test_criar_tabela_resposta_chamado(self, test_db):
         # Arrange
         usuario_repo.criar_tabela()
         chamado_repo.criar_tabela()
+
         # Act
-        resultado = criar_tabela()
+        resultado = resposta_chamado_repo.criar_tabela()
+
         # Assert
-        assert resultado == True, "A tabela de respostas de chamados não foi criada com sucesso."
+        assert resultado is True, "A tabela resposta_chamado não foi criada com sucesso."
+
 
     def test_inserir_resposta_chamado(self, test_db):
         # Arrange
         usuario_repo.criar_tabela()
-        chamado_repo.criar_tabela()        
+        chamado_repo.criar_tabela()
         criar_tabela()
-        resposta_chamado = RespostaChamado(
-            id_resposta=0,  
-            id_chamado=1,  
-            id_administrador=1, 
-            mensagem='Resposta de teste',
-            data_resposta='2023-10-01',
-            status='pendente'
+
+        usuario = Usuario(0, "Maria", "maria@email.com", "senha", "usuario")
+        id_usuario = usuario_repo.inserir(usuario)
+        
+        chamado_repo.criar_tabela()
+        chamado = Chamado(0, id_usuario, 0, "Dúvida sobre sistema", "descricao", "2023-05-01", "em_andamento")
+        chamado_repo.inserir(chamado)
+
+        resposta = RespostaChamado(
+            id_resposta=0,
+            id_chamado=chamado.id_chamado,
+            id_usuario=str(id_usuario),
+            mensagem="Sua dúvida foi registrada.",
+            data_resposta="2025-07-01",
+            status=""
         )
         # Act
-        resultado = inserir(resposta_chamado)
+        resultado = inserir(resposta)
         # Assert
-        assert resultado == True, "A resposta do chamado não foi inserida com sucesso."
+        assert isinstance(resultado, int), "Deve retornar um ID inteiro"
+        assert resultado > 0, "O ID retornado deve ser maior que zero"
 
     def test_obter_por_id_existente(self, test_db):
         # Arrange
         usuario_repo.criar_tabela()
         chamado_repo.criar_tabela()
         criar_tabela()
-        usuario = Usuario(1, "Usuario Teste", "fulano@gmail.com", "senha123", "aluno")        
+
+        usuario = Usuario(0, "João", "joao@email.com", "123", "usuario")
         id_usuario = usuario_repo.inserir(usuario)
-        chamado = Chamado(
-            id_chamado=0,  
-            id_usuario_criador=id_usuario,
-            id_administrador_responsavel=1,
-            titulo='Chamado de Teste',
-            descricao='Descrição do chamado teste',
-            data_criacao='2023-10-01',
-            status='em_andamento'
-        )
+
+        chamado = Chamado(0, id_usuario, 0, "Dúvida sobre sistema", "descricao", "2023-05-01", "em_andamento")
         id_chamado = chamado_repo.inserir(chamado)
-        resposta = RespostaChamado(
-            id_resposta=0,
-            id_chamado=1,
-            id_usuario_autor=id_usuario,
-            mensagem='Resposta de teste',
-            data_resposta='2023-10-01',
-        )
-        id_resposta_chamado = chamado_repo.inserir(resposta)
+
+        resposta = RespostaChamado(0, id_chamado, str(id_usuario), "Mensagem", "2025-07-01", "")
+        id_resposta = inserir(resposta)
+
         # Act
-        resultado = obter_por_id(id_resposta_chamado)
+        resultado = obter_por_id(id_resposta)
+
         # Assert
-        assert resultado is not None, "A resposta do chamado não foi encontrada pelo ID."
-        assert resultado.id_resposta_chamado == 1, "O ID da resposta do chamado retornada não é o esperado."
+        assert resultado is not None, "A resposta deveria ser encontrada pelo ID"
+        assert resultado.id_resposta == id_resposta, "O ID retornado está incorreto"
 
     def test_obter_por_id_inexistente(self, test_db):
         # Arrange
@@ -71,142 +79,113 @@ class TestRespostaChamadoRepo:
         chamado_repo.criar_tabela()
         criar_tabela()
         # Act
-        id_inexistente = 999
-        resultado = obter_por_id(id_inexistente)
+        resultado = obter_por_id(999)
         # Assert
-        assert resultado is None, "A busca por uma resposta do chamado inexistente deveria retornar None."
+        assert resultado is None, "A busca por resposta inexistente deve retornar None"
 
-    def test_obter_resposta_por_pagina_primeira_pagina(self, test_db, lista_respostas_chamados_exemplo, lista_usuarios_exemplo, lista_chamados_exemplo):
+    def test_obter_respostas_por_pagina_primeira_pagina(self, test_db, lista_usuarios_exemplo, lista_chamados_exemplo, lista_respostas_chamado_exemplo):
         # Arrange
         usuario_repo.criar_tabela()
         chamado_repo.criar_tabela()
-        criar_tabela()
+        resposta_chamado_repo.criar_tabela()
 
         for usuario in lista_usuarios_exemplo:
             usuario_repo.inserir(usuario)
-        
         for chamado in lista_chamados_exemplo:
             chamado_repo.inserir(chamado)
-        
-        for i, resposta_chamado in enumerate(lista_respostas_chamados_exemplo, start=1):
-            resposta_chamado.id_aluno = i
-            resposta_chamado.id_edital = i
-            inserir(resposta_chamado)
-        
+        for resposta in lista_respostas_chamado_exemplo:
+            resposta_chamado_repo.inserir(resposta)
+
         # Act
-        pagina_respostas_chamados = obter_por_pagina(1, 4)
+        pagina_respostas = resposta_chamado_repo.obter_por_pagina(1, 3)
 
         # Assert
-        assert len(pagina_respostas_chamados) == 4, "Deveria retornar 4 respostas de chamados na primeira página"
-        assert all(isinstance(i, RespostaChamado) for i in pagina_respostas_chamados), "Todos os itens da página devem ser do tipo RespostaChamado"
-        ids_esperados = [1, 2, 3, 4]
-        ids_retornados = [i.id_resposta_chamado for i in pagina_respostas_chamados]
-        assert ids_retornados == ids_esperados, "Os IDs das respostas de chamados retornadas não são os esperados."
+        assert len(pagina_respostas) == 3, "Deveria retornar 3 respostas na primeira página"
+        assert all(isinstance(r, RespostaChamado) for r in pagina_respostas), "Todos os itens devem ser do tipo RespostaChamado"
+        ids_esperados = [1, 2, 3]
+        ids_retornados = [r.id_resposta for r in pagina_respostas]
+        assert ids_retornados == ids_esperados, "IDs retornados estão incorretos"
 
-    def test_obter_resposta_por_pagina_terceira_pagina(self, test_db, lista_respostas_chamados_exemplo, lista_usuarios_exemplo, lista_chamados_exemplo):
+
+    def test_obter_respostas_por_pagina_terceira_pagina(self, test_db, lista_usuarios_exemplo, lista_chamados_exemplo, lista_respostas_chamado_exemplo):
         # Arrange
         usuario_repo.criar_tabela()
         chamado_repo.criar_tabela()
-        criar_tabela()
+        resposta_chamado_repo.criar_tabela()
 
         for usuario in lista_usuarios_exemplo:
             usuario_repo.inserir(usuario)
-        
         for chamado in lista_chamados_exemplo:
             chamado_repo.inserir(chamado)
-        
-        for i, resposta_chamado in enumerate(lista_respostas_chamados_exemplo, start=1):
-            resposta_chamado.id_aluno = i
-            resposta_chamado.id_edital = i
-            inserir(resposta_chamado)
-        
+        for resposta in lista_respostas_chamado_exemplo:
+            resposta_chamado_repo.inserir(resposta)
+
         # Act
-        pagina_respostas_chamados = obter_por_pagina(3, 4)
+        pagina_respostas = resposta_chamado_repo.obter_por_pagina(3, 2)
 
         # Assert
-        assert len(pagina_respostas_chamados) == 2, "Deveria retornar 2 respostas de chamados na terceira página"
-        assert all(isinstance(i, RespostaChamado) for i in pagina_respostas_chamados), "Todos os itens da página devem ser do tipo RespostaChamado"
-        ids_esperados = [9, 10]
-        ids_retornados = [i.id_resposta_chamado for i in pagina_respostas_chamados]
-        assert ids_retornados == ids_esperados, "Os IDs das respostas de chamados retornadas na terceira página não são os esperados."
+        assert len(pagina_respostas) == 2, "Deveria retornar 2 respostas na terceira página"
+        assert all(isinstance(r, RespostaChamado) for r in pagina_respostas), "Todos os itens devem ser do tipo RespostaChamado"
+        ids_esperados = [5, 6]
+        ids_retornados = [r.id_resposta for r in pagina_respostas]
+        assert ids_retornados == ids_esperados, f"IDs retornados incorretos: {ids_retornados}"
 
     def test_atualizar_resposta_existente(self, test_db):
         # Arrange
         usuario_repo.criar_tabela()
         chamado_repo.criar_tabela()
         criar_tabela()
-        usuario = Usuario(1, "Usuario Teste", "fulano@gmail.com", "senha123", "aluno")        
+
+        usuario = Usuario(0, "Ana", "ana@email.com", "123", "usuario")
         id_usuario = usuario_repo.inserir(usuario)
-        chamado = Chamado(1, 1, 1, 'Chamado de Teste', 'Descrição do chamado teste', '2023-10-01', 'em_andamento')
+
+        chamado = Chamado(0, id_usuario, 0, "Dúvida sobre sistema", "descricao", "2023-05-01", "em_andamento")
         id_chamado = chamado_repo.inserir(chamado)
-        resposta = RespostaChamado(
-            id_resposta_chamado=0,
-            id_chamado=1,
-            id_usuario_autor=id_usuario,
-            mensagem='Resposta de teste',
-            data_resposta='2023-10-01',
-        )
-        id_resposta_chamado = chamado_repo.inserir(resposta)
-        resposta_atualizada = RespostaChamado(
-            id_resposta_chamado=id_resposta_chamado,
-            id_chamado=id_chamado,
-            id_usuario_autor=id_usuario,
-            mensagem='Resposta de teste atualizada',
-            data_resposta='2023-10-02',
-        )
-        
+
+        resposta = RespostaChamado(0, id_chamado, str(id_usuario), "Original", "2025-07-01", "")
+        id_resposta = inserir(resposta)
+
+        resposta_atualizada = RespostaChamado(id_resposta, id_chamado, str(id_usuario), "Atualizado", "2025-07-01", "")
         # Act
         resultado = atualizar(resposta_atualizada)
-        # Assert
-        assert resultado == True, "A resposta do chamado não foi atualizada com sucesso."
-        resposta_db = obter_por_id(id_resposta_chamado)
-        assert resposta_db is not None, "A resposta do chamado atualizada não foi encontrada no banco de dados."
 
-    
+        # Assert
+        assert resultado is True, "A resposta não foi atualizada com sucesso"
+
     def test_atualizar_resposta_inexistente(self, test_db):
         # Arrange
-        resposta_inexistente = RespostaChamado(
-            id_resposta_chamado=9999,  # ID inexistente
-            id_chamado=1,
-            id_usuario_autor=1,
-            mensagem='Resposta inexistente',
-            data_resposta='2023-10-01',
-        )
+        criar_tabela()
+        resposta = RespostaChamado(9999, 1, "1", "Inexistente", "2025-07-01", "")
         # Act
-        resultado = atualizar(resposta_inexistente)
+        resultado = atualizar(resposta)
         # Assert
-        assert resultado == False, "A atualização da resposta do chamado inexistente deveria ter falhado."
+        assert resultado is False, "Atualização de resposta inexistente deveria retornar False"
 
     def test_excluir_resposta_existente(self, test_db):
         # Arrange
         usuario_repo.criar_tabela()
         chamado_repo.criar_tabela()
         criar_tabela()
-        
-        usuario = Usuario(1, "Usuario Teste", "fulano@gmail.com", "senha123", "aluno")        
+
+        usuario = Usuario(0, "Carlos", "carlos@email.com", "abc", "usuario")
         id_usuario = usuario_repo.inserir(usuario)
-        chamado = Chamado(1, 1, 1, 'Chamado de Teste', 'Descrição do chamado teste', '2023-10-01', 'em_andamento')
+
+        chamado = Chamado(0, id_usuario, 0, "Dúvida sobre sistema", "descricao", "2023-05-01", "em_andamento")
         id_chamado = chamado_repo.inserir(chamado)
-        resposta = RespostaChamado(
-            id_resposta_chamado=0,
-            id_chamado=id_chamado,
-            id_usuario_autor=id_usuario,
-            mensagem='Resposta de teste',
-            data_resposta='2023-10-01',
-        )
+
+        resposta = RespostaChamado(0, id_chamado, str(id_usuario), "Para excluir", "2025-07-01", "")
         id_resposta = inserir(resposta)
+
         # Act
         resultado = excluir(id_resposta)
+
         # Assert
-        assert resultado == True, "A resposta do chamado não foi deletada com sucesso."
+        assert resultado is True, "A resposta não foi excluída com sucesso"
 
     def test_excluir_resposta_inexistente(self, test_db):
         # Arrange
-        usuario_repo.criar_tabela()
-        chamado_repo.criar_tabela()
         criar_tabela()
-        id_inexistente = 9999  
-        # Act   
-        resultado = excluir(id_inexistente)
+        # Act
+        resultado = excluir(9999)
         # Assert
-        assert resultado == False, "A exclusão de uma resposta inexistente deveria ter falhado."
+        assert resultado is False, "Exclusão de resposta inexistente deveria retornar False"
