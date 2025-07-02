@@ -43,7 +43,7 @@ class TestChamadoRepo:
 
         resultado = chamado_repo.obter_por_id(id_chamado)
         assert resultado is not None
-        assert resultado.id_duvida == id_chamado
+        assert resultado.id_chamado == id_chamado
 
     def test_obter_por_id_inexistente(self, test_db):
         usuario_repo.criar_tabela()
