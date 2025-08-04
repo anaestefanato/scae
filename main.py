@@ -11,9 +11,13 @@ templates = Jinja2Templates(directory="templates")
 
 @app.get("/")
 async def read_root():
-    response = templates.TemplateResponse("interface/index.html", {"request": {}})
+    response = templates.TemplateResponse("/home/index.html", {"request": {}})
     return response
 
+@app.get("/login")
+async def read_login():
+    response = templates.TemplateResponse("/login/login.html", {"request": {}})
+    return response
 
 
 if __name__ == "__main__":
