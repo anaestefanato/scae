@@ -1,0 +1,605 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SCAE - Dashboard Administrador</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+    <style>
+        :root {
+            --ifes-green: #2E7D32;
+            --ifes-red: #C62828;
+            --ifes-light-green: #4CAF50;
+            --ifes-light-gray: #f5f5f5;
+            --ifes-dark-gray: #333333;
+        }
+        
+        body {
+            background-color: var(--ifes-light-gray);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        .sidebar {
+            background-color: white;
+            height: 100vh;
+            position: fixed;
+            box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
+            width: 250px;
+            z-index: 1000;
+            transition: all 0.3s;
+            left: 0;
+        }
+        
+        .sidebar.collapsed {
+            left: -250px;
+        }
+        
+        .sidebar-header {
+            padding: 20px 15px;
+            border-bottom: 1px solid #eee;
+            position: relative;
+        }
+        
+        .sidebar-header img {
+            max-width: 100%;
+            height: auto;
+        }
+        
+        .nav-link {
+            color: var(--ifes-dark-gray);
+            padding: 12px 20px;
+            margin: 5px 0;
+            border-radius: 5px;
+        }
+        
+        .nav-link:hover, .nav-link.active {
+            background-color: var(--ifes-light-green);
+            color: white;
+        }
+        
+        .nav-link i {
+            margin-right: 10px;
+        }
+        
+        .main-content {
+            margin-left: 270px;
+            padding: 30px;
+            transition: all 0.3s;
+        }
+        
+        .main-content.expanded {
+            margin-left: 20px;
+        }
+        
+        .card {
+            border: none;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+            margin-bottom: 20px;
+            transition: transform 0.3s;
+        }
+        
+        .card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .card-header {
+            background-color: var(--ifes-green);
+            color: white;
+            border-radius: 10px 10px 0 0 !important;
+            padding: 15px 20px;
+            font-weight: 600;
+        }
+        
+        .card-body {
+            padding: 20px;
+        }
+        
+        .status-badge {
+            padding: 8px 15px;
+            border-radius: 20px;
+            font-weight: 500;
+            font-size: 0.9rem;
+        }
+        
+        .status-pendente {
+            background-color: #FFF3CD;
+            color: #856404;
+        }
+        
+        .status-deferido {
+            background-color: #D4EDDA;
+            color: #155724;
+        }
+        
+        .status-indeferido {
+            background-color: #F8D7DA;
+            color: #721C24;
+        }
+        
+        .welcome-banner {
+            background-color: white;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+        }
+        
+        .welcome-banner h2 {
+            color: var(--ifes-dark-gray);
+            margin-bottom: 10px;
+        }
+        
+        .welcome-banner p {
+            color: #666;
+            margin-bottom: 0;
+        }
+        
+        .user-profile {
+            display: flex;
+            align-items: center;
+            margin-left: auto;
+        }
+        
+        .user-profile img {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            margin-right: 10px;
+        }
+        
+        .notification-badge {
+            position: absolute;
+            top: 5px;
+            right: 5px;
+            background-color: var(--ifes-red);
+            color: white;
+            border-radius: 50%;
+            width: 18px;
+            height: 18px;
+            font-size: 0.7rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .menu-toggle {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            z-index: 1100;
+            background-color: var(--ifes-green);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+            display: none;
+        }
+        
+        .menu-toggle.visible {
+            display: flex;
+        }
+        
+        .close-sidebar {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: none;
+            border: none;
+            color: var(--ifes-dark-gray);
+            cursor: pointer;
+            font-size: 1.2rem;
+        }
+        
+        .stats-card {
+            background-color: white;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+            text-align: center;
+        }
+        
+        .stats-card .number {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--ifes-green);
+            margin-bottom: 10px;
+        }
+        
+        .stats-card .label {
+            color: var(--ifes-dark-gray);
+            font-weight: 500;
+        }
+        
+        .table-card {
+            background-color: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+            margin-bottom: 30px;
+        }
+        
+        .table-card .card-header {
+            background-color: var(--ifes-green);
+            color: white;
+            padding: 15px 20px;
+            font-weight: 600;
+        }
+        
+        .table-card .table {
+            margin-bottom: 0;
+        }
+        
+        .table-card .table th {
+            border-top: none;
+            font-weight: 600;
+            color: var(--ifes-dark-gray);
+        }
+        
+        .action-buttons {
+            display: flex;
+            gap: 5px;
+        }
+        
+        .action-buttons .btn {
+            padding: 0.25rem 0.5rem;
+            font-size: 0.8rem;
+        }
+        
+        @media (max-width: 992px) {
+            .sidebar {
+                width: 70px;
+                overflow: hidden;
+            }
+            
+            .sidebar .nav-link span {
+                display: none;
+            }
+            
+            .sidebar .nav-link i {
+                margin-right: 0;
+                font-size: 1.2rem;
+            }
+            
+            .main-content {
+                margin-left: 90px;
+            }
+            
+            .sidebar-header, .sidebar-footer {
+                text-align: center;
+                padding: 10px;
+            }
+            
+            .sidebar-header h6, .sidebar-header small {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Menu Toggle Button (visible when sidebar is collapsed) -->
+    <button class="menu-toggle" id="menuToggle">
+        <i class="bi bi-list"></i>
+    </button>
+
+    <!-- Sidebar -->
+    <div class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <button class="close-sidebar" id="closeSidebar">
+                <i class="bi bi-x-lg"></i>
+            </button>
+            <img src="logoifes.png" alt="Logo IFES" width="180">
+        </div>
+        <div class="d-flex flex-column p-3">
+            <div class="mb-4 text-center">
+                <h6 class="mb-0">Sistema de Controle de</h6>
+                <h6>Assistência Estudantil</h6>
+            </div>
+            <ul class="nav nav-pills flex-column mb-auto">
+                <li class="nav-item">
+                    <a href="#" class="nav-link active">
+                        <i class="bi bi-speedometer2"></i> <span>Dashboard</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="#" class="nav-link">
+                        <i class="bi bi-file-earmark-text"></i> <span>Gerenciar Editais</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="#" class="nav-link">
+                        <i class="bi bi-clipboard-check"></i> <span>Inscrições</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="#" class="nav-link">
+                        <i class="bi bi-people"></i> <span>Alunos</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="#" class="nav-link">
+                        <i class="bi bi-currency-dollar"></i> <span>Pagamentos</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="#" class="nav-link">
+                        <i class="bi bi-file-earmark-bar-graph"></i> <span>Relatórios</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="#" class="nav-link">
+                        <i class="bi bi-gear"></i> <span>Configurações</span>
+                    </a>
+                </li>
+            </ul>
+            <hr>
+            <div class="text-center">
+                <a href="login.html" class="btn btn-outline-danger">
+                    <i class="bi bi-box-arrow-right"></i> <span>Sair</span>
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content" id="mainContent">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h2>Dashboard Administrativo</h2>
+            <div class="user-profile">
+                <img src="perfil.jpg" alt="Perfil">
+                <div>
+                    <small class="text-muted">Administrador</small>
+                    <div class="fw-bold">Ana Oliveira</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="welcome-banner">
+            <div class="row">
+                <div class="col-md-9">
+                    <h4>Bem-vindo ao Painel Administrativo</h4>
+                    <p>Aqui você pode gerenciar editais, inscrições, alunos e pagamentos do Sistema de Controle de Assistência Estudantil.</p>
+                </div>
+                <div class="col-md-3 d-flex align-items-center justify-content-end">
+                    <a href="#" class="btn btn-success">Criar Novo Edital</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="row mb-4">
+            <div class="col-md-3">
+                <div class="stats-card">
+                    <div class="number">3</div>
+                    <div class="label">Editais Ativos</div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="stats-card">
+                    <div class="number">127</div>
+                    <div class="label">Inscrições Pendentes</div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="stats-card">
+                    <div class="number">342</div>
+                    <div class="label">Alunos Beneficiados</div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="stats-card">
+                    <div class="number">R$ 68.400</div>
+                    <div class="label">Valor Total Mensal</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-6">
+                <div class="table-card">
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                        <span>Editais Recentes</span>
+                        <a href="#" class="btn btn-sm btn-light">Ver Todos</a>
+                    </div>
+                    <div class="table-responsive">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Número</th>
+                                    <th>Tipo</th>
+                                    <th>Status</th>
+                                    <th>Inscrições</th>
+                                    <th>Ações</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>01/2025</td>
+                                    <td>Auxílio Alimentação</td>
+                                    <td><span class="badge bg-success">Ativo</span></td>
+                                    <td>215</td>
+                                    <td>
+                                        <div class="action-buttons">
+                                            <button class="btn btn-sm btn-outline-primary"><i class="bi bi-eye"></i></button>
+                                            <button class="btn btn-sm btn-outline-secondary"><i class="bi bi-pencil"></i></button>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>01/2025</td>
+                                    <td>Auxílio Transporte</td>
+                                    <td><span class="badge bg-success">Ativo</span></td>
+                                    <td>187</td>
+                                    <td>
+                                        <div class="action-buttons">
+                                            <button class="btn btn-sm btn-outline-primary"><i class="bi bi-eye"></i></button>
+                                            <button class="btn btn-sm btn-outline-secondary"><i class="bi bi-pencil"></i></button>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>02/2025</td>
+                                    <td>Auxílio Material Didático</td>
+                                    <td><span class="badge bg-success">Ativo</span></td>
+                                    <td>67</td>
+                                    <td>
+                                        <div class="action-buttons">
+                                            <button class="btn btn-sm btn-outline-primary"><i class="bi bi-eye"></i></button>
+                                            <button class="btn btn-sm btn-outline-secondary"><i class="bi bi-pencil"></i></button>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>04/2024</td>
+                                    <td>Auxílio Moradia</td>
+                                    <td><span class="badge bg-secondary">Encerrado</span></td>
+                                    <td>42</td>
+                                    <td>
+                                        <div class="action-buttons">
+                                            <button class="btn btn-sm btn-outline-primary"><i class="bi bi-eye"></i></button>
+                                            <button class="btn btn-sm btn-outline-secondary"><i class="bi bi-pencil"></i></button>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-6">
+                <div class="table-card">
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                        <span>Inscrições Recentes</span>
+                        <a href="#" class="btn btn-sm btn-light">Ver Todas</a>
+                    </div>
+                    <div class="table-responsive">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Aluno</th>
+                                    <th>Edital</th>
+                                    <th>Data</th>
+                                    <th>Status</th>
+                                    <th>Ações</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>João Silva</td>
+                                    <td>Auxílio Transporte</td>
+                                    <td>01/04/2025</td>
+                                    <td><span class="badge bg-warning text-dark">Em Análise</span></td>
+                                    <td>
+                                        <div class="action-buttons">
+                                            <button class="btn btn-sm btn-outline-primary"><i class="bi bi-eye"></i></button>
+                                            <button class="btn btn-sm btn-outline-success"><i class="bi bi-check-lg"></i></button>
+                                            <button class="btn btn-sm btn-outline-danger"><i class="bi bi-x-lg"></i></button>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>Maria Santos</td>
+                                    <td>Auxílio Material Didático</td>
+                                    <td>20/04/2025</td>
+                                    <td><span class="badge bg-warning text-dark">Em Análise</span></td>
+                                    <td>
+                                        <div class="action-buttons">
+                                            <button class="btn btn-sm btn-outline-primary"><i class="bi bi-eye"></i></button>
+                                            <button class="btn btn-sm btn-outline-success"><i class="bi bi-check-lg"></i></button>
+                                            <button class="btn btn-sm btn-outline-danger"><i class="bi bi-x-lg"></i></button>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>Pedro Oliveira</td>
+                                    <td>Auxílio Alimentação</td>
+                                    <td>15/03/2025</td>
+                                    <td><span class="badge bg-success">Aprovado</span></td>
+                                    <td>
+                                        <div class="action-buttons">
+                                            <button class="btn btn-sm btn-outline-primary"><i class="bi bi-eye"></i></button>
+                                            <button class="btn btn-sm btn-outline-secondary"><i class="bi bi-pencil"></i></button>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>Carla Mendes</td>
+                                    <td>Auxílio Transporte</td>
+                                    <td>28/03/2025</td>
+                                    <td><span class="badge bg-danger">Indeferido</span></td>
+                                    <td>
+                                        <div class="action-buttons">
+                                            <button class="btn btn-sm btn-outline-primary"><i class="bi bi-eye"></i></button>
+                                            <button class="btn btn-sm btn-outline-secondary"><i class="bi bi-pencil"></i></button>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <div class="card-header">Próximos Pagamentos</div>
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <div>
+                                <h5 class="mb-0">Auxílio Alimentação - Abril/2025</h5>
+                                <small class="text-muted">215 alunos - R$ 43.000,00</small>
+                            </div>
+                            <div>
+                                <span class="badge bg-warning text-dark">Pendente</span>
+                            </div>
+                        </div>
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <div>
+                                <h5 class="mb-0">Auxílio Transporte - Abril/2025</h5>
+                                <small class="text-muted">187 alunos - R$ 28.050,00</small>
+                            </div>
+                            <div>
+                                <span class="badge bg-warning text-dark">Pendente</span>
+                            </div>
+                        </div>
+                        <div class="d-flex justify-content-end mt-3">
+                            <button class="btn btn-success">Processar Pagamentos</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Menu toggle functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            const sidebar = document.getElementById('sidebar');
+            const mainContent = document.getElementById('mainContent');
+            const menuToggle = document.getElementById('menuToggle');
+            const closeSidebar = document.getElementById('closeSidebar');
+            
+            // Close sidebar button
+            closeSidebar.addEventListener('click', function() {
+                sidebar.classList.add('collapsed');
+                mainContent.classList.add('expanded');
+                menuToggle.classList.add('visible');
+            });
+            
+            // Open sidebar button
+            menuToggle.addEventListener('click', function() {
+                sidebar.classList.remove('collapsed');
+                mainContent.classList.remove('expanded');
+                menuToggle.classList.remove('visible');
+            });
+        });
+    </script>
+</body>
+</html>
