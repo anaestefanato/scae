@@ -10,11 +10,6 @@ app = FastAPI()
 app.mount("/static", StaticFiles(directory="static"), name="static")
 # templates = Jinja2Templates(directory="templates")
 
-# @app.get("/")
-# async def read_root():
-#     response = templates.TemplateResponse("/home/index.html", {"request": {}})
-#     return response
-
 if __name__ == "__main__":
     uvicorn.run(app="main:app", host="127.0.0.1", port=8000, reload=True)
 
