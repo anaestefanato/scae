@@ -1,14 +1,14 @@
 import sys
 import os
-from data import resposta_chamado_repo
-from data.resposta_chamado_repo import *
-from data.resposta_chamado_model import RespostaChamado
-from data import chamado_repo
-from data import usuario_repo
-from data.usuario_model import Usuario
-from data.chamado_model import Chamado
-from data.administrador_model import Administrador
-from data import administrador_repo
+from repo import resposta_chamado_repo
+from repo.resposta_chamado_repo import *
+from model.resposta_chamado_model import RespostaChamado
+from repo import chamado_repo
+from repo import usuario_repo
+from model.usuario_model import Usuario
+from model.chamado_model import Chamado
+from model.administrador_model import Administrador
+from repo import administrador_repo
 
 class TestRespostaChamadoRepo:
     

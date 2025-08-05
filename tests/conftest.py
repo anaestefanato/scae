@@ -32,14 +32,14 @@ def test_db():
 @pytest.fixture
 def usuario_exemplo():
     # Cria um usuário de exemplo para os testes
-    from data.usuario_model import Usuario
+    from model.usuario_model import Usuario
     usuario = Usuario(0, "Usuário Teste", "joaosilva@email.com", "123456", "administrador")
     return usuario
 
 @pytest.fixture
 def lista_usuarios_exemplo():
     # Cria uma lista de 10 usuários de exemplo para os testes
-    from data.usuario_model import Usuario
+    from model.usuario_model import Usuario
     usuarios = []
     for i in range(1, 11):
         usuario = Usuario(0, f"Usuário {i:02d}", f"usuario{i:02d}@email.com", "123456", 0)
@@ -49,7 +49,7 @@ def lista_usuarios_exemplo():
 @pytest.fixture
 def lista_alunos_exemplo():
     # Cria uma lista de 10 alunos de exemplo para os testes
-    from data.aluno_model import Aluno
+    from model.aluno_model import Aluno
     alunos = []
     for i in range(1, 11):
         aluno = Aluno(0, f"Aluno {i:02d}", f"aluno{i:02d}@email.com", f"123456{i:02d}", "aluno", f"1234567890{i:02d}", datetime(2000, 1, i).date(), f"Pai {i:02d}", "Rua A", "Banco A", "1234", "56789", 1500.00, f"ALUNO{i:02d}")
@@ -59,7 +59,7 @@ def lista_alunos_exemplo():
 @pytest.fixture
 def lista_auxilios_moradia_exemplo():
     # Cria uma lista de 10 auxílios de moradia de exemplo para os testes
-    from data.auxilio_moradia_model import AuxilioMoradia
+    from model.auxilio_moradia_model import AuxilioMoradia
     auxilios_moradia = []
     for i in range(1, 11):
         auxilio = AuxilioMoradia(0, f"Auxilio Moradia {i:02d}", 1000.00 * i)
@@ -67,7 +67,7 @@ def lista_auxilios_moradia_exemplo():
     return auxilios_moradia
 
 import pytest
-from data.auxilio_transporte_model import AuxilioTransporte
+from model.auxilio_transporte_model import AuxilioTransporte
 
 @pytest.fixture
 def lista_auxilios_transporte_exemplo():
@@ -91,7 +91,7 @@ def lista_auxilios_transporte_exemplo():
 @pytest.fixture
 def lista_inscricoes_exemplo():
     # Cria uma lista de 10 inscrições de exemplo para os testes
-    from data.inscricao_model import Inscricao
+    from model.inscricao_model import Inscricao
     inscricoes = []
     for i in range(1, 11):
         inscricao = Inscricao(
@@ -110,7 +110,7 @@ def lista_inscricoes_exemplo():
 @pytest.fixture
 def lista_editais_exemplo():
     # Cria uma lista de 10 editais de exemplo para os testes
-    from data.edital_model import Edital
+    from model.edital_model import Edital
     editais = []
     for i in range(1, 11):
         edital = Edital(
@@ -128,7 +128,7 @@ def lista_editais_exemplo():
 @pytest.fixture
 def lista_recursos_exemplo():
     # Cria uma lista de 10 recursos de exemplo para os testes
-    from data.recurso_model import Recurso
+    from model.recurso_model import Recurso
     recursos = []
     for i in range(1, 11):
         recurso = Recurso(
@@ -146,7 +146,7 @@ def lista_recursos_exemplo():
 @pytest.fixture
 def lista_duvidas_exemplo():
     # Cria uma lista de 10 dúvidas de exemplo para os testes
-    from data.duvida_edital_model import Duvida
+    from model.duvida_edital_model import Duvida
     duvidas = []
     for i in range(1, 11):
         duvida = Duvida(
@@ -164,7 +164,7 @@ def lista_duvidas_exemplo():
 @pytest.fixture
 def lista_chamados_exemplo():
     # Cria uma lista de 10 chamados de exemplo para os testes
-    from data.chamado_model import Chamado
+    from model.chamado_model import Chamado
     chamados = []
     for i in range(1, 11):
         chamado = Chamado(
@@ -182,7 +182,7 @@ def lista_chamados_exemplo():
 @pytest.fixture
 def lista_respostas_chamado_exemplo():
     # Cria uma lista de 10 respostas de chamado de exemplo para os testes
-    from data.resposta_chamado_model import RespostaChamado
+    from model.resposta_chamado_model import RespostaChamado
     respostas = []
     for i in range(1, 11):
         resposta = RespostaChamado(

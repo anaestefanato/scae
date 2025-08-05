@@ -1,9 +1,9 @@
-from data import auxilio_repo
-from data.auxilio_model import Auxilio
-from data.auxilio_transporte_model import AuxilioTransporte
-from data.auxilio_transporte_repo import AuxilioTransporteRepo
-from data import edital_repo
-from data import inscricao_repo
+from repo import auxilio_repo
+from model.auxilio_model import Auxilio
+from model.auxilio_transporte_model import AuxilioTransporte
+from repo.auxilio_transporte_repo import AuxilioTransporteRepo
+from repo import edital_repo
+from repo import inscricao_repo
 
 class TestAuxilioTransporteRepo:
     def test_criar_tabela_auxilio_transporte(self, test_db):

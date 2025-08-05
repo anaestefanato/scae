@@ -1,12 +1,12 @@
 import sys
 import os
-from data import recurso_repo
-from data.recurso_repo import *
-from data.recurso_model import Recurso
-from data import inscricao_repo
-from data import usuario_repo
-from data.usuario_model import Usuario
-from data.inscricao_model import Inscricao
+from repo import recurso_repo
+from repo.recurso_repo import *
+from model.recurso_model import Recurso
+from repo import inscricao_repo
+from repo import usuario_repo
+from model.usuario_model import Usuario
+from model.inscricao_model import Inscricao
 
 class TestRecursoRepo:
     def test_criar_tabela_recurso(self, test_db):

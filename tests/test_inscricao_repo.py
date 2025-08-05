@@ -1,13 +1,13 @@
 import sys 
 import os 
-from data import inscricao_repo
-from data.inscricao_repo import *
-from data.inscricao_model import Inscricao
-from data import usuario_repo
-from data import aluno_repo
-from data.aluno_model import Aluno
-from data import edital_repo
-from data.edital_model import Edital
+from repo import inscricao_repo
+from repo.inscricao_repo import *
+from model.inscricao_model import Inscricao
+from repo import usuario_repo
+from repo import aluno_repo
+from model.aluno_model import Aluno
+from repo import edital_repo
+from model.edital_model import Edital
 
 class TestInscricaoRepo:
     def test_criar_tabela_inscricao(self, test_db):

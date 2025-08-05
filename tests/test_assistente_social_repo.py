@@ -1,9 +1,9 @@
 import sys 
 import os 
-from data import assistente_social_repo
-from data.assistente_social_repo import *
-from data.assistente_social_model import AssistenteSocial
-from data import usuario_repo
+from repo import assistente_social_repo
+from repo.assistente_social_repo import *
+from model.assistente_social_model import AssistenteSocial
+from repo import usuario_repo
 
 class TestAssistenteSocialRepo:
     def test_criar_tabela_assistente_social(self, test_db):

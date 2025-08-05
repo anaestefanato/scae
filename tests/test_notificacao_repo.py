@@ -1,7 +1,7 @@
-from data import usuario_repo
-from data.notificacao_repo import *
-from data.usuario_model import Usuario
-from data.notificacao_model import Notificacao
+from repo import usuario_repo
+from repo.notificacao_repo import *
+from model.usuario_model import Usuario
+from model.notificacao_model import Notificacao
 
 class TestNotificacaoRepo:
     def test_criar_tabela_notificacao(self, test_db):

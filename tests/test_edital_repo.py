@@ -1,7 +1,7 @@
 import sys 
 import os 
-from data.edital_repo import *
-from data.edital_model import Edital
+from repo.edital_repo import *
+from model.edital_model import Edital
 
 class TestEditalRepo:
     def test_criar_tabela_edital(self, test_db):

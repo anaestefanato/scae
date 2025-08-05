@@ -1,8 +1,9 @@
-from data import chamado_repo
-from data.chamado_model import Chamado
-from data import chamado_repo, usuario_repo, administrador_repo
-from data.usuario_model import Usuario
-from data.administrador_model import Administrador
+from repo import chamado_repo
+from model.chamado_model import Chamado
+from repo import usuario_repo
+from model.usuario_model import Usuario
+from model.administrador_model import Administrador
+from repo import administrador_repo, chamado_repo
 
 class TestChamadoRepo:
 

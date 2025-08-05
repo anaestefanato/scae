@@ -1,8 +1,8 @@
 import sys 
 import os 
-from data import usuario_repo
-from data.usuario_repo import *
-from data.usuario_model import Usuario
+from repo import usuario_repo
+from repo.usuario_repo import *
+from model.usuario_model import Usuario
 
 class TestUsuarioRepo:
     def test_criar_tabela_usuario(self, test_db):

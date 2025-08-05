@@ -1,9 +1,9 @@
 import sys 
 import os 
-from data import administrador_repo
-from data.administrador_repo import *
-from data.administrador_model import Administrador
-from data import usuario_repo
+from repo import administrador_repo
+from repo.administrador_repo import *
+from model.administrador_model import Administrador
+from repo import usuario_repo
 
 class TestAdministradorRepo:
     def test_criar_tabela_administrador(self, test_db):

@@ -1,11 +1,11 @@
 # test_auxilio_moradia.py
 
-from data import auxilio_repo
-from data.auxilio_model import Auxilio
-from data.auxilio_moradia_model import AuxilioMoradia
-from data.auxilio_moradia_repo import AuxilioMoradiaRepo
-from data import edital_repo
-from data import inscricao_repo
+from repo import auxilio_repo
+from model.auxilio_model import Auxilio
+from model.auxilio_moradia_model import AuxilioMoradia
+from repo.auxilio_moradia_repo import AuxilioMoradiaRepo
+from repo import edital_repo
+from repo import inscricao_repo
 
 class TestAuxilioMoradiaRepo:
     def test_criar_tabela_auxilio_moradia(self, test_db):

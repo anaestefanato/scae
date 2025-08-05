@@ -1,10 +1,10 @@
 import pytest
-import data.usuario_repo as usuario_repo
-import data.edital_repo as edital_repo
-import data.duvida_edital_repo as duvida_repo
-from data.usuario_model import Usuario
-from data.edital_model import Edital
-from data.duvida_edital_model import DuvidaEdital
+import repo.usuario_repo as usuario_repo
+import repo.edital_repo as edital_repo
+import repo.duvida_edital_repo as duvida_repo
+from model.usuario_model import Usuario
+from model.edital_model import Edital
+from model.duvida_edital_model import DuvidaEdital
 
 class TestDuvidaEditalRepo:
     def test_criar_tabela(self, test_db):
