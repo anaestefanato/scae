@@ -6,297 +6,8 @@
     <title>SCAE - Dashboard Assistente Social</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
-    <style>
-        :root {
-            --ifes-green: #2E7D32;
-            --ifes-red: #C62828;
-            --ifes-light-green: #4CAF50;
-            --ifes-light-gray: #f5f5f5;
-            --ifes-dark-gray: #333333;
-        }
-        
-        body {
-            background-color: var(--ifes-light-gray);
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
-        
-        .sidebar {
-            background-color: white;
-            height: 100vh;
-            position: fixed;
-            box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
-            width: 250px;
-            z-index: 1000;
-            transition: all 0.3s;
-            left: 0;
-        }
-        
-        .sidebar.collapsed {
-            left: -250px;
-        }
-        
-        .sidebar-header {
-            padding: 20px 15px;
-            border-bottom: 1px solid #eee;
-            position: relative;
-        }
-        
-        .sidebar-header img {
-            max-width: 100%;
-            height: auto;
-        }
-        
-        .nav-link {
-            color: var(--ifes-dark-gray);
-            padding: 12px 20px;
-            margin: 5px 0;
-            border-radius: 5px;
-        }
-        
-        .nav-link:hover, .nav-link.active {
-            background-color: var(--ifes-light-green);
-            color: white;
-        }
-        
-        .nav-link i {
-            margin-right: 10px;
-        }
-        
-        .main-content {
-            margin-left: 270px;
-            padding: 30px;
-            transition: all 0.3s;
-        }
-        
-        .main-content.expanded {
-            margin-left: 20px;
-        }
-        
-        .card {
-            border: none;
-            border-radius: 10px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-            margin-bottom: 20px;
-            transition: transform 0.3s;
-        }
-        
-        .card:hover {
-            transform: translateY(-5px);
-        }
-        
-        .card-header {
-            background-color: var(--ifes-green);
-            color: white;
-            border-radius: 10px 10px 0 0 !important;
-            padding: 15px 20px;
-            font-weight: 600;
-        }
-        
-        .card-body {
-            padding: 20px;
-        }
-        
-        .status-badge {
-            padding: 8px 15px;
-            border-radius: 20px;
-            font-weight: 500;
-            font-size: 0.9rem;
-        }
-        
-        .status-pendente {
-            background-color: #FFF3CD;
-            color: #856404;
-        }
-        
-        .status-deferido {
-            background-color: #D4EDDA;
-            color: #155724;
-        }
-        
-        .status-indeferido {
-            background-color: #F8D7DA;
-            color: #721C24;
-        }
-        
-        .welcome-banner {
-            background-color: white;
-            border-radius: 10px;
-            padding: 20px;
-            margin-bottom: 30px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-        }
-        
-        .welcome-banner h2 {
-            color: var(--ifes-dark-gray);
-            margin-bottom: 10px;
-        }
-        
-        .welcome-banner p {
-            color: #666;
-            margin-bottom: 0;
-        }
-        
-        .user-profile {
-            display: flex;
-            align-items: center;
-            margin-left: auto;
-        }
-        
-        .user-profile img {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            margin-right: 10px;
-        }
-        
-        .notification-badge {
-            position: absolute;
-            top: 5px;
-            right: 5px;
-            background-color: var(--ifes-red);
-            color: white;
-            border-radius: 50%;
-            width: 18px;
-            height: 18px;
-            font-size: 0.7rem;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-        
-        .menu-toggle {
-            position: fixed;
-            top: 20px;
-            left: 20px;
-            z-index: 1100;
-            background-color: var(--ifes-green);
-            color: white;
-            border: none;
-            border-radius: 50%;
-            width: 40px;
-            height: 40px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
-            display: none;
-        }
-        
-        .menu-toggle.visible {
-            display: flex;
-        }
-        
-        .close-sidebar {
-            position: absolute;
-            top: 10px;
-            right: 10px;
-            background: none;
-            border: none;
-            color: var(--ifes-dark-gray);
-            cursor: pointer;
-            font-size: 1.2rem;
-        }
-        
-        .stats-card {
-            background-color: white;
-            border-radius: 10px;
-            padding: 20px;
-            margin-bottom: 20px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-            text-align: center;
-        }
-        
-        .stats-card .number {
-            font-size: 2.5rem;
-            font-weight: 700;
-            color: var(--ifes-green);
-            margin-bottom: 10px;
-        }
-        
-        .stats-card .label {
-            color: var(--ifes-dark-gray);
-            font-weight: 500;
-        }
-        
-        .table-card {
-            background-color: white;
-            border-radius: 10px;
-            overflow: hidden;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-            margin-bottom: 30px;
-        }
-        
-        .table-card .card-header {
-            background-color: var(--ifes-green);
-            color: white;
-            padding: 15px 20px;
-            font-weight: 600;
-        }
-        
-        .table-card .table {
-            margin-bottom: 0;
-        }
-        
-        .table-card .table th {
-            border-top: none;
-            font-weight: 600;
-            color: var(--ifes-dark-gray);
-        }
-        
-        .action-buttons {
-            display: flex;
-            gap: 5px;
-        }
-        
-        .action-buttons .btn {
-            padding: 0.25rem 0.5rem;
-            font-size: 0.8rem;
-        }
-        
-        .priority-high {
-            color: var(--ifes-red);
-            font-weight: bold;
-        }
-        
-        .priority-medium {
-            color: #FF9800;
-            font-weight: bold;
-        }
-        
-        .priority-low {
-            color: var(--ifes-green);
-            font-weight: bold;
-        }
-        
-        @media (max-width: 992px) {
-            .sidebar {
-                width: 70px;
-                overflow: hidden;
-            }
-            
-            .sidebar .nav-link span {
-                display: none;
-            }
-            
-            .sidebar .nav-link i {
-                margin-right: 0;
-                font-size: 1.2rem;
-            }
-            
-            .main-content {
-                margin-left: 90px;
-            }
-            
-            .sidebar-header, .sidebar-footer {
-                text-align: center;
-                padding: 10px;
-            }
-            
-            .sidebar-header h6, .sidebar-header small {
-                display: none;
-            }
-        }
+    <link rel="stylesheet" href="/static/css/styles.css" />
+
     </style>
 </head>
 <body>
@@ -311,7 +22,7 @@
             <button class="close-sidebar" id="closeSidebar">
                 <i class="bi bi-x-lg"></i>
             </button>
-            <img src="logoifes.png" alt="Logo IFES" width="180">
+            <img src="/static/img/logoifes.png" alt="Logo IFES" width="180">
         </div>
         <div class="d-flex flex-column p-3">
             <div class="mb-4 text-center">
@@ -364,7 +75,7 @@
         <div class="d-flex justify-content-between align-items-center mb-4">
             <h2>Dashboard Assistente Social</h2>
             <div class="user-profile">
-                <img src="perfil.jpg" alt="Perfil">
+                <img src="/static/img/perfil.jpg" alt="Perfil">
                 <div>
                     <small class="text-muted">Assistente Social</small>
                     <div class="fw-bold">Mariana Costa</div>
@@ -378,13 +89,16 @@
                     <h4>Bem-vindo ao Painel do Assistente Social</h4>
                     <p>Aqui você pode analisar inscrições, gerenciar entrevistas e acompanhar a situação socioeconômica dos alunos.</p>
                 </div>
-                <div class="col-md-3 d-flex align-items-center justify-content-end">
-                    <a href="#" class="btn btn-success">Agendar Entrevista</a>
-                </div>
             </div>
         </div>
 
-        <div class="row mb-4">
+         <div class="row mb-4">
+            <div class="col-md-3">
+                <div class="stats-card">
+                    <div class="number">3</div>
+                    <div class="label">Editais Ativos</div>
+                </div>
+            </div>
             <div class="col-md-3">
                 <div class="stats-card">
                     <div class="number">127</div>
@@ -393,32 +107,26 @@
             </div>
             <div class="col-md-3">
                 <div class="stats-card">
-                    <div class="number">15</div>
-                    <div class="label">Entrevistas Agendadas</div>
-                </div>
-            </div>
-            <div class="col-md-3">
-                <div class="stats-card">
                     <div class="number">342</div>
-                    <div class="label">Alunos Atendidos</div>
+                    <div class="label">Alunos Beneficiados</div>
                 </div>
             </div>
             <div class="col-md-3">
                 <div class="stats-card">
-                    <div class="number">42</div>
-                    <div class="label">Visitas Domiciliares</div>
+                    <div class="number">R$ 68.400</div>
+                    <div class="label">Valor Total Mensal</div>
                 </div>
             </div>
         </div>
 
         <div class="row">
             <div class="col-md-6">
-                <div class="table-card">
+                <div class="table-card h-100" style="min-height: 340px; max-height: 340px; display: flex; flex-direction: column;">
                     <div class="card-header d-flex justify-content-between align-items-center">
                         <span>Inscrições para Análise</span>
                         <a href="#" class="btn btn-sm btn-light">Ver Todas</a>
                     </div>
-                    <div class="table-responsive">
+                    <div class="table-responsive" style="flex: 1 1 auto; overflow-y: auto;">
                         <table class="table">
                             <thead>
                                 <tr>
@@ -486,45 +194,11 @@
                         </table>
                     </div>
                 </div>
-                
-                <div class="card">
-                    <div class="card-header">Documentos Pendentes</div>
-                    <div class="card-body">
-                        <div class="d-flex justify-content-between align-items-center mb-3">
-                            <div>
-                                <h5 class="mb-0">João Silva</h5>
-                                <small class="text-muted">Comprovante de residência atualizado</small>
-                            </div>
-                            <div>
-                                <button class="btn btn-sm btn-outline-primary">Solicitar</button>
-                            </div>
-                        </div>
-                        <div class="d-flex justify-content-between align-items-center mb-3">
-                            <div>
-                                <h5 class="mb-0">Maria Santos</h5>
-                                <small class="text-muted">Comprovante de renda familiar</small>
-                            </div>
-                            <div>
-                                <button class="btn btn-sm btn-outline-primary">Solicitar</button>
-                            </div>
-                        </div>
-                        <div class="d-flex justify-content-between align-items-center">
-                            <div>
-                                <h5 class="mb-0">Pedro Oliveira</h5>
-                                <small class="text-muted">Declaração de matrícula</small>
-                            </div>
-                            <div>
-                                <button class="btn btn-sm btn-outline-primary">Solicitar</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
             </div>
-            
             <div class="col-md-6">
-                <div class="card mb-4">
+                <div class="card h-100" style="min-height: 340px; max-height: 340px; display: flex; flex-direction: column;">
                     <div class="card-header">Entrevistas Agendadas</div>
-                    <div class="card-body">
+                    <div class="card-body" style="flex: 1 1 auto; overflow-y: auto;">
                         <div class="d-flex justify-content-between align-items-center mb-3 p-3 bg-light rounded">
                             <div>
                                 <h5 class="mb-0">João Silva</h5>
@@ -532,6 +206,16 @@
                             </div>
                             <div class="text-end">
                                 <div class="fw-bold">Hoje, 14:00</div>
+                                <button class="btn btn-sm btn-outline-primary mt-2">Iniciar</button>
+                            </div>
+                        </div>
+                        <div class="d-flex justify-content-between align-items-center mb-3 p-3 bg-light rounded">
+                            <div>
+                                <h5 class="mb-0">Alice Souza</h5>
+                                <small class="text-muted">Auxílio Alimentação</small>
+                            </div>
+                            <div class="text-end">
+                                <div class="fw-bold">Hoje, 16:00</div>
                                 <button class="btn btn-sm btn-outline-primary mt-2">Iniciar</button>
                             </div>
                         </div>
@@ -545,77 +229,48 @@
                                 <button class="btn btn-sm btn-outline-secondary mt-2">Reagendar</button>
                             </div>
                         </div>
-                        <div class="d-flex justify-content-between align-items-center p-3 bg-light rounded">
-                            <div>
-                                <h5 class="mb-0">Pedro Oliveira</h5>
-                                <small class="text-muted">Auxílio Alimentação</small>
-                            </div>
-                            <div class="text-end">
-                                <div class="fw-bold">22/04/2025, 15:45</div>
-                                <button class="btn btn-sm btn-outline-secondary mt-2">Reagendar</button>
-                            </div>
-                        </div>
                         <div class="d-flex justify-content-end mt-3">
                             <button class="btn btn-success">Nova Entrevista</button>
                         </div>
                     </div>
                 </div>
-                
-                <div class="table-card">
-                    <div class="card-header d-flex justify-content-between align-items-center">
-                        <span>Visitas Domiciliares</span>
-                        <a href="#" class="btn btn-sm btn-light">Ver Todas</a>
-                    </div>
-                    <div class="table-responsive">
-                        <table class="table">
-                            <thead>
-                                <tr>
-                                    <th>Aluno</th>
-                                    <th>Endereço</th>
-                                    <th>Data</th>
-                                    <th>Status</th>
-                                    <th>Ações</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td>João Silva</td>
-                                    <td>Rua das Flores, 123</td>
-                                    <td>25/04/2025</td>
-                                    <td><span class="badge bg-warning text-dark">Agendada</span></td>
-                                    <td>
-                                        <div class="action-buttons">
-                                            <button class="btn btn-sm btn-outline-primary"><i class="bi bi-eye"></i></button>
-                                            <button class="btn btn-sm btn-outline-secondary"><i class="bi bi-pencil"></i></button>
-                                        </div>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>Maria Santos</td>
-                                    <td>Av. Principal, 456</td>
-                                    <td>27/04/2025</td>
-                                    <td><span class="badge bg-warning text-dark">Agendada</span></td>
-                                    <td>
-                                        <div class="action-buttons">
-                                            <button class="btn btn-sm btn-outline-primary"><i class="bi bi-eye"></i></button>
-                                            <button class="btn btn-sm btn-outline-secondary"><i class="bi bi-pencil"></i></button>
-                                        </div>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>Pedro Oliveira</td>
-                                    <td>Rua dos Ipês, 789</td>
-                                    <td>15/04/2025</td>
-                                    <td><span class="badge bg-success">Realizada</span></td>
-                                    <td>
-                                        <div class="action-buttons">
-                                            <button class="btn btn-sm btn-outline-primary"><i class="bi bi-eye"></i></button>
-                                            <button class="btn btn-sm btn-outline-secondary"><i class="bi bi-file-earmark-text"></i></button>
-                                        </div>
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
+            </div>
+        </div>
+        <div class="row mt-4">
+            <div class="col-12">
+                <div class="card" style="min-height: 180px;">
+                    <div class="card-header">Documentos Pendentes</div>
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <div>
+                                <h5 class="mb-0">João Silva</h5>
+                                <small class="text-muted">Comprovante de residência atualizado</small>
+                            </div>
+                            <div>
+                                <button class="btn btn-sm btn-outline-primary"><i class="bi bi-eye"></i></button>
+                                <button class="btn btn-sm btn-outline-success">Aprovar</button>
+                            </div>
+                        </div>
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <div>
+                                <h5 class="mb-0">Maria Santos</h5>
+                                <small class="text-muted">Comprovante de renda familiar</small>
+                            </div>
+                            <div>
+                                <button class="btn btn-sm btn-outline-primary"><i class="bi bi-eye"></i></button>
+                                <button class="btn btn-sm btn-outline-success">Aprovar</button>
+                            </div>
+                        </div>
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                                <h5 class="mb-0">Pedro Oliveira</h5>
+                                <small class="text-muted">Declaração de matrícula</small>
+                            </div>
+                            <div>
+                                <button class="btn btn-sm btn-outline-primary"><i class="bi bi-eye"></i></button>
+                                <button class="btn btn-sm btn-outline-success">Aprovar</button>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
