@@ -6,8 +6,8 @@ router = APIRouter()
 templates = Jinja2Templates(directory="templates")
 
 
-@router.get("/aluno/chamado")
+@router.get("/aluno/historico")
 async def get_root(request: Request):
-    response = templates.TemplateResponse("/chamado/chamado.html", {"request": request,})
+    response = templates.TemplateResponse("/historico/historico.html", {"request": request})
     return response
 
