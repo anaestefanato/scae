@@ -22,3 +22,8 @@ async def get_login(request: Request):
 async def get_cadastro(request: Request):
     response = templates.TemplateResponse("/cadastro/cadastro.html", {"request": request})
     return response
+
+@router.get("/sobre")
+async def get_sobre(request: Request):
+    response = templates.TemplateResponse("/sobre/sobre.html", {"request": request})
+    return response
