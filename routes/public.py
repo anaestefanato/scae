@@ -13,10 +13,12 @@ async def get_root(request: Request):
 
 
 @router.get("/login")
-async def get_root(request: Request):
+async def get_login(request: Request):
     response = templates.TemplateResponse("/login/login.html", {"request": request})
     return response
 
 
-
-
+@router.get("/cadastro")
+async def get_cadastro(request: Request):
+    response = templates.TemplateResponse("/cadastro/cadastro.html", {"request": request})
+    return response
