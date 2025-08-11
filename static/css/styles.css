@@ -12,7 +12,7 @@
 }
 
 body {
-    background-color: white;
+    background-color: #fff !important;
     font-family: 'Afacad', sans-serif;
 }
 
@@ -476,47 +476,145 @@ body {
     font-size: 1.2rem;
 }
 
+.stats-card {
+    background-color: white;
+    border-radius: 10px;
+    padding: 20px;
+    margin-bottom: 20px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    text-align: center;
+}
+
+.stats-card .number {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: var(--ifes-green);
+    margin-bottom: 10px;
+}
+
+.stats-card .label {
+    color: var(--ifes-dark-gray);
+    font-weight: 500;
+}
+
+.table-card {
+    background-color: white;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    margin-bottom: 30px;
+}
+
+.table-card .card-header {
+    background-color: var(--ifes-green);
+    color: white;
+    padding: 15px 20px;
+    font-weight: 600;
+}
+
+.table-card .table {
+    margin-bottom: 0;
+}
+
+.table-card .table th {
+    border-top: none;
+    font-weight: 600;
+    color: var(--ifes-dark-gray);
+}
+
+.action-buttons {
+    display: flex;
+    gap: 5px;
+}
+
+.action-buttons .btn {
+    padding: 0.25rem 0.5rem;
+    font-size: 0.8rem;
+}
+
+.priority-high {
+    color: var(--ifes-red);
+    font-weight: bold;
+}
+
+.priority-medium {
+    color: #FF9800;
+    font-weight: bold;
+}
+
+.priority-low {
+    color: var(--ifes-green);
+    font-weight: bold;
+}
+
 @media (max-width: 992px) {
     .sidebar {
         width: 70px;
         overflow: hidden;
     }
-
+    
     .sidebar .nav-link span {
         display: none;
     }
-
+    
     .sidebar .nav-link i {
         margin-right: 0;
         font-size: 1.2rem;
     }
-
+    
     .main-content {
         margin-left: 90px;
     }
-
-    .sidebar-header,
-    .sidebar-footer {
+    
+    .sidebar-header, .sidebar-footer {
         text-align: center;
         padding: 10px;
     }
-
-    .sidebar-header h6,
-    .sidebar-header small {
+    
+    .sidebar-header h6, .sidebar-header small {
         display: none;
     }
 }
 
-a {
-    text-decoration: none;
-    color: inherit;
+.btn-solicitar, 
+.btn-cancelar {
+    color: white !important;
+    border-radius: 50px;
+    height: 47px; /* Ajustado para combinar com a altura dos inputs */
+    padding: 0 25px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.1rem;
+    white-space: nowrap;
 }
 
+.btn-solicitar {
+    width: auto;
+    min-width: 220px; /* Aumentado para acomodar melhor o texto */
+    background-color: #1a6d36;
+}
 
-/* CSS expecífico do cadastro */
+.btn-solicitar:hover {
+    background-color: #15552b;
+    border-color: #124d25;
+}
 
-.cadastro-login-container {
+.btn-cancelar {
+    width: auto;
+    min-width: 120px;
+    background-color: #c62828;
+}
+
+.btn-cancelar:hover {
+    background-color: #a32020;
+    border-color: #8e1b1b;
+}
+
+/* Estilo específico da página de cadastro conforme imagem */
+.cadastro-container {
     background-color: #ffffff;
+    font-family: 'Afacad', sans-serif;
     border: 2px solid #1a8754;
     border-radius: 30px;
     max-width: 600px;
@@ -524,10 +622,9 @@ a {
     padding: 4rem 2rem 2rem;
     position: relative;
     text-align: center;
-    font-family: 'Poppins', sans-serif;
 }
 
-.cadastro-login-title {
+.cadastro-container h1 {
     color: #1a8754;
     font-size: 5rem;
     font-weight: 700;
@@ -538,27 +635,35 @@ a {
     z-index: 2;
     white-space: nowrap;
     background-color: #ffffff; 
-    padding: 0 1rem; 
-    font-family: 'Poppins', sans-serif;
+    padding: 0 1rem;
 }
 
-.subtitle {
+.cadastro-text {
     color: #333;
     font-size: 1.2rem;
     margin-bottom: 2rem;
 }
 
-.cadastro-login-input {
-    background-color: #e1e3e5;
+.input-field {
+    background: #E9ECEF;
+    border: none;
     border-radius: 50px;
-    padding: 0.75rem 1.5rem;
-    font-size: 1.1rem;
-    width: 90%;
-    display: inline-block;
-    font-family: 'Poppins', sans-serif;
+    padding: 12px 25px;
+    font-size: 16px;
+    margin-bottom: 15px;
+    width: 100%;
+    color: #333;
 }
 
-.btn-success {
+.btn-container {
+    display: flex;
+    gap: 15px;
+    justify-content: center;
+    width: 100%;
+    margin-top: 10px;
+}
+
+.btn-solicitar {
     background-color: #1a6d36;
     border-color: #1a6d36;
     padding: 0.60rem 5rem;
@@ -566,291 +671,29 @@ a {
     border-radius: 50px;
     width: 40%;
     display: inline-block;
-    font-family: 'Poppins', sans-serif;
 }
 
-.login-button {
-    background-color: #1a6d36; 
-    border-color: #1a6d36;
-    padding: 0.60rem 5rem;
-    font-size: 1.2rem;
-    border-radius: 50px;
-    width: 50%;
-    display: inline-block;
-    font-family: 'Poppins', sans-serif;
-}
-
-.btn-success:hover {
+.btn-solicitar:hover {
     background-color: #15552b;
     border-color: #124d25;
 }
 
-.btn-danger {
-    background-color: #c62828;
+.btn-cancelar {
+   background-color: #c62828;
     border-color: #c62828;
     font-size: 1.1rem;
     width: 30%;
-    font-family: 'Poppins', sans-serif;
 }
 
-.btn-danger:hover {
+.btn-cancelar:hover {
     background-color: #a32020;
     border-color: #8e1b1b;
 }
 
+
 .ifes-logo {
-    max-width: 160px;
-    margin-top: 2rem;
-}
-
-.cadastro-text {
-    margin: 50px 0;  /* Reduzido de 30px para 15px nas margens */
-    font-size: 21px;  /* Aumentado de 16px para 18px */
-}
-
-.cadastro-text span {
-    color: #666;
-}
-
-.cadastro-text a {
-    color: #DC3545;
-    text-decoration: none;
-    font-weight: 500;
-    font-size: 21px;  /* Aumentado de 16px para 18px */
-}
-
-.login-container {
-    background: white;
-    border: 2px solid #18854F;
-    border-radius: 30px;
-    padding: 20px 40px 30px;  /* Reduzido de 60px para 45px no padding-top */
-    width: 90%;
-    max-width: 500px;
-    position: relative;
-    text-align: center;
-    font-family: 'Afacad', sans-serif;
-}
-
-.login-container h1 {
-    color: #18854F;
-    font-size: 5.5rem;
-    font-weight: 700; 
-    position: absolute;
-    top: -66px;
-    left: 50%;
-    transform: translateX(-50%);
-    background: white;
-    padding: 0 15px;
-    margin: 0;
-    z-index: 10;
-}
-
-form {
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
-    margin: 30px 0;
-}
-
-form input {
-    background: #E9ECEF;
-    border: none;
-    border-radius: 50px;
-    padding: 12px 25px;
-    font-size: 20px;
-    width: 100%;
-}
-
-form input::placeholder {
-    color: #666;
-}
-
-form button {
-    background: #18854F;
-    color: white;
-    border: none;
-    border-radius: 50px;
-    padding: 12px;
-    font-size: 20px;
-    width: 50%;
-    margin: 20px auto 0;
-    cursor: pointer;
-}
-
-.btn-group {
-    display: flex;
-    gap: 15px;
-    justify-content: center;
+    max-width: 150px;
     margin-top: 20px;
-}
-
-.btn-group button {
-    width: auto;
-    padding: 12px 30px;
-}
-
-.btn-cancel {
-    background: #DC3545;
-    color: white;
-    border: none;
-    border-radius: 50px;
-    padding: 12px;
-    font-size: 20px;
-    cursor: pointer;
-}
-
-.btn-cancel:hover {
-    background: #c82333;
-}
-
-.logo {
-    margin-top: 40px;
-}
-
-.logo img {
-    max-width: 200px;
-}
-
-:root {
-    --ifes-green: #2E7D32;
-    --ifes-red: #C62828;
-    --ifes-light-green: #4CAF50;
-    --ifes-light-gray: #f5f5f5;
-    --ifes-dark-gray: #333333;
-}
-
-body {
-    background-color: var(--ifes-light-gray);
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-}
-
-.sidebar {
-    background-color: white;
-    height: 100vh;
-    position: fixed;
-    box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
-    width: 250px;
-    z-index: 1000;
-    transition: all 0.3s;
-    left: 0;
-}
-
-.sidebar.collapsed {
-    left: -250px;
-}
-
-.sidebar-header {
-    padding: 20px 15px;
-    border-bottom: 1px solid #eee;
-    position: relative;
-}
-
-.sidebar-header img {
-    max-width: 100%;
-    height: auto;
-}
-
-.nav-link {
-    color: var(--ifes-dark-gray);
-    padding: 12px 20px;
-    margin: 5px 0;
-    border-radius: 5px;
-}
-
-.nav-link:hover, .nav-link.active {
-    background-color: var(--ifes-light-green);
-    color: white;
-}
-
-.nav-link i {
-    margin-right: 10px;
-}
-
-.main-content {
-    margin-left: 270px;
-    padding: 30px;
-    transition: all 0.3s;
-}
-
-.main-content.expanded {
-    margin-left: 20px;
-}
-
-.card {
-    border: none;
-    border-radius: 10px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-    margin-bottom: 20px;
-    transition: transform 0.3s;
-}
-
-.card:hover {
-    transform: translateY(-5px);
-}
-
-.card-header {
-    background-color: var(--ifes-green);
-    color: white;
-    border-radius: 10px 10px 0 0 !important;
-    padding: 15px 20px;
-    font-weight: 600;
-}
-
-.card-body {
-    padding: 20px;
-}
-
-.status-badge {
-    padding: 8px 15px;
-    border-radius: 20px;
-    font-weight: 500;
-    font-size: 0.9rem;
-}
-
-.status-pendente {
-    background-color: #FFF3CD;
-    color: #856404;
-}
-
-.status-deferido {
-    background-color: #D4EDDA;
-    color: #155724;
-}
-
-.status-indeferido {
-    background-color: #F8D7DA;
-    color: #721C24;
-}
-
-.welcome-banner {
-    background-color: white;
-    border-radius: 10px;
-    padding: 20px;
-    margin-bottom: 30px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-}
-
-.welcome-banner h2 {
-    color: var(--ifes-dark-gray);
-    margin-bottom: 10px;
-}
-
-.welcome-banner p {
-    color: #666;
-    margin-bottom: 0;
-}
-
-.user-profile {
-    display: flex;
-    align-items: center;
-    margin-left: auto;
-}
-
-.user-profile img {
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    margin-right: 10px;
 }
 
 .notification-badge {
@@ -1002,11 +845,1970 @@ body {
     }
 }
 
+.btn-solicitar, 
+.btn-cancelar {
+    color: white !important;
+    border-radius: 50px;
+    height: 47px; /* Ajustado para combinar com a altura dos inputs */
+    padding: 0 25px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.1rem;
+    white-space: nowrap;
+}
+
+.btn-solicitar {
+    width: auto;
+    min-width: 220px; /* Aumentado para acomodar melhor o texto */
+    background-color: #1a6d36;
+}
+
+.btn-solicitar:hover {
+    background-color: #15552b;
+    border-color: #124d25;
+}
+
+.btn-cancelar {
+    width: auto;
+    min-width: 120px;
+    background-color: #c62828;
+}
+
+.btn-cancelar:hover {
+    background-color: #a32020;
+    border-color: #8e1b1b;
+}
+
+/* Estilo específico da página de cadastro conforme imagem */
+.cadastro-container {
+    background-color: #ffffff;
+    font-family: 'Afacad', sans-serif;
+    border: 2px solid #1a8754;
+    border-radius: 30px;
+    max-width: 600px;
+    width: 90%;
+    padding: 4rem 2rem 2rem;
+    position: relative;
+    text-align: center;
+}
+
+.cadastro-container h1 {
+    color: #1a8754;
+    font-size: 5rem;
+    font-weight: 700;
+    position: absolute;
+    top: -3rem; 
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 2;
+    white-space: nowrap;
+    background-color: #ffffff; 
+    padding: 0 1rem;
+}
+
+.cadastro-text {
+    color: #333;
+    font-size: 1.2rem;
+    margin-bottom: 2rem;
+}
+
+.input-field {
+    background: #E9ECEF;
+    border: none;
+    border-radius: 50px;
+    padding: 12px 25px;
+    font-size: 16px;
+    margin-bottom: 15px;
+    width: 100%;
+    color: #333;
+}
+
+.btn-container {
+    display: flex;
+    gap: 15px;
+    justify-content: center;
+    width: 100%;
+    margin-top: 10px;
+}
+
+.btn-solicitar {
+    background-color: #1a6d36;
+    border-color: #1a6d36;
+    padding: 0.60rem 5rem;
+    font-size: 1.1rem;
+    border-radius: 50px;
+    width: 40%;
+    display: inline-block;
+}
+
+.btn-solicitar:hover {
+    background-color: #15552b;
+    border-color: #124d25;
+}
+
+.btn-cancelar {
+   background-color: #c62828;
+    border-color: #c62828;
+    font-size: 1.1rem;
+    width: 30%;
+}
+
+.btn-cancelar:hover {
+    background-color: #a32020;
+    border-color: #8e1b1b;
+}
 
 
+.ifes-logo {
+    max-width: 150px;
+    margin-top: 20px;
+}
+
+.notification-badge {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    background-color: var(--ifes-red);
+    color: white;
+    border-radius: 50%;
+    width: 18px;
+    height: 18px;
+    font-size: 0.7rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.menu-toggle {
+    position: fixed;
+    top: 20px;
+    left: 20px;
+    z-index: 1100;
+    background-color: var(--ifes-green);
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    display: none;
+}
+
+.menu-toggle.visible {
+    display: flex;
+}
+
+.close-sidebar {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: none;
+    border: none;
+    color: var(--ifes-dark-gray);
+    cursor: pointer;
+    font-size: 1.2rem;
+}
+
+.stats-card {
+    background-color: white;
+    border-radius: 10px;
+    padding: 20px;
+    margin-bottom: 20px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    text-align: center;
+}
+
+.stats-card .number {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: var(--ifes-green);
+    margin-bottom: 10px;
+}
+
+.stats-card .label {
+    color: var(--ifes-dark-gray);
+    font-weight: 500;
+}
+
+.table-card {
+    background-color: white;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    margin-bottom: 30px;
+}
+
+.table-card .card-header {
+    background-color: var(--ifes-green);
+    color: white;
+    padding: 15px 20px;
+    font-weight: 600;
+}
+
+.table-card .table {
+    margin-bottom: 0;
+}
+
+.table-card .table th {
+    border-top: none;
+    font-weight: 600;
+    color: var(--ifes-dark-gray);
+}
+
+.action-buttons {
+    display: flex;
+    gap: 5px;
+}
+
+.action-buttons .btn {
+    padding: 0.25rem 0.5rem;
+    font-size: 0.8rem;
+}
+
+.priority-high {
+    color: var(--ifes-red);
+    font-weight: bold;
+}
+
+.priority-medium {
+    color: #FF9800;
+    font-weight: bold;
+}
+
+.priority-low {
+    color: var(--ifes-green);
+    font-weight: bold;
+}
+
+@media (max-width: 992px) {
+    .sidebar {
+        width: 70px;
+        overflow: hidden;
+    }
+    
+    .sidebar .nav-link span {
+        display: none;
+    }
+    
+    .sidebar .nav-link i {
+        margin-right: 0;
+        font-size: 1.2rem;
+    }
+    
+    .main-content {
+        margin-left: 90px;
+    }
+    
+    .sidebar-header, .sidebar-footer {
+        text-align: center;
+        padding: 10px;
+    }
+    
+    .sidebar-header h6, .sidebar-header small {
+        display: none;
+    }
+}
+
+.btn-solicitar, 
+.btn-cancelar {
+    color: white !important;
+    border-radius: 50px;
+    height: 47px; /* Ajustado para combinar com a altura dos inputs */
+    padding: 0 25px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.1rem;
+    white-space: nowrap;
+}
+
+.btn-solicitar {
+    width: auto;
+    min-width: 220px; /* Aumentado para acomodar melhor o texto */
+    background-color: #1a6d36;
+}
+
+.btn-solicitar:hover {
+    background-color: #15552b;
+    border-color: #124d25;
+}
+
+.btn-cancelar {
+    width: auto;
+    min-width: 120px;
+    background-color: #c62828;
+}
+
+.btn-cancelar:hover {
+    background-color: #a32020;
+    border-color: #8e1b1b;
+}
+
+/* Estilo específico da página de cadastro conforme imagem */
+.cadastro-container {
+    background-color: #ffffff;
+    font-family: 'Afacad', sans-serif;
+    border: 2px solid #1a8754;
+    border-radius: 30px;
+    max-width: 600px;
+    width: 90%;
+    padding: 4rem 2rem 2rem;
+    position: relative;
+    text-align: center;
+}
+
+.cadastro-container h1 {
+    color: #1a8754;
+    font-size: 5rem;
+    font-weight: 700;
+    position: absolute;
+    top: -3rem; 
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 2;
+    white-space: nowrap;
+    background-color: #ffffff; 
+    padding: 0 1rem;
+}
+
+.cadastro-text {
+    color: #333;
+    font-size: 1.2rem;
+    margin-bottom: 2rem;
+}
+
+.input-field {
+    background: #E9ECEF;
+    border: none;
+    border-radius: 50px;
+    padding: 12px 25px;
+    font-size: 16px;
+    margin-bottom: 15px;
+    width: 100%;
+    color: #333;
+}
+
+.btn-container {
+    display: flex;
+    gap: 15px;
+    justify-content: center;
+    width: 100%;
+    margin-top: 10px;
+}
+
+.btn-solicitar {
+    background-color: #1a6d36;
+    border-color: #1a6d36;
+    padding: 0.60rem 5rem;
+    font-size: 1.1rem;
+    border-radius: 50px;
+    width: 40%;
+    display: inline-block;
+}
+
+.btn-solicitar:hover {
+    background-color: #15552b;
+    border-color: #124d25;
+}
+
+.btn-cancelar {
+   background-color: #c62828;
+    border-color: #c62828;
+    font-size: 1.1rem;
+    width: 30%;
+}
+
+.btn-cancelar:hover {
+    background-color: #a32020;
+    border-color: #8e1b1b;
+}
 
 
+.ifes-logo {
+    max-width: 150px;
+    margin-top: 20px;
+}
+
+.notification-badge {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    background-color: var(--ifes-red);
+    color: white;
+    border-radius: 50%;
+    width: 18px;
+    height: 18px;
+    font-size: 0.7rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.menu-toggle {
+    position: fixed;
+    top: 20px;
+    left: 20px;
+    z-index: 1100;
+    background-color: var(--ifes-green);
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    display: none;
+}
+
+.menu-toggle.visible {
+    display: flex;
+}
+
+.close-sidebar {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: none;
+    border: none;
+    color: var(--ifes-dark-gray);
+    cursor: pointer;
+    font-size: 1.2rem;
+}
+
+.stats-card {
+    background-color: white;
+    border-radius: 10px;
+    padding: 20px;
+    margin-bottom: 20px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    text-align: center;
+}
+
+.stats-card .number {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: var(--ifes-green);
+    margin-bottom: 10px;
+}
+
+.stats-card .label {
+    color: var(--ifes-dark-gray);
+    font-weight: 500;
+}
+
+.table-card {
+    background-color: white;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    margin-bottom: 30px;
+}
+
+.table-card .card-header {
+    background-color: var(--ifes-green);
+    color: white;
+    padding: 15px 20px;
+    font-weight: 600;
+}
+
+.table-card .table {
+    margin-bottom: 0;
+}
+
+.table-card .table th {
+    border-top: none;
+    font-weight: 600;
+    color: var(--ifes-dark-gray);
+}
+
+.action-buttons {
+    display: flex;
+    gap: 5px;
+}
+
+.action-buttons .btn {
+    padding: 0.25rem 0.5rem;
+    font-size: 0.8rem;
+}
+
+.priority-high {
+    color: var(--ifes-red);
+    font-weight: bold;
+}
+
+.priority-medium {
+    color: #FF9800;
+    font-weight: bold;
+}
+
+.priority-low {
+    color: var(--ifes-green);
+    font-weight: bold;
+}
+
+@media (max-width: 992px) {
+    .sidebar {
+        width: 70px;
+        overflow: hidden;
+    }
+    
+    .sidebar .nav-link span {
+        display: none;
+    }
+    
+    .sidebar .nav-link i {
+        margin-right: 0;
+        font-size: 1.2rem;
+    }
+    
+    .main-content {
+        margin-left: 90px;
+    }
+    
+    .sidebar-header, .sidebar-footer {
+        text-align: center;
+        padding: 10px;
+    }
+    
+    .sidebar-header h6, .sidebar-header small {
+        display: none;
+    }
+}
+
+.btn-solicitar, 
+.btn-cancelar {
+    color: white !important;
+    border-radius: 50px;
+    height: 47px; /* Ajustado para combinar com a altura dos inputs */
+    padding: 0 25px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.1rem;
+    white-space: nowrap;
+}
+
+.btn-solicitar {
+    width: auto;
+    min-width: 220px; /* Aumentado para acomodar melhor o texto */
+    background-color: #1a6d36;
+}
+
+.btn-solicitar:hover {
+    background-color: #15552b;
+    border-color: #124d25;
+}
+
+.btn-cancelar {
+    width: auto;
+    min-width: 120px;
+    background-color: #c62828;
+}
+
+.btn-cancelar:hover {
+    background-color: #a32020;
+    border-color: #8e1b1b;
+}
+
+/* Estilo específico da página de cadastro conforme imagem */
+.cadastro-container {
+    background-color: #ffffff;
+    font-family: 'Afacad', sans-serif;
+    border: 2px solid #1a8754;
+    border-radius: 30px;
+    max-width: 600px;
+    width: 90%;
+    padding: 4rem 2rem 2rem;
+    position: relative;
+    text-align: center;
+}
+
+.cadastro-container h1 {
+    color: #1a8754;
+    font-size: 5rem;
+    font-weight: 700;
+    position: absolute;
+    top: -3rem; 
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 2;
+    white-space: nowrap;
+    background-color: #ffffff; 
+    padding: 0 1rem;
+}
+
+.cadastro-text {
+    color: #333;
+    font-size: 1.2rem;
+    margin-bottom: 2rem;
+}
+
+.input-field {
+    background: #E9ECEF;
+    border: none;
+    border-radius: 50px;
+    padding: 12px 25px;
+    font-size: 16px;
+    margin-bottom: 15px;
+    width: 100%;
+    color: #333;
+}
+
+.btn-container {
+    display: flex;
+    gap: 15px;
+    justify-content: center;
+    width: 100%;
+    margin-top: 10px;
+}
+
+.btn-solicitar {
+    background-color: #1a6d36;
+    border-color: #1a6d36;
+    padding: 0.60rem 5rem;
+    font-size: 1.1rem;
+    border-radius: 50px;
+    width: 40%;
+    display: inline-block;
+}
+
+.btn-solicitar:hover {
+    background-color: #15552b;
+    border-color: #124d25;
+}
+
+.btn-cancelar {
+   background-color: #c62828;
+    border-color: #c62828;
+    font-size: 1.1rem;
+    width: 30%;
+}
+
+.btn-cancelar:hover {
+    background-color: #a32020;
+    border-color: #8e1b1b;
+}
 
 
+.ifes-logo {
+    max-width: 150px;
+    margin-top: 20px;
+}
+
+.notification-badge {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    background-color: var(--ifes-red);
+    color: white;
+    border-radius: 50%;
+    width: 18px;
+    height: 18px;
+    font-size: 0.7rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.menu-toggle {
+    position: fixed;
+    top: 20px;
+    left: 20px;
+    z-index: 1100;
+    background-color: var(--ifes-green);
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    display: none;
+}
+
+.menu-toggle.visible {
+    display: flex;
+}
+
+.close-sidebar {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: none;
+    border: none;
+    color: var(--ifes-dark-gray);
+    cursor: pointer;
+    font-size: 1.2rem;
+}
+
+.stats-card {
+    background-color: white;
+    border-radius: 10px;
+    padding: 20px;
+    margin-bottom: 20px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    text-align: center;
+}
+
+.stats-card .number {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: var(--ifes-green);
+    margin-bottom: 10px;
+}
+
+.stats-card .label {
+    color: var(--ifes-dark-gray);
+    font-weight: 500;
+}
+
+.table-card {
+    background-color: white;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    margin-bottom: 30px;
+}
+
+.table-card .card-header {
+    background-color: var(--ifes-green);
+    color: white;
+    padding: 15px 20px;
+    font-weight: 600;
+}
+
+.table-card .table {
+    margin-bottom: 0;
+}
+
+.table-card .table th {
+    border-top: none;
+    font-weight: 600;
+    color: var(--ifes-dark-gray);
+}
+
+.action-buttons {
+    display: flex;
+    gap: 5px;
+}
+
+.action-buttons .btn {
+    padding: 0.25rem 0.5rem;
+    font-size: 0.8rem;
+}
+
+.priority-high {
+    color: var(--ifes-red);
+    font-weight: bold;
+}
+
+.priority-medium {
+    color: #FF9800;
+    font-weight: bold;
+}
+
+.priority-low {
+    color: var(--ifes-green);
+    font-weight: bold;
+}
+
+@media (max-width: 992px) {
+    .sidebar {
+        width: 70px;
+        overflow: hidden;
+    }
+    
+    .sidebar .nav-link span {
+        display: none;
+    }
+    
+    .sidebar .nav-link i {
+        margin-right: 0;
+        font-size: 1.2rem;
+    }
+    
+    .main-content {
+        margin-left: 90px;
+    }
+    
+    .sidebar-header, .sidebar-footer {
+        text-align: center;
+        padding: 10px;
+    }
+    
+    .sidebar-header h6, .sidebar-header small {
+        display: none;
+    }
+}
+
+.btn-solicitar, 
+.btn-cancelar {
+    color: white !important;
+    border-radius: 50px;
+    height: 47px; /* Ajustado para combinar com a altura dos inputs */
+    padding: 0 25px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.1rem;
+    white-space: nowrap;
+}
+
+.btn-solicitar {
+    width: auto;
+    min-width: 220px; /* Aumentado para acomodar melhor o texto */
+    background-color: #1a6d36;
+}
+
+.btn-solicitar:hover {
+    background-color: #15552b;
+    border-color: #124d25;
+}
+
+.btn-cancelar {
+    width: auto;
+    min-width: 120px;
+    background-color: #c62828;
+}
+
+.btn-cancelar:hover {
+    background-color: #a32020;
+    border-color: #8e1b1b;
+}
+
+/* Estilo específico da página de cadastro conforme imagem */
+.cadastro-container {
+    background-color: #ffffff;
+    font-family: 'Afacad', sans-serif;
+    border: 2px solid #1a8754;
+    border-radius: 30px;
+    max-width: 600px;
+    width: 90%;
+    padding: 4rem 2rem 2rem;
+    position: relative;
+    text-align: center;
+}
+
+.cadastro-container h1 {
+    color: #1a8754;
+    font-size: 5rem;
+    font-weight: 700;
+    position: absolute;
+    top: -3rem; 
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 2;
+    white-space: nowrap;
+    background-color: #ffffff; 
+    padding: 0 1rem;
+}
+
+.cadastro-text {
+    color: #333;
+    font-size: 1.2rem;
+    margin-bottom: 2rem;
+}
+
+.input-field {
+    background: #E9ECEF;
+    border: none;
+    border-radius: 50px;
+    padding: 12px 25px;
+    font-size: 16px;
+    margin-bottom: 15px;
+    width: 100%;
+    color: #333;
+}
+
+.btn-container {
+    display: flex;
+    gap: 15px;
+    justify-content: center;
+    width: 100%;
+    margin-top: 10px;
+}
+
+.btn-solicitar {
+    background-color: #1a6d36;
+    border-color: #1a6d36;
+    padding: 0.60rem 5rem;
+    font-size: 1.1rem;
+    border-radius: 50px;
+    width: 40%;
+    display: inline-block;
+}
+
+.btn-solicitar:hover {
+    background-color: #15552b;
+    border-color: #124d25;
+}
+
+.btn-cancelar {
+   background-color: #c62828;
+    border-color: #c62828;
+    font-size: 1.1rem;
+    width: 30%;
+}
+
+.btn-cancelar:hover {
+    background-color: #a32020;
+    border-color: #8e1b1b;
+}
 
 
+.ifes-logo {
+    max-width: 150px;
+    margin-top: 20px;
+}
+
+.notification-badge {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    background-color: var(--ifes-red);
+    color: white;
+    border-radius: 50%;
+    width: 18px;
+    height: 18px;
+    font-size: 0.7rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.menu-toggle {
+    position: fixed;
+    top: 20px;
+    left: 20px;
+    z-index: 1100;
+    background-color: var(--ifes-green);
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    display: none;
+}
+
+.menu-toggle.visible {
+    display: flex;
+}
+
+.close-sidebar {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: none;
+    border: none;
+    color: var(--ifes-dark-gray);
+    cursor: pointer;
+    font-size: 1.2rem;
+}
+
+.stats-card {
+    background-color: white;
+    border-radius: 10px;
+    padding: 20px;
+    margin-bottom: 20px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    text-align: center;
+}
+
+.stats-card .number {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: var(--ifes-green);
+    margin-bottom: 10px;
+}
+
+.stats-card .label {
+    color: var(--ifes-dark-gray);
+    font-weight: 500;
+}
+
+.table-card {
+    background-color: white;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    margin-bottom: 30px;
+}
+
+.table-card .card-header {
+    background-color: var(--ifes-green);
+    color: white;
+    padding: 15px 20px;
+    font-weight: 600;
+}
+
+.table-card .table {
+    margin-bottom: 0;
+}
+
+.table-card .table th {
+    border-top: none;
+    font-weight: 600;
+    color: var(--ifes-dark-gray);
+}
+
+.action-buttons {
+    display: flex;
+    gap: 5px;
+}
+
+.action-buttons .btn {
+    padding: 0.25rem 0.5rem;
+    font-size: 0.8rem;
+}
+
+.priority-high {
+    color: var(--ifes-red);
+    font-weight: bold;
+}
+
+.priority-medium {
+    color: #FF9800;
+    font-weight: bold;
+}
+
+.priority-low {
+    color: var(--ifes-green);
+    font-weight: bold;
+}
+
+@media (max-width: 992px) {
+    .sidebar {
+        width: 70px;
+        overflow: hidden;
+    }
+    
+    .sidebar .nav-link span {
+        display: none;
+    }
+    
+    .sidebar .nav-link i {
+        margin-right: 0;
+        font-size: 1.2rem;
+    }
+    
+    .main-content {
+        margin-left: 90px;
+    }
+    
+    .sidebar-header, .sidebar-footer {
+        text-align: center;
+        padding: 10px;
+    }
+    
+    .sidebar-header h6, .sidebar-header small {
+        display: none;
+    }
+}
+
+.btn-solicitar, 
+.btn-cancelar {
+    color: white !important;
+    border-radius: 50px;
+    height: 47px; /* Ajustado para combinar com a altura dos inputs */
+    padding: 0 25px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.1rem;
+    white-space: nowrap;
+}
+
+.btn-solicitar {
+    width: auto;
+    min-width: 220px; /* Aumentado para acomodar melhor o texto */
+    background-color: #1a6d36;
+}
+
+.btn-solicitar:hover {
+    background-color: #15552b;
+    border-color: #124d25;
+}
+
+.btn-cancelar {
+    width: auto;
+    min-width: 120px;
+    background-color: #c62828;
+}
+
+.btn-cancelar:hover {
+    background-color: #a32020;
+    border-color: #8e1b1b;
+}
+
+/* Estilo específico da página de cadastro conforme imagem */
+.cadastro-container {
+    background-color: #ffffff;
+    font-family: 'Afacad', sans-serif;
+    border: 2px solid #1a8754;
+    border-radius: 30px;
+    max-width: 600px;
+    width: 90%;
+    padding: 4rem 2rem 2rem;
+    position: relative;
+    text-align: center;
+}
+
+.cadastro-container h1 {
+    color: #1a8754;
+    font-size: 5rem;
+    font-weight: 700;
+    position: absolute;
+    top: -3rem; 
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 2;
+    white-space: nowrap;
+    background-color: #ffffff; 
+    padding: 0 1rem;
+}
+
+.cadastro-text {
+    color: #333;
+    font-size: 1.2rem;
+    margin-bottom: 2rem;
+}
+
+.input-field {
+    background: #E9ECEF;
+    border: none;
+    border-radius: 50px;
+    padding: 12px 25px;
+    font-size: 16px;
+    margin-bottom: 15px;
+    width: 100%;
+    color: #333;
+}
+
+.btn-container {
+    display: flex;
+    gap: 15px;
+    justify-content: center;
+    width: 100%;
+    margin-top: 10px;
+}
+
+.btn-solicitar {
+    background-color: #1a6d36;
+    border-color: #1a6d36;
+    padding: 0.60rem 5rem;
+    font-size: 1.1rem;
+    border-radius: 50px;
+    width: 40%;
+    display: inline-block;
+}
+
+.btn-solicitar:hover {
+    background-color: #15552b;
+    border-color: #124d25;
+}
+
+.btn-cancelar {
+   background-color: #c62828;
+    border-color: #c62828;
+    font-size: 1.1rem;
+    width: 30%;
+}
+
+.btn-cancelar:hover {
+    background-color: #a32020;
+    border-color: #8e1b1b;
+}
+
+
+.ifes-logo {
+    max-width: 150px;
+    margin-top: 20px;
+}
+
+.notification-badge {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    background-color: var(--ifes-red);
+    color: white;
+    border-radius: 50%;
+    width: 18px;
+    height: 18px;
+    font-size: 0.7rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.menu-toggle {
+    position: fixed;
+    top: 20px;
+    left: 20px;
+    z-index: 1100;
+    background-color: var(--ifes-green);
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    display: none;
+}
+
+.menu-toggle.visible {
+    display: flex;
+}
+
+.close-sidebar {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: none;
+    border: none;
+    color: var(--ifes-dark-gray);
+    cursor: pointer;
+    font-size: 1.2rem;
+}
+
+.stats-card {
+    background-color: white;
+    border-radius: 10px;
+    padding: 20px;
+    margin-bottom: 20px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    text-align: center;
+}
+
+.stats-card .number {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: var(--ifes-green);
+    margin-bottom: 10px;
+}
+
+.stats-card .label {
+    color: var(--ifes-dark-gray);
+    font-weight: 500;
+}
+
+.table-card {
+    background-color: white;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    margin-bottom: 30px;
+}
+
+.table-card .card-header {
+    background-color: var(--ifes-green);
+    color: white;
+    padding: 15px 20px;
+    font-weight: 600;
+}
+
+.table-card .table {
+    margin-bottom: 0;
+}
+
+.table-card .table th {
+    border-top: none;
+    font-weight: 600;
+    color: var(--ifes-dark-gray);
+}
+
+.action-buttons {
+    display: flex;
+    gap: 5px;
+}
+
+.action-buttons .btn {
+    padding: 0.25rem 0.5rem;
+    font-size: 0.8rem;
+}
+
+.priority-high {
+    color: var(--ifes-red);
+    font-weight: bold;
+}
+
+.priority-medium {
+    color: #FF9800;
+    font-weight: bold;
+}
+
+.priority-low {
+    color: var(--ifes-green);
+    font-weight: bold;
+}
+
+@media (max-width: 992px) {
+    .sidebar {
+        width: 70px;
+        overflow: hidden;
+    }
+    
+    .sidebar .nav-link span {
+        display: none;
+    }
+    
+    .sidebar .nav-link i {
+        margin-right: 0;
+        font-size: 1.2rem;
+    }
+    
+    .main-content {
+        margin-left: 90px;
+    }
+    
+    .sidebar-header, .sidebar-footer {
+        text-align: center;
+        padding: 10px;
+    }
+    
+    .sidebar-header h6, .sidebar-header small {
+        display: none;
+    }
+}
+
+.btn-solicitar, 
+.btn-cancelar {
+    color: white !important;
+    border-radius: 50px;
+    height: 47px; /* Ajustado para combinar com a altura dos inputs */
+    padding: 0 25px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.1rem;
+    white-space: nowrap;
+}
+
+.btn-solicitar {
+    width: auto;
+    min-width: 220px; /* Aumentado para acomodar melhor o texto */
+    background-color: #1a6d36;
+}
+
+.btn-solicitar:hover {
+    background-color: #15552b;
+    border-color: #124d25;
+}
+
+.btn-cancelar {
+    width: auto;
+    min-width: 120px;
+    background-color: #c62828;
+}
+
+.btn-cancelar:hover {
+    background-color: #a32020;
+    border-color: #8e1b1b;
+}
+
+/* Estilo específico da página de cadastro conforme imagem */
+.cadastro-container {
+    background-color: #ffffff;
+    font-family: 'Afacad', sans-serif;
+    border: 2px solid #1a8754;
+    border-radius: 30px;
+    max-width: 600px;
+    width: 90%;
+    padding: 4rem 2rem 2rem;
+    position: relative;
+    text-align: center;
+}
+
+.cadastro-container h1 {
+    color: #1a8754;
+    font-size: 5rem;
+    font-weight: 700;
+    position: absolute;
+    top: -3rem; 
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 2;
+    white-space: nowrap;
+    background-color: #ffffff; 
+    padding: 0 1rem;
+}
+
+.cadastro-text {
+    color: #333;
+    font-size: 1.2rem;
+    margin-bottom: 2rem;
+}
+
+.input-field {
+    background: #E9ECEF;
+    border: none;
+    border-radius: 50px;
+    padding: 12px 25px;
+    font-size: 16px;
+    margin-bottom: 15px;
+    width: 100%;
+    color: #333;
+}
+
+.btn-container {
+    display: flex;
+    gap: 15px;
+    justify-content: center;
+    width: 100%;
+    margin-top: 10px;
+}
+
+.btn-solicitar {
+    background-color: #1a6d36;
+    border-color: #1a6d36;
+    padding: 0.60rem 5rem;
+    font-size: 1.1rem;
+    border-radius: 50px;
+    width: 40%;
+    display: inline-block;
+}
+
+.btn-solicitar:hover {
+    background-color: #15552b;
+    border-color: #124d25;
+}
+
+.btn-cancelar {
+   background-color: #c62828;
+    border-color: #c62828;
+    font-size: 1.1rem;
+    width: 30%;
+}
+
+.btn-cancelar:hover {
+    background-color: #a32020;
+    border-color: #8e1b1b;
+}
+
+
+.ifes-logo {
+    max-width: 150px;
+    margin-top: 20px;
+}
+
+.notification-badge {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    background-color: var(--ifes-red);
+    color: white;
+    border-radius: 50%;
+    width: 18px;
+    height: 18px;
+    font-size: 0.7rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.menu-toggle {
+    position: fixed;
+    top: 20px;
+    left: 20px;
+    z-index: 1100;
+    background-color: var(--ifes-green);
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    display: none;
+}
+
+.menu-toggle.visible {
+    display: flex;
+}
+
+.close-sidebar {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: none;
+    border: none;
+    color: var(--ifes-dark-gray);
+    cursor: pointer;
+    font-size: 1.2rem;
+}
+
+.stats-card {
+    background-color: white;
+    border-radius: 10px;
+    padding: 20px;
+    margin-bottom: 20px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    text-align: center;
+}
+
+.stats-card .number {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: var(--ifes-green);
+    margin-bottom: 10px;
+}
+
+.stats-card .label {
+    color: var(--ifes-dark-gray);
+    font-weight: 500;
+}
+
+.table-card {
+    background-color: white;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    margin-bottom: 30px;
+}
+
+.table-card .card-header {
+    background-color: var(--ifes-green);
+    color: white;
+    padding: 15px 20px;
+    font-weight: 600;
+}
+
+.table-card .table {
+    margin-bottom: 0;
+}
+
+.table-card .table th {
+    border-top: none;
+    font-weight: 600;
+    color: var(--ifes-dark-gray);
+}
+
+.action-buttons {
+    display: flex;
+    gap: 5px;
+}
+
+.action-buttons .btn {
+    padding: 0.25rem 0.5rem;
+    font-size: 0.8rem;
+}
+
+.priority-high {
+    color: var(--ifes-red);
+    font-weight: bold;
+}
+
+.priority-medium {
+    color: #FF9800;
+    font-weight: bold;
+}
+
+.priority-low {
+    color: var(--ifes-green);
+    font-weight: bold;
+}
+
+@media (max-width: 992px) {
+    .sidebar {
+        width: 70px;
+        overflow: hidden;
+    }
+    
+    .sidebar .nav-link span {
+        display: none;
+    }
+    
+    .sidebar .nav-link i {
+        margin-right: 0;
+        font-size: 1.2rem;
+    }
+    
+    .main-content {
+        margin-left: 90px;
+    }
+    
+    .sidebar-header, .sidebar-footer {
+        text-align: center;
+        padding: 10px;
+    }
+    
+    .sidebar-header h6, .sidebar-header small {
+        display: none;
+    }
+}
+
+.btn-solicitar, 
+.btn-cancelar {
+    color: white !important;
+    border-radius: 50px;
+    height: 47px; /* Ajustado para combinar com a altura dos inputs */
+    padding: 0 25px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.1rem;
+    white-space: nowrap;
+}
+
+.btn-solicitar {
+    width: auto;
+    min-width: 220px; /* Aumentado para acomodar melhor o texto */
+    background-color: #1a6d36;
+}
+
+.btn-solicitar:hover {
+    background-color: #15552b;
+    border-color: #124d25;
+}
+
+.btn-cancelar {
+    width: auto;
+    min-width: 120px;
+    background-color: #c62828;
+}
+
+.btn-cancelar:hover {
+    background-color: #a32020;
+    border-color: #8e1b1b;
+}
+
+/* Estilo específico da página de cadastro conforme imagem */
+.cadastro-container {
+    background-color: #ffffff;
+    font-family: 'Afacad', sans-serif;
+    border: 2px solid #1a8754;
+    border-radius: 30px;
+    max-width: 600px;
+    width: 90%;
+    padding: 4rem 2rem 2rem;
+    position: relative;
+    text-align: center;
+}
+
+.cadastro-container h1 {
+    color: #1a8754;
+    font-size: 5rem;
+    font-weight: 700;
+    position: absolute;
+    top: -3rem; 
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 2;
+    white-space: nowrap;
+    background-color: #ffffff; 
+    padding: 0 1rem;
+}
+
+.cadastro-text {
+    color: #333;
+    font-size: 1.2rem;
+    margin-bottom: 2rem;
+}
+
+.input-field {
+    background: #E9ECEF;
+    border: none;
+    border-radius: 50px;
+    padding: 12px 25px;
+    font-size: 16px;
+    margin-bottom: 15px;
+    width: 100%;
+    color: #333;
+}
+
+.btn-container {
+    display: flex;
+    gap: 15px;
+    justify-content: center;
+    width: 100%;
+    margin-top: 10px;
+}
+
+.btn-solicitar {
+    background-color: #1a6d36;
+    border-color: #1a6d36;
+    padding: 0.60rem 5rem;
+    font-size: 1.1rem;
+    border-radius: 50px;
+    width: 40%;
+    display: inline-block;
+}
+
+.btn-solicitar:hover {
+    background-color: #15552b;
+    border-color: #124d25;
+}
+
+.btn-cancelar {
+   background-color: #c62828;
+    border-color: #c62828;
+    font-size: 1.1rem;
+    width: 30%;
+}
+
+.btn-cancelar:hover {
+    background-color: #a32020;
+    border-color: #8e1b1b;
+}
+
+
+.ifes-logo {
+    max-width: 150px;
+    margin-top: 20px;
+}
+
+.notification-badge {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    background-color: var(--ifes-red);
+    color: white;
+    border-radius: 50%;
+    width: 18px;
+    height: 18px;
+    font-size: 0.7rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.menu-toggle {
+    position: fixed;
+    top: 20px;
+    left: 20px;
+    z-index: 1100;
+    background-color: var(--ifes-green);
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    display: none;
+}
+
+.menu-toggle.visible {
+    display: flex;
+}
+
+.close-sidebar {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: none;
+    border: none;
+    color: var(--ifes-dark-gray);
+    cursor: pointer;
+    font-size: 1.2rem;
+}
+
+.stats-card {
+    background-color: white;
+    border-radius: 10px;
+    padding: 20px;
+    margin-bottom: 20px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    text-align: center;
+}
+
+.stats-card .number {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: var(--ifes-green);
+    margin-bottom: 10px;
+}
+
+.stats-card .label {
+    color: var(--ifes-dark-gray);
+    font-weight: 500;
+}
+
+.table-card {
+    background-color: white;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    margin-bottom: 30px;
+}
+
+.table-card .card-header {
+    background-color: var(--ifes-green);
+    color: white;
+    padding: 15px 20px;
+    font-weight: 600;
+}
+
+.table-card .table {
+    margin-bottom: 0;
+}
+
+.table-card .table th {
+    border-top: none;
+    font-weight: 600;
+    color: var(--ifes-dark-gray);
+}
+
+.action-buttons {
+    display: flex;
+    gap: 5px;
+}
+
+.action-buttons .btn {
+    padding: 0.25rem 0.5rem;
+    font-size: 0.8rem;
+}
+
+.priority-high {
+    color: var(--ifes-red);
+    font-weight: bold;
+}
+
+.priority-medium {
+    color: #FF9800;
+    font-weight: bold;
+}
+
+.priority-low {
+    color: var(--ifes-green);
+    font-weight: bold;
+}
+
+@media (max-width: 992px) {
+    .sidebar {
+        width: 70px;
+        overflow: hidden;
+    }
+    
+    .sidebar .nav-link span {
+        display: none;
+    }
+    
+    .sidebar .nav-link i {
+        margin-right: 0;
+        font-size: 1.2rem;
+    }
+    
+    .main-content {
+        margin-left: 90px;
+    }
+    
+    .sidebar-header, .sidebar-footer {
+        text-align: center;
+        padding: 10px;
+    }
+    
+    .sidebar-header h6, .sidebar-header small {
+        display: none;
+    }
+}
+
+.btn-solicitar, 
+.btn-cancelar {
+    color: white !important;
+    border-radius: 50px;
+    height: 47px; /* Ajustado para combinar com a altura dos inputs */
+    padding: 0 25px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.1rem;
+    white-space: nowrap;
+}
+
+.btn-solicitar {
+    width: auto;
+    min-width: 220px; /* Aumentado para acomodar melhor o texto */
+    background-color: #1a6d36;
+}
+
+.btn-solicitar:hover {
+    background-color: #15552b;
+    border-color: #124d25;
+}
+
+.btn-cancelar {
+    width: auto;
+    min-width: 120px;
+    background-color: #c62828;
+}
+
+.btn-cancelar:hover {
+    background-color: #a32020;
+    border-color: #8e1b1b;
+}
+
+/* Estilo específico da página de cadastro conforme imagem */
+.cadastro-container {
+    background-color: #ffffff;
+    font-family: 'Afacad', sans-serif;
+    border: 2px solid #1a8754;
+    border-radius: 30px;
+    max-width: 600px;
+    width: 90%;
+    padding: 4rem 2rem 2rem;
+    position: relative;
+    text-align: center;
+}
+
+.cadastro-container h1 {
+    color: #1a8754;
+    font-size: 5rem;
+    font-weight: 700;
+    position: absolute;
+    top: -3rem; 
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 2;
+    white-space: nowrap;
+    background-color: #ffffff; 
+    padding: 0 1rem;
+}
+
+.cadastro-text {
+    color: #333;
+    font-size: 1.2rem;
+    margin-bottom: 2rem;
+}
+
+.input-field {
+    background: #E9ECEF;
+    border: none;
+    border/ *   R e g r a s   e s p e c � f i c a s   p a r a   a u m e n t a r   a l t u r a   d o s   c a m p o s   e   b o t � e s   * / 
+ . i n p u t - f i e l d   { 
+         p a d d i n g :   1 8 p x   2 5 p x   ! i m p o r t a n t ; 
+ } 
+ 
+ . b t n - s o l i c i t a r   { 
+         p a d d i n g :   0 . 8 5 r e m   5 r e m   ! i m p o r t a n t ; 
+ } 
+ 
+ . b t n - c a n c e l a r   { 
+         p a d d i n g :   0 . 8 5 r e m   3 r e m   ! i m p o r t a n t ; 
+ }  
+ 
