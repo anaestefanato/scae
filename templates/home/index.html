@@ -53,7 +53,7 @@
                                 <a class="nav-link active" aria-current="page" href="#">Início</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" href="#">Sobre</a>
+                                <a class="nav-link" href="/sobre">Sobre</a>
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link" href="#">Contato</a>
@@ -103,11 +103,85 @@
             </div>
             <div class="hero-wave">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320">
-                    <path fill="#ffffff" fill-opacity="1" d="M0,160L60,149.3C120,139,240,117,360,106.7C480,96,600,96,720,106.7C840,117,960,139,1080,138.7C1200,139,1320,117,1380,106.7L1440,96L1440,320L1380,320C1320,320,1200,320,1080,320C960,320,840,320,720,320C600,320,480,320,360,320C240,320,120,320,60,320L0,320Z"></path>
+                    <path fill="#f8f9fa" fill-opacity="1" d="M0,160L60,149.3C120,139,240,117,360,106.7C480,96,600,96,720,106.7C840,117,960,139,1080,138.7C1200,139,1320,117,1380,106.7L1440,96L1440,320L1380,320C1320,320,1200,320,1080,320C960,320,840,320,720,320C600,320,480,320,360,320C240,320,120,320,60,320L0,320Z"></path>
                 </svg>
             </div>
         </section>
-        <section class="benefits bg-suave-verde py-5">
+        
+        <!-- Carrossel -->
+        <section class="carousel-section bg-light py-0">
+            <div id="institutionalCarousel" class="carousel slide" data-bs-ride="carousel" data-bs-interval="4000">
+                <div class="carousel-inner">
+                    <div class="carousel-item active">
+                        <div class="carousel-image-container">
+                            <img src="https://www.cachoeiro.es.gov.br/site-pmci/wp-content/uploads/2021/12/ifes-1024x456.jpg" 
+                                 class="d-block w-100 carousel-img" alt="Instituto Federal do Espírito Santo">
+                            <div class="carousel-overlay">
+                                <div class="container">
+                                    <div class="row justify-content-center">
+                                        <div class="col-lg-8 text-center">
+                                            <h3 class="text-dark fw-bold mb-3">Instituto Federal do Espírito Santo</h3>
+                                            <p class="text-muted mb-0">Educação, Ciência e Tecnologia para o desenvolvimento do Espírito Santo</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="carousel-item">
+                        <div class="carousel-image-container">
+                            <img src="https://www.cachoeiro.es.gov.br/site-pmci/wp-content/uploads/2021/12/ifes-1024x456.jpg" 
+                                 class="d-block w-100 carousel-img" alt="Sistema SCAE">
+                            <div class="carousel-overlay">
+                                <div class="container">
+                                    <div class="row justify-content-center">
+                                        <div class="col-lg-8 text-center">
+                                            <h3 class="text-dark fw-bold mb-3">Sistema SCAE</h3>
+                                            <p class="text-muted mb-0">Modernizando a assistência estudantil com tecnologia e eficiência</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="carousel-item">
+                        <div class="carousel-image-container">
+                            <img src="https://www.cachoeiro.es.gov.br/site-pmci/wp-content/uploads/2021/12/ifes-1024x456.jpg" 
+                                 class="d-block w-100 carousel-img" alt="Assistência Estudantil">
+                            <div class="carousel-overlay">
+                                <div class="container">
+                                    <div class="row justify-content-center">
+                                        <div class="col-lg-8 text-center">
+                                            <h3 class="text-dark fw-bold mb-3">Assistência Estudantil</h3>
+                                            <p class="text-muted mb-0">Apoio integral aos estudantes para permanência e sucesso acadêmico</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Indicadores -->
+                <div class="carousel-indicators">
+                    <button type="button" data-bs-target="#institutionalCarousel" data-bs-slide-to="0" class="active" aria-current="true"></button>
+                    <button type="button" data-bs-target="#institutionalCarousel" data-bs-slide-to="1"></button>
+                    <button type="button" data-bs-target="#institutionalCarousel" data-bs-slide-to="2"></button>
+                </div>
+                
+                <!-- Controles -->
+                <button class="carousel-control-prev" type="button" data-bs-target="#institutionalCarousel" data-bs-slide="prev">
+                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Anterior</span>
+                </button>
+                <button class="carousel-control-next" type="button" data-bs-target="#institutionalCarousel" data-bs-slide="next">
+                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Próximo</span>
+                </button>
+            </div>
+        </section>
+        
+        <section class="benefits bg-light py-5">
             <div class="container py-4">
                 <div class="row text-center mb-5">
                     <div class="col-lg-8 mx-auto">
