@@ -6,7 +6,7 @@ router = APIRouter()
 templates = Jinja2Templates(directory="templates")
 
 
-@router.get("/perfil")
+@router.get("/inicio")
 async def get_perfil(request: Request):
     response = templates.TemplateResponse("/admin/dashboard.html", {"request": request})
     return response
