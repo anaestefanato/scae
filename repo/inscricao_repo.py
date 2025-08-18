@@ -1,7 +1,7 @@
 from typing import Optional
 from model.inscricao_model import Inscricao
-from data.inscricao_sql import *
-from data.util import get_connection
+from sql.inscricao_sql import *
+from sql.util import get_connection
 
 def criar_tabela() -> bool:
     try:

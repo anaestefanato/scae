@@ -1,4 +1,5 @@
 from fastapi import APIRouter, Request
+from fastapi.responses import RedirectResponse
 from fastapi.templating import Jinja2Templates
 
 
@@ -15,6 +16,12 @@ async def get_root(request: Request):
 @router.get("/login")
 async def get_login(request: Request):
     response = templates.TemplateResponse("/login/login.html", {"request": request})
+    return response
+
+@router.post("/login")
+async def post_login(request: Request):
+    # fazer checagens antes do redirecionamento
+    response = RedirectResponse(url="/aluno/inicio", status_code=303)
     return response
 
 

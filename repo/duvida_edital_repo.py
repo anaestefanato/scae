@@ -1,7 +1,7 @@
 from typing import Optional, List
 from model.duvida_edital_model import DuvidaEdital
-from data.duvida_edital_sql import *
-from data.util import get_connection
+from sql.duvida_edital_sql import *
+from sql.util import get_connection
 
 def criar_tabela() -> bool:
     try:

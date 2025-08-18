@@ -2,8 +2,8 @@ from typing import Optional, List
 from repo import auxilio_repo
 from model.auxilio_model import Auxilio
 from model.auxilio_transporte_model import AuxilioTransporte
-from data.auxilio_transporte_sql import *
-from data.util import get_connection
+from sql.auxilio_transporte_sql import *
+from sql.util import get_connection
 
 class AuxilioTransporteRepo:
 

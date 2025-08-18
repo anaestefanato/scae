@@ -1,7 +1,7 @@
 from typing import Optional
 from model.auxilio_model import Auxilio
-from data.auxilio_sql import *
-from data.util import get_connection
+from sql.auxilio_sql import *
+from sql.util import get_connection
 
 def criar_tabela() -> bool:
     try:

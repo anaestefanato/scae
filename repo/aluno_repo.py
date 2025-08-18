@@ -1,9 +1,9 @@
 from typing import Optional
 from repo import usuario_repo
 from model.aluno_model import Aluno
-from data.aluno_sql import *
+from sql.aluno_sql import *
 from model.usuario_model import Usuario
-from data.util import get_connection
+from sql.util import get_connection
 
 def criar_tabela() -> bool:
     usuario_repo.criar_tabela()

@@ -1,7 +1,7 @@
 from typing import Optional
 from model.resposta_chamado_model import RespostaChamado
-from data.resposta_chamado_sql import *
-from data.util import get_connection
+from sql.resposta_chamado_sql import *
+from sql.util import get_connection
 
 def criar_tabela() -> bool:
     try:
