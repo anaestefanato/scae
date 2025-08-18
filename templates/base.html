@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>{% block title %}SCAE - Sistema de Controle da Assistência Estudantil{% endblock %}</title>
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+        <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+        <link rel="icon" type="image/png" href="/static/img/logo.png">
+        {% block css %}
+        <link rel="stylesheet" href="/static/css/index.css">
+        {% endblock %}
+    </head>
+    <body>
+        <nav class="navbar navbar-expand-lg navbar-light bg-white fixed-top shadow-sm">
+            <div class="container">
+                <a class="" href="/">
+                    <img
+                        src="/static/img/cor.png"
+                        alt="Logo SCAE"
+                        height="35"
+                        class="me-2"
+                    >
+                </a>
+                <button
+                    class="navbar-toggler"
+                    type="button"
+                    data-bs-toggle="offcanvas"
+                    data-bs-target="#navbarOffcanvas"
+                    aria-controls="navbarOffcanvas"
+                    aria-expanded="false"
+                    aria-label="Toggle navigation"
+                >
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div
+                    class="offcanvas offcanvas-end"
+                    tabindex="-1"
+                    id="navbarOffcanvas"
+                    aria-labelledby="navbarOffcanvasLabel"
+                >
+                    <div class="offcanvas-header">
+                        <h5 class="offcanvas-title" id="navbarOffcanvasLabel">Menu</h5>
+                        <button
+                            type="button"
+                            class="btn-close text-reset"
+                            data-bs-dismiss="offcanvas"
+                            aria-label="Close"
+                        ></button>
+                    </div>
+                    <div class="offcanvas-body">
+                        <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+                            <li class="nav-item">
+                                <a class="nav-link {% block nav_inicio %}{% endblock %}" aria-current="page" href="/">Início</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link {% block nav_sobre %}{% endblock %}" href="/sobre">Sobre</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link {% block nav_contato %}{% endblock %}" href="/contato">Contato</a>
+                            </li>
+                            <li class="nav-item ms-lg-3">
+                                <a class="btn btn-success rounded-pill px-4" href="/login">
+                                    <i class="bi bi-box-arrow-in-right me-1"></i>
+                                    Login
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </nav>
+
+        {% block content %}
+        {% endblock %}
+
+        <footer class="footer bg-dark text-white py-4">
+            <div class="container">
+              <div class="row">
+                <div class="col-12 text-center">
+                  <p class="text-white-50 mb-0">
+                    &copy; 2025 Sistema de Controle de Assistência Estudantil. Todos os direitos reservados.
+                  </p>
+                </div>
+              </div>
+            </div>
+        </footer>
+
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+        {% block js %}
+        {% endblock %}
+    </body>
+</html>
