@@ -16,3 +16,12 @@ async def get_editais_detalhes(request: Request):
     response = templates.TemplateResponse("/aluno/editais_detalhes.html", {"request": request})
     return response
 
+@router.get("/editais/primeira-inscricao")
+async def get_editais_primeira_inscricao(request: Request):
+    response = templates.TemplateResponse("/aluno/editais_primeira_inscricao.html", {"request": request})
+    return response
+
+@router.get("/editais/renovacao")
+async def get_editais_renovacao(request: Request):
+    response = templates.TemplateResponse("/aluno/editais_renovacao.html", {"request": request})
+    return response

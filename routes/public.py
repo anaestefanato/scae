@@ -34,3 +34,8 @@ async def get_cadastro(request: Request):
 async def get_sobre(request: Request):
     response = templates.TemplateResponse("/publicas/sobre.html", {"request": request})
     return response
+
+@router.get("/contato")
+async def get_contato(request: Request):
+    response = templates.TemplateResponse("/publicas/contato.html", {"request": request})
+    return response
