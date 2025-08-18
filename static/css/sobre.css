@@ -227,6 +227,11 @@ body {
 }
 
 /* Estilos específicos para a página Sobre */
+.contato-hero {
+    background: linear-gradient(135deg, #f5f9f7, #e8f5f0);
+    padding: 4rem 0 2rem;
+}
+
 .assistencia, .scae {
     background-color: #ffffff;
 }
