@@ -11,3 +11,7 @@ async def get_acompanhar_inscricoes(request: Request):
     response = templates.TemplateResponse("/aluno/acompanhar_inscricoes.html", {"request": request})
     return response
 
+@router.get("/acompanhar-inscricoes/recurso")
+async def get_acompanhar_inscricoes_recurso(request: Request):
+    response = templates.TemplateResponse("/aluno/solicitar_recurso.html", {"request": request})
+    return response

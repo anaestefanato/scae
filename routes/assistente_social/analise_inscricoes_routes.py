@@ -11,3 +11,7 @@ async def get_analise_inscricoes(request: Request):
     response = templates.TemplateResponse("/assistente/analise_inscricoes.html", {"request": request})
     return response
 
+@router.get("/analise-inscricoes/detalhes")
+async def get_analise_inscricoes_detalhes(request: Request):
+    response = templates.TemplateResponse("/assistente/detalhes_inscricoes.html", {"request": request})
+    return response
