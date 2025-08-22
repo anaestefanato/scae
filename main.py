@@ -5,7 +5,7 @@ from routes import public
 from routes.admin import analisar_cadastro_routes, perfiladmin_routes, responder_chamado_routes
 from routes.aluno import acompanhar_inscricoes_routes, dados_cadastrais_routes, duvidas_frequentes_routes, editais_routes, notificacao_routes, perfil_routes, recebimentos_routes, suporte_routes
 from repo import administrador_repo, aluno_repo, assistente_social_repo, auxilio_moradia_repo, auxilio_repo, auxilio_transporte_repo, chamado_repo, duvida_edital_repo, edital_repo, inscricao_repo, notificacao_repo, recurso_repo, resposta_chamado_repo, usuario_repo
-from routes.assistente_social import alunos_routes, analise_inscricoes_routes, analise_recurso_routes, perfilassistente_routes
+from routes.assistente_social import alunos_routes, analise_inscricoes_routes, analise_recurso_routes, perfilassistente_routes, entrevistas_routes, relatorios_routes, agenda_routes
 
 usuario_repo.criar_tabela()
 aluno_repo.criar_tabela()
@@ -40,10 +40,14 @@ app.include_router(analisar_cadastro_routes.router, prefix="/admin")
 app.include_router(responder_chamado_routes.router, prefix="/admin")
 app.include_router(perfiladmin_routes.router, prefix="/admin")
 
+
 app.include_router(perfilassistente_routes.router, prefix="/assistente")
 app.include_router(analise_inscricoes_routes.router, prefix="/assistente")
 app.include_router(analise_recurso_routes.router, prefix="/assistente")
 app.include_router(alunos_routes.router, prefix="/assistente")
+app.include_router(entrevistas_routes.router, prefix="/assistente")
+app.include_router(relatorios_routes.router, prefix="/assistente")
+app.include_router(agenda_routes.router, prefix="/assistente")
 
 if __name__ == "__main__":
     uvicorn.run(app="main:app", host="127.0.0.1", port=8000, reload=True)
