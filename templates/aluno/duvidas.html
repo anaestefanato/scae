@@ -1,13 +1,9 @@
-<!DOCTYPE html>
-<html lang="pt-br">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SCAE - Dúvidas Frequentes</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
-    <link rel="stylesheet" href="/static/css/styles.css">
-    <link rel="icon" type="image/png" href="/static/img/logo.png">
+{% extends 'base2.html' %}
+{% set active_page = 'duvidas' %}
+
+{% block title %}SCAE - Dúvidas Frequentes{% endblock %}
+
+{% block head %}
     <style>
         .faq-card {
             border: none;
@@ -105,78 +101,9 @@
             }
         }
     </style>
-</head>
-<body>
-    <button class="menu-toggle" id="menuToggle">
-        <i class="bi bi-list"></i>
-    </button>
+{% endblock %}
 
-    <div class="sidebar" id="sidebar">
-        <div class="sidebar-header">
-            <button class="close-sidebar" id="closeSidebar">
-                <i class="bi bi-x-lg"></i>
-            </button>
-            <img src="/static/img/logoifes.png" alt="Logo IFES" width="180">
-        </div>
-        <div class="d-flex flex-column p-3">
-            <div class="mb-4 text-center">
-                <h6 class="mb-0">Sistema de Controle de</h6>
-                <h6>Assistência Estudantil</h6>
-            </div>
-            <ul class="nav nav-pills flex-column mb-auto">
-                <li class="nav-item">
-                    <a href="/aluno/inicio" class="nav-link">
-                        <i class="bi bi-house-door"></i>
-                        <span>Início</span>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a href="/aluno/editais" class="nav-link">
-                        <i class="bi bi-file-earmark-text"></i>
-                        <span>Editais</span>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a href="/aluno/recebimentos" class="nav-link">
-                        <i class="bi bi-clipboard-check"></i>
-                        <span>Histórico de Recebimentos</span>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a href="/aluno/duvidas" class="nav-link active bg-success text-white">
-                        <i class="bi bi-question-circle"></i>
-                        <span>Dúvidas Frequentes</span>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a href="/aluno/notificacoes" class="nav-link">
-                        <i class="bi bi-bell"></i>
-                        <span>Notificações</span>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a href="/aluno/dadoscadastrais" class="nav-link">
-                        <i class="bi bi-person"></i>
-                        <span>Meu Perfil</span>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a href="/aluno/suporte" class="nav-link">
-                        <i class="bi bi-question-circle"></i>
-                        <span>Suporte</span>
-                    </a>
-                </li>
-            </ul>
-            <hr>
-            <div class="text-center">
-                <a href="/" class="btn btn-outline-danger">
-                    <i class="bi bi-box-arrow-right"></i>
-                    <span>Sair</span>
-                </a>
-            </div>
-        </div>
-    </div>
-
+{% block content %}
     <div class="main-content" id="mainContent">
         <div class="d-flex justify-content-between align-items-center mb-4">
             <h2>Dúvidas Frequentes</h2>
@@ -410,24 +337,6 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            const sidebar = document.getElementById('sidebar');
-            const mainContent = document.getElementById('mainContent');
-            const menuToggle = document.getElementById('menuToggle');
-            const closeSidebar = document.getElementById('closeSidebar');
-            
-            // Sidebar functionality
-            closeSidebar.addEventListener('click', function() {
-                sidebar.classList.add('collapsed');
-                mainContent.classList.add('expanded');
-                menuToggle.classList.add('visible');
-            });
-            
-            menuToggle.addEventListener('click', function() {
-                sidebar.classList.remove('collapsed');
-                mainContent.classList.remove('expanded');
-                menuToggle.classList.remove('visible');
-            });
-
             // Filter functionality
             const filterTabs = document.querySelectorAll('#questionTabs .nav-link');
             const faqCards = document.querySelectorAll('.accordion-item');
@@ -497,5 +406,4 @@
             form.reset();
         }
     </script>
-</body>
-</html>
+{% endblock %}

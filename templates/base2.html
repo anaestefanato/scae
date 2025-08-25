@@ -29,43 +29,43 @@
 				</div>
 				<ul class="nav nav-pills flex-column mb-auto">
 					<li class="nav-item">
-						<a href="#" class="nav-link bg-success text-white">
+						<a href="/aluno/inicio" class="nav-link {% if active_page == 'inicio' %}bg-success text-white{% endif %}">
 							<i class="bi bi-house-door"></i>
 							<span>Início</span>
 						</a>
 					</li>
 					<li class="nav-item">
-						<a href="/aluno/editais" class="nav-link">
+						<a href="/aluno/editais" class="nav-link {% if active_page == 'editais' %}bg-success text-white{% endif %}">
 							<i class="bi bi-file-earmark-text"></i>
 							<span>Editais</span>
 						</a>
 					</li>
 					<li class="nav-item">
-						<a href="/aluno/recebimentos" class="nav-link">
+						<a href="/aluno/recebimentos" class="nav-link {% if active_page == 'recebimentos' %}bg-success text-white{% endif %}">
 							<i class="bi bi-clipboard-check"></i>
 							<span>Histórico de Recebimentos</span>
 						</a>
 					</li>
 					<li class="nav-item">
-						<a href="/aluno/duvidas" class="nav-link">
+						<a href="/aluno/duvidas" class="nav-link {% if active_page == 'duvidas' %}bg-success text-white{% endif %}">
 							<i class="bi bi-question-circle"></i>
 							<span>Dúvidas Frequentes</span>
 						</a>
 					</li>
 					<li class="nav-item">
-					<a href="/aluno/notificacoes" class="nav-link">
-						<i class="bi bi-bell"></i>
-						<span>Notificações</span>
-					</a>
-				</li>
+						<a href="/aluno/notificacoes" class="nav-link {% if active_page == 'notificacoes' %}bg-success text-white{% endif %}">
+							<i class="bi bi-bell"></i>
+							<span>Notificações</span>
+						</a>
+					</li>
 					<li class="nav-item">
-						<a href="/aluno/dadoscadastrais" class="nav-link">
+						<a href="/aluno/dadoscadastrais" class="nav-link {% if active_page == 'dadoscadastrais' %}bg-success text-white{% endif %}">
 							<i class="bi bi-person"></i>
 							<span>Meu Perfil</span>
 						</a>
 					</li>
 					<li class="nav-item">
-						<a href="/aluno/suporte" class="nav-link">
+						<a href="/aluno/suporte" class="nav-link {% if active_page == 'suporte' %}bg-success text-white{% endif %}">
 							<i class="bi bi-question-circle"></i>
 							<span>Suporte</span>
 						</a>
