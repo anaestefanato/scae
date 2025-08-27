@@ -1,3 +1,65 @@
+{% extends 'base2.html' %}
+{% block title %}Histórico de Recebimentos{% endblock %}
+
+{% block content %}
+<div class="main-content container py-4">
+    <h2 class="mb-4">Histórico de Recebimentos</h2>
+    <div class="card table-card">
+        <div class="card-header">Recebimentos Recentes</div>
+        <div class="card-body p-0">
+            <table class="table table-striped mb-0">
+                <thead>
+                    <tr>
+                        <th>Auxílio</th>
+                        <th>Referente ao Mês</th>
+                        <th>Valor</th>
+                        <th>Status</th>
+                        <th>Data de Recebimento</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Alimentação</td>
+                        <td>Julho/2025</td>
+                        <td>R$ 200,00</td>
+                        <td><span class="status-badge status-deferido">Confirmado</span></td>
+                        <td>10/07/2025</td>
+                    </tr>
+                    <tr>
+                        <td>Transporte</td>
+                        <td>Julho/2025</td>
+                        <td>R$ 150,00</td>
+                        <td><span class="status-badge status-deferido">Confirmado</span></td>
+                        <td>10/07/2025</td>
+                    </tr>
+                    <tr>
+                        <td>Alimentação</td>
+                        <td>Junho/2025</td>
+                        <td>R$ 200,00</td>
+                        <td><span class="status-badge status-deferido">Confirmado</span></td>
+                        <td>10/06/2025</td>
+                    </tr>
+                    <tr>
+                        <td>Transporte</td>
+                        <td>Junho/2025</td>
+                        <td>R$ 150,00</td>
+                        <td><span class="status-badge status-deferido">Confirmado</span></td>
+                        <td>10/06/2025</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+<style>
+@media (max-width: 768px) {
+    .main-content.container { padding: 10px !important; }
+    h2 { font-size: 1.3rem; }
+    .table-card { margin-bottom: 20px; }
+    .table th, .table td { font-size: 0.95rem; padding: 8px; }
+}
+</style>
+{% endblock %}
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>

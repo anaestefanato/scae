@@ -1,11 +1,106 @@
-<!DOCTYPE html>
-<html lang="pt-br">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Acompanhar Inscrições</title>
-</head>
-<body>
-    <h1>Acompanhar Inscrições</h1>
-</body>
-</html>
+{% extends 'base2.html' %}
+{% block title %}Acompanhar Inscrição{% endblock %}
+
+{% block content %}
+<div class="modal fade show d-block" tabindex="-1" role="dialog" aria-modal="true" style="background: rgba(0,0,0,0.4);">
+    <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+        <div class="modal-content shadow-lg">
+            <div class="modal-header bg-success text-white">
+                <h5 class="modal-title">Acompanhamento da Inscrição</h5>
+                <button type="button" class="btn-close btn-close-white" aria-label="Fechar" onclick="window.history.back()"></button>
+            </div>
+            <div class="modal-body">
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <p><strong>Edital:</strong> 01/2025</p>
+                        <p><strong>Tipo de Auxílio:</strong> Transporte</p>
+                        <p><strong>Valor Previsto:</strong> R$ 150,00</p>
+                        <p><strong>Data de Inscrição:</strong> 01/04/2025</p>
+                    </div>
+                    <div class="col-md-6">
+                        <p><strong>Documentos Enviados:</strong></p>
+                        <ul class="list-group list-group-flush">
+                            <li class="list-group-item">Comprovante de residência</li>
+                            <li class="list-group-item">Declaração de matrícula</li>
+                            <li class="list-group-item">RG</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="mb-4">
+                    <span class="status-badge status-pendente">Aguardando análise da assistência social</span>
+                </div>
+                <h6 class="mb-3">Linha do Tempo</h6>
+                <ul class="timeline">
+                    <li class="timeline-item completed">
+                        <span class="timeline-date">01/04/2025</span>
+                        <span class="timeline-content">Inscrição submetida</span>
+                    </li>
+                    <li class="timeline-item active">
+                        <span class="timeline-date">Em andamento</span>
+                        <span class="timeline-content">Em análise pela assistência social</span>
+                    </li>
+                    <li class="timeline-item">
+                        <span class="timeline-date">Previsto: 30/04/2025</span>
+                        <span class="timeline-content">Resultado da análise</span>
+                    </li>
+                </ul>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" onclick="window.history.back()">Fechar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+.modal.fade.show.d-block { z-index: 2000; }
+.timeline {
+    list-style: none;
+    padding-left: 0;
+    position: relative;
+}
+.timeline:before {
+    content: '';
+    position: absolute;
+    left: 18px;
+    top: 0;
+    bottom: 0;
+    width: 2px;
+    background: #4CAF50;
+}
+.timeline-item {
+    position: relative;
+    margin-bottom: 30px;
+    padding-left: 40px;
+}
+.timeline-item:before {
+    content: '';
+    position: absolute;
+    left: 10px;
+    top: 5px;
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background: #fff;
+    border: 2px solid #4CAF50;
+    z-index: 1;
+}
+.timeline-item.completed:before {
+    background: #4CAF50;
+}
+.timeline-item.active:before {
+    background: #FFC107;
+    border-color: #FFC107;
+}
+.timeline-date {
+    font-size: 0.85rem;
+    color: #888;
+    margin-bottom: 2px;
+    display: block;
+}
+.timeline-content {
+    font-size: 1rem;
+    color: #333;
+}
+</style>
+{% endblock %}
