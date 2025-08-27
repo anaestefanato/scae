@@ -6,7 +6,6 @@
 
 body {
     font-family: 'Poppins', sans-serif;
-    padding-top: 76px;
 }
 
 .navbar-brand {
@@ -60,8 +59,6 @@ body {
         transform: translateY(0px);
     }
 }
-
-
 
 .wave-container {
     position: absolute;
