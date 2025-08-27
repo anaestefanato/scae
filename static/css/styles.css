@@ -1,0 +1,2531 @@
+:root {
+    --ifes-green: #2E7D32;
+    --ifes-red: #C62828;
+    --ifes-light-green: #4CAF50;
+    --ifes-light-gray: #f5f5f5;
+    --ifes-dark-gray: #333333;
+    --calendar-primary: #2E7D32;
+    --calendar-secondary: #4CAF50;
+    --calendar-accent: #81C784;
+    --calendar-light: #E8F5E9;
+    --calendar-text: #1B5E20;
+}
+
+body {
+    background-color: #fff !important;
+    font-family: 'Afacad', sans-serif;
+}
+
+.body-cadastro-login {
+    background-color: #ffffff;
+    font-family: 'Afacad', sans-serif;
+}
+
+.sidebar {
+    background-color: white;
+    height: 100vh;
+    position: fixed;
+    box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
+    width: 250px;
+    z-index: 1000;
+    transition: all 0.3s;
+    left: 0;
+}
+
+.sidebar.collapsed {
+    left: -250px;
+}
+
+.sidebar-header {
+    padding: 20px 15px;
+    border-bottom: 1px solid #eee;
+    position: relative;
+}
+
+.sidebar-header img {
+    max-width: 100%;
+    height: auto;
+}
+
+.nav-link {
+    color: var(--ifes-dark-gray);
+    padding: 12px 20px;
+    margin: 5px 0;
+    border-radius: 5px;
+}
+
+.nav-link:hover,
+.nav-link.active {
+    background-color: var(--ifes-light-green);
+    color: white;
+}
+
+.nav-link i {
+    margin-right: 10px;
+}
+
+.main-content {
+    margin-left: 270px;
+    padding: 30px;
+    transition: all 0.3s;
+}
+
+.main-content.expanded {
+    margin-left: 20px;
+}
+
+.card {
+    border: none;
+    border-radius: 10px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    margin-bottom: 20px;
+    transition: transform 0.3s;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+}
+
+.card-header {
+    background-color: var(--ifes-green);
+    color: white;
+    border-radius: 10px 10px 0 0 !important;
+    padding: 15px 20px;
+    font-weight: 600;
+}
+
+.card-body {
+    padding: 20px;
+}
+
+.status-badge {
+    padding: 8px 15px;
+    border-radius: 20px;
+    font-weight: 500;
+    font-size: 0.9rem;
+}
+
+.status-pendente {
+    background-color: #FFF3CD;
+    color: #856404;
+}
+
+.status-deferido {
+    background-color: #D4EDDA;
+    color: #155724;
+}
+
+.status-indeferido {
+    background-color: #F8D7DA;
+    color: #721C24;
+}
+
+/* ===== ESTILOS MELHORADOS DO CALENDÁRIO ===== */
+.calendar-card {
+    height: 100%;
+    background: linear-gradient(135deg, #ffffff 0%, #f8fffe 100%);
+    border: 1px solid rgba(46, 125, 50, 0.1);
+    box-shadow: 0 8px 25px rgba(46, 125, 50, 0.08);
+    overflow: hidden;
+}
+
+.calendar-card .card-body {
+    padding: 1.5rem;
+}
+
+/* Container principal do calendário */
+#fc-calendar {
+    max-width: 100%;
+    height: 420px !important; /* Altura fixa */
+    margin: 0 auto;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 4px 15px rgba(46, 125, 50, 0.1);
+}
+
+/* Header do calendário */
+.fc-header-toolbar {
+    background: linear-gradient(135deg, var(--calendar-primary) 0%, var(--calendar-secondary) 100%);
+    padding: 0.7rem 1rem; /* Reduzido o padding */
+    border-radius: 12px 12px 0 0;
+    margin-bottom: 0 !important;
+    height: 60px !important; /* Altura fixa do header */
+    min-height: 60px !important;
+}
+
+.fc-toolbar-title {
+    color: white !important;
+    font-size: 1.1rem !important; /* Reduzido o tamanho da fonte */
+    font-weight: 600 !important;
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+}
+
+/* Botões do header */
+.fc-button-primary {
+    background: rgba(255, 255, 255, 0.2) !important;
+    border: 1px solid rgba(255, 255, 255, 0.3) !important;
+    color: white !important;
+    border-radius: 8px !important;
+    padding: 0.3rem 0.7rem !important; /* Reduzido o padding */
+    font-weight: 500 !important;
+    font-size: 0.8rem !important; /* Reduzido o tamanho da fonte */
+    transition: all 0.3s ease !important;
+    backdrop-filter: blur(10px);
+}
+
+.fc-button-primary:hover {
+    background: rgba(255, 255, 255, 0.3) !important;
+    border-color: rgba(255, 255, 255, 0.5) !important;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.fc-button-primary:focus {
+    box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.3) !important;
+}
+
+.fc-button-active {
+    background: rgba(255, 255, 255, 0.4) !important;
+    border-color: rgba(255, 255, 255, 0.6) !important;
+}
+
+/* Área principal do calendário */
+.fc-daygrid {
+    background: white;
+    border-radius: 0 0 12px 12px;
+    height: 360px !important; /* Altura fixa da área do calendário */
+    overflow: hidden;
+}
+
+/* Tabela do calendário com altura fixa */
+.fc-daygrid-body {
+    height: 300px !important; /* Altura fixa do corpo do calendário */
+}
+
+.fc-scrollgrid-sync-table {
+    height: 100% !important;
+}
+
+/* Cabeçalho dos dias da semana */
+.fc-col-header {
+    background: linear-gradient(135deg, var(--calendar-light) 0%, #f1f8e9 100%);
+    border-bottom: 2px solid var(--calendar-accent);
+    height: 40px !important; /* Altura fixa do cabeçalho */
+    min-height: 40px !important;
+}
+
+.fc-col-header-cell {
+    padding: 0.8rem 0.5rem; /* Reduzido o padding */
+    border-right: 1px solid rgba(46, 125, 50, 0.1);
+    height: 40px !important;
+}
+
+.fc-col-header-cell-cushion {
+    color: var(--calendar-text) !important;
+    font-weight: 600 !important;
+    font-size: 0.8rem !important; /* Reduzido o tamanho da fonte */
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+/* Células dos dias com altura fixa */
+.fc-daygrid-day {
+    border: 1px solid rgba(46, 125, 50, 0.08);
+    transition: all 0.2s ease;
+    position: relative;
+    height: 50px !important; /* Altura fixa para cada célula de dia */
+    min-height: 50px !important;
+    max-height: 50px !important;
+    overflow: hidden;
+}
+
+.fc-daygrid-day:hover {
+    background: linear-gradient(135deg, var(--calendar-light) 0%, rgba(129, 199, 132, 0.1) 100%);
+}
+
+.fc-daygrid-day-frame {
+    height: 100% !important;
+    min-height: 50px !important;
+}
+
+.fc-daygrid-day-top {
+    height: 100% !important;
+}
+
+.fc-daygrid-day-number {
+    color: var(--calendar-text) !important;
+    font-weight: 500 !important;
+    padding: 0.4rem !important; /* Reduzido o padding */
+    font-size: 0.85rem !important; /* Reduzido o tamanho da fonte */
+    transition: all 0.2s ease;
+}
+
+/* Dia atual */
+.fc-day-today {
+    background: linear-gradient(135deg, var(--calendar-light) 0%, rgba(129, 199, 132, 0.2) 100%) !important;
+    border: 2px solid var(--calendar-accent) !important;
+}
+
+.fc-day-today .fc-daygrid-day-number {
+    background: var(--calendar-primary);
+    color: white !important;
+    border-radius: 50%;
+    width: 28px; /* Ajustado o tamanho */
+    height: 28px; /* Ajustado o tamanho */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0.2rem; /* Ajustado a margem */
+    font-weight: 600 !important;
+    box-shadow: 0 2px 8px rgba(46, 125, 50, 0.3);
+}
+
+/* Eventos no calendário */
+.fc-event {
+    background: linear-gradient(135deg, var(--calendar-secondary) 0%, var(--calendar-accent) 100%) !important;
+    border: none !important;
+    border-radius: 6px !important;
+    padding: 0.2rem 0.4rem !important; /* Reduzido o padding */
+    margin: 0.1rem !important; /* Reduzido a margem */
+    font-size: 0.75rem !important; /* Reduzido o tamanho da fonte */
+    font-weight: 500 !important;
+    color: white !important;
+    box-shadow: 0 2px 6px rgba(46, 125, 50, 0.2);
+    transition: all 0.2s ease;
+    height: auto !important;
+    max-height: 20px !important; /* Altura máxima dos eventos */
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
+.fc-event:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(46, 125, 50, 0.3);
+}
+
+.fc-event-title {
+    font-weight: 500 !important;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+/* Garantir que as linhas da semana tenham altura uniforme */
+.fc-daygrid-week {
+    height: 50px !important;
+    min-height: 50px !important;
+    max-height: 50px !important;
+}
+
+/* Responsividade do calendário */
+@media (max-width: 768px) {
+    #fc-calendar {
+        height: 350px !important;
+    }
+    
+    .fc-daygrid {
+        height: 290px !important;
+    }
+    
+    .fc-daygrid-body {
+        height: 250px !important;
+    }
+    
+    .fc-daygrid-day {
+        height: 42px !important;
+        min-height: 42px !important;
+        max-height: 42px !important;
+    }
+    
+    .fc-daygrid-week {
+        height: 42px !important;
+        min-height: 42px !important;
+        max-height: 42px !important;
+    }
+    
+    .fc-toolbar-title {
+        font-size: 1rem !important; /* Ajustado para telas menores */
+    }
+    
+    .fc-button-primary {
+        padding: 0.3rem 0.6rem !important; /* Ajustado para telas menores */
+        font-size: 0.75rem !important; /* Ajustado para telas menores */
+    }
+}
+
+/* Lista de eventos abaixo do calendário */
+.calendar-card .card-body.pt-2.pb-3 {
+    padding-top: 0.5rem !important; /* Reduzido o padding superior */
+    padding-bottom: 0.5rem !important; /* Reduzido o padding inferior */
+}
+
+.calendar-event {
+    background: linear-gradient(135deg, var(--calendar-light) 0%, rgba(232, 245, 233, 0.8) 100%);
+    border-left: 4px solid var(--calendar-primary);
+    padding: 10px 14px; /* Reduzido o padding */
+    margin-bottom: 8px; /* Reduzido a margem inferior */
+    border-radius: 8px;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 6px rgba(46, 125, 50, 0.08);
+}
+
+.calendar-event:hover {
+    transform: translateX(4px);
+    box-shadow: 0 4px 12px rgba(46, 125, 50, 0.15);
+    background: linear-gradient(135deg, rgba(129, 199, 132, 0.15) 0%, var(--calendar-light) 100%);
+}
+
+.calendar-event .date {
+    font-weight: 600;
+    color: var(--calendar-primary);
+    font-size: 0.8rem; /* Reduzido o tamanho da fonte */
+    width: 80px; /* Ajustado a largura */
+    min-width: 80px;
+}
+
+.calendar-event .description {
+    flex: 1;
+    color: var(--calendar-text);
+    font-size: 0.85rem; /* Reduzido o tamanho da fonte */
+    line-height: 1.3;
+    margin-left: 10px; /* Reduzido a margem */
+}
+
+/* ===== FIM DOS ESTILOS DO CALENDÁRIO ===== */
+
+.welcome-banner {
+    background-color: white;
+    border-radius: 10px;
+    padding: 20px;
+    margin-bottom: 30px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+.welcome-banner h2 {
+    color: var(--ifes-dark-gray);
+    margin-bottom: 10px;
+}
+
+.welcome-banner p {
+    color: #666;
+    margin-bottom: 0;
+}
+
+.user-profile {
+    display: flex;
+    align-items: center;
+    margin-left: auto;
+}
+
+.user-profile img {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    margin-right: 10px;
+}
+
+.notification-badge {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    background-color: var(--ifes-red);
+    color: white;
+    border-radius: 50%;
+    width: 18px;
+    height: 18px;
+    font-size: 0.7rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.menu-toggle {
+    position: fixed;
+    top: 20px;
+    left: 20px;
+    z-index: 1100;
+    background-color: var(--ifes-green);
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    display: none;
+}
+
+.menu-toggle.visible {
+    display: flex;
+}
+
+.close-sidebar {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: none;
+    border: none;
+    color: var(--ifes-dark-gray);
+    cursor: pointer;
+    font-size: 1.2rem;
+}
+
+.stats-card {
+    background-color: white;
+    border-radius: 10px;
+    padding: 20px;
+    margin-bottom: 20px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    text-align: center;
+}
+
+.stats-card .number {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: var(--ifes-green);
+    margin-bottom: 10px;
+}
+
+.stats-card .label {
+    color: var(--ifes-dark-gray);
+    font-weight: 500;
+}
+
+.table-card {
+    background-color: white;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    margin-bottom: 30px;
+}
+
+.table-card .card-header {
+    background-color: var(--ifes-green);
+    color: white;
+    padding: 15px 20px;
+    font-weight: 600;
+}
+
+.table-card .table {
+    margin-bottom: 0;
+}
+
+.table-card .table th {
+    border-top: none;
+    font-weight: 600;
+    color: var(--ifes-dark-gray);
+}
+
+.action-buttons {
+    display: flex;
+    gap: 5px;
+}
+
+.action-buttons .btn {
+    padding: 0.25rem 0.5rem;
+    font-size: 0.8rem;
+}
+
+.priority-high {
+    color: var(--ifes-red);
+    font-weight: bold;
+}
+
+.priority-medium {
+    color: #FF9800;
+    font-weight: bold;
+}
+
+.priority-low {
+    color: var(--ifes-green);
+    font-weight: bold;
+}
+
+@media (max-width: 992px) {
+    .sidebar {
+        width: 70px;
+        overflow: hidden;
+    }
+    
+    .sidebar .nav-link span {
+        display: none;
+    }
+    
+    .sidebar .nav-link i {
+        margin-right: 0;
+        font-size: 1.2rem;
+    }
+    
+    .main-content {
+        margin-left: 90px;
+    }
+    
+    .sidebar-header, .sidebar-footer {
+        text-align: center;
+        padding: 10px;
+    }
+    
+    .sidebar-header h6, .sidebar-header small {
+        display: none;
+    }
+}
+
+.btn-solicitar, 
+.btn-cancelar {
+    color: white !important;
+    border-radius: 50px;
+    height: 47px; /* Ajustado para combinar com a altura dos inputs */
+    padding: 0 25px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.1rem;
+    white-space: nowrap;
+}
+
+.btn-solicitar {
+    width: auto;
+    min-width: 220px; /* Aumentado para acomodar melhor o texto */
+    background-color: #1a6d36;
+}
+
+.btn-solicitar:hover {
+    background-color: #15552b;
+    border-color: #124d25;
+}
+
+.btn-cancelar {
+    width: auto;
+    min-width: 120px;
+    background-color: #c62828;
+}
+
+.btn-cancelar:hover {
+    background-color: #a32020;
+    border-color: #8e1b1b;
+}
+
+/* Estilo específico da página de cadastro conforme imagem */
+.cadastro-container {
+    background-color: #ffffff;
+    font-family: 'Afacad', sans-serif;
+    border: 2px solid #1a8754;
+    border-radius: 30px;
+    max-width: 600px;
+    width: 90%;
+    padding: 4rem 2rem 2rem;
+    position: relative;
+    text-align: center;
+}
+
+.cadastro-container h1 {
+    color: #1a8754;
+    font-size: 5rem;
+    font-weight: 700;
+    position: absolute;
+    top: -3rem; 
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 2;
+    white-space: nowrap;
+    background-color: #ffffff; 
+    padding: 0 1rem;
+}
+
+.cadastro-text {
+    color: #333;
+    font-size: 1.2rem;
+    margin-bottom: 2rem;
+}
+
+.input-field {
+    background: #E9ECEF;
+    border: none;
+    border-radius: 50px;
+    padding: 12px 25px;
+    font-size: 16px;
+    margin-bottom: 15px;
+    width: 100%;
+    color: #333;
+}
+
+.btn-container {
+    display: flex;
+    gap: 15px;
+    justify-content: center;
+    width: 100%;
+    margin-top: 10px;
+}
+
+.btn-solicitar {
+    background-color: #1a6d36;
+    border-color: #1a6d36;
+    padding: 0.60rem 5rem;
+    font-size: 1.1rem;
+    border-radius: 50px;
+    width: 40%;
+    display: inline-block;
+}
+
+.btn-solicitar:hover {
+    background-color: #15552b;
+    border-color: #124d25;
+}
+
+.btn-cancelar {
+   background-color: #c62828;
+    border-color: #c62828;
+    font-size: 1.1rem;
+    width: 30%;
+}
+
+.btn-cancelar:hover {
+    background-color: #a32020;
+    border-color: #8e1b1b;
+}
+
+
+.ifes-logo {
+    max-width: 150px;
+    margin-top: 20px;
+}
+
+.notification-badge {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    background-color: var(--ifes-red);
+    color: white;
+    border-radius: 50%;
+    width: 18px;
+    height: 18px;
+    font-size: 0.7rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.menu-toggle {
+    position: fixed;
+    top: 20px;
+    left: 20px;
+    z-index: 1100;
+    background-color: var(--ifes-green);
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    display: none;
+}
+
+.menu-toggle.visible {
+    display: flex;
+}
+
+.close-sidebar {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: none;
+    border: none;
+    color: var(--ifes-dark-gray);
+    cursor: pointer;
+    font-size: 1.2rem;
+}
+
+.stats-card {
+    background-color: white;
+    border-radius: 10px;
+    padding: 20px;
+    margin-bottom: 20px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    text-align: center;
+}
+
+.stats-card .number {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: var(--ifes-green);
+    margin-bottom: 10px;
+}
+
+.stats-card .label {
+    color: var(--ifes-dark-gray);
+    font-weight: 500;
+}
+
+.table-card {
+    background-color: white;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    margin-bottom: 30px;
+}
+
+.table-card .card-header {
+    background-color: var(--ifes-green);
+    color: white;
+    padding: 15px 20px;
+    font-weight: 600;
+}
+
+.table-card .table {
+    margin-bottom: 0;
+}
+
+.table-card .table th {
+    border-top: none;
+    font-weight: 600;
+    color: var(--ifes-dark-gray);
+}
+
+.action-buttons {
+    display: flex;
+    gap: 5px;
+}
+
+.action-buttons .btn {
+    padding: 0.25rem 0.5rem;
+    font-size: 0.8rem;
+}
+
+.priority-high {
+    color: var(--ifes-red);
+    font-weight: bold;
+}
+
+.priority-medium {
+    color: #FF9800;
+    font-weight: bold;
+}
+
+.priority-low {
+    color: var(--ifes-green);
+    font-weight: bold;
+}
+
+@media (max-width: 992px) {
+    .sidebar {
+        width: 70px;
+        overflow: hidden;
+    }
+    
+    .sidebar .nav-link span {
+        display: none;
+    }
+    
+    .sidebar .nav-link i {
+        margin-right: 0;
+        font-size: 1.2rem;
+    }
+    
+    .main-content {
+        margin-left: 90px;
+    }
+    
+    .sidebar-header, .sidebar-footer {
+        text-align: center;
+        padding: 10px;
+    }
+    
+    .sidebar-header h6, .sidebar-header small {
+        display: none;
+    }
+}
+
+.btn-solicitar, 
+.btn-cancelar {
+    color: white !important;
+    border-radius: 50px;
+    height: 47px; /* Ajustado para combinar com a altura dos inputs */
+    padding: 0 25px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.1rem;
+    white-space: nowrap;
+}
+
+.btn-solicitar {
+    width: auto;
+    min-width: 220px; /* Aumentado para acomodar melhor o texto */
+    background-color: #1a6d36;
+}
+
+.btn-solicitar:hover {
+    background-color: #15552b;
+    border-color: #124d25;
+}
+
+.btn-cancelar {
+    width: auto;
+    min-width: 120px;
+    background-color: #c62828;
+}
+
+.btn-cancelar:hover {
+    background-color: #a32020;
+    border-color: #8e1b1b;
+}
+
+/* Estilo específico da página de cadastro conforme imagem */
+.cadastro-container {
+    background-color: #ffffff;
+    font-family: 'Afacad', sans-serif;
+    border: 2px solid #1a8754;
+    border-radius: 30px;
+    max-width: 600px;
+    width: 90%;
+    padding: 4rem 2rem 2rem;
+    position: relative;
+    text-align: center;
+}
+
+.cadastro-container h1 {
+    color: #1a8754;
+    font-size: 5rem;
+    font-weight: 700;
+    position: absolute;
+    top: -3rem; 
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 2;
+    white-space: nowrap;
+    background-color: #ffffff; 
+    padding: 0 1rem;
+}
+
+.cadastro-text {
+    color: #333;
+    font-size: 1.2rem;
+    margin-bottom: 2rem;
+}
+
+.input-field {
+    background: #E9ECEF;
+    border: none;
+    border-radius: 50px;
+    padding: 12px 25px;
+    font-size: 16px;
+    margin-bottom: 15px;
+    width: 100%;
+    color: #333;
+}
+
+.btn-container {
+    display: flex;
+    gap: 15px;
+    justify-content: center;
+    width: 100%;
+    margin-top: 10px;
+}
+
+.btn-solicitar {
+    background-color: #1a6d36;
+    border-color: #1a6d36;
+    padding: 0.60rem 5rem;
+    font-size: 1.1rem;
+    border-radius: 50px;
+    width: 40%;
+    display: inline-block;
+}
+
+.btn-solicitar:hover {
+    background-color: #15552b;
+    border-color: #124d25;
+}
+
+.btn-cancelar {
+   background-color: #c62828;
+    border-color: #c62828;
+    font-size: 1.1rem;
+    width: 30%;
+}
+
+.btn-cancelar:hover {
+    background-color: #a32020;
+    border-color: #8e1b1b;
+}
+
+
+.ifes-logo {
+    max-width: 150px;
+    margin-top: 20px;
+}
+
+.notification-badge {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    background-color: var(--ifes-red);
+    color: white;
+    border-radius: 50%;
+    width: 18px;
+    height: 18px;
+    font-size: 0.7rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.menu-toggle {
+    position: fixed;
+    top: 20px;
+    left: 20px;
+    z-index: 1100;
+    background-color: var(--ifes-green);
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    display: none;
+}
+
+.menu-toggle.visible {
+    display: flex;
+}
+
+.close-sidebar {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: none;
+    border: none;
+    color: var(--ifes-dark-gray);
+    cursor: pointer;
+    font-size: 1.2rem;
+}
+
+.stats-card {
+    background-color: white;
+    border-radius: 10px;
+    padding: 20px;
+    margin-bottom: 20px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    text-align: center;
+}
+
+.stats-card .number {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: var(--ifes-green);
+    margin-bottom: 10px;
+}
+
+.stats-card .label {
+    color: var(--ifes-dark-gray);
+    font-weight: 500;
+}
+
+.table-card {
+    background-color: white;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    margin-bottom: 30px;
+}
+
+.table-card .card-header {
+    background-color: var(--ifes-green);
+    color: white;
+    padding: 15px 20px;
+    font-weight: 600;
+}
+
+.table-card .table {
+    margin-bottom: 0;
+}
+
+.table-card .table th {
+    border-top: none;
+    font-weight: 600;
+    color: var(--ifes-dark-gray);
+}
+
+.action-buttons {
+    display: flex;
+    gap: 5px;
+}
+
+.action-buttons .btn {
+    padding: 0.25rem 0.5rem;
+    font-size: 0.8rem;
+}
+
+.priority-high {
+    color: var(--ifes-red);
+    font-weight: bold;
+}
+
+.priority-medium {
+    color: #FF9800;
+    font-weight: bold;
+}
+
+.priority-low {
+    color: var(--ifes-green);
+    font-weight: bold;
+}
+
+@media (max-width: 992px) {
+    .sidebar {
+        width: 70px;
+        overflow: hidden;
+    }
+    
+    .sidebar .nav-link span {
+        display: none;
+    }
+    
+    .sidebar .nav-link i {
+        margin-right: 0;
+        font-size: 1.2rem;
+    }
+    
+    .main-content {
+        margin-left: 90px;
+    }
+    
+    .sidebar-header, .sidebar-footer {
+        text-align: center;
+        padding: 10px;
+    }
+    
+    .sidebar-header h6, .sidebar-header small {
+        display: none;
+    }
+}
+
+.btn-solicitar, 
+.btn-cancelar {
+    color: white !important;
+    border-radius: 50px;
+    height: 47px; /* Ajustado para combinar com a altura dos inputs */
+    padding: 0 25px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.1rem;
+    white-space: nowrap;
+}
+
+.btn-solicitar {
+    width: auto;
+    min-width: 220px; /* Aumentado para acomodar melhor o texto */
+    background-color: #1a6d36;
+}
+
+.btn-solicitar:hover {
+    background-color: #15552b;
+    border-color: #124d25;
+}
+
+.btn-cancelar {
+    width: auto;
+    min-width: 120px;
+    background-color: #c62828;
+}
+
+.btn-cancelar:hover {
+    background-color: #a32020;
+    border-color: #8e1b1b;
+}
+
+/* Estilo específico da página de cadastro conforme imagem */
+.cadastro-container {
+    background-color: #ffffff;
+    font-family: 'Afacad', sans-serif;
+    border: 2px solid #1a8754;
+    border-radius: 30px;
+    max-width: 600px;
+    width: 90%;
+    padding: 4rem 2rem 2rem;
+    position: relative;
+    text-align: center;
+}
+
+.cadastro-container h1 {
+    color: #1a8754;
+    font-size: 5rem;
+    font-weight: 700;
+    position: absolute;
+    top: -3rem; 
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 2;
+    white-space: nowrap;
+    background-color: #ffffff; 
+    padding: 0 1rem;
+}
+
+.cadastro-text {
+    color: #333;
+    font-size: 1.2rem;
+    margin-bottom: 2rem;
+}
+
+.input-field {
+    background: #E9ECEF;
+    border: none;
+    border-radius: 50px;
+    padding: 12px 25px;
+    font-size: 16px;
+    margin-bottom: 15px;
+    width: 100%;
+    color: #333;
+}
+
+.btn-container {
+    display: flex;
+    gap: 15px;
+    justify-content: center;
+    width: 100%;
+    margin-top: 10px;
+}
+
+.btn-solicitar {
+    background-color: #1a6d36;
+    border-color: #1a6d36;
+    padding: 0.60rem 5rem;
+    font-size: 1.1rem;
+    border-radius: 50px;
+    width: 40%;
+    display: inline-block;
+}
+
+.btn-solicitar:hover {
+    background-color: #15552b;
+    border-color: #124d25;
+}
+
+.btn-cancelar {
+   background-color: #c62828;
+    border-color: #c62828;
+    font-size: 1.1rem;
+    width: 30%;
+}
+
+.btn-cancelar:hover {
+    background-color: #a32020;
+    border-color: #8e1b1b;
+}
+
+
+.ifes-logo {
+    max-width: 150px;
+    margin-top: 20px;
+}
+
+.notification-badge {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    background-color: var(--ifes-red);
+    color: white;
+    border-radius: 50%;
+    width: 18px;
+    height: 18px;
+    font-size: 0.7rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.menu-toggle {
+    position: fixed;
+    top: 20px;
+    left: 20px;
+    z-index: 1100;
+    background-color: var(--ifes-green);
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    display: none;
+}
+
+.menu-toggle.visible {
+    display: flex;
+}
+
+.close-sidebar {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: none;
+    border: none;
+    color: var(--ifes-dark-gray);
+    cursor: pointer;
+    font-size: 1.2rem;
+}
+
+.stats-card {
+    background-color: white;
+    border-radius: 10px;
+    padding: 20px;
+    margin-bottom: 20px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    text-align: center;
+}
+
+.stats-card .number {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: var(--ifes-green);
+    margin-bottom: 10px;
+}
+
+.stats-card .label {
+    color: var(--ifes-dark-gray);
+    font-weight: 500;
+}
+
+.table-card {
+    background-color: white;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    margin-bottom: 30px;
+}
+
+.table-card .card-header {
+    background-color: var(--ifes-green);
+    color: white;
+    padding: 15px 20px;
+    font-weight: 600;
+}
+
+.table-card .table {
+    margin-bottom: 0;
+}
+
+.table-card .table th {
+    border-top: none;
+    font-weight: 600;
+    color: var(--ifes-dark-gray);
+}
+
+.action-buttons {
+    display: flex;
+    gap: 5px;
+}
+
+.action-buttons .btn {
+    padding: 0.25rem 0.5rem;
+    font-size: 0.8rem;
+}
+
+.priority-high {
+    color: var(--ifes-red);
+    font-weight: bold;
+}
+
+.priority-medium {
+    color: #FF9800;
+    font-weight: bold;
+}
+
+.priority-low {
+    color: var(--ifes-green);
+    font-weight: bold;
+}
+
+@media (max-width: 992px) {
+    .sidebar {
+        width: 70px;
+        overflow: hidden;
+    }
+    
+    .sidebar .nav-link span {
+        display: none;
+    }
+    
+    .sidebar .nav-link i {
+        margin-right: 0;
+        font-size: 1.2rem;
+    }
+    
+    .main-content {
+        margin-left: 90px;
+    }
+    
+    .sidebar-header, .sidebar-footer {
+        text-align: center;
+        padding: 10px;
+    }
+    
+    .sidebar-header h6, .sidebar-header small {
+        display: none;
+    }
+}
+
+.btn-solicitar, 
+.btn-cancelar {
+    color: white !important;
+    border-radius: 50px;
+    height: 47px; /* Ajustado para combinar com a altura dos inputs */
+    padding: 0 25px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.1rem;
+    white-space: nowrap;
+}
+
+.btn-solicitar {
+    width: auto;
+    min-width: 220px; /* Aumentado para acomodar melhor o texto */
+    background-color: #1a6d36;
+}
+
+.btn-solicitar:hover {
+    background-color: #15552b;
+    border-color: #124d25;
+}
+
+.btn-cancelar {
+    width: auto;
+    min-width: 120px;
+    background-color: #c62828;
+}
+
+.btn-cancelar:hover {
+    background-color: #a32020;
+    border-color: #8e1b1b;
+}
+
+/* Estilo específico da página de cadastro conforme imagem */
+.cadastro-container {
+    background-color: #ffffff;
+    font-family: 'Afacad', sans-serif;
+    border: 2px solid #1a8754;
+    border-radius: 30px;
+    max-width: 600px;
+    width: 90%;
+    padding: 4rem 2rem 2rem;
+    position: relative;
+    text-align: center;
+}
+
+.cadastro-container h1 {
+    color: #1a8754;
+    font-size: 5rem;
+    font-weight: 700;
+    position: absolute;
+    top: -3rem; 
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 2;
+    white-space: nowrap;
+    background-color: #ffffff; 
+    padding: 0 1rem;
+}
+
+.cadastro-text {
+    color: #333;
+    font-size: 1.2rem;
+    margin-bottom: 2rem;
+}
+
+.input-field {
+    background: #E9ECEF;
+    border: none;
+    border-radius: 50px;
+    padding: 12px 25px;
+    font-size: 16px;
+    margin-bottom: 15px;
+    width: 100%;
+    color: #333;
+}
+
+.btn-container {
+    display: flex;
+    gap: 15px;
+    justify-content: center;
+    width: 100%;
+    margin-top: 10px;
+}
+
+.btn-solicitar {
+    background-color: #1a6d36;
+    border-color: #1a6d36;
+    padding: 0.60rem 5rem;
+    font-size: 1.1rem;
+    border-radius: 50px;
+    width: 40%;
+    display: inline-block;
+}
+
+.btn-solicitar:hover {
+    background-color: #15552b;
+    border-color: #124d25;
+}
+
+.btn-cancelar {
+   background-color: #c62828;
+    border-color: #c62828;
+    font-size: 1.1rem;
+    width: 30%;
+}
+
+.btn-cancelar:hover {
+    background-color: #a32020;
+    border-color: #8e1b1b;
+}
+
+
+.ifes-logo {
+    max-width: 150px;
+    margin-top: 20px;
+}
+
+.notification-badge {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    background-color: var(--ifes-red);
+    color: white;
+    border-radius: 50%;
+    width: 18px;
+    height: 18px;
+    font-size: 0.7rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.menu-toggle {
+    position: fixed;
+    top: 20px;
+    left: 20px;
+    z-index: 1100;
+    background-color: var(--ifes-green);
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    display: none;
+}
+
+.menu-toggle.visible {
+    display: flex;
+}
+
+.close-sidebar {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: none;
+    border: none;
+    color: var(--ifes-dark-gray);
+    cursor: pointer;
+    font-size: 1.2rem;
+}
+
+.stats-card {
+    background-color: white;
+    border-radius: 10px;
+    padding: 20px;
+    margin-bottom: 20px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    text-align: center;
+}
+
+.stats-card .number {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: var(--ifes-green);
+    margin-bottom: 10px;
+}
+
+.stats-card .label {
+    color: var(--ifes-dark-gray);
+    font-weight: 500;
+}
+
+.table-card {
+    background-color: white;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    margin-bottom: 30px;
+}
+
+.table-card .card-header {
+    background-color: var(--ifes-green);
+    color: white;
+    padding: 15px 20px;
+    font-weight: 600;
+}
+
+.table-card .table {
+    margin-bottom: 0;
+}
+
+.table-card .table th {
+    border-top: none;
+    font-weight: 600;
+    color: var(--ifes-dark-gray);
+}
+
+.action-buttons {
+    display: flex;
+    gap: 5px;
+}
+
+.action-buttons .btn {
+    padding: 0.25rem 0.5rem;
+    font-size: 0.8rem;
+}
+
+.priority-high {
+    color: var(--ifes-red);
+    font-weight: bold;
+}
+
+.priority-medium {
+    color: #FF9800;
+    font-weight: bold;
+}
+
+.priority-low {
+    color: var(--ifes-green);
+    font-weight: bold;
+}
+
+@media (max-width: 992px) {
+    .sidebar {
+        width: 70px;
+        overflow: hidden;
+    }
+    
+    .sidebar .nav-link span {
+        display: none;
+    }
+    
+    .sidebar .nav-link i {
+        margin-right: 0;
+        font-size: 1.2rem;
+    }
+    
+    .main-content {
+        margin-left: 90px;
+    }
+    
+    .sidebar-header, .sidebar-footer {
+        text-align: center;
+        padding: 10px;
+    }
+    
+    .sidebar-header h6, .sidebar-header small {
+        display: none;
+    }
+}
+
+.btn-solicitar, 
+.btn-cancelar {
+    color: white !important;
+    border-radius: 50px;
+    height: 47px; /* Ajustado para combinar com a altura dos inputs */
+    padding: 0 25px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.1rem;
+    white-space: nowrap;
+}
+
+.btn-solicitar {
+    width: auto;
+    min-width: 220px; /* Aumentado para acomodar melhor o texto */
+    background-color: #1a6d36;
+}
+
+.btn-solicitar:hover {
+    background-color: #15552b;
+    border-color: #124d25;
+}
+
+.btn-cancelar {
+    width: auto;
+    min-width: 120px;
+    background-color: #c62828;
+}
+
+.btn-cancelar:hover {
+    background-color: #a32020;
+    border-color: #8e1b1b;
+}
+
+/* Estilo específico da página de cadastro conforme imagem */
+.cadastro-container {
+    background-color: #ffffff;
+    font-family: 'Afacad', sans-serif;
+    border: 2px solid #1a8754;
+    border-radius: 30px;
+    max-width: 600px;
+    width: 90%;
+    padding: 4rem 2rem 2rem;
+    position: relative;
+    text-align: center;
+}
+
+.cadastro-container h1 {
+    color: #1a8754;
+    font-size: 5rem;
+    font-weight: 700;
+    position: absolute;
+    top: -3rem; 
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 2;
+    white-space: nowrap;
+    background-color: #ffffff; 
+    padding: 0 1rem;
+}
+
+.cadastro-text {
+    color: #333;
+    font-size: 1.2rem;
+    margin-bottom: 2rem;
+}
+
+.input-field {
+    background: #E9ECEF;
+    border: none;
+    border-radius: 50px;
+    padding: 12px 25px;
+    font-size: 16px;
+    margin-bottom: 15px;
+    width: 100%;
+    color: #333;
+}
+
+.btn-container {
+    display: flex;
+    gap: 15px;
+    justify-content: center;
+    width: 100%;
+    margin-top: 10px;
+}
+
+.btn-solicitar {
+    background-color: #1a6d36;
+    border-color: #1a6d36;
+    padding: 0.60rem 5rem;
+    font-size: 1.1rem;
+    border-radius: 50px;
+    width: 40%;
+    display: inline-block;
+}
+
+.btn-solicitar:hover {
+    background-color: #15552b;
+    border-color: #124d25;
+}
+
+.btn-cancelar {
+   background-color: #c62828;
+    border-color: #c62828;
+    font-size: 1.1rem;
+    width: 30%;
+}
+
+.btn-cancelar:hover {
+    background-color: #a32020;
+    border-color: #8e1b1b;
+}
+
+
+.ifes-logo {
+    max-width: 150px;
+    margin-top: 20px;
+}
+
+.notification-badge {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    background-color: var(--ifes-red);
+    color: white;
+    border-radius: 50%;
+    width: 18px;
+    height: 18px;
+    font-size: 0.7rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.menu-toggle {
+    position: fixed;
+    top: 20px;
+    left: 20px;
+    z-index: 1100;
+    background-color: var(--ifes-green);
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    display: none;
+}
+
+.menu-toggle.visible {
+    display: flex;
+}
+
+.close-sidebar {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: none;
+    border: none;
+    color: var(--ifes-dark-gray);
+    cursor: pointer;
+    font-size: 1.2rem;
+}
+
+.stats-card {
+    background-color: white;
+    border-radius: 10px;
+    padding: 20px;
+    margin-bottom: 20px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    text-align: center;
+}
+
+.stats-card .number {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: var(--ifes-green);
+    margin-bottom: 10px;
+}
+
+.stats-card .label {
+    color: var(--ifes-dark-gray);
+    font-weight: 500;
+}
+
+.table-card {
+    background-color: white;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    margin-bottom: 30px;
+}
+
+.table-card .card-header {
+    background-color: var(--ifes-green);
+    color: white;
+    padding: 15px 20px;
+    font-weight: 600;
+}
+
+.table-card .table {
+    margin-bottom: 0;
+}
+
+.table-card .table th {
+    border-top: none;
+    font-weight: 600;
+    color: var(--ifes-dark-gray);
+}
+
+.action-buttons {
+    display: flex;
+    gap: 5px;
+}
+
+.action-buttons .btn {
+    padding: 0.25rem 0.5rem;
+    font-size: 0.8rem;
+}
+
+.priority-high {
+    color: var(--ifes-red);
+    font-weight: bold;
+}
+
+.priority-medium {
+    color: #FF9800;
+    font-weight: bold;
+}
+
+.priority-low {
+    color: var(--ifes-green);
+    font-weight: bold;
+}
+
+@media (max-width: 992px) {
+    .sidebar {
+        width: 70px;
+        overflow: hidden;
+    }
+    
+    .sidebar .nav-link span {
+        display: none;
+    }
+    
+    .sidebar .nav-link i {
+        margin-right: 0;
+        font-size: 1.2rem;
+    }
+    
+    .main-content {
+        margin-left: 90px;
+    }
+    
+    .sidebar-header, .sidebar-footer {
+        text-align: center;
+        padding: 10px;
+    }
+    
+    .sidebar-header h6, .sidebar-header small {
+        display: none;
+    }
+}
+
+.btn-solicitar, 
+.btn-cancelar {
+    color: white !important;
+    border-radius: 50px;
+    height: 47px; /* Ajustado para combinar com a altura dos inputs */
+    padding: 0 25px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.1rem;
+    white-space: nowrap;
+}
+
+.ifes-logo {
+    max-width: 150px;
+    margin-top: 20px;
+}
+
+.notification-badge {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    background-color: var(--ifes-red);
+    color: white;
+    border-radius: 50%;
+    width: 18px;
+    height: 18px;
+    font-size: 0.7rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.menu-toggle {
+    position: fixed;
+    top: 20px;
+    left: 20px;
+    z-index: 1100;
+    background-color: var(--ifes-green);
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    display: none;
+}
+
+.menu-toggle.visible {
+    display: flex;
+}
+
+.close-sidebar {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: none;
+    border: none;
+    color: var(--ifes-dark-gray);
+    cursor: pointer;
+    font-size: 1.2rem;
+}
+
+.stats-card {
+    background-color: white;
+    border-radius: 10px;
+    padding: 20px;
+    margin-bottom: 20px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    text-align: center;
+}
+
+.stats-card .number {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: var(--ifes-green);
+    margin-bottom: 10px;
+}
+
+.stats-card .label {
+    color: var(--ifes-dark-gray);
+    font-weight: 500;
+}
+
+.table-card {
+    background-color: white;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    margin-bottom: 30px;
+}
+
+.table-card .card-header {
+    background-color: var(--ifes-green);
+    color: white;
+    padding: 15px 20px;
+    font-weight: 600;
+}
+
+.table-card .table {
+    margin-bottom: 0;
+}
+
+.table-card .table th {
+    border-top: none;
+    font-weight: 600;
+    color: var(--ifes-dark-gray);
+}
+
+.action-buttons {
+    display: flex;
+    gap: 5px;
+}
+
+.action-buttons .btn {
+    padding: 0.25rem 0.5rem;
+    font-size: 0.8rem;
+}
+
+.priority-high {
+    color: var(--ifes-red);
+    font-weight: bold;
+}
+
+.priority-medium {
+    color: #FF9800;
+    font-weight: bold;
+}
+
+.priority-low {
+    color: var(--ifes-green);
+    font-weight: bold;
+}
+
+@media (max-width: 992px) {
+    .sidebar {
+        width: 70px;
+        overflow: hidden;
+    }
+    
+    .sidebar .nav-link span {
+        display: none;
+    }
+    
+    .sidebar .nav-link i {
+        margin-right: 0;
+        font-size: 1.2rem;
+    }
+    
+    .main-content {
+        margin-left: 90px;
+    }
+    
+    .sidebar-header, .sidebar-footer {
+        text-align: center;
+        padding: 10px;
+    }
+    
+    .sidebar-header h6, .sidebar-header small {
+        display: none;
+    }
+}
+
+.btn-solicitar, 
+.btn-cancelar {
+    color: white !important;
+    border-radius: 50px;
+    height: 47px; /* Ajustado para combinar com a altura dos inputs */
+    padding: 0 25px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.1rem;
+    white-space: nowrap;
+}
+
+.btn-solicitar {
+    width: auto;
+    min-width: 220px; /* Aumentado para acomodar melhor o texto */
+    background-color: #1a6d36;
+}
+
+.btn-solicitar:hover {
+    background-color: #15552b;
+    border-color: #124d25;
+}
+
+.btn-cancelar {
+    width: auto;
+    min-width: 120px;
+    background-color: #c62828;
+}
+
+.btn-cancelar:hover {
+    background-color: #a32020;
+    border-color: #8e1b1b;
+}
+
+
+.cadastro-text {
+    color: #333;
+    font-size: 1.2rem;
+    margin-bottom: 2rem;
+}
+
+.input-field {
+    background: #E9ECEF;
+    border: none;
+    border-radius: 50px;
+    padding: 12px 25px;
+    font-size: 16px;
+    margin-bottom: 15px;
+    width: 100%;
+    color: #333;
+}
+
+.btn-container {
+    display: flex;
+    gap: 15px;
+    justify-content: center;
+    width: 100%;
+    margin-top: 10px;
+}
+
+
+.ifes-logo {
+    max-width: 150px;
+    margin-top: 20px;
+}
+
+.notification-badge {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    background-color: var(--ifes-red);
+    color: white;
+    border-radius: 50%;
+    width: 18px;
+    height: 18px;
+    font-size: 0.7rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.menu-toggle {
+    position: fixed;
+    top: 20px;
+    left: 20px;
+    z-index: 1100;
+    background-color: var(--ifes-green);
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    display: none;
+}
+
+.menu-toggle.visible {
+    display: flex;
+}
+
+.close-sidebar {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: none;
+    border: none;
+    color: var(--ifes-dark-gray);
+    cursor: pointer;
+    font-size: 1.2rem;
+}
+
+.stats-card {
+    background-color: white;
+    border-radius: 10px;
+    padding: 20px;
+    margin-bottom: 20px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    text-align: center;
+}
+
+.stats-card .number {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: var(--ifes-green);
+    margin-bottom: 10px;
+}
+
+.stats-card .label {
+    color: var(--ifes-dark-gray);
+    font-weight: 500;
+}
+
+.table-card {
+    background-color: white;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    margin-bottom: 30px;
+}
+
+.table-card .card-header {
+    background-color: var(--ifes-green);
+    color: white;
+    padding: 15px 20px;
+    font-weight: 600;
+}
+
+.table-card .table {
+    margin-bottom: 0;
+}
+
+.table-card .table th {
+    border-top: none;
+    font-weight: 600;
+    color: var(--ifes-dark-gray);
+}
+
+.action-buttons {
+    display: flex;
+    gap: 5px;
+}
+
+.action-buttons .btn {
+    padding: 0.25rem 0.5rem;
+    font-size: 0.8rem;
+}
+
+.priority-high {
+    color: var(--ifes-red);
+    font-weight: bold;
+}
+
+.priority-medium {
+    color: #FF9800;
+    font-weight: bold;
+}
+
+.priority-low {
+    color: var(--ifes-green);
+    font-weight: bold;
+}
+
+@media (max-width: 992px) {
+    .sidebar {
+        width: 70px;
+        overflow: hidden;
+    }
+    
+    .sidebar .nav-link span {
+        display: none;
+    }
+    
+    .sidebar .nav-link i {
+        margin-right: 0;
+        font-size: 1.2rem;
+    }
+    
+    .main-content {
+        margin-left: 90px;
+    }
+    
+    .sidebar-header, .sidebar-footer {
+        text-align: center;
+        padding: 10px;
+    }
+    
+    .sidebar-header h6, .sidebar-header small {
+        display: none;
+    }
+}
+
+
+.btn-solicitar {
+    width: auto;
+    min-width: 220px; /* Aumentado para acomodar melhor o texto */
+    background-color: #1a6d36;
+}
+
+.btn-solicitar:hover {
+    background-color: #15552b;
+    border-color: #124d25;
+}
+
+.btn-cancelar {
+    width: auto;
+    min-width: 120px;
+    background-color: #c62828;
+}
+
+.btn-cancelar:hover {
+    background-color: #a32020;
+    border-color: #8e1b1b;
+}
+
+
+.input-login {
+    background-color: #e1e3e5;
+    border-radius: 50px;
+    border: none;
+    padding: 0.75rem 1rem;
+    font-size: 1.2rem;
+    width: 80%;
+    display: inline-block;
+    margin-bottom: 15px;
+}
+
+.btn-container {
+    display: flex;
+    gap: 15px;
+    justify-content: center;
+    width: 100%;
+    margin-top: 10px;
+}
+
+
+.ifes-logo {
+    max-width: 150px;
+    margin-top: 20px;
+}
+
+.notification-badge {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    background-color: var(--ifes-red);
+    color: white;
+    border-radius: 50%;
+    width: 18px;
+    height: 18px;
+    font-size: 0.7rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.menu-toggle {
+    position: fixed;
+    top: 20px;
+    left: 20px;
+    z-index: 1100;
+    background-color: var(--ifes-green);
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    display: none;
+}
+
+.menu-toggle.visible {
+    display: flex;
+}
+
+.close-sidebar {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: none;
+    border: none;
+    color: var(--ifes-dark-gray);
+    cursor: pointer;
+    font-size: 1.2rem;
+}
+
+.stats-card {
+    background-color: white;
+    border-radius: 10px;
+    padding: 20px;
+    margin-bottom: 20px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    text-align: center;
+}
+
+.stats-card .number {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: var(--ifes-green);
+    margin-bottom: 10px;
+}
+
+.stats-card .label {
+    color: var(--ifes-dark-gray);
+    font-weight: 500;
+}
+
+.table-card {
+    background-color: white;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    margin-bottom: 30px;
+}
+
+.table-card .card-header {
+    background-color: var(--ifes-green);
+    color: white;
+    padding: 15px 20px;
+    font-weight: 600;
+}
+
+.table-card .table {
+    margin-bottom: 0;
+}
+
+.table-card .table th {
+    border-top: none;
+    font-weight: 600;
+    color: var(--ifes-dark-gray);
+}
+
+.action-buttons {
+    display: flex;
+    gap: 5px;
+}
+
+.action-buttons .btn {
+    padding: 0.25rem 0.5rem;
+    font-size: 0.8rem;
+}
+
+.priority-high {
+    color: var(--ifes-red);
+    font-weight: bold;
+}
+
+.priority-medium {
+    color: #FF9800;
+    font-weight: bold;
+}
+
+.priority-low {
+    color: var(--ifes-green);
+    font-weight: bold;
+}
+
+@media (max-width: 992px) {
+    .sidebar {
+        width: 70px;
+        overflow: hidden;
+    }
+    
+    .sidebar .nav-link span {
+        display: none;
+    }
+    
+    .sidebar .nav-link i {
+        margin-right: 0;
+        font-size: 1.2rem;
+    }
+    
+    .main-content {
+        margin-left: 90px;
+    }
+    
+    .sidebar-header, .sidebar-footer {
+        text-align: center;
+        padding: 10px;
+    }
+    
+    .sidebar-header h6, .sidebar-header small {
+        display: none;
+    }
+}
+
+/* Estilo específico da página de cadastro conforme imagem */
+.cadastro-container {
+    background-color: #ffffff;
+    font-family: 'Afacad', sans-serif;
+    border: 2px solid #1a8754;
+    border-radius: 30px;
+    max-width: 550px;
+    width: 70%;
+    padding: 4rem 2rem 2rem;
+    position: relative;
+    text-align: center;
+}
+
+.input-cadastro {
+    background-color: #e1e3e5;
+    border-radius: 50px;
+    padding: 0.75rem 1rem;
+    font-size: 1.2rem;
+    width: 90%;
+    display: inline-block;
+    margin-bottom: 15px;
+}
+
+/* pagina sobre */
+
+
+
