@@ -5,11 +5,7 @@
 
 {% block head %}
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;700&display=swap" rel="stylesheet">
-    <style>
-        body, .main-content, .container, .card, .table, h2, h4, h6, .stats-card, .table-card, .btn, .form-select, .modal-content {
-            font-family: 'Poppins', sans-serif !important;
-        }
-    </style>
+    <link rel="stylesheet" href="/static/css/dashboard_aluno.css">
     <link href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.17/main.min.css" rel="stylesheet" />
     <link href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.17/bootstrap5/main.min.css" rel="stylesheet" />
 {% endblock %}
@@ -209,40 +205,6 @@
     </div>
 </div>
 
-<style>
-.modal.fade[style*="display:block"] { z-index: 2000; }
-</style>
-
-<script>
-// Modal Confirmar Recebimento
-document.getElementById('btnConfirmarRecebimento').addEventListener('click', function() {
-    document.getElementById('modalConfirmarRecebimento').style.display = 'block';
-    document.getElementById('modalConfirmarRecebimento').classList.add('show');
-});
-function fecharModalConfirmarRecebimento() {
-    document.getElementById('modalConfirmarRecebimento').style.display = 'none';
-    document.getElementById('modalConfirmarRecebimento').classList.remove('show');
-}
-function confirmarRecebimento() {
-    fecharModalConfirmarRecebimento();
-    var btn = document.getElementById('btnConfirmarRecebimento');
-    btn.textContent = 'Recebimento Confirmado';
-    btn.classList.remove('btn-outline-success');
-    btn.classList.add('btn-success');
-    btn.disabled = true;
-}
-
-// Modal Detalhes Auxílio
-document.getElementById('btnDetalhesAuxilio').addEventListener('click', function() {
-    document.getElementById('modalDetalhesAuxilio').style.display = 'block';
-    document.getElementById('modalDetalhesAuxilio').classList.add('show');
-});
-function fecharModalDetalhesAuxilio() {
-    document.getElementById('modalDetalhesAuxilio').style.display = 'none';
-    document.getElementById('modalDetalhesAuxilio').classList.remove('show');
-}
-</script>
-
 <!-- Modal de acompanhamento de inscrição -->
 <div id="modalAcompanhar" class="modal fade" tabindex="-1" role="dialog" aria-modal="true" style="display:none; background: rgba(0,0,0,0.4);">
     <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
@@ -294,108 +256,7 @@ function fecharModalDetalhesAuxilio() {
     </div>
 </div>
 
-<style>
-.modal.fade[style*="display:block"] { z-index: 2000; }
-.timeline {
-    list-style: none;
-    padding-left: 0;
-    position: relative;
-}
-.timeline:before {
-    content: '';
-    position: absolute;
-    left: 18px;
-    top: 0;
-    bottom: 0;
-    width: 2px;
-    background: #4CAF50;
-}
-.timeline-item {
-    position: relative;
-    margin-bottom: 30px;
-    padding-left: 40px;
-}
-.timeline-item:before {
-    content: '';
-    position: absolute;
-    left: 10px;
-    top: 5px;
-    width: 16px;
-    height: 16px;
-    border-radius: 50%;
-    background: #fff;
-    border: 2px solid #4CAF50;
-    z-index: 1;
-}
-.timeline-item.completed:before {
-    background: #4CAF50;
-}
-.timeline-item.active:before {
-    background: #FFC107;
-    border-color: #FFC107;
-}
-.timeline-date {
-    font-size: 0.85rem;
-    color: #888;
-    margin-bottom: 2px;
-    display: block;
-}
-.timeline-content {
-    font-size: 1rem;
-    color: #333;
-}
-</style>
-
-<script>
-document.getElementById('btnAcompanhar').addEventListener('click', function() {
-    document.getElementById('modalAcompanhar').style.display = 'block';
-    document.getElementById('modalAcompanhar').classList.add('show');
-});
-function fecharModalAcompanhar() {
-    document.getElementById('modalAcompanhar').style.display = 'none';
-    document.getElementById('modalAcompanhar').classList.remove('show');
-}
-</script>
-
 <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.17/index.global.min.js"></script>
-<script>
-    document.addEventListener("DOMContentLoaded", function () {
-        var calendarEl = document.getElementById("fc-calendar");
-        if (calendarEl) {
-            var calendar = new FullCalendar.Calendar(calendarEl, {
-                themeSystem: "bootstrap5",
-                initialView: "dayGridMonth",
-                locale: "pt-br",
-                headerToolbar: {
-                    left: "prev,next today",
-                    center: "title",
-                    right: "",
-                },
-                buttonText: {
-                    today: "Hoje",
-                },
-                events: [
-                    {
-                        title: "Início das inscrições para Auxílio Material Didático",
-                        start: "2025-04-20",
-                    },
-                    {
-                        title: "Resultado da análise do Auxílio Transporte",
-                        start: "2025-04-30",
-                    },
-                    {
-                        title: "Fim das inscrições para Auxílio Material Didático",
-                        start: "2025-05-05",
-                    },
-                    {
-                        title: "Prazo para confirmação de recebimento do Auxílio Alimentação",
-                        start: "2025-05-10",
-                    },
-                ],
-            });
-            calendar.render();
-        }
-    });
-</script>
+<script src="/static/js/dashboard_aluno.js"></script>
 {% endblock %}
 

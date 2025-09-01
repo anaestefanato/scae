@@ -5,85 +5,7 @@
 
 {% block head %}
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;700&display=swap" rel="stylesheet">
-<style>
-body, .main-content, .container, .card, .table, h2, h3, h4, h5, h6, .btn, .form-select, .modal-content {
-    font-family: 'Poppins', sans-serif !important;
-}
-</style>
-    <style>
-        .profile-header {
-            background: linear-gradient(180deg, #1b5e20 0%, var(--ifes-green) 50%, var(--ifes-light-green) 100%);
-            padding: 40px 0;
-            margin-bottom: 30px;
-            border-radius: 15px;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-        }
-
-        .profile-picture {
-            width: 150px;
-            height: 150px;
-            border-radius: 50%;
-            border: 5px solid white;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-            object-fit: cover;
-            margin-bottom: 20px;
-        }
-
-        .profile-info {
-            color: white;
-            text-align: center;
-        }
-
-        .data-card {
-            background: white;
-            border-radius: 12px;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
-            margin-bottom: 25px;
-            border: none;
-        }
-
-        .data-card .card-header {
-            background: none;
-            border-bottom: 1px solid rgba(0, 0, 0, 0.1);
-            padding: 20px;
-        }
-
-        .data-card .card-header h5 {
-            margin: 0;
-            color: var(--ifes-green);
-            font-weight: 600;
-        }
-
-        .form-label {
-            font-weight: 500;
-            color: #555;
-        }
-
-        .btn-edit {
-            position: absolute;
-            top: 15px;
-            right: 15px;
-        }
-
-        .form-control:disabled {
-            background-color: #f8f9fa;
-            border-color: #e9ecef;
-        }
-
-        .history-item {
-            padding: 15px;
-            border-bottom: 1px solid #eee;
-        }
-
-        .history-item:last-child {
-            border-bottom: none;
-        }
-
-        .history-date {
-            font-size: 0.85rem;
-            color: #666;
-        }
-    </style>
+<link rel="stylesheet" href="/static/css/dadoscadastrais_aluno.css">
 {% endblock %}
 
 {% block content %}
@@ -390,63 +312,9 @@ body, .main-content, .container, .card, .table, h2, h3, h4, h5, h6, .btn, .form-
         </div>
     </div>
 
+    {% endblock %}
+
+    {% block scripts %}
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            // Funcionalidades específicas da página já implementadas
-        });
-
-        function toggleEdit(formId) {
-            const form = document.getElementById('form' + formId.charAt(0).toUpperCase() + formId.slice(1));
-            const inputs = form.getElementsByTagName('input');
-            const button = form.closest('.card').querySelector('.btn-outline-success');
-            
-            if (inputs[0].disabled) {
-                // Habilitar edição
-                for (let input of inputs) {
-                    input.disabled = false;
-                }
-                button.innerHTML = '<i class="bi bi-check-lg"></i> Salvar';
-                button.classList.add('active');
-            } else {
-                // Salvar alterações
-                saveChanges(formId);
-                for (let input of inputs) {
-                    input.disabled = true;
-                }
-                button.innerHTML = '<i class="bi bi-pencil"></i> Editar';
-                button.classList.remove('active');
-            }
-        }
-
-        function saveChanges(formId) {
-            // Aqui você pode adicionar a lógica para salvar as alterações no backend
-            alert('Alterações salvas com sucesso!');
-            
-            // Adiciona o registro no histórico
-            const today = new Date().toLocaleDateString('pt-BR');
-            const historyContainer = document.querySelector('.history-item').parentElement;
-            const newHistoryItem = document.createElement('div');
-            newHistoryItem.className = 'history-item';
-            newHistoryItem.innerHTML = `
-                <div class="d-flex justify-content-between align-items-start">
-                    <div>
-                        <h6 class="mb-1">Atualização de ${formId === 'pessoal' ? 'Dados Pessoais' : 'Endereço'}</h6>
-                        <p class="mb-0 text-muted small">Alteração nos dados</p>
-                    </div>
-                    <span class="history-date">${today}</span>
-                </div>
-            `;
-            historyContainer.insertBefore(newHistoryItem, historyContainer.firstChild);
-        }
-
-        function savePhoto() {
-            // Aqui você pode adicionar a lógica para salvar a nova foto no backend
-            alert('Foto atualizada com sucesso!');
-            
-            // Fecha o modal
-            const modal = bootstrap.Modal.getInstance(document.getElementById('changePhotoModal'));
-            modal.hide();
-        }
-    </script>
-{% endblock %}
+    <script src="/static/js/dadoscadastrais_aluno.js"></script>
+    {% endblock %}
