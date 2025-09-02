@@ -11,11 +11,11 @@
 		{% block head %}{% endblock %}
 	</head>
 	<body>
-		<button class="menu-toggle" id="menuToggle">
+		<button class="menu-toggle visible" id="menuToggle">
 			<i class="bi bi-list"></i>
 		</button>
 
-		<div class="sidebar" id="sidebar">
+		<div class="sidebar collapsed" id="sidebar">
 			<div class="sidebar-header">
 				<button class="close-sidebar" id="closeSidebar">
 					<i class="bi bi-x-lg"></i>
@@ -81,6 +81,9 @@
 			</div>
 		</div>
 
+		<!-- Backdrop for overlay sidebar -->
+		<div class="sidebar-backdrop" id="sidebarBackdrop"></div>
+
 		{% block content %}{% endblock %}
 
 		        <footer class="footer bg-success text-white py-4">
@@ -102,18 +105,40 @@
 				const mainContent = document.getElementById("mainContent");
 				const menuToggle = document.getElementById("menuToggle");
 				const closeSidebar = document.getElementById("closeSidebar");
+				const sidebarBackdrop = document.getElementById('sidebarBackdrop');
 
-				closeSidebar.addEventListener("click", function () {
-					sidebar.classList.add("collapsed");
-					if (mainContent) mainContent.classList.add("expanded");
-					menuToggle.classList.add("visible");
-				});
+				// Apply initial collapsed state if elements exist
+				// Start collapsed by default (sidebar overlays content)
+				if (sidebar && !sidebar.classList.contains('collapsed')) {
+					sidebar.classList.add('collapsed');
+				}
+				if (menuToggle && !menuToggle.classList.contains('visible')) {
+					menuToggle.classList.add('visible');
+				}
 
-				menuToggle.addEventListener("click", function () {
-					sidebar.classList.remove("collapsed");
-					if (mainContent) mainContent.classList.remove("expanded");
-					menuToggle.classList.remove("visible");
-				});
+				function closeOverlay() {
+					if (sidebar) sidebar.classList.add('collapsed');
+					if (menuToggle) menuToggle.classList.add('visible');
+					if (sidebarBackdrop) sidebarBackdrop.classList.remove('visible');
+					document.body.classList.remove('no-scroll');
+				}
+
+				if (closeSidebar) {
+					closeSidebar.addEventListener('click', closeOverlay);
+				}
+
+				if (sidebarBackdrop) {
+					sidebarBackdrop.addEventListener('click', closeOverlay);
+				}
+
+				if (menuToggle) {
+					menuToggle.addEventListener('click', function () {
+						if (sidebar) sidebar.classList.remove('collapsed');
+						if (menuToggle) menuToggle.classList.remove('visible');
+						if (sidebarBackdrop) sidebarBackdrop.classList.add('visible');
+						document.body.classList.add('no-scroll');
+					});
+				}
 			});
 		</script>
 
