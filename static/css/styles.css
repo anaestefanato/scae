@@ -28,13 +28,35 @@ body {
     position: fixed;
     box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
     width: 250px;
-    z-index: 1000;
-    transition: all 0.3s;
+    z-index: 1050; /* above main content */
+    transition: transform 0.25s ease;
+    transform: translateX(0);
+    top: 0;
     left: 0;
 }
 
 .sidebar.collapsed {
-    left: -250px;
+    transform: translateX(-100%); /* slide out of view without affecting layout */
+}
+
+/* Backdrop shown when sidebar is open (for overlay effect) */
+.sidebar-backdrop {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.45);
+    z-index: 1040; /* below sidebar (1050) */
+    opacity: 0;
+    transition: opacity 0.2s ease;
+    pointer-events: none;
+}
+.sidebar-backdrop.visible {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+/* Prevent body scroll when sidebar open */
+.no-scroll {
+    overflow: hidden !important;
 }
 
 .sidebar-header {
@@ -66,14 +88,14 @@ body {
 }
 
 .main-content {
-    margin-left: 270px;
+    margin-left: 0; /* no push */
     padding: 30px;
-    transition: all 0.3s;
+    transition: none;
+    position: relative;
+    z-index: 1;
 }
 
-.main-content.expanded {
-    margin-left: 20px;
-}
+/* .main-content.overlayed removed (not used) */
 
 .card {
     border: none;
@@ -354,6 +376,27 @@ body {
     .fc-button-primary {
         padding: 0.3rem 0.6rem !important; /* Ajustado para telas menores */
         font-size: 0.75rem !important; /* Ajustado para telas menores */
+    }
+}
+
+/* Responsive behavior for sidebar: still overlay (do not shrink content) */
+@media (max-width: 992px) {
+    .sidebar {
+        /* Let sidebar take most of the screen but not tiny: up to 85vw or max 360px */
+        width: min(360px, 85vw);
+    }
+
+    .menu-toggle {
+        left: 10px;
+        top: 10px;
+        z-index: 1060; /* above backdrop */
+    }
+}
+
+@media (max-width: 480px) {
+    .sidebar {
+        /* On very small devices allow a larger fraction */
+        width: min(420px, 95vw);
     }
 }
 
