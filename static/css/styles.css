@@ -10,15 +10,16 @@
     --calendar-light: #E8F5E9;
     --calendar-text: #1B5E20;
 }
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;700&display=swap');
 
 body {
     background-color: #fff !important;
-    font-family: 'Afacad', sans-serif;
+    font-family: 'Poppins', Arial, Helvetica, sans-serif;
 }
 
 .body-cadastro-login {
     background-color: #ffffff;
-    font-family: 'Afacad', sans-serif;
+    font-family: 'Poppins', Arial, Helvetica, sans-serif;
 }
 
 .sidebar {
