@@ -4,7 +4,13 @@ id_usuario INTEGER PRIMARY KEY AUTOINCREMENT,
 nome TEXT NOT NULL,
 email TEXT UNIQUE NOT NULL,
 senha TEXT NOT NULL,
-tipo_usuario TEXT NOT NULL
+#adicionar matricula aqui? 
+tipo_usuario TEXT NOT NULL, # fica ou vai embora?
+perfil TEXT NOT NULL DEFAULT 'aluno',
+foto TEXT,
+token_redefinicao TEXT,
+data_token TIMESTAMP,
+data_cadastro TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 """
 
@@ -27,6 +33,7 @@ FROM usuario
 WHERE id_usuario = ?
 """ 
 
+#trocar por matricula 
 OBTER_POR_EMAIL = """
 SELECT
 id_usuario, nome, email, senha, tipo_usuario
