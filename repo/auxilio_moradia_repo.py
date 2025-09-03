@@ -3,7 +3,7 @@ from repo import auxilio_repo
 from model.auxilio_model import Auxilio
 from model.auxilio_moradia_model import AuxilioMoradia
 from sql.auxilio_moradia_sql import *
-from sql.util import get_connection
+from util.db_util import get_connection
 
 class AuxilioMoradiaRepo:
 
