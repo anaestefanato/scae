@@ -1,14 +1,14 @@
 CRIAR_TABELA = """
 CREATE TABLE IF NOT EXISTS administrador (
 id_usuario INTEGER PRIMARY KEY,
-matricula TEXT NOT NULL,
+tipo TEXT NOT NULL,
 FOREIGN KEY (id_usuario) REFERENCES usuario(id_usuario)
 );
 
 """
 
 INSERIR = """
-INSERT INTO administrador (id_usuario, matricula) 
+INSERT INTO administrador (id_usuario, tipo) 
 VALUES (?, ?)
 """
 
@@ -19,10 +19,10 @@ ad.id_usuario,
     u.email, 
     u.senha, 
     u.tipo_usuario, 
-    ad.matricula 
+    ad.tipo 
 FROM administrador ad
 INNER JOIN usuario u ON ad.id_usuario = u.id_usuario
-ORDER BY matricula
+ORDER BY ad.tipo
 """ 
 
 OBTER_POR_ID = """
@@ -32,7 +32,7 @@ SELECT
     u.email, 
     u.senha, 
     u.tipo_usuario, 
-    ad.matricula 
+    ad.tipo 
 FROM administrador ad
 INNER JOIN usuario u ON ad.id_usuario = u.id_usuario
 WHERE ad.id_usuario = ?
@@ -41,7 +41,7 @@ WHERE ad.id_usuario = ?
 
 ATUALIZAR = """
 UPDATE administrador
-SET matricula = ?
+SET tipo = ?
 WHERE id_usuario = ?
 """
 

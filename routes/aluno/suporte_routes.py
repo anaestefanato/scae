@@ -11,3 +11,4 @@ async def get_suporte(request: Request):
     response = templates.TemplateResponse("/aluno/suporte.html", {"request": request})
     return response
 
+

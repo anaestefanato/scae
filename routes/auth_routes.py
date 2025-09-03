@@ -19,12 +19,12 @@ async def post_login(
     senha: str = Form(...),
     redirect: str = Form(None)
 ):
-    usuario = usuario_repo.OBTER_POR_MATRICULA(matricula) 
+    usuario = usuario_repo.obter_usuario_por_matricula(matricula) 
     
     if not usuario or not verificar_senha(senha, usuario.senha):
         return templates.TemplateResponse(
             "login.html",
-            {"request": request, "erro": "Email ou senha inválidos"}
+            {"request": request, "erro": "Matrícula ou senha inválidos"}
         )
     
     # Criar sessão
