@@ -14,4 +14,3 @@ class Aluno(Usuario):
     agencia_bancaria: str
     numero_conta_bancaria: str
     renda_familiar: float
-    matricula: str

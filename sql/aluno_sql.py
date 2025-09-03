@@ -1,6 +1,6 @@
 CRIAR_TABELA = """
 CREATE TABLE IF NOT EXISTS aluno (
-    id_usuario INTEGER,
+    id_usuario INTEGER PRIMARY KEY,
     cpf TEXT NOT NULL,
     data_nascimento TEXT NOT NULL,
     filiacao TEXT NOT NULL,
@@ -9,7 +9,6 @@ CREATE TABLE IF NOT EXISTS aluno (
     agencia_bancaria TEXT NOT NULL,
     numero_conta_bancaria TEXT NOT NULL,
     renda_familiar REAL NOT NULL,
-    matricula TEXT NOT NULL,
     FOREIGN KEY (id_usuario) REFERENCES usuario(id_usuario) ON DELETE CASCADE
 )
 """
