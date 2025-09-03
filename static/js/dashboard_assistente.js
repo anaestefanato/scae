@@ -8,39 +8,39 @@ document.addEventListener('DOMContentLoaded', function() {
     const mainContent = document.getElementById('mainContent');
     const menuToggle = document.getElementById('menuToggle');
     const closeSidebar = document.getElementById('closeSidebar');
+    const sidebarBackdrop = document.createElement('div');
+    sidebarBackdrop.className = 'sidebar-backdrop';
+    document.body.appendChild(sidebarBackdrop);
     
-    // Close sidebar button
-    closeSidebar.addEventListener('click', function() {
+    function closeSidebarFunction() {
         sidebar.classList.remove('open');
         mainContent.classList.remove('shifted');
         menuToggle.classList.remove('hidden');
-    });
+        sidebarBackdrop.classList.remove('visible');
+        document.body.style.overflow = '';
+    }
     
-    // Open sidebar button
-    menuToggle.addEventListener('click', function() {
+    function openSidebarFunction() {
         sidebar.classList.add('open');
         mainContent.classList.add('shifted');
         menuToggle.classList.add('hidden');
-    });
+        sidebarBackdrop.classList.add('visible');
+        document.body.style.overflow = 'hidden';
+    }
+    
+    // Close sidebar button
+    closeSidebar.addEventListener('click', closeSidebarFunction);
+    
+    // Open sidebar button
+    menuToggle.addEventListener('click', openSidebarFunction);
 
-    // Close sidebar when clicking outside of it
-    document.addEventListener('click', function(event) {
-        const isClickInsideSidebar = sidebar.contains(event.target);
-        const isClickOnMenuToggle = menuToggle.contains(event.target);
-        
-        if (!isClickInsideSidebar && !isClickOnMenuToggle && sidebar.classList.contains('open')) {
-            sidebar.classList.remove('open');
-            mainContent.classList.remove('shifted');
-            menuToggle.classList.remove('hidden');
-        }
-    });
+    // Close sidebar when clicking on backdrop
+    sidebarBackdrop.addEventListener('click', closeSidebarFunction);
 
     // Close sidebar when pressing ESC key
     document.addEventListener('keydown', function(event) {
         if (event.key === 'Escape' && sidebar.classList.contains('open')) {
-            sidebar.classList.remove('open');
-            mainContent.classList.remove('shifted');
-            menuToggle.classList.remove('hidden');
+            closeSidebarFunction();
         }
     });
 
