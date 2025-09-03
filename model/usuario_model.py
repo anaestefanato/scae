@@ -5,12 +5,12 @@ from typing import Optional
 class Usuario:
     id_usuario: int
     nome: str
+    matricula: str
     email: str
     senha: str
     tipo_usuario: str
-    perfil: str = 'aluno'
-    foto: Optional[str] = None
-    token_redefinicao: Optional[str] = None
-    data_token: Optional[str] = None
-    data_cadastro: Optional[str] = None
-    
+    perfil: str 
+    foto: Optional[str] 
+    token_redefinicao: Optional[str] 
+    data_token: Optional[str] 
+    data_cadastro: Optional[str]

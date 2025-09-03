@@ -3,9 +3,9 @@ from fastapi.staticfiles import StaticFiles
 import uvicorn
 from starlette.middleware.sessions import SessionMiddleware
 import secrets
-from routes import public
+from routes import auth_routes, perfil_routes, public
 from routes.admin import analisar_cadastro_routes, perfiladmin_routes, responder_chamado_routes
-from routes.aluno import acompanhar_inscricoes_routes, dados_cadastrais_routes, duvidas_frequentes_routes, editais_routes, notificacao_routes, perfil_routes, recebimentos_routes, suporte_routes
+from routes.aluno import acompanhar_inscricoes_routes, dados_cadastrais_routes, duvidas_frequentes_routes, editais_routes, notificacao_routes, perfilaluno_routes, recebimentos_routes, suporte_routes
 from repo import administrador_repo, aluno_repo, assistente_social_repo, auxilio_moradia_repo, auxilio_repo, auxilio_transporte_repo, chamado_repo, duvida_edital_repo, edital_repo, inscricao_repo, notificacao_repo, recurso_repo, resposta_chamado_repo, usuario_repo
 from routes.assistente_social import alunos_routes, analise_inscricoes_routes, analise_recurso_routes, perfilassistente_routes, entrevistas_routes, relatorios_routes, agenda_routes
 
@@ -40,7 +40,9 @@ app.add_middleware(
 )
 
 app.include_router(public.router)
-app.include_router(perfil_routes.router, prefix="/aluno")
+app.include_router(auth_routes.router)
+app.include_router(perfil_routes.router)
+app.include_router(perfilaluno_routes.router, prefix="/aluno")
 app.include_router(editais_routes.router, prefix="/aluno")
 app.include_router(recebimentos_routes.router, prefix="/aluno")
 app.include_router(dados_cadastrais_routes.router, prefix="/aluno")

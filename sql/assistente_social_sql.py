@@ -1,7 +1,6 @@
 CRIAR_TABELA = """
 CREATE TABLE IF NOT EXISTS assistente_social (
     id_usuario INTEGER,
-    matricula TEXT NOT NULL,
     FOREIGN KEY (id_usuario) REFERENCES usuario(id_usuario) ON DELETE CASCADE
 )
 """
