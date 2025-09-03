@@ -3,11 +3,11 @@ from fastapi.responses import RedirectResponse, HTMLResponse
 from fastapi.templating import Jinja2Templates
 
 from model.usuario_model import Usuario
-from model.cliente_model import Cliente
-from repo import usuario_repo, cliente_repo
+from repo import usuario_repo
 from util.security import criar_hash_senha, verificar_senha, gerar_token_redefinicao, obter_data_expiracao_token, validar_forca_senha
 from util.auth_decorator import criar_sessao, destruir_sessao, obter_usuario_logado, esta_logado
 from util.template_util import criar_templates
+
 
 router = APIRouter()
 templates = criar_templates("templates/auth")
