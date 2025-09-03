@@ -1,6 +1,8 @@
 from fastapi import FastAPI
 from fastapi.staticfiles import StaticFiles
 import uvicorn
+from starlette.middleware.sessions import SessionMiddleware
+import secrets
 from routes import public
 from routes.admin import analisar_cadastro_routes, perfiladmin_routes, responder_chamado_routes
 from routes.aluno import acompanhar_inscricoes_routes, dados_cadastrais_routes, duvidas_frequentes_routes, editais_routes, notificacao_routes, perfil_routes, recebimentos_routes, suporte_routes
@@ -25,6 +27,17 @@ auxilio_transporte_repo.AuxilioTransporteRepo.criar_tabela()
 
 app = FastAPI()
 app.mount("/static", StaticFiles(directory="static"), name="static")
+# Gerar chave secreta (em produção, use variável de ambiente!)
+SECRET_KEY = secrets.token_urlsafe(32)
+
+# Adicionar middleware de sessão
+app.add_middleware(
+    SessionMiddleware, 
+    secret_key=SECRET_KEY,
+    max_age=3600,  # Sessão expira em 1 hora
+    same_site="lax",
+    https_only=False  # Em produção, mude para True com HTTPS
+)
 
 app.include_router(public.router)
 app.include_router(perfil_routes.router, prefix="/aluno")
