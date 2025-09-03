@@ -1,7 +1,7 @@
 from typing import Optional
 from model.recurso_model import Recurso
 from sql.recurso_sql import *
-from sql.util import get_connection
+from util.db_util import get_connection
 
 def criar_tabela() -> bool:
     try:

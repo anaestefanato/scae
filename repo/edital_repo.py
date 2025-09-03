@@ -1,7 +1,7 @@
 from typing import Optional
 from model.edital_model import Edital
 from sql.edital_sql import *
-from sql.util import get_connection
+from util.db_util import get_connection
 
 def criar_tabela() -> bool:
     try:

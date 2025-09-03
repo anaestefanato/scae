@@ -1,7 +1,7 @@
 from typing import Optional, List
 from model.notificacao_model import Notificacao
 from sql.notificacao_sql import *
-from sql.util import get_connection
+from util.db_util import get_connection
 
 def criar_tabela() -> bool:
     with get_connection() as conn:
