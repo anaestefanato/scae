@@ -2571,5 +2571,304 @@ body {
 
 /* pagina sobre */
 
+/* =========================
+   MODAL NOVA ENTREVISTA STYLES
+   ========================= */
+
+.modal-content {
+    border: none;
+    border-radius: 12px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+}
+
+.modal-header {
+    background: linear-gradient(135deg, var(--ifes-green), var(--ifes-light-green));
+    color: white;
+    border-radius: 12px 12px 0 0;
+    border-bottom: none;
+    padding: 20px 25px;
+}
+
+.modal-title {
+    font-weight: 600;
+    font-size: 1.3rem;
+}
+
+.modal-header .btn-close {
+    filter: brightness(0) invert(1);
+    opacity: 0.8;
+}
+
+.modal-header .btn-close:hover {
+    opacity: 1;
+}
+
+.modal-body {
+    padding: 25px;
+    background-color: #fafafa;
+}
+
+.modal-footer {
+    border-top: 1px solid #e9ecef;
+    padding: 20px 25px;
+    background-color: white;
+    border-radius: 0 0 12px 12px;
+}
+
+/* Form Styles dentro do Modal */
+#novaEntrevistaForm .form-label {
+    font-weight: 500;
+    color: var(--ifes-dark-gray);
+    margin-bottom: 8px;
+}
+
+#novaEntrevistaForm .form-label i {
+    color: var(--ifes-green);
+}
+
+#novaEntrevistaForm .form-control,
+#novaEntrevistaForm .form-select {
+    border: 2px solid #e9ecef;
+    border-radius: 8px;
+    padding: 12px 15px;
+    font-size: 0.95rem;
+    transition: all 0.3s ease;
+}
+
+#novaEntrevistaForm .form-control:focus,
+#novaEntrevistaForm .form-select:focus {
+    border-color: var(--ifes-green);
+    box-shadow: 0 0 0 0.2rem rgba(46, 125, 50, 0.25);
+}
+
+#novaEntrevistaForm .form-control:valid,
+#novaEntrevistaForm .form-select:valid {
+    border-color: var(--ifes-light-green);
+}
+
+/* Specific styling for student name input */
+#alunoNome {
+    text-transform: capitalize;
+}
+
+#alunoNome::placeholder {
+    color: #adb5bd;
+    font-style: italic;
+}
+
+#alunoNome:focus {
+    border-color: var(--ifes-green);
+    box-shadow: 0 0 0 0.2rem rgba(46, 125, 50, 0.25);
+}
+
+/* Checkbox Styles */
+#novaEntrevistaForm .form-check {
+    margin-bottom: 12px;
+}
+
+#novaEntrevistaForm .form-check-input {
+    width: 18px;
+    height: 18px;
+    margin-top: 0.125rem;
+    border: 2px solid #dee2e6;
+}
+
+#novaEntrevistaForm .form-check-input:checked {
+    background-color: var(--ifes-green);
+    border-color: var(--ifes-green);
+}
+
+#novaEntrevistaForm .form-check-label {
+    font-size: 0.95rem;
+    color: var(--ifes-dark-gray);
+    margin-left: 8px;
+}
+
+#novaEntrevistaForm .form-check-label i {
+    color: var(--ifes-green);
+}
+
+/* Priority Select Styling */
+#prioridade option[value="baixa"] {
+    background-color: #e8f5e9;
+}
+
+#prioridade option[value="media"] {
+    background-color: #fff3e0;
+}
+
+#prioridade option[value="alta"] {
+    background-color: #ffebee;
+}
+
+#prioridade option[value="urgente"] {
+    background-color: #fce4ec;
+}
+
+/* Button Styles no Modal */
+.modal-footer .btn {
+    padding: 10px 20px;
+    border-radius: 8px;
+    font-weight: 500;
+    text-transform: none;
+    min-width: 120px;
+}
+
+.modal-footer .btn-secondary {
+    background-color: #6c757d;
+    border-color: #6c757d;
+}
+
+.modal-footer .btn-secondary:hover {
+    background-color: #5a6268;
+    border-color: #545b62;
+}
+
+.modal-footer .btn-success {
+    background-color: var(--ifes-green);
+    border-color: var(--ifes-green);
+}
+
+.modal-footer .btn-success:hover {
+    background-color: #1b5e20;
+    border-color: #1b5e20;
+}
+
+.modal-footer .btn-success:disabled {
+    background-color: #a5d6a7;
+    border-color: #a5d6a7;
+    opacity: 0.8;
+}
+
+/* Textarea Resize */
+#observacoes {
+    resize: vertical;
+    min-height: 80px;
+}
+
+/* Responsive Modal */
+@media (max-width: 768px) {
+    .modal-dialog {
+        margin: 10px;
+        max-width: calc(100% - 20px);
+    }
+    
+    .modal-body {
+        padding: 20px;
+    }
+    
+    .modal-footer {
+        padding: 15px 20px;
+        flex-direction: column;
+        gap: 10px;
+    }
+    
+    .modal-footer .btn {
+        width: 100%;
+        margin: 0;
+    }
+}
+
+/* Animation for modal appearance */
+.modal.fade .modal-dialog {
+    transition: transform 0.3s ease-out;
+    transform: translate(0, -50px);
+}
+
+.modal.show .modal-dialog {
+    transform: none;
+}
+
+/* Input validation styling */
+.was-validated .form-control:invalid,
+.was-validated .form-select:invalid {
+    border-color: var(--ifes-red);
+}
+
+.was-validated .form-control:valid,
+.was-validated .form-select:valid {
+    border-color: var(--ifes-light-green);
+}
+
+/* Loading state for button */
+.btn .bi-hourglass-split {
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* Nova entrevista animation */
+.nova-entrevista {
+    animation: slideInFromTop 0.5s ease-out;
+    border-left: 4px solid var(--ifes-green);
+}
+
+@keyframes slideInFromTop {
+    0% {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.nova-entrevista:hover {
+    background-color: #e8f5e9 !important;
+    transition: background-color 0.3s ease;
+}
+
+/* Document approval styles */
+.btn-aprovar .bi-hourglass-split {
+    animation: spin 1s linear infinite;
+}
+
+.badge-aprovado {
+    font-size: 0.7rem;
+    padding: 2px 6px;
+}
+
+.documento-aprovado {
+    background-color: #d4edda !important;
+    border: 1px solid #c3e6cb !important;
+    border-radius: 5px !important;
+    transition: all 0.3s ease !important;
+}
+
+.btn-outline-success.disabled {
+    opacity: 1 !important;
+    background-color: transparent !important;
+    border: none !important;
+}
+
+.btn-outline-success.disabled i {
+    color: #28a745 !important;
+    font-size: 1.2rem;
+}
+
+.btn-outline-success.disabled:hover {
+    background-color: transparent !important;
+    border: none !important;
+}
+
+/* Hover effect for document rows */
+.card-body .d-flex:hover {
+    background-color: #f8f9fa;
+    border-radius: 5px;
+    transition: background-color 0.2s ease;
+}
+
+.documento-aprovado:hover {
+    background-color: #d4edda !important;
+}
+
+/* =========================
+   END MODAL NOVA ENTREVISTA STYLES
+   ========================= */
+
 
 

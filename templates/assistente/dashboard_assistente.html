@@ -6,17 +6,8 @@
     <title>SCAE - Dashboard Assistente Social</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
-    <link rel="stylesheet" href="/static/css/styles.css" />
-
-    <!-- Fonte Poppins -->
+    <link rel="stylesheet" href="/static/css/dashboard_assistente.css" />
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;700&display=swap" rel="stylesheet">
-    <style>
-        html, body, .body-cadastro-login {
-            font-family: 'Poppins', Arial, Helvetica, sans-serif !important;
-        }
-    </style>
-
-    </style>
 </head>
 <body>
     <!-- Menu Toggle Button (visible when sidebar is collapsed) -->
@@ -134,12 +125,12 @@
 
         <div class="row">
             <div class="col-md-6">
-                <div class="table-card h-100" style="min-height: 340px; max-height: 340px; display: flex; flex-direction: column;">
+                <div class="table-card h-100">
                     <div class="card-header d-flex justify-content-between align-items-center">
                         <span>Inscrições para Análise</span>
                         <a href="#" class="btn btn-sm btn-light">Ver Todas</a>
                     </div>
-                    <div class="table-responsive" style="flex: 1 1 auto; overflow-y: auto;">
+                    <div class="table-responsive">
                         <table class="table">
                             <thead>
                                 <tr>
@@ -209,41 +200,59 @@
                 </div>
             </div>
             <div class="col-md-6">
-                <div class="card h-100" style="min-height: 340px; max-height: 340px; display: flex; flex-direction: column;">
+                <div class="card h-100">
                     <div class="card-header">Entrevistas Agendadas</div>
-                    <div class="card-body" style="flex: 1 1 auto; overflow-y: auto;">
+                    <div class="card-body overflow-scroll" id="entrevistasContainer">
                         <div class="d-flex justify-content-between align-items-center mb-3 p-3 bg-light rounded">
                             <div>
                                 <h5 class="mb-0">João Silva</h5>
-                                <small class="text-muted">Auxílio Transporte</small>
+                                <small class="text-muted">Entrevista Inicial - Auxílio Transporte</small>
+                                <br>
+                                <small class="text-info">
+                                    <i class="bi bi-geo-alt"></i> Presencial - Sala 201 - Bloco A
+                                </small>
                             </div>
                             <div class="text-end">
                                 <div class="fw-bold">Hoje, 14:00</div>
-                                <button class="btn btn-sm btn-outline-primary mt-2">Iniciar</button>
+                                <span class="badge bg-danger mb-2">Alta</span>
+                                <br>
+                                <button class="btn btn-sm btn-outline-primary mt-1">Iniciar</button>
                             </div>
                         </div>
                         <div class="d-flex justify-content-between align-items-center mb-3 p-3 bg-light rounded">
                             <div>
                                 <h5 class="mb-0">Alice Souza</h5>
-                                <small class="text-muted">Auxílio Alimentação</small>
+                                <small class="text-muted">Reavaliação - Auxílio Alimentação</small>
+                                <br>
+                                <small class="text-info">
+                                    <i class="bi bi-camera-video"></i> Online - https://meet.google.com/abc-defg-hij
+                                </small>
                             </div>
                             <div class="text-end">
                                 <div class="fw-bold">Hoje, 16:00</div>
-                                <button class="btn btn-sm btn-outline-primary mt-2">Iniciar</button>
+                                <span class="badge bg-warning mb-2">Média</span>
+                                <br>
+                                <button class="btn btn-sm btn-outline-primary mt-1">Iniciar</button>
                             </div>
                         </div>
                         <div class="d-flex justify-content-between align-items-center mb-3 p-3 bg-light rounded">
                             <div>
                                 <h5 class="mb-0">Maria Santos</h5>
-                                <small class="text-muted">Auxílio Material Didático</small>
+                                <small class="text-muted">Acompanhamento - Auxílio Material Didático</small>
+                                <br>
+                                <small class="text-info">
+                                    <i class="bi bi-camera-video"></i> Online - https://teams.microsoft.com/l/meetup-join/xyz123
+                                </small>
                             </div>
                             <div class="text-end">
                                 <div class="fw-bold">Amanhã, 10:30</div>
-                                <button class="btn btn-sm btn-outline-secondary mt-2">Reagendar</button>
+                                <span class="badge bg-success mb-2">Baixa</span>
+                                <br>
+                                <button class="btn btn-sm btn-outline-secondary mt-1">Reagendar</button>
                             </div>
                         </div>
                         <div class="d-flex justify-content-end mt-3">
-                            <button class="btn btn-success">Nova Entrevista</button>
+                            <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#novaEntrevistaModal">Nova Entrevista</button>
                         </div>
                     </div>
                 </div>
@@ -251,7 +260,7 @@
         </div>
         <div class="row mt-4">
             <div class="col-12">
-                <div class="card" style="min-height: 180px;">
+                <div class="card documents">
                     <div class="card-header">Documentos Pendentes</div>
                     <div class="card-body">
                         <div class="d-flex justify-content-between align-items-center mb-3">
@@ -260,8 +269,8 @@
                                 <small class="text-muted">Comprovante de residência atualizado</small>
                             </div>
                             <div>
-                                <button class="btn btn-sm btn-outline-primary"><i class="bi bi-eye"></i></button>
-                                <button class="btn btn-sm btn-outline-success">Aprovar</button>
+                                <button class="btn btn-sm btn-outline-primary me-2"><i class="bi bi-eye"></i></button>
+                                <button class="btn btn-sm btn-outline-success btn-aprovar" data-documento="joao-residencia">Aprovar</button>
                             </div>
                         </div>
                         <div class="d-flex justify-content-between align-items-center mb-3">
@@ -270,8 +279,8 @@
                                 <small class="text-muted">Comprovante de renda familiar</small>
                             </div>
                             <div>
-                                <button class="btn btn-sm btn-outline-primary"><i class="bi bi-eye"></i></button>
-                                <button class="btn btn-sm btn-outline-success">Aprovar</button>
+                                <button class="btn btn-sm btn-outline-primary me-2"><i class="bi bi-eye"></i></button>
+                                <button class="btn btn-sm btn-outline-success btn-aprovar" data-documento="maria-renda">Aprovar</button>
                             </div>
                         </div>
                         <div class="d-flex justify-content-between align-items-center">
@@ -280,8 +289,8 @@
                                 <small class="text-muted">Declaração de matrícula</small>
                             </div>
                             <div>
-                                <button class="btn btn-sm btn-outline-primary"><i class="bi bi-eye"></i></button>
-                                <button class="btn btn-sm btn-outline-success">Aprovar</button>
+                                <button class="btn btn-sm btn-outline-primary me-2"><i class="bi bi-eye"></i></button>
+                                <button class="btn btn-sm btn-outline-success btn-aprovar" data-documento="pedro-matricula">Aprovar</button>
                             </div>
                         </div>
                     </div>
@@ -290,29 +299,146 @@
         </div>
     </div>
 
+    <!-- Modal Nova Entrevista -->
+    <div class="modal fade" id="novaEntrevistaModal" tabindex="-1" aria-labelledby="novaEntrevistaModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="novaEntrevistaModalLabel">
+                        <i class="bi bi-calendar-plus me-2"></i>Agendar Nova Entrevista
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="novaEntrevistaForm">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="alunoNome" class="form-label">
+                                        <i class="bi bi-person me-1"></i>Nome do Aluno
+                                    </label>
+                                    <input type="text" class="form-control" id="alunoNome" placeholder="Digite o nome completo do aluno..." required>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="tipoEntrevista" class="form-label">
+                                        <i class="bi bi-clipboard me-1"></i>Tipo de Entrevista
+                                    </label>
+                                    <select class="form-select" id="tipoEntrevista" required>
+                                        <option value="">Selecione o tipo...</option>
+                                        <option value="inicial">Entrevista Inicial</option>
+                                        <option value="reavaliacao">Reavaliação</option>
+                                        <option value="acompanhamento">Acompanhamento</option>
+                                        <option value="renovacao">Renovação de Auxílio</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col-md-4">
+                                <div class="mb-3">
+                                    <label for="dataEntrevista" class="form-label">
+                                        <i class="bi bi-calendar me-1"></i>Data
+                                    </label>
+                                    <input type="date" class="form-control" id="dataEntrevista" required>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="mb-3">
+                                    <label for="horaEntrevista" class="form-label">
+                                        <i class="bi bi-clock me-1"></i>Horário
+                                    </label>
+                                    <input type="time" class="form-control" id="horaEntrevista" required>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="mb-3">
+                                    <label for="duracao" class="form-label">
+                                        <i class="bi bi-stopwatch me-1"></i>Duração (min)
+                                    </label>
+                                    <select class="form-select" id="duracao" required>
+                                        <option value="30">30 minutos</option>
+                                        <option value="45">45 minutos</option>
+                                        <option value="60" selected>60 minutos</option>
+                                        <option value="90">90 minutos</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="modalidade" class="form-label">
+                                        <i class="bi bi-geo-alt me-1"></i>Modalidade
+                                    </label>
+                                    <select class="form-select" id="modalidade" required>
+                                        <option value="presencial" selected>Presencial</option>
+                                        <option value="online">Online</option>
+                                        <option value="hibrido">Híbrido</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="local" class="form-label">
+                                        <i class="bi bi-building me-1"></i>Local/Sala
+                                    </label>
+                                    <input type="text" class="form-control" id="local" placeholder="Ex: Sala 201 - Bloco A">
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="prioridade" class="form-label">
+                                <i class="bi bi-exclamation-triangle me-1"></i>Prioridade
+                            </label>
+                            <select class="form-select" id="prioridade" required>
+                                <option value="baixa">Baixa</option>
+                                <option value="media" selected>Média</option>
+                                <option value="alta">Alta</option>
+                                <option value="urgente">Urgente</option>
+                            </select>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="observacoes" class="form-label">
+                                <i class="bi bi-chat-text me-1"></i>Observações
+                            </label>
+                            <textarea class="form-control" id="observacoes" rows="3" placeholder="Observações adicionais sobre a entrevista..."></textarea>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" id="notificarAluno">
+                                <label class="form-check-label" for="notificarAluno">
+                                    <i class="bi bi-bell me-1"></i>Notificar aluno por email
+                                </label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" id="lembrete">
+                                <label class="form-check-label" for="lembrete">
+                                    <i class="bi bi-alarm me-1"></i>Criar lembrete 1 dia antes
+                                </label>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                        <i class="bi bi-x-circle me-1"></i>Cancelar
+                    </button>
+                    <button type="button" class="btn btn-success" id="agendarEntrevista">
+                        <i class="bi bi-check-circle me-1"></i>Agendar Entrevista
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
-    <script>
-        // Menu toggle functionality
-        document.addEventListener('DOMContentLoaded', function() {
-            const sidebar = document.getElementById('sidebar');
-            const mainContent = document.getElementById('mainContent');
-            const menuToggle = document.getElementById('menuToggle');
-            const closeSidebar = document.getElementById('closeSidebar');
-            
-            // Close sidebar button
-            closeSidebar.addEventListener('click', function() {
-                sidebar.classList.add('collapsed');
-                mainContent.classList.add('expanded');
-                menuToggle.classList.add('visible');
-            });
-            
-            // Open sidebar button
-            menuToggle.addEventListener('click', function() {
-                sidebar.classList.remove('collapsed');
-                mainContent.classList.remove('expanded');
-                menuToggle.classList.remove('visible');
-            });
-        });
-    </script>
+    <script src="/static/js/dashboard_assistente.js"></script>
 </body>
 </html>
