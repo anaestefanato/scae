@@ -23,22 +23,24 @@ def inserir(aluno: Aluno) -> Optional[int]:
         id_usuario = usuario_repo.inserir(Usuario(
             id_usuario=0,
             nome=aluno.nome,
+            matricula=aluno.matricula,
             email=aluno.email,
-            senha=aluno.senha,
-            tipo_usuario=aluno.tipo_usuario
+            senha=aluno.senha
         ))
         # Depois insere na tabela aluno
         cursor.execute(INSERIR, (
             aluno.id_usuario if aluno.id_usuario else id_usuario,
             aluno.cpf ,
+            aluno.rg,
+            aluno.telefone,
+            aluno.curso,
             aluno.data_nascimento,
             aluno.filiacao,
             aluno.endereco,
             aluno.nome_banco,
             aluno.agencia_bancaria,
             aluno.numero_conta_bancaria,
-            aluno.renda_familiar,
-            aluno.matricula
+            aluno.renda_familiar
         ))
         return id_usuario
     
@@ -52,10 +54,13 @@ def obter_todos() -> list[Aluno]:
             aluno = Aluno(
                 id_usuario=row["id_usuario"],
                 nome=row["nome"],
+                matricula=row["matricula"],
                 email=row["email"],
                 senha=row["senha"],
-                tipo_usuario=row["tipo_usuario"],
                 cpf=row["cpf"],
+                rg=row["rg"],
+                telefone=row["telefone"],
+                curso=row["curso"],
                 data_nascimento=row["data_nascimento"],
                 filiacao=row["filiacao"],
                 endereco=row["endereco"],
@@ -63,7 +68,7 @@ def obter_todos() -> list[Aluno]:
                 agencia_bancaria=row["agencia_bancaria"],
                 numero_conta_bancaria=row["numero_conta_bancaria"],
                 renda_familiar=row["renda_familiar"],
-                matricula=row["matricula"]
+                quantidade_pessoas=row["quantidade_pessoas"]
             )
             alunos.append(aluno)
         return alunos
@@ -77,10 +82,13 @@ def obter_por_id(id: int) -> Optional[Aluno]:
             return Aluno(
                 id_usuario=row["id_usuario"],
                 nome=row["nome"],
+                matricula=row["matricula"],
                 email=row["email"],
                 senha=row["senha"],
-                tipo_usuario=row["tipo_usuario"],
                 cpf=row["cpf"],
+                rg=row["rg"],
+                telefone=row["telefone"],
+                curso=row["curso"],
                 data_nascimento=row["data_nascimento"],
                 filiacao=row["filiacao"],
                 endereco=row["endereco"],
@@ -88,8 +96,7 @@ def obter_por_id(id: int) -> Optional[Aluno]:
                 agencia_bancaria=row["agencia_bancaria"],
                 numero_conta_bancaria=row["numero_conta_bancaria"],
                 renda_familiar=row["renda_familiar"],
-                matricula=row["matricula"]
-            )
+                quantidade_pessoas=row["quantidade_pessoas"])
         return None
 
 
@@ -103,6 +110,7 @@ def obter_alunos_por_pagina(pagina: int, limite: int) -> list[Usuario]:
             Aluno(
                 id_usuario=row["id_usuario"],
                 nome=row["nome"],
+                matricula=row["matricula"],
                 email=row["email"],
                 senha=row["senha"],
                 tipo_usuario=row["tipo_usuario"],
@@ -114,7 +122,7 @@ def obter_alunos_por_pagina(pagina: int, limite: int) -> list[Usuario]:
                 agencia_bancaria=row["agencia_bancaria"],
                 numero_conta_bancaria=row["numero_conta_bancaria"],
                 renda_familiar=row["renda_familiar"],
-                matricula=row["matricula"])
+                quantidade_pessoas=row["quantidade_pessoas"])
             for row in rows]
         return alunos
 
@@ -136,6 +144,7 @@ def atualizar(aluno: Usuario) -> bool:
             aluno.agencia_bancaria,
             aluno.numero_conta_bancaria,
             aluno.renda_familiar,
+            aluno.quantidade_pessoas,
             aluno.id_usuario))
         return (cursor.rowcount > 0)
     

@@ -2,6 +2,9 @@ CRIAR_TABELA = """
 CREATE TABLE IF NOT EXISTS aluno (
     id_usuario INTEGER PRIMARY KEY,
     cpf TEXT NOT NULL,
+    rg TEXT NOT NULL,
+    telefone TEXT NOT NULL,
+    curso TEXT NOT NULL,
     data_nascimento TEXT NOT NULL,
     filiacao TEXT NOT NULL,
     endereco TEXT NOT NULL,
@@ -9,52 +12,61 @@ CREATE TABLE IF NOT EXISTS aluno (
     agencia_bancaria TEXT NOT NULL,
     numero_conta_bancaria TEXT NOT NULL,
     renda_familiar REAL NOT NULL,
+    quantidade_pessoas INTEGER NOT NULL,
     FOREIGN KEY (id_usuario) REFERENCES usuario(id_usuario) ON DELETE CASCADE
 )
 """
 
 INSERIR = """
-INSERT INTO aluno (id_usuario, cpf, data_nascimento, filiacao, endereco, nome_banco, agencia_bancaria, numero_conta_bancaria, renda_familiar, matricula) 
-VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+INSERT INTO aluno (id_usuario, cpf, rg, telefone, curso, data_nascimento, filiacao, endereco, nome_banco, agencia_bancaria, numero_conta_bancaria, renda_familiar, quantidade_pessoas) 
+VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
 """
 
 OBTER_TODOS = """
 SELECT 
-id_usuario, cpf, data_nascimento, filiacao, endereco, nome_banco, numero_conta_bancaria, renda_familiar, matricula 
+al.id_usuario, al.cpf, al.rg, al.telefone, al.curso, al.data_nascimento, al.filiacao, al.endereco, al.nome_banco, al.agencia_bancaria, al.numero_conta_bancaria, al.renda_familiar, al.quantidade_pessoas, u.nome, u.matricula, u.email, u.senha
 FROM aluno al 
 INNER JOIN usuario u ON al.id_usuario = u.id_usuario    
-ORDER BY matricula
+ORDER BY al.matricula
 """ 
 
 OBTER_POR_ID = """
 SELECT 
-    aluno.id_usuario AS id_usuario,
-    usuario.nome AS nome,
-    usuario.email AS email,
-    usuario.senha AS senha,
-    usuario.tipo_usuario AS tipo_usuario,
-    aluno.cpf AS cpf,
-    aluno.data_nascimento AS data_nascimento,
-    aluno.filiacao AS filiacao,
-    aluno.endereco AS endereco,
-    aluno.nome_banco AS nome_banco,
-    aluno.agencia_bancaria AS agencia_bancaria,
-    aluno.numero_conta_bancaria AS numero_conta_bancaria,
-    aluno.renda_familiar AS renda_familiar,
-    aluno.matricula AS matricula
-FROM aluno
-JOIN usuario ON aluno.id_usuario = usuario.id_usuario
-WHERE aluno.id_usuario = ?
+    al.id_usuario AS id_usuario,
+    u.nome AS nome,
+    u.matricula AS matricula
+    u.email AS email,
+    u.senha AS senha,
+    u.tipo_usuario AS tipo_usuario,
+    al.cpf AS cpf,
+    al.rg AS rg,
+    al.telefone AS telefone,
+    al.curso AS curso,
+    al.data_nascimento AS data_nascimento,
+    al.filiacao AS filiacao,
+    al.endereco AS endereco,
+    al.nome_banco AS nome_banco,
+    al.agencia_bancaria AS agencia_bancaria,
+    al.numero_conta_bancaria AS numero_conta_bancaria,
+    al.renda_familiar AS renda_familiar,
+    al.quantidade_pessoas AS quantidade_pessoas
+FROM aluno al
+JOIN usuario u ON al.id_usuario = u.id_usuario
+WHERE al.id_usuario = ?
 """ 
 
 OBTER_POR_PAGINA = """
 SELECT
 u.id_usuario,
+u.matricula,
 u.nome,
 u.email,
 u.senha,
 u.tipo_usuario,
 al.cpf,
+al.rg,
+al.telefone,
+al.curso,
 al.data_nascimento,
 al.filiacao,
 al.endereco,
@@ -62,16 +74,16 @@ al.nome_banco,
 al.agencia_bancaria,
 al.numero_conta_bancaria,
 al.renda_familiar,
-al.matricula
+al.quantidade_pessoas
 FROM aluno al
 INNER JOIN usuario u ON al.id_usuario = u.id_usuario
-ORDER BY al.matricula
+ORDER BY u.matricula
 LIMIT ? OFFSET ?
 """
 
 ATUALIZAR = """
 UPDATE aluno
-SET cpf = ?, data_nascimento = ?, filiacao = ?, endereco = ?, nome_banco = ?, agencia_bancaria = ?, numero_conta_bancaria = ?, renda_familiar = ?
+SET cpf = ?, rg = ?, telefone = ?, data_nascimento = ?, filiacao = ?, endereco = ?, nome_banco = ?, agencia_bancaria = ?, numero_conta_bancaria = ?, renda_familiar = ?, quantidade_pessoas = ?
 WHERE id_usuario = ?
 """
 
