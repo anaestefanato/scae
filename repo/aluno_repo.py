@@ -154,3 +154,18 @@ def excluir(id: int) -> bool:
         cursor.execute(EXCLUIR, (id,))
         usuario_repo.excluir(id, cursor)
         return (cursor.rowcount > 0)
+    
+def possui_cadastro_completo(id: int) -> bool:
+    with get_connection() as conn:
+        cursor = conn.cursor()
+        cursor.execute(POSSUI_CADASTRO_COMPLETO, (id,))
+        row = cursor.fetchone()
+        if row:
+            return bool(row["cadastro_completo"])
+        return False
+    
+def marcar_cadastro_completo(id: int) -> bool:
+    with get_connection() as conn:
+        cursor = conn.cursor()
+        cursor.execute(MARCAR_CADASTRO_COMPLETO, (id,))
+        return (cursor.rowcount > 0)

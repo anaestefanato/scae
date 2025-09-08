@@ -34,7 +34,8 @@ async def post_login(
         "matricula": usuario.matricula,
         "email": usuario.email,
         "perfil": usuario.perfil,
-        "foto": usuario.foto
+        "foto": usuario.foto,
+        "completo": usuario_repo.possui_cadastro_completo(usuario.id_usuario)
     }
     criar_sessao(request, usuario_dict)
     

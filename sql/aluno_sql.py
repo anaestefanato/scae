@@ -13,6 +13,7 @@ CREATE TABLE IF NOT EXISTS aluno (
     numero_conta_bancaria TEXT NOT NULL,
     renda_familiar REAL NOT NULL,
     quantidade_pessoas INTEGER NOT NULL,
+    cadastro_completo BOOLEAN DEFAULT 0,
     FOREIGN KEY (id_usuario) REFERENCES usuario(id_usuario) ON DELETE CASCADE
 )
 """
@@ -89,5 +90,17 @@ WHERE id_usuario = ?
 
 EXCLUIR = """
 DELETE FROM aluno
+WHERE id_usuario = ?
+"""
+
+POSSUI_CADASTRO_COMPLETO = """
+SELECT cadastro_completo
+FROM aluno
+WHERE id_usuario = ?
+"""
+
+MARCAR_CADASTRO_COMPLETO = """
+UPDATE aluno
+SET cadastro_completo = 1
 WHERE id_usuario = ?
 """

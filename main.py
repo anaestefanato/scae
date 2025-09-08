@@ -8,6 +8,7 @@ from routes.admin import analisar_cadastro_routes, perfiladmin_routes, responder
 from routes.aluno import acompanhar_inscricoes_routes, dados_cadastrais_routes, duvidas_frequentes_routes, editais_routes, notificacao_routes, perfilaluno_routes, recebimentos_routes, suporte_routes
 from repo import administrador_repo, aluno_repo, assistente_social_repo, auxilio_moradia_repo, auxilio_repo, auxilio_transporte_repo, chamado_repo, duvida_edital_repo, edital_repo, inscricao_repo, notificacao_repo, recurso_repo, resposta_chamado_repo, usuario_repo
 from routes.assistente_social import alunos_routes, analise_inscricoes_routes, analise_recurso_routes, perfilassistente_routes, entrevistas_routes, relatorios_routes, agenda_routes
+from util import seed_db
 
 usuario_repo.criar_tabela()
 aluno_repo.criar_tabela()
@@ -23,12 +24,14 @@ notificacao_repo.criar_tabela()
 recurso_repo.criar_tabela()
 auxilio_moradia_repo.AuxilioMoradiaRepo.criar_tabela()
 auxilio_transporte_repo.AuxilioTransporteRepo.criar_tabela()
+seed_db.criar_admin_padrao()
+seed_db.criar_aluno_padrao()
 
 
 app = FastAPI()
 app.mount("/static", StaticFiles(directory="static"), name="static")
 # Gerar chave secreta (em produção, use variável de ambiente!)
-SECRET_KEY = secrets.token_urlsafe(32)
+SECRET_KEY = "f0983404657523e010e3c1cafb3e61be"
 
 # Adicionar middleware de sessão
 app.add_middleware(

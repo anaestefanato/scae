@@ -20,17 +20,18 @@ def inserir(administrador: Administrador) -> Optional[int]:
     with get_connection() as conn:
         cursor = conn.cursor()
         usuario = Usuario(
-            0,
-            administrador.nome, 
-            administrador.email, 
-            administrador.senha, 
-            administrador.tipo_usuario
+            id_usuario=0,
+            nome=administrador.nome, 
+            matricula=administrador.matricula,
+            email=administrador.email, 
+            senha=administrador.senha,
+            perfil="admin"
         )
         id_usuario = usuario_repo.inserir(usuario)
         
         cursor.execute(INSERIR, (
             id_usuario,  
-            administrador.matricula
+            administrador.tipo
         ))
         
         conn.commit()
