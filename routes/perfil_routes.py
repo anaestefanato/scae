@@ -17,7 +17,8 @@ templates = criar_templates("templates/dadoscadastrais")
 
 @router.get("/dadoscadastrais")
 @requer_autenticacao()
-async def get_perfil(request: Request, usuario_logado: dict = None):
+async def get_perfil(request: Request):
+    usuario_logado = obter_usuario_logado(request)
     # Buscar dados completos do usuário
     usuario = usuario_repo.obter_por_matricula(usuario_logado['matricula'])
     if not usuario:
@@ -60,10 +61,9 @@ async def post_perfil(
     agencia_bancaria: str = Form(None),
     numero_conta_bancaria: str = Form(None),
     renda_familiar: str = Form(None),
-    quantidade_pessoas: str = Form(None),
-    usuario_logado: dict = None
+    quantidade_pessoas: str = Form(None)
 ):
-
+    usuario_logado = obter_usuario_logado(request)
     usuario = usuario_repo.obter_por_matricula(usuario_logado['matricula'])
     
     # Verificar se o email já está em uso por outro usuário
@@ -144,10 +144,11 @@ async def post_perfil(
 #MEXER daqui pra baixo
 @router.get("/perfil/alterar-senha")
 @requer_autenticacao()
-async def get_alterar_senha(request: Request, usuario_logado: dict = None):
+async def get_alterar_senha(request: Request):
+    usuario_logado = obter_usuario_logado(request)
     return templates.TemplateResponse(
         "alterar_senha.html",
-        {"request": request}
+        {"request": request, "usuario_logado": usuario_logado}
     )
 
 
@@ -157,9 +158,9 @@ async def post_alterar_senha(
     request: Request,
     senha_atual: str = Form(...),
     senha_nova: str = Form(...),
-    confirmar_senha: str = Form(...),
-    usuario_logado: dict = None
+    confirmar_senha: str = Form(...)
 ):
+    usuario_logado = obter_usuario_logado(request)
     usuario = usuario_repo.obter_por_id(usuario_logado['id'])
     
     # Verificar senha atual
@@ -210,9 +211,9 @@ async def post_alterar_senha(
 @requer_autenticacao()
 async def alterar_foto(
     request: Request,
-    foto: UploadFile = File(...),
-    usuario_logado: dict = None
+    foto: UploadFile = File(...)
 ):
+    usuario_logado = obter_usuario_logado(request)
     # Validar tipo de arquivo
     tipos_permitidos = ["image/jpeg", "image/png", "image/jpg"]
     if foto.content_type not in tipos_permitidos:
