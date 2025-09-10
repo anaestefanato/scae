@@ -12,7 +12,7 @@ class TestNotificacaoRepo:
     def test_inserir_notificacao(self, test_db):
         usuario_repo.criar_tabela()
         criar_tabela()
-        usuario = Usuario(id_usuario=None, nome="Teste", email="teste@email.com", senha="1234", tipo_usuario="aluno")
+        usuario = Usuario(id_usuario=None, nome="Teste", email="teste@email.com", senha="1234", perfil="aluno")
         id_usuario = usuario_repo.inserir(usuario)
         notificacao = Notificacao(
             id_notificacao=None,
@@ -27,7 +27,7 @@ class TestNotificacaoRepo:
     def test_obter_por_id_existente(self, test_db):
         usuario_repo.criar_tabela()
         criar_tabela()
-        usuario = Usuario(id_usuario=None, nome="Teste", email="teste@email.com", senha="1234", tipo_usuario="aluno")
+        usuario = Usuario(id_usuario=None, nome="Teste", email="teste@email.com", senha="1234", perfil="aluno")
         id_usuario = usuario_repo.inserir(usuario)
         notificacao = Notificacao(
             id_notificacao=None,
@@ -51,7 +51,7 @@ class TestNotificacaoRepo:
         usuario_repo.criar_tabela()
         criar_tabela()
         for i in range(1, 6):
-            usuario = Usuario(id_usuario=None, nome=f"Usuário {i}", email=f"user{i}@mail.com", senha="123", tipo_usuario="aluno")
+            usuario = Usuario(id_usuario=None, nome=f"Usuário {i}", email=f"user{i}@mail.com", senha="123", perfil="aluno")
             id_usuario = usuario_repo.inserir(usuario)
             notificacao = Notificacao(
                 id_notificacao=None,
@@ -68,7 +68,7 @@ class TestNotificacaoRepo:
     def test_atualizar_notificacao_existente(self, test_db):
         usuario_repo.criar_tabela()
         criar_tabela()
-        usuario = Usuario(id_usuario=None, nome="Usuário", email="email@email.com", senha="1234", tipo_usuario="aluno")
+        usuario = Usuario(id_usuario=None, nome="Usuário", email="email@email.com", senha="1234", perfil="aluno")
         id_usuario = usuario_repo.inserir(usuario)
         notificacao = Notificacao(
             id_notificacao=None,
@@ -106,7 +106,7 @@ class TestNotificacaoRepo:
     def test_excluir_notificacao_existente(self, test_db):
         usuario_repo.criar_tabela()
         criar_tabela()
-        usuario = Usuario(id_usuario=None, nome="Usuário", email="email@email.com", senha="1234", tipo_usuario="aluno")
+        usuario = Usuario(id_usuario=None, nome="Usuário", email="email@email.com", senha="1234", perfil="aluno")
         id_usuario = usuario_repo.inserir(usuario)
         notificacao = Notificacao(
             id_notificacao=None,

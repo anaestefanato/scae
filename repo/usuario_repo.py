@@ -85,7 +85,11 @@ def obter_todos_por_perfil(perfil: str) -> list[Usuario]:
                 matricula=row["matricula"],
                 email=row["email"],
                 senha=row["senha"],
-                perfil=row["perfil"])
+                perfil=row["perfil"],
+                foto=None,
+                token_redefinicao=None,
+                data_token=None,
+                data_cadastro=None)
             for row in rows]
         return usuarios
     

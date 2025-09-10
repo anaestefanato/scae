@@ -20,11 +20,11 @@ def inserir(assistenteSocial: AssistenteSocial) -> Optional[int]:
     with get_connection() as conn:
         cursor = conn.cursor()
         usuario = Usuario(
-            0,
-            assistenteSocial.nome,
-            assistenteSocial.email,
-            assistenteSocial.senha,
-            assistenteSocial.tipo_usuario
+            id_usuario=0,
+            nome=assistenteSocial.nome,
+            email=assistenteSocial.email,
+            senha=assistenteSocial.senha,
+            perfil=assistenteSocial.perfil
         )
         id_usuario = usuario_repo.inserir(usuario)
         if not id_usuario:
@@ -47,7 +47,7 @@ def obter_todos() -> list[AssistenteSocial]:
                 nome=row["nome"],
                 email=row["email"],
                 senha=row["senha"],
-                tipo_usuario=row["tipo_usuario"],
+                perfil=row["perfil"],
                 matricula=row["matricula"])
             for row in rows]
         return assistentes
@@ -64,18 +64,19 @@ def obter_por_id( id: int) -> Optional[AssistenteSocial]:
             nome=row["nome"],
             email=row["email"],
             senha=row["senha"],
-            tipo_usuario=row["tipo_usuario"],
+            perfil=row["perfil"],
             matricula=row["matricula"])
         return assistentes
     
 def atualizar(assistenteSocial: AssistenteSocial) -> bool:
     with get_connection() as conn:
         cursor = conn.cursor()
-        usuario = Usuario(assistenteSocial.id_usuario,
-                assistenteSocial.nome, 
-                assistenteSocial.email, 
-                assistenteSocial.senha, 
-                assistenteSocial.tipo_usuario)
+        usuario = Usuario(
+            id_usuario=assistenteSocial.id_usuario,
+            nome=assistenteSocial.nome,
+            email=assistenteSocial.email,
+            senha=assistenteSocial.senha,
+            perfil=assistenteSocial.perfil)
         usuario_repo.atualizar(usuario)
         cursor.execute(ATUALIZAR, (
             assistenteSocial.matricula,  # usa o id do usuário já existente

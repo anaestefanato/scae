@@ -5,4 +5,4 @@ from model.usuario_model import Usuario
 @dataclass
 class Administrador(Usuario):
     id_usuario: int
-    tipo: str
+    tipo_admin: str

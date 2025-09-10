@@ -25,7 +25,7 @@ class TestUsuarioRepo:
         assert usuario_db.nome == "Usuario Teste", "O nome do usuário inserido não corresponde ao esperado."
         assert usuario_db.email == "fulano@gmail.com", "O email do usuário inserido deve ser None."
         assert usuario_db.senha == "123456", "A senha do usuário inserido deve ser None."
-        assert usuario_db.tipo_usuario == "assistente", "O tipo de usuário do usuário inserido deve ser None."
+        assert usuario_db.perfil == "assistente", "O tipo de usuário do usuário inserido deve ser None."
 
     def test_obter_por_id_existente(self, test_db):
         # Arrange
@@ -76,14 +76,14 @@ class TestUsuarioRepo:
         # Act
         usuario_inserido.nome = "Usuario Atualizado"
         usuario_inserido.email = "joaosilva@email.com"
-        usuario_inserido.tipo_usuario = "administrador"
+        usuario_inserido.perfil = "administrador"
         resultado = atualizar(usuario_inserido)
         # Assert
         assert resultado == True, "A atualização do usuário falhou."
         usuario_db = obter_por_id(id_usuario_inserido)
         assert usuario_db.nome == "Usuario Atualizado", "O nome do usuário atualizado não corresponde ao esperado."
         assert usuario_db.email == "joaosilva@email.com", "O email do usuário atualizado não corresponde ao esperado."
-        assert usuario_db.tipo_usuario == "administrador", "O tipo de usuário atualizado não corresponde ao esperado."
+        assert usuario_db.perfil == "administrador", "O tipo de usuário atualizado não corresponde ao esperado."
 
     def test_atualizar_usuario_inexistente(self, test_db, usuario_exemplo):
         # Arrange
@@ -116,16 +116,16 @@ class TestUsuarioRepo:
         # Assert
         assert resultado == False, "A exclusão de um usuário inexistente deveria retornar False."
 
-    def test_atualizar_tipo_usuario(self, test_db, usuario_exemplo):
+    def test_atualizar_perfil(self, test_db, usuario_exemplo):
         # Arrange
         usuario_repo.criar_tabela()
         id_usuario_inserido = usuario_repo.inserir(usuario_exemplo)
         # Act
-        resultado = usuario_repo.atualizar_tipo_usuario(id_usuario_inserido, 'aluno')
+        resultado = usuario_repo.atualizar_perfil(id_usuario_inserido, 'aluno')
         # Assert
         assert resultado == True, "A atualização do tipo de usuário deveria retornar True"
         usuario_db = usuario_repo.obter_por_id(id_usuario_inserido)
-        assert usuario_db.tipo_usuario == 'aluno', "O tipo do usuário atualizado não confere"
+        assert usuario_db.perfil == 'aluno', "O tipo do usuário atualizado não confere"
 
     def test_atualizar_senha(self, test_db, usuario_exemplo):
         # Arrange

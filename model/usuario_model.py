@@ -7,8 +7,7 @@ class Usuario:
     nome: str
     matricula: str
     email: str
-    senha: str
-    tipo_usuario: str
+    senha: str    
     perfil: str 
     foto: Optional[str] 
     token_redefinicao: Optional[str] 

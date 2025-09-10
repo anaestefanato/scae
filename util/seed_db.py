@@ -11,13 +11,25 @@ def criar_admin_padrao():
     if not admins:
         senha_hash = criar_hash_senha("admin123")
         admin = Administrador(
+            # id_usuario: int
+            # nome: str
+            # matricula: str
+            # email: str
+            # senha: str
+            # perfil: str
+            # perfil: str 
             id_usuario=0,
             nome="Administrador",
-            email="admin@admin.com",
-            senha=senha_hash,
-            perfil="admin",
             matricula="admin123",
-            tipo_usuario="admin"
+            email="admin@admin.com",
+            senha=senha_hash,            
+            perfil="admin",
+            tipo_admin="super",
+            foto=None,
+            token_redefinicao=None,
+            data_token=None,
+            data_cadastro=None
+            
         )
         id_usuario = usuario_repo.inserir(admin)        
         print("Admin criado: admin@admin.com / admin123")
@@ -34,8 +46,7 @@ def criar_aluno_padrao():
             email="aluno@aluno.com",
             senha=senha_hash,
             perfil="aluno",
-            matricula="aluno123",
-            tipo_usuario="aluno",
+            matricula="aluno123",            
             cpf="000.000.000-00",
             rg="00.000.000-0",
             telefone="(00) 00000-0000",
@@ -51,7 +62,11 @@ def criar_aluno_padrao():
             agencia_bancaria="0001",
             numero_conta_bancaria="12345-6",
             renda_familiar=6000.00,
-            quantidade_pessoas=4
+            quantidade_pessoas=4,
+            foto=None,
+            token_redefinicao=None,
+            data_token=None,
+            data_cadastro=None
         )
         id_usuario = usuario_repo.inserir(aluno)
         print("Aluno criado: aluno@aluno.com / aluno123")

@@ -31,7 +31,7 @@ def inserir(administrador: Administrador) -> Optional[int]:
         
         cursor.execute(INSERIR, (
             id_usuario,  
-            administrador.tipo
+            administrador.tipo_admin
         ))
         
         conn.commit()
@@ -49,7 +49,7 @@ def obter_todos() -> list[Administrador]:
                 nome=row["nome"],
                 email=row["email"],
                 senha=row["senha"],
-                tipo_usuario=row["tipo_usuario"])
+                perfil=row["perfil"])
             for row in rows]
         return administradores
 
@@ -63,16 +63,22 @@ def obter_por_id(id_usuario: int) -> Optional[Administrador]:
         return Administrador(
             id_usuario=row["id_usuario"],
             nome=row["nome"],
+            matricula=row["matricula"],
             email=row["email"],
             senha=row["senha"],
-            tipo_usuario=row["tipo_usuario"],
-            matricula=row["matricula"]
+            perfil=row["perfil"]
         )
     
 def atualizar(administrador: Administrador) -> bool:
     with get_connection() as conn:
         cursor = conn.cursor()
-        usuario = Usuario(administrador.id_usuario, administrador.nome, administrador.email, administrador.senha, administrador.tipo_usuario)
+        usuario = Usuario(
+            id_usuario=administrador.id_usuario, 
+            nome=administrador.nome, 
+            matricula=administrador.matricula,
+            email=administrador.email, 
+            senha=administrador.senha, 
+            perfil=administrador.perfil)
         usuario_repo.atualizar(usuario)
         cursor.execute(ATUALIZAR, (
             administrador.matricula, 

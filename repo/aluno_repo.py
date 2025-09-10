@@ -125,7 +125,7 @@ def obter_alunos_por_pagina(pagina: int, limite: int) -> list[Usuario]:
                 matricula=row["matricula"],
                 email=row["email"],
                 senha=row["senha"],
-                tipo_usuario=row["tipo_usuario"],
+                perfil=row["perfil"],
                 cpf=row["cpf"],
                 rg=row["rg"],
                 telefone=row["telefone"],
@@ -148,11 +148,12 @@ def obter_alunos_por_pagina(pagina: int, limite: int) -> list[Usuario]:
 def atualizar(aluno: Usuario) -> bool:
     with get_connection() as conn:
         cursor = conn.cursor()
-        usuario = Usuario(aluno.id_usuario,
-                          aluno.nome, 
-                          aluno.email, 
-                          aluno.senha, 
-                          aluno.tipo_usuario)
+        usuario = Usuario(
+            id_usuario=aluno.id_usuario,
+            nome=aluno.nome,
+            email=aluno.email,
+            senha=aluno.senha,
+            perfil=aluno.perfil)
         usuario_repo.atualizar(usuario)
         cursor.execute(ATUALIZAR, (
             aluno.cpf, 
