@@ -12,7 +12,11 @@ class Aluno(Usuario):
     curso: str
     data_nascimento: str
     filiacao: str
-    endereco: str
+    cep: str
+    cidade: str
+    bairro: str
+    rua: str
+    numero: str
     nome_banco: str
     agencia_bancaria: str
     numero_conta_bancaria: str

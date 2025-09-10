@@ -7,7 +7,11 @@ CREATE TABLE IF NOT EXISTS aluno (
     curso TEXT NOT NULL,
     data_nascimento TEXT NOT NULL,
     filiacao TEXT NOT NULL,
-    endereco TEXT NOT NULL,
+    cep TEXT NOT NULL,
+    cidade TEXT NOT NULL,
+    bairro TEXT NOT NULL,
+    rua TEXT NOT NULL,
+    numero TEXT NOT NULL,
     nome_banco TEXT NOT NULL,
     agencia_bancaria TEXT NOT NULL,
     numero_conta_bancaria TEXT NOT NULL,
@@ -19,13 +23,13 @@ CREATE TABLE IF NOT EXISTS aluno (
 """
 
 INSERIR = """
-INSERT INTO aluno (id_usuario, cpf, rg, telefone, curso, data_nascimento, filiacao, endereco, nome_banco, agencia_bancaria, numero_conta_bancaria, renda_familiar, quantidade_pessoas) 
-VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+INSERT INTO aluno (id_usuario, cpf, rg, telefone, curso, data_nascimento, filiacao, cep, cidade, bairro, rua, numero, nome_banco, agencia_bancaria, numero_conta_bancaria, renda_familiar, quantidade_pessoas) 
+VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
 """
 
 OBTER_TODOS = """
 SELECT 
-al.id_usuario, al.cpf, al.rg, al.telefone, al.curso, al.data_nascimento, al.filiacao, al.endereco, al.nome_banco, al.agencia_bancaria, al.numero_conta_bancaria, al.renda_familiar, al.quantidade_pessoas, u.nome, u.matricula, u.email, u.senha
+al.id_usuario, al.cpf, al.rg, al.telefone, al.curso, al.data_nascimento, al.filiacao, al.cep, al.cidade, al.bairro, al.rua, al.numero, al.nome_banco, al.agencia_bancaria, al.numero_conta_bancaria, al.renda_familiar, al.quantidade_pessoas, u.nome, u.matricula, u.email, u.senha
 FROM aluno al 
 INNER JOIN usuario u ON al.id_usuario = u.id_usuario    
 ORDER BY al.matricula
@@ -45,7 +49,11 @@ SELECT
     al.curso AS curso,
     al.data_nascimento AS data_nascimento,
     al.filiacao AS filiacao,
-    al.endereco AS endereco,
+    al.cep AS cep,
+    al.cidade AS cidade,
+    al.bairro AS bairro,
+    al.rua AS rua,
+    al.numero AS numero,
     al.nome_banco AS nome_banco,
     al.agencia_bancaria AS agencia_bancaria,
     al.numero_conta_bancaria AS numero_conta_bancaria,
@@ -70,7 +78,11 @@ al.telefone,
 al.curso,
 al.data_nascimento,
 al.filiacao,
-al.endereco,
+al.cep,
+al.cidade,
+al.bairro,
+al.rua,
+al.numero,
 al.nome_banco,
 al.agencia_bancaria,
 al.numero_conta_bancaria,
@@ -84,7 +96,7 @@ LIMIT ? OFFSET ?
 
 ATUALIZAR = """
 UPDATE aluno
-SET cpf = ?, rg = ?, telefone = ?, data_nascimento = ?, filiacao = ?, endereco = ?, nome_banco = ?, agencia_bancaria = ?, numero_conta_bancaria = ?, renda_familiar = ?, quantidade_pessoas = ?
+SET cpf = ?, rg = ?, telefone = ?, data_nascimento = ?, filiacao = ?, cep = ?, cidade = ?, bairro = ?, rua = ?, numero = ?, nome_banco = ?, agencia_bancaria = ?, numero_conta_bancaria = ?, renda_familiar = ?, quantidade_pessoas = ?
 WHERE id_usuario = ?
 """
 

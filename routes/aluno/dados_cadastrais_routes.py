@@ -8,6 +8,7 @@ templates = Jinja2Templates(directory="templates")
 
 @router.get("/dadoscadastrais")
 async def get_dados_cadastrais(request: Request):
+    
     response = templates.TemplateResponse("/aluno/dadoscadastrais.html", {"request": request})
     return response
 

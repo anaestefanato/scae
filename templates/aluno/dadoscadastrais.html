@@ -123,23 +123,23 @@
                         <div class="row g-3">
                             <div class="col-md-6">
                                 <label class="form-label">CEP</label>
-                                <input type="text" class="form-control" value="29.300-000" disabled>
+                                <input type="text" class="form-control" value="{{ aluno.cep }}" disabled>
                             </div>
                             <div class="col-md-6">
                                 <label class="form-label">Cidade</label>
-                                <input type="text" class="form-control" value="Cachoeiro de Itapemirim" disabled>
+                                <input type="text" class="form-control" value="{{ aluno.cidade }}" disabled>
                             </div>
                             <div class="col-md-6">
                                 <label class="form-label">Bairro</label>
-                                <input type="text" class="form-control" value="Centro" disabled>
+                                <input type="text" class="form-control" value="{{ aluno.bairro }}" disabled>
                             </div>
                             <div class="col-md-6">
                                 <label class="form-label">Rua</label>
-                                <input type="text" class="form-control" value="Rua Principal" disabled>
+                                <input type="text" class="form-control" value="{{ aluno.rua }}" disabled>
                             </div>
                             <div class="col-md-6">
                                 <label class="form-label">Número</label>
-                                <input type="text" class="form-control" value="123" disabled>
+                                <input type="text" class="form-control" value="{{ aluno.numero }}" disabled>
                             </div>
                             <div class="col-md-6">
                                 <label class="form-label">Complemento</label>
@@ -191,7 +191,7 @@
                                 <label class="form-label">Renda Per Capita</label>
                                 <div class="input-group">
                                     <span class="input-group-text">R$</span>
-                                    <input type="text" class="form-control" value="625,00" disabled>
+                                    <input type="text" class="form-control" value="" disabled>
                                 </div>
                             </div>
                             <div class="col-md-6">
@@ -225,8 +225,8 @@
                                     <p class="mb-0 text-muted small">Edital 01/2025 - Vigência até 31/12/2025</p>
                                 </div>
                                 <div class="text-end">
-                                    <div class="fw-bold text-success">R$ 200,00</div>
-                                    <span class="badge bg-success">Ativo</span>
+                                    <div class="fw-bold text-success">{{ auxilio_alimentacao.valor_mensal }}</div>
+                                    <span class="badge bg-success">{{ inscricao.status }}</span>
                                 </div>
                             </div>
                         </div>
@@ -237,8 +237,8 @@
                                     <p class="mb-0 text-muted small">Edital 01/2025 - Em análise</p>
                                 </div>
                                 <div class="text-end">
-                                    <div class="fw-bold text-muted">R$ 150,00</div>
-                                    <span class="badge bg-warning text-dark">Em Análise</span>
+                                    <div class="fw-bold text-muted">{{ auxilio_transporte.valor_mensal }}</div>
+                                    <span class="badge bg-warning text-dark">{{ inscricao.status }}</span>
                                 </div>
                             </div>
                         </div>
