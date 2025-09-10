@@ -38,6 +38,13 @@ id_usuario, nome, matricula, email, senha, perfil
 FROM usuario
 WHERE matricula = ?
 """
+OBTER_TODOS_POR_PERFIL = """
+SELECT
+id_usuario, nome, matricula, email, senha, perfil
+FROM usuario
+WHERE perfil = ?
+ORDER BY nome
+"""
 
 OBTER_USUARIOS_POR_PAGINA = """
 SELECT id_usuario, nome, matricula, email, senha, perfil
