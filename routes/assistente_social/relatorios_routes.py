@@ -14,6 +14,6 @@ templates = Jinja2Templates(directory="templates")
 async def get_relatorios(request: Request):
     usuario_logado = obter_usuario_logado(request)
     assistente = usuario_repo.obter_usuario_por_matricula(usuario_logado['matricula'])
-    response = templates.TemplateResponse("/assistente/relatorios.html", {"request": request, "assistente": assistente})
+    response = templates.TemplateResponse("assistente/relatorios.html", {"request": request, "assistente": assistente})
     return response
 

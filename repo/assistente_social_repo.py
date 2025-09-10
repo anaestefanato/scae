@@ -22,6 +22,7 @@ def inserir(assistenteSocial: AssistenteSocial) -> Optional[int]:
         usuario = Usuario(
             id_usuario=0,
             nome=assistenteSocial.nome,
+            matricula=assistenteSocial.matricula,
             email=assistenteSocial.email,
             senha=assistenteSocial.senha,
             perfil=assistenteSocial.perfil
@@ -31,7 +32,7 @@ def inserir(assistenteSocial: AssistenteSocial) -> Optional[int]:
             return None
         cursor.execute(INSERIR, (
             id_usuario,  # usa o id retornado da inserção do usuário
-            assistenteSocial.matricula
+            assistenteSocial.siap
         ))
         conn.commit()
         return id_usuario
@@ -45,10 +46,11 @@ def obter_todos() -> list[AssistenteSocial]:
             AssistenteSocial(
                 id_usuario=row["id_usuario"], 
                 nome=row["nome"],
+                matricula=row["matricula"],
                 email=row["email"],
                 senha=row["senha"],
                 perfil=row["perfil"],
-                matricula=row["matricula"])
+                siap=row["siap"])
             for row in rows]
         return assistentes
 
@@ -62,10 +64,11 @@ def obter_por_id( id: int) -> Optional[AssistenteSocial]:
         assistentes = AssistenteSocial(
             id_usuario=row["id_usuario"],
             nome=row["nome"],
+            matricula=row["matricula"],
             email=row["email"],
             senha=row["senha"],
             perfil=row["perfil"],
-            matricula=row["matricula"])
+            siap=row["siap"])
         return assistentes
     
 def atualizar(assistenteSocial: AssistenteSocial) -> bool:
@@ -74,12 +77,13 @@ def atualizar(assistenteSocial: AssistenteSocial) -> bool:
         usuario = Usuario(
             id_usuario=assistenteSocial.id_usuario,
             nome=assistenteSocial.nome,
+            matricula=assistenteSocial.matricula,
             email=assistenteSocial.email,
             senha=assistenteSocial.senha,
             perfil=assistenteSocial.perfil)
         usuario_repo.atualizar(usuario)
         cursor.execute(ATUALIZAR, (
-            assistenteSocial.matricula,  # usa o id do usuário já existente
+            assistenteSocial.siap,  # usa o id do usuário já existente
             assistenteSocial.id_usuario))
         return (cursor.rowcount > 0)
     

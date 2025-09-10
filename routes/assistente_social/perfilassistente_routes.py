@@ -10,10 +10,10 @@ templates = Jinja2Templates(directory="templates")
 
 
 @router.get("/inicio")
-@requer_autenticacao("assistente")
+#@requer_autenticacao("assistente")
 async def get_perfil(request: Request):
     usuario_logado = obter_usuario_logado(request)
     assistente = usuario_repo.obter_usuario_por_matricula(usuario_logado['matricula'])
-    response = templates.TemplateResponse("/assistente/dashboard.html", {"request": request, "assistente": assistente})
+    response = templates.TemplateResponse("/assistente/dashboard_assistente.html", {"request": request, "assistente": assistente})
     return response
 
