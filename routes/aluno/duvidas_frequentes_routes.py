@@ -3,7 +3,7 @@ from fastapi.responses import RedirectResponse
 from fastapi.templating import Jinja2Templates
 
 from repo import usuario_repo
-from util.auth_decorator import requer_autenticacao
+from util.auth_decorator import obter_usuario_logado, requer_autenticacao
 
 
 router = APIRouter()
@@ -12,11 +12,11 @@ templates = Jinja2Templates(directory="templates")
 
 @router.get("/duvidas")
 @requer_autenticacao(["aluno"])
-async def get_duvidas(request: Request, matricula: str):
-    usuario = request.session.get("usuario")
-    if not usuario.completo:
+async def get_duvidas(request: Request):
+    usuario_logado = obter_usuario_logado(request)
+    if not usuario_logado['completo']:
         return RedirectResponse("/aluno/dadoscadastrais", status_code=303)
-    aluno = usuario_repo.obter_usuario_por_matricula(matricula)
+    aluno = usuario_repo.obter_usuario_por_matricula(usuario_logado['matricula'])
     response = templates.TemplateResponse("/aluno/duvidas.html", {"request": request, "aluno": aluno})
     return response
 

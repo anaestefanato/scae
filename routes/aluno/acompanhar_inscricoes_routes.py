@@ -3,7 +3,7 @@ from fastapi.responses import RedirectResponse
 from fastapi.templating import Jinja2Templates
 
 from repo import usuario_repo
-from util.auth_decorator import requer_autenticacao
+from util.auth_decorator import obter_usuario_logado, requer_autenticacao
 
 
 router = APIRouter()
@@ -11,21 +11,23 @@ templates = Jinja2Templates(directory="templates")
 
 
 @router.get("/acompanhar-inscricoes")
-@requer_autenticacao(["aluno"])
-async def get_acompanhar_inscricoes(request: Request, matricula: str):
-    usuario = request.session.get("usuario")
-    if not usuario.completo:
+#@requer_autenticacao(["aluno"])
+async def get_acompanhar_inscricoes(request: Request):
+    usuario_logado = obter_usuario_logado(request)
+    if not usuario_logado['completo']:
         return RedirectResponse("/aluno/dadoscadastrais", status_code=303)
 
-    aluno = usuario_repo.obter_usuario_por_matricula(matricula)
+    aluno = usuario_repo.obter_usuario_por_matricula(usuario_logado['matricula'])
     response = templates.TemplateResponse("/aluno/acompanhar_inscricoes.html", {"request": request, "aluno": aluno})
     return response
 
 @router.get("/acompanhar-inscricoes/recurso")
-async def get_acompanhar_inscricoes_recurso(request: Request, matricula: str):
-    usuario = request.session.get("usuario")
-    if not usuario.completo:
+async def get_acompanhar_inscricoes_recurso(request: Request):
+    usuario_logado = obter_usuario_logado(request)
+    if not usuario_logado['completo']:
         return RedirectResponse("/aluno/dadoscadastrais", status_code=303)
-    aluno = usuario_repo.obter_usuario_por_matricula(matricula)
+    aluno = usuario_repo.obter_usuario_por_matricula(usuario_logado['matricula'])
     response = templates.TemplateResponse("/aluno/solicitar_recurso.html", {"request": request, "aluno": aluno})
     return response
+
+
