@@ -5,85 +5,131 @@ from typing import Optional
 
 from model.usuario_model import Usuario
 from repo import usuario_repo
+from sql.usuario_sql import OBTER_POR_MATRICULA
+from sql.aluno_sql import ATUALIZAR
 from util.security import criar_hash_senha, verificar_senha, validar_forca_senha
 from util.auth_decorator import requer_autenticacao, obter_usuario_logado
 from util.template_util import criar_templates
 
 router = APIRouter()
-templates = criar_templates("templates/perfil")
+templates = criar_templates("templates/inicio")
 
 
-@router.get("/perfil")
+@router.get("/inicio")
 @requer_autenticacao()
 async def get_perfil(request: Request, usuario_logado: dict = None):
     # Buscar dados completos do usuário
-    usuario = usuario_repo.obter_por_id(usuario_logado['id'])
+    usuario = usuario_repo.OBTER_POR_MATRICULA(usuario_logado['matricula'])
     
-    # Se for cliente, buscar dados adicionais
-    cliente_dados = None
-    if usuario.perfil == 'cliente':
+    # Se for aluno, buscar dados adicionais
+    aluno_dados = None
+    if usuario.perfil == 'aluno':
         try:
             from util.db_util import get_connection
             with get_connection() as conn:
                 cursor = conn.cursor()
-                cursor.execute("SELECT cpf, telefone FROM cliente WHERE id=?", (usuario.id,))
+                cursor.execute(OBTER_POR_MATRICULA, (usuario.matricula,))
                 row = cursor.fetchone()
                 if row:
-                    cliente_dados = {
-                        'cpf': row['cpf'],
-                        'telefone': row['telefone']
+                    aluno_dados = {
+                        'cpf': row["cpf"],
+                        'rg': row["rg"],
+                        'telefone': row["telefone"],
+                        'curso': row["curso"],
+                        'data_nascimento': row["data_nascimento"],
+                        'filiacao': row["filiacao"],
+                        'cep': row["cep"],
+                        'cidade': row["cidade"],
+                        'bairro': row["bairro"],
+                        'rua': row["rua"],
+                        'numero': row["numero"],
+                        'nome_banco': row["nome_banco"],
+                        'agencia_bancaria': row["agencia_bancaria"],
+                        'numero_conta_bancaria': row["numero_conta_bancaria"],
+                        'renda_familiar': row["renda_familiar"],
+                        'quantidade_pessoas': row["quantidade_pessoas"]
                     }
         except:
             pass
     
     return templates.TemplateResponse(
-        "dados.html",
+        "dados_cadastrais.html",
         {
             "request": request,
             "usuario": usuario,
-            "cliente_dados": cliente_dados
+            "aluno_dados": aluno_dados
         }
     )
 
 
-@router.post("/perfil")
+@router.post("/inicio")
 @requer_autenticacao()
 async def post_perfil(
     request: Request,
     nome: str = Form(...),
+    matricula: str = Form(...),
     email: str = Form(...),
     cpf: str = Form(None),
+    rg: str = Form(None),
     telefone: str = Form(None),
+    curso: str = Form(None),
+    data_nascimento: str = Form(None),
+    filiacao: str = Form(None),
+    cep: str = Form(None),
+    cidade: str = Form(None),
+    bairro: str = Form(None),
+    rua: str = Form(None),
+    numero: str = Form(None),
+    nome_banco: str = Form(None),
+    agencia_bancaria: str = Form(None),
+    numero_conta_bancaria: str = Form(None),
+    renda_familiar: str = Form(None),
+    quantidade_pessoas: str = Form(None),
     usuario_logado: dict = None
 ):
-    usuario = usuario_repo.obter_por_id(usuario_logado['id'])
+
+    usuario = usuario_repo.OBTER_POR_MATRICULA(usuario_logado['matricula'])
     
     # Verificar se o email já está em uso por outro usuário
-    usuario_existente = usuario_repo.obter_por_email(email)
+    usuario_existente = usuario_repo.OBTER_POR_MATRICULA(matricula)
     if usuario_existente and usuario_existente.id != usuario.id:
-        cliente_dados = None
-        if usuario.perfil == 'cliente':
+        aluno = None
+        if usuario.perfil == 'aluno':
             try:
                 from util.db_util import get_connection
                 with get_connection() as conn:
                     cursor = conn.cursor()
-                    cursor.execute("SELECT cpf, telefone FROM cliente WHERE id=?", (usuario.id,))
+                    cursor.execute(OBTER_POR_MATRICULA, (usuario.matricula,))
                     row = cursor.fetchone()
                     if row:
-                        cliente_dados = {
-                            'cpf': row['cpf'],
-                            'telefone': row['telefone']
+                        aluno = {
+                            'cpf': row["cpf"],
+                            'rg': row["rg"],
+                            'telefone': row["telefone"],
+                            'curso': row["curso"],
+                            'data_nascimento': row["data_nascimento"],
+                            'filiacao': row["filiacao"],
+                            'cep': row["cep"],
+                            'cidade': row["cidade"],
+                            'bairro': row["bairro"],
+                            'rua': row["rua"],
+                            'numero': row["numero"],
+                            'nome_banco': row["nome_banco"],
+                            'agencia_bancaria': row["agencia_bancaria"],
+                            'numero_conta_bancaria': row["numero_conta_bancaria"],
+                            'renda_familiar': row["renda_familiar"],
+                            'quantidade_pessoas': row["quantidade_pessoas"]
                         }
             except:
                 pass
         
         return templates.TemplateResponse(
-            "dados.html",
+            "dados_cadastrais.html",
             {
                 "request": request,
                 "usuario": usuario,
-                "cliente_dados": cliente_dados,
-                "erro": "Este email já está em uso"
+                "aluno_dados": aluno,
+                "erro": "Esta matrícula já está em uso"
             }
         )
     
@@ -91,16 +137,16 @@ async def post_perfil(
     usuario.nome = nome
     usuario.email = email
     usuario_repo.alterar(usuario)
-    
-    # Se for cliente, atualizar dados adicionais
-    if usuario.perfil == 'cliente' and cpf and telefone:
+
+    # Se for aluno, atualizar dados adicionais
+    if usuario.perfil == 'aluno' and cpf and rg and telefone and curso and data_nascimento and filiacao and cep and cidade and bairro and rua and numero and nome_banco and agencia_bancaria and numero_conta_bancaria and renda_familiar and quantidade_pessoas:
         try:
             from util.db_util import get_connection
             with get_connection() as conn:
                 cursor = conn.cursor()
                 cursor.execute(
-                    "UPDATE cliente SET cpf=?, telefone=? WHERE id=?",
-                    (cpf, telefone, usuario.id)
+                    ATUALIZAR,
+                    (cpf, rg, telefone, data_nascimento, filiacao, cep, cidade, bairro, rua, numero, nome_banco, agencia_bancaria, numero_conta_bancaria, renda_familiar, quantidade_pessoas, usuario.matricula)
                 )
                 conn.commit()
         except:
@@ -119,7 +165,7 @@ async def post_perfil(
     
     return RedirectResponse("/perfil?sucesso=1", status.HTTP_303_SEE_OTHER)
 
-
+#MEXER daqui pra baixo
 @router.get("/perfil/alterar-senha")
 @requer_autenticacao()
 async def get_alterar_senha(request: Request, usuario_logado: dict = None):
