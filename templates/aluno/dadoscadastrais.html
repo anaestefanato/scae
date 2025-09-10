@@ -33,44 +33,41 @@
         </div>
 
         <div class="container">
-            <!-- Dados Pessoais -->
+            
             <div class="card data-card">
                 <div class="card-header d-flex justify-content-between align-items-center">
                     <h5>
                         <i class="bi bi-person-vcard me-2"></i>
                         Dados Pessoais
                     </h5>
-                    <button class="btn btn-outline-success btn-sm" onclick="toggleEdit('pessoal')">
-                        <i class="bi bi-pencil"></i> Editar
-                    </button>
                 </div>
                 <div class="card-body">
                     <form id="formPessoal">
                         <div class="row g-3">
                             <div class="col-md-6">
                                 <label class="form-label">Nome Completo</label>
-                                <input type="text" class="form-control" value="{{ aluno.nome }}" disabled>
+                                <input type="text" class="form-control" name="nome" value="{{ aluno.nome }}">
                             </div>
                             <div class="col-md-6">
                                 <label class="form-label">CPF</label>
-                                <input type="text" class="form-control" value="{{ aluno.cpf }}" disabled>
+                                <input type="text" class="form-control" name="cpf" value="{{ aluno.cpf }}">
                             </div>
                             <div class="col-md-6">
                                 <label class="form-label">Data de Nascimento</label>
-                                <input type="date" class="form-control" value="{{ aluno.data_nascimento }}" disabled>
+                                <input type="date" class="form-control" name="data_nascimento" value="{{ aluno.data_nascimento }}">
                             </div>
                             <!-- NAO POSSUI RG -->
                             <div class="col-md-6"> 
                                 <label class="form-label">RG</label>
-                                <input type="text" class="form-control" value="{{ aluno.rg }}" disabled>
+                                <input type="text" class="form-control" name="rg" value="{{ aluno.rg }}">
                             </div>
                             <div class="col-md-6">
                                 <label class="form-label">E-mail</label>
-                                <input type="email" class="form-control" value="{{ aluno.email }}" disabled>
+                                <input type="email" class="form-control" name="email" value="{{ aluno.email }}">
                             </div>
                             <div class="col-md-6">
                                 <label class="form-label">Telefone</label>
-                                <input type="tel" class="form-control" value="{{ aluno.telefone }}" disabled>
+                                <input type="tel" class="form-control" name="telefone" value="{{ aluno.telefone }}">
                             </div>
                         </div>
                     </form>
@@ -89,19 +86,19 @@
                     <div class="row g-3">
                         <div class="col-md-6">
                             <label class="form-label">Matrícula</label>
-                            <input type="text" class="form-control" value="{{ aluno.matricula }}" disabled>
+                            <input type="text" class="form-control" value="{{ aluno.matricula }}">
                         </div>
                         <div class="col-md-6">
                             <label class="form-label">Curso</label>
-                            <input type="text" class="form-control" value="{{ aluno.curso }}" disabled>
+                            <input type="text" class="form-control" value="{{ aluno.curso }}">
                         </div>
                         <div class="col-md-6">
                             <label class="form-label">Período/Ano</label>
-                            <input type="text" class="form-control" value="3º Período" disabled>
+                            <input type="text" class="form-control" value="3º Período">
                         </div>
                         <div class="col-md-6">
                             <label class="form-label">Turno</label>
-                            <input type="text" class="form-control" value="Integral" disabled>
+                            <input type="text" class="form-control" value="Integral">
                         </div>
                     </div>
                 </div>
@@ -114,36 +111,33 @@
                         <i class="bi bi-geo-alt me-2"></i>
                         Endereço
                     </h5>
-                    <button class="btn btn-outline-success btn-sm" onclick="toggleEdit('endereco')">
-                        <i class="bi bi-pencil"></i> Editar
-                    </button>
                 </div>
                 <div class="card-body">
                     <form id="formEndereco">
                         <div class="row g-3">
                             <div class="col-md-6">
                                 <label class="form-label">CEP</label>
-                                <input type="text" class="form-control" value="{{ aluno.cep }}" disabled>
+                                <input type="text" class="form-control" name="cep" value="{{ aluno.cep }}">
                             </div>
                             <div class="col-md-6">
                                 <label class="form-label">Cidade</label>
-                                <input type="text" class="form-control" value="{{ aluno.cidade }}" disabled>
+                                <input type="text" class="form-control" name="cidade" value="{{ aluno.cidade }}">
                             </div>
                             <div class="col-md-6">
                                 <label class="form-label">Bairro</label>
-                                <input type="text" class="form-control" value="{{ aluno.bairro }}" disabled>
+                                <input type="text" class="form-control" name="bairro" value="{{ aluno.bairro }}">
                             </div>
                             <div class="col-md-6">
                                 <label class="form-label">Rua</label>
-                                <input type="text" class="form-control" value="{{ aluno.rua }}" disabled>
+                                <input type="text" class="form-control" name="rua" value="{{ aluno.rua }}">
                             </div>
                             <div class="col-md-6">
                                 <label class="form-label">Número</label>
-                                <input type="text" class="form-control" value="{{ aluno.numero }}" disabled>
+                                <input type="text" class="form-control" name="numero" value="{{ aluno.numero }}">
                             </div>
                             <div class="col-md-6">
                                 <label class="form-label">Complemento</label>
-                                <input type="text" class="form-control" value="Apt 301" disabled>
+                                <input type="text" class="form-control" name="complemento" value="Apt 301">
                             </div>
                         </div>
                     </form>
@@ -157,50 +151,47 @@
                         <i class="bi bi-bank me-2"></i>
                         Dados Bancários e Socioeconômicos
                     </h5>
-                    <button class="btn btn-outline-success btn-sm" onclick="toggleEdit('bancario')">
-                        <i class="bi bi-pencil"></i> Editar
-                    </button>
                 </div>
                 <div class="card-body">
                     <form id="formBancario">
                         <div class="row g-3">
                             <div class="col-md-4">
                                 <label class="form-label">Banco</label>
-                                <input type="text" class="form-control" value="{{ aluno.nome_banco }}" disabled>
+                                <input type="text" class="form-control" name="nome_banco" value="{{ aluno.nome_banco }}">
                             </div>
                             <div class="col-md-4">
                                 <label class="form-label">Agência</label>
-                                <input type="text" class="form-control" value="{{ aluno.agencia_bancaria }}" disabled>
+                                <input type="text" class="form-control" name="agencia_bancaria" value="{{ aluno.agencia_bancaria }}">
                             </div>
                             <div class="col-md-4">
                                 <label class="form-label">Conta</label>
-                                <input type="text" class="form-control" value="{{ aluno.numero_conta_bancaria }}" disabled>
+                                <input type="text" class="form-control" name="numero_conta_bancaria" value="{{ aluno.numero_conta_bancaria }}">
                             </div>
                             <div class="col-md-6">
                                 <label class="form-label">Renda Familiar Total</label>
                                 <div class="input-group">
                                     <span class="input-group-text">R$</span>
-                                    <input type="text" class="form-control" value="{{ aluno.renda_familiar }}" disabled>
+                                    <input type="text" class="form-control" name="renda_familiar" value="{{ aluno.renda_familiar }}">
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <label class="form-label">Quantidade de Membros na Família</label>
-                                <input type="number" class="form-control" value="4" disabled>
+                                <input type="number" class="form-control" name="qtd_membros_familia" value="4">
                             </div>
                             <div class="col-md-6">
                                 <label class="form-label">Renda Per Capita</label>
                                 <div class="input-group">
                                     <span class="input-group-text">R$</span>
-                                    <input type="text" class="form-control" value="" disabled>
+                                    <input type="text" class="form-control" name="renda_per_capita" value="">
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <label class="form-label">Situação de Moradia</label>
-                                <select class="form-select" disabled>
-                                    <option selected>Casa Própria</option>
-                                    <option>Alugada</option>
-                                    <option>Cedida</option>
-                                    <option>Financiada</option>
+                                <select class="form-select" name="situacao_moradia">
+                                    <option value="Casa Própria" selected>Casa Própria</option>
+                                    <option value="Alugada">Alugada</option>
+                                    <option value="Cedida">Cedida</option>
+                                    <option value="Financiada">Financiada</option>
                                 </select>
                             </div>
                         </div>
@@ -208,81 +199,11 @@
                 </div>
             </div>
 
-            <!-- Auxílios Ativos -->
-            <div class="card data-card">
-                <div class="card-header">
-                    <h5>
-                        <i class="bi bi-cash-stack me-2"></i>
-                        Auxílios Ativos
-                    </h5>
-                </div>
-                <div class="card-body p-0">
-                    <div class="list-group list-group-flush">
-                        <div class="list-group-item">
-                            <div class="d-flex justify-content-between align-items-center">
-                                <div>
-                                    <h6 class="mb-1">Auxílio Alimentação</h6>
-                                    <p class="mb-0 text-muted small">Edital 01/2025 - Vigência até 31/12/2025</p>
-                                </div>
-                                <div class="text-end">
-                                    <div class="fw-bold text-success">R$ 200,00</div>
-                                    <span class="badge bg-success">Ativo</span>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="list-group-item">
-                            <div class="d-flex justify-content-between align-items-center">
-                                <div>
-                                    <h6 class="mb-1">Auxílio Transporte</h6>
-                                    <p class="mb-0 text-muted small">Edital 01/2025 - Em análise</p>
-                                </div>
-                                <div class="text-end">
-                                    <div class="fw-bold text-muted">R$ 100,00</div>
-                                    <span class="badge bg-warning text-dark">Em análise</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Histórico de Alterações -->
-            <div class="card data-card">
-                <div class="card-header">
-                    <h5>
-                        <i class="bi bi-clock-history me-2"></i>
-                        Histórico de Alterações
-                    </h5>
-                </div>
-                <div class="card-body p-0">
-                    <div class="history-item">
-                        <div class="d-flex justify-content-between align-items-start">
-                            <div>
-                                <h6 class="mb-1">Atualização de Endereço</h6>
-                                <p class="mb-0 text-muted small">Alteração no endereço residencial</p>
-                            </div>
-                            <span class="history-date">24/08/2025</span>
-                        </div>
-                    </div>
-                    <div class="history-item">
-                        <div class="d-flex justify-content-between align-items-start">
-                            <div>
-                                <h6 class="mb-1">Atualização de Contato</h6>
-                                <p class="mb-0 text-muted small">Alteração no número de telefone</p>
-                            </div>
-                            <span class="history-date">15/07/2025</span>
-                        </div>
-                    </div>
-                    <div class="history-item">
-                        <div class="d-flex justify-content-between align-items-start">
-                            <div>
-                                <h6 class="mb-1">Cadastro Inicial</h6>
-                                <p class="mb-0 text-muted small">Criação do perfil no sistema</p>
-                            </div>
-                            <span class="history-date">01/03/2025</span>
-                        </div>
-                    </div>
-                </div>
+            <!-- Botão Salvar Alterações -->
+            <div class="text-center mt-4 mb-4">
+                <button type="button" class="btn btn-success btn-lg" onclick="saveAllChanges()">
+                    <i class="bi bi-floppy"></i> Salvar Alterações
+                </button>
             </div>
         </div>
     </div>
