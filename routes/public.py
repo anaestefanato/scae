@@ -55,9 +55,9 @@ async def post_login(
         return RedirectResponse(redirect, status.HTTP_303_SEE_OTHER)
     
     if usuario.perfil == "admin":
-        return RedirectResponse("/admin", status.HTTP_303_SEE_OTHER)
+        return RedirectResponse("/admin/inicio", status.HTTP_303_SEE_OTHER)
     elif usuario.perfil == "assistente":
-        return RedirectResponse("/assistente", status.HTTP_303_SEE_OTHER)
+        return RedirectResponse("/assistente/inicio", status.HTTP_303_SEE_OTHER)
     elif usuario.perfil == "aluno":
         return RedirectResponse("/aluno/inicio", status.HTTP_303_SEE_OTHER)
 

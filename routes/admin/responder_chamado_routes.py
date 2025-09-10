@@ -10,7 +10,7 @@ templates = Jinja2Templates(directory="templates")
 
 
 @router.get("/responder-chamado")
-@requer_autenticacao("admin")
+#@requer_autenticacao("admin")
 async def get_responder_chamado(request: Request):
     usuario_logado = obter_usuario_logado(request)
     admin = usuario_repo.obter_usuario_por_matricula(usuario_logado['matricula'])

@@ -1,3 +1,5 @@
+from fastapi.responses import RedirectResponse
+
 from fastapi import APIRouter, Request
 from fastapi.templating import Jinja2Templates
 
@@ -10,7 +12,7 @@ templates = Jinja2Templates(directory="templates")
 
 
 @router.get("/inicio")
-@requer_autenticacao("admin")
+#@requer_autenticacao("admin")
 async def get_perfil(request: Request):
     usuario_logado = obter_usuario_logado(request)
     admin = usuario_repo.obter_usuario_por_matricula(usuario_logado['matricula'])
