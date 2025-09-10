@@ -4,53 +4,30 @@ from fastapi.responses import RedirectResponse
 from typing import Optional
 
 from model.usuario_model import Usuario
-from repo import usuario_repo
-from sql.usuario_sql import OBTER_POR_MATRICULA
+from repo import aluno_repo, usuario_repo
+from sql.usuario_sql import obter_por_matricula
 from sql.aluno_sql import ATUALIZAR
 from util.security import criar_hash_senha, verificar_senha, validar_forca_senha
 from util.auth_decorator import requer_autenticacao, obter_usuario_logado
 from util.template_util import criar_templates
 
 router = APIRouter()
-templates = criar_templates("templates/inicio")
+templates = criar_templates("templates/dadoscadastrais")
 
 
-@router.get("/inicio")
+@router.get("/dadoscadastrais")
 @requer_autenticacao()
-async def get_perfil(request: Request, usuario_logado: dict = None):
+async def get_perfil(request: Request):
+    usuario_logado = obter_usuario_logado(request)
     # Buscar dados completos do usuário
-    usuario = usuario_repo.OBTER_POR_MATRICULA(usuario_logado['matricula'])
+    usuario = usuario_repo.obter_por_matricula(usuario_logado['matricula'])
+    if not usuario:
+        return RedirectResponse("/login", status.HTTP_303_SEE_OTHER)
     
     # Se for aluno, buscar dados adicionais
     aluno_dados = None
     if usuario.perfil == 'aluno':
-        try:
-            from util.db_util import get_connection
-            with get_connection() as conn:
-                cursor = conn.cursor()
-                cursor.execute(OBTER_POR_MATRICULA, (usuario.matricula,))
-                row = cursor.fetchone()
-                if row:
-                    aluno_dados = {
-                        'cpf': row["cpf"],
-                        'rg': row["rg"],
-                        'telefone': row["telefone"],
-                        'curso': row["curso"],
-                        'data_nascimento': row["data_nascimento"],
-                        'filiacao': row["filiacao"],
-                        'cep': row["cep"],
-                        'cidade': row["cidade"],
-                        'bairro': row["bairro"],
-                        'rua': row["rua"],
-                        'numero': row["numero"],
-                        'nome_banco': row["nome_banco"],
-                        'agencia_bancaria': row["agencia_bancaria"],
-                        'numero_conta_bancaria': row["numero_conta_bancaria"],
-                        'renda_familiar': row["renda_familiar"],
-                        'quantidade_pessoas': row["quantidade_pessoas"]
-                    }
-        except:
-            pass
+        aluno = aluno_repo.obter_por_id(usuario.id)       
     
     return templates.TemplateResponse(
         "dados_cadastrais.html",
@@ -62,7 +39,7 @@ async def get_perfil(request: Request, usuario_logado: dict = None):
     )
 
 
-@router.post("/inicio")
+@router.post("/dadoscadastrais")
 @requer_autenticacao()
 async def post_perfil(
     request: Request,
@@ -84,14 +61,13 @@ async def post_perfil(
     agencia_bancaria: str = Form(None),
     numero_conta_bancaria: str = Form(None),
     renda_familiar: str = Form(None),
-    quantidade_pessoas: str = Form(None),
-    usuario_logado: dict = None
+    quantidade_pessoas: str = Form(None)
 ):
-
-    usuario = usuario_repo.OBTER_POR_MATRICULA(usuario_logado['matricula'])
+    usuario_logado = obter_usuario_logado(request)
+    usuario = usuario_repo.obter_por_matricula(usuario_logado['matricula'])
     
     # Verificar se o email já está em uso por outro usuário
-    usuario_existente = usuario_repo.OBTER_POR_MATRICULA(matricula)
+    usuario_existente = usuario_repo.obter_por_matricula(matricula)
     if usuario_existente and usuario_existente.id != usuario.id:
         aluno = None
         if usuario.perfil == 'aluno':
@@ -99,7 +75,7 @@ async def post_perfil(
                 from util.db_util import get_connection
                 with get_connection() as conn:
                     cursor = conn.cursor()
-                    cursor.execute(OBTER_POR_MATRICULA, (usuario.matricula,))
+                    cursor.execute(obter_por_matricula, (usuario.matricula,))
                     row = cursor.fetchone()
                     if row:
                         aluno = {
@@ -168,10 +144,11 @@ async def post_perfil(
 #MEXER daqui pra baixo
 @router.get("/perfil/alterar-senha")
 @requer_autenticacao()
-async def get_alterar_senha(request: Request, usuario_logado: dict = None):
+async def get_alterar_senha(request: Request):
+    usuario_logado = obter_usuario_logado(request)
     return templates.TemplateResponse(
         "alterar_senha.html",
-        {"request": request}
+        {"request": request, "usuario_logado": usuario_logado}
     )
 
 
@@ -181,9 +158,9 @@ async def post_alterar_senha(
     request: Request,
     senha_atual: str = Form(...),
     senha_nova: str = Form(...),
-    confirmar_senha: str = Form(...),
-    usuario_logado: dict = None
+    confirmar_senha: str = Form(...)
 ):
+    usuario_logado = obter_usuario_logado(request)
     usuario = usuario_repo.obter_por_id(usuario_logado['id'])
     
     # Verificar senha atual
@@ -234,9 +211,9 @@ async def post_alterar_senha(
 @requer_autenticacao()
 async def alterar_foto(
     request: Request,
-    foto: UploadFile = File(...),
-    usuario_logado: dict = None
+    foto: UploadFile = File(...)
 ):
+    usuario_logado = obter_usuario_logado(request)
     # Validar tipo de arquivo
     tipos_permitidos = ["image/jpeg", "image/png", "image/jpg"]
     if foto.content_type not in tipos_permitidos:

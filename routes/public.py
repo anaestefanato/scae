@@ -1,8 +1,8 @@
-from fastapi import APIRouter, Request, Form
+from fastapi import APIRouter, Request, Form, status
 from fastapi.responses import RedirectResponse
 from fastapi.templating import Jinja2Templates
 
-from repo import usuario_repo
+from repo import aluno_repo, usuario_repo
 from util.auth_decorator import criar_sessao
 from util.security import verificar_senha
 
@@ -23,13 +23,50 @@ async def get_login(request: Request):
     return response
 
 
+@router.post("/login")
+async def post_login(
+    request: Request,
+    matricula: str = Form(...),
+    senha: str = Form(...),
+    redirect: str = Form(None)
+):
+    usuario = usuario_repo.obter_usuario_por_matricula(matricula) 
+    
+    if not usuario or not verificar_senha(senha, usuario.senha):
+        return templates.TemplateResponse(
+            "publicas/login.html",
+            {"request": request, "erro": "Matrícula ou senha inválidos"}
+        )
+    
+    # Criar sessão
+    usuario_dict = {
+        "id": usuario.id_usuario,
+        "nome": usuario.nome,
+        "matricula": usuario.matricula,
+        "email": usuario.email,
+        "perfil": usuario.perfil,
+        "foto": usuario.foto,
+        "completo": aluno_repo.possui_cadastro_completo(usuario.id_usuario)
+    }
+    criar_sessao(request, usuario_dict)
+    
+    # Redirecionar
+    if redirect:
+        return RedirectResponse(redirect, status.HTTP_303_SEE_OTHER)
+    
+    if usuario.perfil == "admin":
+        return RedirectResponse("/admin/inicio", status.HTTP_303_SEE_OTHER)
+    elif usuario.perfil == "assistente":
+        return RedirectResponse("/assistente/inicio", status.HTTP_303_SEE_OTHER)
+    elif usuario.perfil == "aluno":
+        return RedirectResponse("/aluno/inicio", status.HTTP_303_SEE_OTHER)
 
-# @router.post("/login")
-# async def post_login(request: Request):
-#     # fazer checagens antes do redirecionamento
-#     response = RedirectResponse(url="/aluno/inicio", status_code=303)
-#     return response
+    return RedirectResponse("/", status.HTTP_303_SEE_OTHER)
 
+@router.get("/logout")
+async def logout(request: Request):
+    request.session.clear()
+    return RedirectResponse("/", status.HTTP_303_SEE_OTHER)
 
 
 @router.get("/cadastro")

@@ -16,12 +16,15 @@
         </div>
         <form method="post" action="/login">
             <div class="mb-2 mt-5 text-center">
-                <input type="text" class="form-control login-input rounded-pill" placeholder="Matrícula" required></div><br>
+                <input type="text" name="matricula" class="form-control login-input rounded-pill" placeholder="Matrícula" required></div><br>
             <div class="mb-3 position-relative text-center">
-                <input type="password" class="form-control login-input rounded-pill" placeholder="Senha" required>
+                <input type="password" name="senha" class="form-control login-input rounded-pill" placeholder="Senha" required>
             </div>
             <div class="text-center mt-5">
                 <button type="submit" class="btn btn-success login-button rounded-pill px-5">Entrar</button>
+            </div>
+            <div class="text-center mt-3">
+                <span class="text-muted cadastro-text"><a href="#" data-bs-toggle="modal" data-bs-target="#modalRedefinirSenha" class="text-muted" style="text-decoration:none;">Esqueceu a senha?</a></span>
             </div>
         </form>
         <div class="text-center">
@@ -29,6 +32,69 @@
         </div>
     </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+        
+        <div class="modal fade" id="modalRedefinirSenha" tabindex="-1" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content rounded-4">
+                    <div class="modal-header border-0 pb-0">
+                        <h5 class="modal-title text-success fw-bold">Redefinir Senha</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body pt-2">
+                        <form id="formRedefinirSenha" method="post" action="/alterar-senha" novalidate>
+                            <div class="mb-3">
+                                <label for="matricula_rec" class="form-label">Matrícula</label>
+                                <input type="text" class="form-control" id="matricula_rec" name="matricula" required>
+                                <div class="invalid-feedback">Informe a matrícula.</div>
+                            </div>
+                            <div class="mb-3">
+                                <label for="senha_nova" class="form-label">Nova Senha</label>
+                                <input type="password" class="form-control" id="senha_nova" name="senha_nova" minlength="6" required>
+                                <div class="form-text">Mínimo 6 caracteres.</div>
+                                <div class="invalid-feedback">Senha inválida.</div>
+                            </div>
+                            <div class="mb-3">
+                                <label for="confirmar_senha" class="form-label">Confirmar Nova Senha</label>
+                                <input type="password" class="form-control" id="confirmar_senha" name="confirmar_senha" minlength="6" required>
+                                <div class="invalid-feedback" id="confirmarFeedback">Confirme a senha.</div>
+                            </div>
+                            <div class="d-flex justify-content-end gap-2 mt-4">
+                                <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancelar</button>
+                                <button type="submit" class="btn btn-success">Salvar</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+        <script>
+            (function(){
+                const form = document.getElementById('formRedefinirSenha');
+                if(!form) return;
+                form.addEventListener('submit', function(e){
+                    const senha = document.getElementById('senha_nova').value;
+                    const confirmar = document.getElementById('confirmar_senha').value;
+                    let valido = true;
+                    if(senha.length < 6){
+                        document.getElementById('senha_nova').classList.add('is-invalid');
+                        valido = false;
+                    } else {
+                        document.getElementById('senha_nova').classList.remove('is-invalid');
+                    }
+                    if(confirmar !== senha){
+                        document.getElementById('confirmar_senha').classList.add('is-invalid');
+                        document.getElementById('confirmarFeedback').textContent = 'As senhas não coincidem.';
+                        valido = false;
+                    } else {
+                        document.getElementById('confirmar_senha').classList.remove('is-invalid');
+                    }
+                    if(!valido){
+                        e.preventDefault();
+                    }
+                });
+            })();
+        </script>
 </body>
 </html>
