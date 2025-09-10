@@ -17,7 +17,7 @@ async def get_root(request: Request, matricula: str):
     if not usuario.completo:
         return RedirectResponse("/aluno/dados-cadastrais", status_code=303)
 
-    usuario = usuario_repo.obter_usuario_por_matricula(matricula)
-    response = templates.TemplateResponse("/aluno/dashboard.html", {"request": request, "usuario": usuario})
+    aluno = usuario_repo.obter_usuario_por_matricula(matricula)
+    response = templates.TemplateResponse("/aluno/dashboard.html", {"request": request, "aluno": aluno})
     return response
 
