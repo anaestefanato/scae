@@ -10,14 +10,14 @@ router = APIRouter()
 templates = Jinja2Templates(directory="templates")
 
 # TESTE COM USUARIO NO LUGAR DE ALUNO PORQUE A TABELA ALUNO NÃO ESTÁ FUNCIONANDO
-@router.get("/inicio/{matricula}")
+@router.get("/inicio")
 @requer_autenticacao(["aluno"])
-async def get_root(request: Request, matricula: str):
+async def get_root(request: Request):
     usuario = request.session.get("usuario")
     if not usuario.completo:
-        return RedirectResponse("/aluno/dados-cadastrais", status_code=303)
+        return RedirectResponse("/aluno/dadoscadastrais", status_code=303)
 
-    aluno = usuario_repo.obter_usuario_por_matricula(matricula)
+    aluno = usuario_repo.obter_usuario_por_matricula(usuario.matricula)
     response = templates.TemplateResponse("/aluno/dashboard.html", {"request": request, "aluno": aluno})
     return response
 
