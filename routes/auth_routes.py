@@ -3,7 +3,7 @@ from fastapi.responses import RedirectResponse, HTMLResponse
 from fastapi.templating import Jinja2Templates
 
 from model.usuario_model import Usuario
-from repo import usuario_repo
+from repo import aluno_repo, usuario_repo
 from util.security import criar_hash_senha, verificar_senha, gerar_token_redefinicao, obter_data_expiracao_token, validar_forca_senha
 from util.auth_decorator import criar_sessao, destruir_sessao, obter_usuario_logado, esta_logado
 from util.template_util import criar_templates
@@ -23,7 +23,7 @@ async def post_login(
     
     if not usuario or not verificar_senha(senha, usuario.senha):
         return templates.TemplateResponse(
-            "login.html",
+            "publicas/login.html",
             {"request": request, "erro": "Matrícula ou senha inválidos"}
         )
     
@@ -35,7 +35,7 @@ async def post_login(
         "email": usuario.email,
         "perfil": usuario.perfil,
         "foto": usuario.foto,
-        "completo": usuario_repo.possui_cadastro_completo(usuario.id_usuario)
+        "completo": aluno_repo.possui_cadastro_completo(usuario.id_usuario)
     }
     criar_sessao(request, usuario_dict)
     

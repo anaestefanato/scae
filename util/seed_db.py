@@ -11,13 +11,6 @@ def criar_admin_padrao():
     if not admins:
         senha_hash = criar_hash_senha("admin123")
         admin = Administrador(
-            # id_usuario: int
-            # nome: str
-            # matricula: str
-            # email: str
-            # senha: str
-            # perfil: str
-            # perfil: str 
             id_usuario=0,
             nome="Administrador",
             matricula="admin123",
@@ -32,9 +25,9 @@ def criar_admin_padrao():
             
         )
         id_usuario = usuario_repo.inserir(admin)        
-        print("Admin criado: admin@admin.com / admin123")
-        
-        
+        print(f"Admin criado: {admin.matricula} / {admin.senha}")
+
+
 def criar_aluno_padrao():
     # Verificar se já existe aluno
     alunos = usuario_repo.obter_todos_por_perfil("aluno")
@@ -69,7 +62,7 @@ def criar_aluno_padrao():
             data_cadastro=None
         )
         id_usuario = usuario_repo.inserir(aluno)
-        print("Aluno criado: aluno@aluno.com / aluno123")
+        print(f"Aluno criado: {aluno.matricula} / {aluno.senha}")
 
 
 if __name__ == "__main__":

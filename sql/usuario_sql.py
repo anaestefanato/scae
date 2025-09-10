@@ -32,7 +32,7 @@ FROM usuario
 WHERE id_usuario = ?
 """ 
 
-OBTER_POR_MATRICULA = """
+obter_por_matricula = """
 SELECT
 id_usuario, nome, matricula, email, senha, perfil
 FROM usuario

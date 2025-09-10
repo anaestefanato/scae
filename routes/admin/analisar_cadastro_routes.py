@@ -1,5 +1,9 @@
 from fastapi import APIRouter, Request
+from fastapi.responses import RedirectResponse
 from fastapi.templating import Jinja2Templates
+
+from repo import usuario_repo
+from util.auth_decorator import requer_autenticacao
 
 
 router = APIRouter()
@@ -7,7 +11,13 @@ templates = Jinja2Templates(directory="templates")
 
 
 @router.get("/analisar-cadastro")
-async def get_analisar_cadastro(request: Request):
-    response = templates.TemplateResponse("/admin/analisar_cadastro.html", {"request": request})
+@requer_autenticacao("admin")
+async def get_analisar_cadastro(request: Request, matricula: str):
+    admin = usuario_repo.obter_usuario_por_matricula(matricula)
+    response = templates.TemplateResponse("/admin/analisar_cadastro.html", {"request": request, "admin": admin})
     return response
+
+@router.get("")
+async def admin_root():
+    return RedirectResponse(url="/admin/inicio")
 
