@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SCAE - Gerenciar Alunos</title>
+    <link rel="icon" type="image/png" href="/static/img/logo.png">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="/static/css/dashboard_admin.css" />
+    <link rel="stylesheet" href="/static/css/usuario_aluno.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Menu Toggle Button (visible when sidebar is collapsed) -->
+    <button class="menu-toggle" id="menuToggle">
+        <i class="bi bi-list"></i>
+    </button>
+
+    <!-- Sidebar -->
+    <div class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <button class="close-sidebar" id="closeSidebar">
+                <i class="bi bi-x-lg"></i>
+            </button>
+            <img src="/static/img/logoifes.png" alt="Logo IFES" width="180">
+        </div>
+        <div class="d-flex flex-column p-3">
+            <div class="mb-4 text-center">
+                <h6 class="mb-0">Sistema de Controle de</h6>
+                <h6>Assistência Estudantil</h6>
+            </div>
+            <ul class="nav nav-pills flex-column mb-auto">
+                <li class="nav-item">
+                    <a href="/admin/dashboard" class="nav-link">
+                        <i class="bi bi-speedometer2"></i> <span>Início</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="/admin/editais" class="nav-link">
+                        <i class="bi bi-file-earmark-text"></i> <span>Gerenciar Editais</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="/admin/inscricoes" class="nav-link">
+                        <i class="bi bi-clipboard-check"></i> <span>Analisar Inscrições</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="/admin/pagamentos" class="nav-link">
+                        <i class="bi bi-credit-card"></i> <span>Pagamentos</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="/admin/usuarios" class="nav-link submenu-toggle" data-submenu="usuarios">
+                        <div class="nav-content">
+                            <i class="bi bi-people"></i> <span>Usuários</span>
+                        </div>
+                        <i class="bi bi-chevron-down submenu-arrow"></i>
+                    </a>
+                    <ul class="submenu expanded" id="submenu-usuarios">
+                        <li class="nav-item">
+                            <a href="/admin/usuarios/alunos" class="nav-link submenu-item active">
+                                <i class="bi bi-person-badge"></i> <span>Alunos</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="/admin/usuarios/assistentes" class="nav-link submenu-item">
+                                <i class="bi bi-person-gear"></i> <span>Assistentes</span>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+                <li class="nav-item">
+                    <a href="/admin/relatorios" class="nav-link">
+                        <i class="bi bi-file-earmark-bar-graph"></i> <span>Relatórios</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="/admin/chamados" class="nav-link">
+                        <i class="bi bi-chat-dots"></i> <span>Chamados</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="/admin/configuracoes" class="nav-link">
+                        <i class="bi bi-gear"></i> <span>Configurações</span>
+                    </a>
+                </li>
+            </ul>
+            <hr>
+            <div class="text-center">
+                <a href="/" class="btn btn-outline-danger">
+                    <i class="bi bi-box-arrow-right"></i> <span>Sair</span>
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content" id="mainContent">
+        <!-- Header com Breadcrumb -->
+        <div class="page-header mb-4">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="/admin/dashboard">Dashboard</a></li>
+                    <li class="breadcrumb-item"><a href="/admin/usuarios">Usuários</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">Alunos</li>
+                </ol>
+            </nav>
+            <div class="d-flex justify-content-between align-items-center">
+                <div>
+                    <h2 class="page-title">Gerenciar Alunos</h2>
+                    <p class="page-subtitle">Controle total sobre cadastros e dados dos alunos</p>
+                </div>
+                <div class="notification-badge" id="notificationBadge">
+                    <i class="bi bi-bell-fill"></i>
+                    <span class="badge bg-danger" id="pendingCount">3</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Cards de Estatísticas -->
+        <div class="row mb-4">
+            <div class="col-md-3">
+                <div class="stats-card card alunos-ativos">
+                    <div class="icon">
+                        <i class="bi bi-person-check"></i>
+                    </div>
+                    <div class="number">487</div>
+                    <div class="label">Alunos Ativos</div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="stats-card card solicitacoes-pendentes">
+                    <div class="icon">
+                        <i class="bi bi-person-plus"></i>
+                    </div>
+                    <div class="number">3</div>
+                    <div class="label">Solicitações Pendentes</div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="stats-card card alunos-beneficiados">
+                    <div class="icon">
+                        <i class="bi bi-award"></i>
+                    </div>
+                    <div class="number">342</div>
+                    <div class="label">Alunos Beneficiados</div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="stats-card card total-auxilios">
+                    <div class="icon">
+                        <i class="bi bi-graph-up"></i>
+                    </div>
+                    <div class="number">1.247</div>
+                    <div class="label">Total de Auxílios</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Seção de Solicitações Pendentes -->
+        <div class="card pending-requests-card mb-4">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <div>
+                    <i class="bi bi-person-plus me-2"></i>
+                    <span>Solicitações de Cadastro Pendentes</span>
+                    <span class="badge bg-warning ms-2" id="pendingRequestsCount">3</span>
+                </div>
+                <button class="btn btn-sm btn-outline-light" onclick="refreshPendingRequests()">
+                    <i class="bi bi-arrow-clockwise me-1"></i>Atualizar
+                </button>
+            </div>
+            <div class="card-body">
+                <div id="pendingRequestsContainer">
+                    <!-- Solicitação 1 -->
+                    <div class="pending-request-item" data-request-id="1">
+                        <div class="row align-items-center">
+                            <div class="col-md-8">
+                                <div class="student-info">
+                                    <h6 class="mb-1">João Carlos Silva</h6>
+                                    <small class="text-muted">
+                                        <i class="bi bi-card-text me-1"></i>Matrícula: 2025001234 •
+                                        <i class="bi bi-person-vcard me-1"></i>CPF: 123.456.789-10 •
+                                        <i class="bi bi-calendar3 me-1"></i>Solicitado em: 08/09/2025
+                                    </small>
+                                </div>
+                            </div>
+                            <div class="col-md-4 text-end">
+                                <div class="action-buttons">
+                                    <button class="btn btn-sm btn-success" onclick="approveRequest(1)">
+                                        <i class="bi bi-check-lg me-1"></i>Aprovar
+                                    </button>
+                                    <button class="btn btn-sm btn-danger" onclick="rejectRequest(1)">
+                                        <i class="bi bi-x-lg me-1"></i>Rejeitar
+                                    </button>
+                                    <button class="btn btn-sm btn-outline-info" onclick="viewRequestDetails(1)">
+                                        <i class="bi bi-eye me-1"></i>Detalhes
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Solicitação 2 -->
+                    <div class="pending-request-item" data-request-id="2">
+                        <div class="row align-items-center">
+                            <div class="col-md-8">
+                                <div class="student-info">
+                                    <h6 class="mb-1">Maria Fernanda Santos</h6>
+                                    <small class="text-muted">
+                                        <i class="bi bi-card-text me-1"></i>Matrícula: 2025001235 •
+                                        <i class="bi bi-person-vcard me-1"></i>CPF: 987.654.321-00 •
+                                        <i class="bi bi-calendar3 me-1"></i>Solicitado em: 09/09/2025
+                                    </small>
+                                </div>
+                            </div>
+                            <div class="col-md-4 text-end">
+                                <div class="action-buttons">
+                                    <button class="btn btn-sm btn-success" onclick="approveRequest(2)">
+                                        <i class="bi bi-check-lg me-1"></i>Aprovar
+                                    </button>
+                                    <button class="btn btn-sm btn-danger" onclick="rejectRequest(2)">
+                                        <i class="bi bi-x-lg me-1"></i>Rejeitar
+                                    </button>
+                                    <button class="btn btn-sm btn-outline-info" onclick="viewRequestDetails(2)">
+                                        <i class="bi bi-eye me-1"></i>Detalhes
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Solicitação 3 -->
+                    <div class="pending-request-item" data-request-id="3">
+                        <div class="row align-items-center">
+                            <div class="col-md-8">
+                                <div class="student-info">
+                                    <h6 class="mb-1">Pedro Henrique Oliveira</h6>
+                                    <small class="text-muted">
+                                        <i class="bi bi-card-text me-1"></i>Matrícula: 2025001236 •
+                                        <i class="bi bi-person-vcard me-1"></i>CPF: 456.789.123-45 •
+                                        <i class="bi bi-calendar3 me-1"></i>Solicitado em: 10/09/2025
+                                    </small>
+                                </div>
+                            </div>
+                            <div class="col-md-4 text-end">
+                                <div class="action-buttons">
+                                    <button class="btn btn-sm btn-success" onclick="approveRequest(3)">
+                                        <i class="bi bi-check-lg me-1"></i>Aprovar
+                                    </button>
+                                    <button class="btn btn-sm btn-danger" onclick="rejectRequest(3)">
+                                        <i class="bi bi-x-lg me-1"></i>Rejeitar
+                                    </button>
+                                    <button class="btn btn-sm btn-outline-info" onclick="viewRequestDetails(3)">
+                                        <i class="bi bi-eye me-1"></i>Detalhes
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Seção de Busca e Filtros -->
+        <div class="search-filter-section mb-4">
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="search-box">
+                        <label for="searchStudent" class="form-label">
+                            <i class="bi bi-search me-1"></i>Buscar Aluno por Matrícula
+                        </label>
+                        <div class="input-group">
+                            <input type="text" class="form-control" id="searchStudent" placeholder="Digite a matrícula do aluno">
+                            <button class="btn btn-outline-success" type="button" onclick="searchStudent()">
+                                <i class="bi bi-search"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="filter-section">
+                        <label for="filterCategory" class="form-label">
+                            <i class="bi bi-funnel me-1"></i>Filtrar por Categoria
+                        </label>
+                        <select class="form-select" id="filterCategory" onchange="filterStudents()">
+                            <option value="">Todos os alunos</option>
+                            <option value="ativos">Alunos Ativos</option>
+                            <option value="beneficiados">Alunos Beneficiados</option>
+                            <option value="alimentacao">Com Auxílio Alimentação</option>
+                            <option value="transporte">Com Auxílio Transporte</option>
+                            <option value="moradia">Com Auxílio Moradia</option>
+                            <option value="material">Com Material Didático</option>
+                            <option value="inativos">Alunos Inativos</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Resultado da Busca Individual -->
+        <div id="searchResult" class="search-result-card mb-4" style="display: none;">
+            <div class="card">
+                <div class="card-header">
+                    <i class="bi bi-person-badge me-2"></i>Resultado da Busca
+                    <button type="button" class="btn-close float-end" onclick="clearSearch()"></button>
+                </div>
+                <div class="card-body" id="searchResultContent">
+                    <!-- Conteúdo será preenchido via JavaScript -->
+                </div>
+            </div>
+        </div>
+
+        <!-- Lista de Alunos -->
+        <div class="students-list-card">
+            <div class="card">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <div>
+                        <i class="bi bi-people me-2"></i>
+                        <span>Lista de Alunos</span>
+                        <span class="badge bg-info ms-2" id="studentsCount">487</span>
+                    </div>
+                    <div>
+                        <button class="btn btn-sm btn-outline-light me-2" onclick="exportStudentsList()">
+                            <i class="bi bi-download me-1"></i>Exportar
+                        </button>
+                        <button class="btn btn-sm btn-outline-light" onclick="refreshStudentsList()">
+                            <i class="bi bi-arrow-clockwise me-1"></i>Atualizar
+                        </button>
+                    </div>
+                </div>
+                <div class="card-body p-0">
+                    <div class="table-responsive">
+                        <table class="table table-hover mb-0" id="studentsTable">
+                            <thead class="table-header">
+                                <tr>
+                                    <th>Nome</th>
+                                    <th>Matrícula</th>
+                                    <th>CPF</th>
+                                    <th>Auxílios Ativos</th>
+                                    <th>Status</th>
+                                    <th>Ações</th>
+                                </tr>
+                            </thead>
+                            <tbody id="studentsTableBody">
+                                <!-- Dados serão carregados via JavaScript -->
+                                <tr>
+                                    <td><strong>Ana Maria Silva</strong></td>
+                                    <td>2024001001</td>
+                                    <td>123.456.789-10</td>
+                                    <td>
+                                        <span class="auxilio-badge alimentacao">Alimentação</span>
+                                        <span class="auxilio-badge transporte">Transporte</span>
+                                    </td>
+                                    <td><span class="badge bg-success">Ativo</span></td>
+                                    <td>
+                                        <div class="action-buttons">
+                                            <button class="btn btn-sm btn-outline-info" onclick="viewStudent(1)">
+                                                <i class="bi bi-eye"></i>
+                                            </button>
+                                            <button class="btn btn-sm btn-outline-secondary" onclick="editStudent(1)">
+                                                <i class="bi bi-pencil"></i>
+                                            </button>
+                                            <button class="btn btn-sm btn-outline-danger" onclick="deleteStudent(1)">
+                                                <i class="bi bi-trash"></i>
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Carlos Eduardo Santos</strong></td>
+                                    <td>2024001002</td>
+                                    <td>987.654.321-00</td>
+                                    <td>
+                                        <span class="auxilio-badge moradia">Moradia</span>
+                                    </td>
+                                    <td><span class="badge bg-success">Ativo</span></td>
+                                    <td>
+                                        <div class="action-buttons">
+                                            <button class="btn btn-sm btn-outline-info" onclick="viewStudent(2)">
+                                                <i class="bi bi-eye"></i>
+                                            </button>
+                                            <button class="btn btn-sm btn-outline-secondary" onclick="editStudent(2)">
+                                                <i class="bi bi-pencil"></i>
+                                            </button>
+                                            <button class="btn btn-sm btn-outline-danger" onclick="deleteStudent(2)">
+                                                <i class="bi bi-trash"></i>
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Fernanda Costa Lima</strong></td>
+                                    <td>2024001003</td>
+                                    <td>456.789.123-45</td>
+                                    <td>
+                                        <span class="auxilio-badge material">Material</span>
+                                        <span class="auxilio-badge alimentacao">Alimentação</span>
+                                    </td>
+                                    <td><span class="badge bg-success">Ativo</span></td>
+                                    <td>
+                                        <div class="action-buttons">
+                                            <button class="btn btn-sm btn-outline-info" onclick="viewStudent(3)">
+                                                <i class="bi bi-eye"></i>
+                                            </button>
+                                            <button class="btn btn-sm btn-outline-secondary" onclick="editStudent(3)">
+                                                <i class="bi bi-pencil"></i>
+                                            </button>
+                                            <button class="btn btn-sm btn-outline-danger" onclick="deleteStudent(3)">
+                                                <i class="bi bi-trash"></i>
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="card-footer">
+                    <nav aria-label="Navegação da lista de alunos">
+                        <ul class="pagination pagination-sm justify-content-center mb-0">
+                            <li class="page-item disabled">
+                                <a class="page-link" href="#">Anterior</a>
+                            </li>
+                            <li class="page-item active">
+                                <a class="page-link" href="#">1</a>
+                            </li>
+                            <li class="page-item">
+                                <a class="page-link" href="#">2</a>
+                            </li>
+                            <li class="page-item">
+                                <a class="page-link" href="#">3</a>
+                            </li>
+                            <li class="page-item">
+                                <a class="page-link" href="#">Próximo</a>
+                            </li>
+                        </ul>
+                    </nav>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="/static/js/dashboard_admin.js"></script>
+    <script src="/static/js/usuario_aluno.js"></script>
+
+    <footer class="footer bg-success text-white py-4">
+        <div class="container">
+            <div class="row">
+                <div class="col-12 text-center">
+                    <p class="text-white mb-0">
+                        &copy; 2025 Sistema de Controle de Assistência Estudantil. Todos os direitos reservados.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>

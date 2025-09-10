@@ -1,0 +1,531 @@
+/* =========================
+   GERENCIAR ALUNOS - CSS ESPECÍFICO
+   ========================= */
+
+/* ===== VARIÁVEIS CSS ESPECÍFICAS ===== */
+:root {
+    --alunos-blue: #1976D2;
+    --alunos-orange: #FFB74D;
+    --alunos-purple: #7B1FA2;
+    --alunos-teal: #00ACC1;
+    --alunos-indigo: #3F51B5;
+    --light-blue: #E3F2FD;
+    --light-orange: #FFF8E1;
+    --light-purple: #F3E5F5;
+    --light-teal: #E0F7FA;
+}
+
+/* ===== PAGE HEADER ===== */
+.page-header {
+    background: linear-gradient(135deg, white 0%, #f8fffe 100%);
+    border-radius: 15px;
+    padding: 25px 30px;
+    margin-bottom: 30px;
+    border-left: 5px solid var(--ifes-green);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.06);
+}
+
+.breadcrumb {
+    background: none;
+    padding: 0;
+    margin-bottom: 15px;
+}
+
+.breadcrumb-item a {
+    color: var(--ifes-green);
+    text-decoration: none;
+}
+
+.breadcrumb-item a:hover {
+    color: var(--ifes-light-green);
+}
+
+.page-title {
+    color: var(--ifes-dark-gray);
+    font-weight: 700;
+    font-size: 2rem;
+    margin-bottom: 5px;
+}
+
+.page-subtitle {
+    color: #666;
+    font-size: 1.1rem;
+    margin-bottom: 0;
+}
+
+.notification-badge {
+    position: relative;
+    background: linear-gradient(135deg, var(--ifes-orange), #FFB74D);
+    color: white;
+    padding: 15px 20px;
+    border-radius: 50px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(255, 152, 0, 0.3);
+}
+
+.notification-badge:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(255, 152, 0, 0.4);
+}
+
+.notification-badge .badge {
+    position: absolute;
+    top: -5px;
+    right: -5px;
+    font-size: 0.7rem;
+}
+
+/* ===== STATS CARDS ESPECÍFICOS ===== */
+.stats-card.alunos-ativos .icon {
+    background: linear-gradient(135deg, var(--ifes-green), var(--ifes-light-green));
+}
+
+.stats-card.solicitacoes-pendentes .icon {
+    background: linear-gradient(135deg, var(--ifes-orange), #FFB74D);
+}
+
+.stats-card.alunos-beneficiados .icon {
+    background: linear-gradient(135deg, var(--ifes-purple), #BA68C8);
+}
+
+.stats-card.total-auxilios .icon {
+    background: linear-gradient(135deg, var(--alunos-blue), #42A5F5);
+}
+
+/* ===== PENDING REQUESTS CARD ===== */
+.pending-requests-card {
+    background: linear-gradient(135deg, #fff 0%, #fff8f0 100%);
+    border: 1px solid rgba(255, 152, 0, 0.1);
+    border-radius: 15px;
+    overflow: hidden;
+}
+
+.pending-requests-card .card-header {
+    background: linear-gradient(135deg, var(--ifes-orange), #FFCC80);
+    color: white;
+    border-bottom: none;
+    padding: 20px 25px;
+}
+
+.pending-request-item {
+    background: rgba(255, 152, 0, 0.05);
+    border-radius: 10px;
+    padding: 20px;
+    margin-bottom: 15px;
+    border-left: 4px solid var(--ifes-orange);
+    transition: all 0.3s ease;
+}
+
+.pending-request-item:hover {
+    background: rgba(255, 152, 0, 0.1);
+    transform: translateX(5px);
+    box-shadow: 0 4px 15px rgba(255, 152, 0, 0.15);
+}
+
+.pending-request-item:last-child {
+    margin-bottom: 0;
+}
+
+.student-info h6 {
+    color: var(--ifes-dark-gray);
+    font-weight: 700;
+    margin-bottom: 5px;
+}
+
+.student-info small {
+    color: #666;
+    font-weight: 500;
+}
+
+/* ===== SEARCH AND FILTER SECTION ===== */
+.search-filter-section {
+    background: linear-gradient(135deg, white 0%, #f8fff8 100%);
+    border-radius: 15px;
+    padding: 25px;
+    border: 1px solid rgba(46, 125, 50, 0.1);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.06);
+}
+
+.search-box .form-label,
+.filter-section .form-label {
+    color: var(--ifes-dark-gray);
+    font-weight: 600;
+    margin-bottom: 10px;
+}
+
+.search-box .input-group {
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.search-box .form-control {
+    border: 1px solid #e1e5e9;
+    border-right: none;
+    padding: 12px 15px;
+}
+
+.search-box .btn {
+    border-left: none;
+    border: 1px solid var(--ifes-green);
+    background: var(--ifes-green);
+    color: white;
+    padding: 12px 20px;
+}
+
+.search-box .btn:hover {
+    background: var(--ifes-light-green);
+    border-color: var(--ifes-light-green);
+}
+
+.filter-section .form-select {
+    border: 1px solid #e1e5e9;
+    border-radius: 10px;
+    padding: 12px 15px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.filter-section .form-select:focus {
+    border-color: var(--ifes-green);
+    box-shadow: 0 0 0 0.2rem rgba(46, 125, 50, 0.25);
+}
+
+/* ===== SEARCH RESULT CARD ===== */
+.search-result-card .card {
+    border: 2px solid var(--ifes-green);
+    border-radius: 15px;
+    box-shadow: 0 6px 20px rgba(46, 125, 50, 0.15);
+}
+
+.search-result-card .card-header {
+    background: linear-gradient(135deg, var(--ifes-green), var(--ifes-light-green));
+    color: white;
+    border-bottom: none;
+    padding: 15px 25px;
+}
+
+/* ===== STUDENTS LIST CARD ===== */
+.students-list-card .card {
+    border-radius: 15px;
+    overflow: hidden;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
+}
+
+.students-list-card .card-header {
+    background: linear-gradient(135deg, var(--ifes-green), var(--ifes-light-green));
+    color: white;
+    padding: 20px 25px;
+    border-bottom: none;
+}
+
+.table-header th {
+    background-color: #f8f9fa;
+    border-top: none;
+    font-weight: 700;
+    color: var(--ifes-dark-gray);
+    padding: 15px 20px;
+    font-size: 0.9rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    border-bottom: 2px solid #dee2e6;
+}
+
+.students-list-card .table td {
+    padding: 15px 20px;
+    vertical-align: middle;
+    border-top: 1px solid #f1f3f4;
+}
+
+.students-list-card .table tbody tr {
+    transition: all 0.2s ease;
+}
+
+.students-list-card .table tbody tr:hover {
+    background-color: var(--ifes-hover-bg);
+    transform: scale(1.005);
+}
+
+/* ===== AUXILIO BADGES ===== */
+.auxilio-badge {
+    display: inline-block;
+    padding: 4px 8px;
+    margin: 2px;
+    border-radius: 12px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+}
+
+.auxilio-badge.alimentacao {
+    background: linear-gradient(135deg, #4CAF50, #66BB6A);
+    color: white;
+}
+
+.auxilio-badge.transporte {
+    background: linear-gradient(135deg, #2196F3, #42A5F5);
+    color: white;
+}
+
+.auxilio-badge.moradia {
+    background: linear-gradient(135deg, #9C27B0, #BA68C8);
+    color: white;
+}
+
+.auxilio-badge.material {
+    background: linear-gradient(135deg, #FFB74D, #FFCC80);
+    color: white;
+}
+
+/* ===== ACTION BUTTONS ESPECÍFICOS ===== */
+.action-buttons .btn {
+    padding: 0.35rem 0.6rem;
+    font-size: 0.8rem;
+    border-radius: 6px;
+    margin: 0 2px;
+    transition: all 0.2s ease;
+}
+
+.action-buttons .btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.pending-request-item .action-buttons .btn {
+    padding: 0.4rem 0.8rem;
+    font-size: 0.85rem;
+    border-radius: 8px;
+    margin: 0 3px;
+}
+
+/* ===== PAGINATION PERSONALIZADA ===== */
+.pagination .page-item .page-link {
+    border: 1px solid #dee2e6;
+    color: var(--ifes-green);
+    padding: 8px 12px;
+    margin: 0 2px;
+    border-radius: 6px;
+    transition: all 0.2s ease;
+}
+
+.pagination .page-item .page-link:hover {
+    background-color: var(--ifes-light-green);
+    color: white;
+    border-color: var(--ifes-light-green);
+    transform: translateY(-1px);
+}
+
+.pagination .page-item.active .page-link {
+    background-color: var(--ifes-green);
+    border-color: var(--ifes-green);
+    color: white;
+}
+
+.pagination .page-item.disabled .page-link {
+    color: #6c757d;
+    background-color: #fff;
+    border-color: #dee2e6;
+}
+
+/* ===== MODALS ESPECÍFICOS ===== */
+.modal-content {
+    border: none;
+    border-radius: 15px;
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+}
+
+.modal-header {
+    background: linear-gradient(135deg, var(--ifes-green), var(--ifes-light-green));
+    color: white;
+    border-radius: 15px 15px 0 0;
+    border-bottom: none;
+    padding: 20px 25px;
+}
+
+.modal-body {
+    padding: 25px;
+}
+
+.modal-footer {
+    border-top: 1px solid #e9ecef;
+    padding: 20px 25px;
+    border-radius: 0 0 15px 15px;
+}
+
+/* ===== LOADING STATES ===== */
+.loading {
+    opacity: 0.6;
+    pointer-events: none;
+    position: relative;
+}
+
+.loading::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 20px;
+    height: 20px;
+    margin: -10px 0 0 -10px;
+    border: 2px solid #f3f3f3;
+    border-top: 2px solid var(--ifes-green);
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* ===== RESPONSIVE DESIGN ===== */
+@media (max-width: 768px) {
+    .page-header {
+        padding: 20px;
+    }
+    
+    .page-title {
+        font-size: 1.5rem;
+    }
+    
+    .notification-badge {
+        padding: 10px 15px;
+    }
+    
+    .search-filter-section {
+        padding: 20px;
+    }
+    
+    .pending-request-item {
+        padding: 15px;
+    }
+    
+    .pending-request-item .action-buttons {
+        margin-top: 15px;
+    }
+    
+    .pending-request-item .action-buttons .btn {
+        width: 100%;
+        margin: 3px 0;
+    }
+    
+    .students-list-card .table {
+        font-size: 0.9rem;
+    }
+    
+    .auxilio-badge {
+        display: block;
+        margin: 1px 0;
+    }
+    
+    .action-buttons {
+        flex-direction: column;
+        gap: 5px;
+    }
+    
+    .action-buttons .btn {
+        font-size: 0.75rem;
+        padding: 0.3rem 0.5rem;
+    }
+}
+
+@media (max-width: 576px) {
+    .stats-card {
+        margin-bottom: 15px;
+    }
+    
+    .stats-card .number {
+        font-size: 2rem;
+    }
+    
+    .table-responsive {
+        font-size: 0.8rem;
+    }
+    
+    .students-list-card .table td {
+        padding: 10px 15px;
+    }
+    
+    .modal-dialog {
+        margin: 10px;
+        max-width: calc(100% - 20px);
+    }
+    
+    .modal-body,
+    .modal-footer {
+        padding: 15px 20px;
+    }
+}
+
+/* ===== ANIMAÇÕES ESPECÍFICAS ===== */
+@keyframes slideInFromLeft {
+    0% {
+        opacity: 0;
+        transform: translateX(-30px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+@keyframes fadeInUp {
+    0% {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.pending-request-item {
+    animation: slideInFromLeft 0.5s ease-out;
+}
+
+.search-result-card {
+    animation: fadeInUp 0.6s ease-out;
+}
+
+/* ===== TOASTS PERSONALIZADOS ===== */
+.toast-container {
+    z-index: 9999;
+}
+
+.toast {
+    border: none;
+    border-radius: 10px;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+}
+
+.toast-header {
+    border-bottom: none;
+    border-radius: 10px 10px 0 0;
+    padding: 15px 20px;
+}
+
+.toast-body {
+    padding: 15px 20px;
+    font-weight: 500;
+}
+
+/* ===== CUSTOM SCROLLBAR PARA TABELAS ===== */
+.table-responsive::-webkit-scrollbar {
+    height: 8px;
+}
+
+.table-responsive::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 10px;
+}
+
+.table-responsive::-webkit-scrollbar-thumb {
+    background: var(--ifes-light-green);
+    border-radius: 10px;
+}
+
+.table-responsive::-webkit-scrollbar-thumb:hover {
+    background: var(--ifes-green);
+}
