@@ -63,8 +63,30 @@ def criar_aluno_padrao():
         )
         id_usuario = usuario_repo.inserir(aluno)
         print(f"Aluno criado: {aluno.matricula} / {aluno.senha}")
+    
+def criar_assistente_padrao():
+    # Verificar se já existe assistente
+    assistentes = usuario_repo.obter_todos_por_perfil("assistente")
+    if not assistentes:
+        senha_hash = criar_hash_senha("assistente123")
+        assistente = Usuario(
+            id_usuario=0,
+            nome="Assistente Padrão",
+            email="assistente@assistente.com",
+            matricula="assistente123",
+            senha=senha_hash,
+            siap="assistente123",
+            perfil="assistente",
+            foto=None,
+            token_redefinicao=None,
+            data_token=None,
+            data_cadastro=None
+        )
+        id_usuario = usuario_repo.inserir(assistente)
+        print(f"Assistente criado: {assistente.matricula} / {assistente.senha}")
 
 
 if __name__ == "__main__":
     criar_admin_padrao()            
     criar_aluno_padrao()
+    criar_assistente_padrao()

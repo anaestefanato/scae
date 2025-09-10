@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SCAE - Gerenciar Assistentes</title>
+    <link rel="icon" type="image/png" href="/static/img/logo.png">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="/static/css/dashboard_admin.css" />
+    <link rel="stylesheet" href="/static/css/usuario_assist.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Menu Toggle Button (visible when sidebar is collapsed) -->
+    <button class="menu-toggle" id="menuToggle">
+        <i class="bi bi-list"></i>
+    </button>
+
+    <!-- Sidebar -->
+    <div class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <button class="close-sidebar" id="closeSidebar">
+                <i class="bi bi-x-lg"></i>
+            </button>
+            <img src="/static/img/logoifes.png" alt="Logo IFES" width="180">
+        </div>
+        <div class="d-flex flex-column p-3">
+            <div class="mb-4 text-center">
+                <h6 class="mb-0">Sistema de Controle de</h6>
+                <h6>Assistência Estudantil</h6>
+            </div>
+            <ul class="nav nav-pills flex-column mb-auto">
+                <li class="nav-item">
+                    <a href="/admin/dashboard" class="nav-link">
+                        <i class="bi bi-speedometer2"></i> <span>Início</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="/admin/editais" class="nav-link">
+                        <i class="bi bi-file-earmark-text"></i> <span>Gerenciar Editais</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="/admin/inscricoes" class="nav-link">
+                        <i class="bi bi-clipboard-check"></i> <span>Analisar Inscrições</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="/admin/pagamentos" class="nav-link">
+                        <i class="bi bi-credit-card"></i> <span>Pagamentos</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="/admin/usuarios" class="nav-link submenu-toggle" data-submenu="usuarios">
+                        <div class="nav-content">
+                            <i class="bi bi-people"></i> <span>Usuários</span>
+                        </div>
+                        <i class="bi bi-chevron-down submenu-arrow"></i>
+                    </a>
+                    <ul class="submenu expanded" id="submenu-usuarios">
+                        <li class="nav-item">
+                            <a href="/admin/usuarios/alunos" class="nav-link submenu-item">
+                                <i class="bi bi-person-badge"></i> <span>Alunos</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="/admin/usuarios/assistentes" class="nav-link submenu-item active">
+                                <i class="bi bi-person-gear"></i> <span>Assistentes</span>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+                <li class="nav-item">
+                    <a href="/admin/relatorios" class="nav-link">
+                        <i class="bi bi-file-earmark-bar-graph"></i> <span>Relatórios</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="/admin/chamados" class="nav-link">
+                        <i class="bi bi-chat-dots"></i> <span>Chamados</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="/admin/configuracoes" class="nav-link">
+                        <i class="bi bi-gear"></i> <span>Configurações</span>
+                    </a>
+                </li>
+            </ul>
+            <hr>
+            <div class="text-center">
+                <a href="/" class="btn btn-outline-danger">
+                    <i class="bi bi-box-arrow-right"></i> <span>Sair</span>
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content" id="mainContent">
+        <!-- Header com Breadcrumb -->
+        <div class="page-header mb-4">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="/admin/dashboard">Dashboard</a></li>
+                    <li class="breadcrumb-item"><a href="/admin/usuarios">Usuários</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">Assistentes</li>
+                </ol>
+            </nav>
+            <div class="d-flex justify-content-between align-items-center">
+                <div>
+                    <h2 class="page-title">Gerenciar Assistentes Sociais</h2>
+                    <p class="page-subtitle">Controle completo sobre a equipe de assistência estudantil</p>
+                </div>
+                <div class="action-header-buttons">
+                    <button class="btn btn-cadastrar-assistente" onclick="openNewAssistantModal()">
+                        <i class="bi bi-person-plus me-2"></i>Cadastrar Novo Assistente
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Cards de Estatísticas -->
+        <div class="row mb-4">
+            <div class="col-md-3">
+                <div class="stats-card card assistentes-ativos">
+                    <div class="icon">
+                        <i class="bi bi-person-check"></i>
+                    </div>
+                    <div class="number">8</div>
+                    <div class="label">Assistentes Ativos</div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="stats-card card casos-atendidos">
+                    <div class="icon">
+                        <i class="bi bi-clipboard-check"></i>
+                    </div>
+                    <div class="number">156</div>
+                    <div class="label">Casos Atendidos</div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="stats-card card inscricoes-analisadas">
+                    <div class="icon">
+                        <i class="bi bi-file-earmark-check"></i>
+                    </div>
+                    <div class="number">342</div>
+                    <div class="label">Inscrições Analisadas</div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="stats-card card media-produtividade">
+                    <div class="icon">
+                        <i class="bi bi-graph-up"></i>
+                    </div>
+                    <div class="number">95%</div>
+                    <div class="label">Média de Produtividade</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Seção de Busca e Filtros -->
+        <div class="search-filter-section mb-4">
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="search-box">
+                        <label for="searchAssistant" class="form-label">
+                            <i class="bi bi-search me-1"></i>Buscar Assistente
+                        </label>
+                        <div class="input-group">
+                            <input type="text" class="form-control" id="searchAssistant" placeholder="Digite o nome ou matrícula do assistente">
+                            <button class="btn btn-outline-success" type="button" onclick="searchAssistant()">
+                                <i class="bi bi-search"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="filter-section">
+                        <label for="filterStatus" class="form-label">
+                            <i class="bi bi-funnel me-1"></i>Filtrar por Status
+                        </label>
+                        <select class="form-select" id="filterStatus" onchange="filterAssistants()">
+                            <option value="">Todos os assistentes</option>
+                            <option value="ativo">Assistentes Ativos</option>
+                            <option value="inativo">Assistentes Inativos</option>
+                            <option value="ferias">Em Férias</option>
+                            <option value="licenca">Em Licença</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Resultado da Busca Individual -->
+        <div id="searchResult" class="search-result-card mb-4" style="display: none;">
+            <div class="card">
+                <div class="card-header">
+                    <i class="bi bi-person-gear me-2"></i>Resultado da Busca
+                    <button type="button" class="btn-close float-end" onclick="clearSearch()"></button>
+                </div>
+                <div class="card-body" id="searchResultContent">
+                    <!-- Conteúdo será preenchido via JavaScript -->
+                </div>
+            </div>
+        </div>
+
+        <!-- Lista de Assistentes -->
+        <div class="assistants-list-card">
+            <div class="card">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <div>
+                        <i class="bi bi-people me-2"></i>
+                        <span>Lista de Assistentes Sociais</span>
+                        <span class="badge bg-info ms-2" id="assistantsCount">8</span>
+                    </div>
+                    <div>
+                        <button class="btn btn-sm btn-outline-light me-2" onclick="exportAssistantsList()">
+                            <i class="bi bi-download me-1"></i>Exportar
+                        </button>
+                        <button class="btn btn-sm btn-outline-light" onclick="refreshAssistantsList()">
+                            <i class="bi bi-arrow-clockwise me-1"></i>Atualizar
+                        </button>
+                    </div>
+                </div>
+                <div class="card-body p-0">
+                    <div class="table-responsive">
+                        <table class="table table-hover mb-0" id="assistantsTable">
+                            <thead class="table-header">
+                                <tr>
+                                    <th>Nome</th>
+                                    <th>Matrícula</th>
+                                    <th>Email</th>
+                                    <th>Área de Atuação</th>
+                                    <th>Status</th>
+                                    <th>Ações</th>
+                                </tr>
+                            </thead>
+                            <tbody id="assistantsTableBody">
+                                <!-- Dados serão carregados via JavaScript -->
+                                <tr>
+                                    <td><strong>Dra. Maria Silva Costa</strong></td>
+                                    <td>AS001</td>
+                                    <td>maria.costa@ifes.edu.br</td>
+                                    <td>
+                                        <span class="area-badge psicologia">Psicologia</span>
+                                    </td>
+                                    <td><span class="badge bg-success">Ativo</span></td>
+                                    <td>
+                                        <div class="action-buttons">
+                                            <button class="btn btn-sm btn-outline-info" onclick="viewAssistant(1)">
+                                                <i class="bi bi-eye"></i>
+                                            </button>
+                                            <button class="btn btn-sm btn-outline-secondary" onclick="editAssistant(1)">
+                                                <i class="bi bi-pencil"></i>
+                                            </button>
+                                            <button class="btn btn-sm btn-outline-danger" onclick="deleteAssistant(1)">
+                                                <i class="bi bi-trash"></i>
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Dr. João Pedro Santos</strong></td>
+                                    <td>AS002</td>
+                                    <td>joao.santos@ifes.edu.br</td>
+                                    <td>
+                                        <span class="area-badge servico-social">Serviço Social</span>
+                                    </td>
+                                    <td><span class="badge bg-success">Ativo</span></td>
+                                    <td>
+                                        <div class="action-buttons">
+                                            <button class="btn btn-sm btn-outline-info" onclick="viewAssistant(2)">
+                                                <i class="bi bi-eye"></i>
+                                            </button>
+                                            <button class="btn btn-sm btn-outline-secondary" onclick="editAssistant(2)">
+                                                <i class="bi bi-pencil"></i>
+                                            </button>
+                                            <button class="btn btn-sm btn-outline-danger" onclick="deleteAssistant(2)">
+                                                <i class="bi bi-trash"></i>
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Dra. Ana Beatriz Lima</strong></td>
+                                    <td>AS003</td>
+                                    <td>ana.lima@ifes.edu.br</td>
+                                    <td>
+                                        <span class="area-badge pedagogia">Pedagogia</span>
+                                    </td>
+                                    <td><span class="badge bg-warning text-dark">Férias</span></td>
+                                    <td>
+                                        <div class="action-buttons">
+                                            <button class="btn btn-sm btn-outline-info" onclick="viewAssistant(3)">
+                                                <i class="bi bi-eye"></i>
+                                            </button>
+                                            <button class="btn btn-sm btn-outline-secondary" onclick="editAssistant(3)">
+                                                <i class="bi bi-pencil"></i>
+                                            </button>
+                                            <button class="btn btn-sm btn-outline-danger" onclick="deleteAssistant(3)">
+                                                <i class="bi bi-trash"></i>
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="card-footer">
+                    <nav aria-label="Navegação da lista de assistentes">
+                        <ul class="pagination pagination-sm justify-content-center mb-0">
+                            <li class="page-item disabled">
+                                <a class="page-link" href="#">Anterior</a>
+                            </li>
+                            <li class="page-item active">
+                                <a class="page-link" href="#">1</a>
+                            </li>
+                            <li class="page-item">
+                                <a class="page-link" href="#">2</a>
+                            </li>
+                            <li class="page-item">
+                                <a class="page-link" href="#">Próximo</a>
+                            </li>
+                        </ul>
+                    </nav>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="/static/js/dashboard_admin.js"></script>
+    <script src="/static/js/usuario_assist.js"></script>
+
+    <footer class="footer bg-success text-white py-4">
+        <div class="container">
+            <div class="row">
+                <div class="col-12 text-center">
+                    <p class="text-white mb-0">
+                        &copy; 2025 Sistema de Controle de Assistência Estudantil. Todos os direitos reservados.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>

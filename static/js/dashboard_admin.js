@@ -346,8 +346,47 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
+    // ===== CONTROLE DO SUBMENU =====
+    function initSubmenu() {
+        const submenuToggles = document.querySelectorAll('.submenu-toggle');
+        
+        submenuToggles.forEach(toggle => {
+            // Adicionar evento apenas na seta, não no link todo
+            const arrow = toggle.querySelector('.submenu-arrow');
+            
+            if (arrow) {
+                arrow.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    e.stopPropagation(); // Impede que o link seja ativado
+                    
+                    const submenuId = toggle.getAttribute('data-submenu');
+                    const submenu = document.getElementById(`submenu-${submenuId}`);
+                    
+                    // Toggle classes
+                    toggle.classList.toggle('expanded');
+                    submenu.classList.toggle('expanded');
+                    
+                    // Fechar outros submenus
+                    submenuToggles.forEach(otherToggle => {
+                        if (otherToggle !== toggle) {
+                            const otherSubmenuId = otherToggle.getAttribute('data-submenu');
+                            const otherSubmenu = document.getElementById(`submenu-${otherSubmenuId}`);
+                            otherToggle.classList.remove('expanded');
+                            if (otherSubmenu) {
+                                otherSubmenu.classList.remove('expanded');
+                            }
+                        }
+                    });
+                });
+            }
+        });
+    }
+
     // ===== INICIALIZAÇÃO =====
     function init() {
+        // Inicializar submenu
+        initSubmenu();
+        
         // Criar modal se não existir
         createNovoEditalModal();
         

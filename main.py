@@ -26,6 +26,7 @@ auxilio_moradia_repo.AuxilioMoradiaRepo.criar_tabela()
 auxilio_transporte_repo.AuxilioTransporteRepo.criar_tabela()
 seed_db.criar_admin_padrao()
 seed_db.criar_aluno_padrao()
+seed_db.criar_assistente_padrao()
 
 
 app = FastAPI()
