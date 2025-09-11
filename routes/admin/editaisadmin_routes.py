@@ -9,11 +9,11 @@ router = APIRouter()
 templates = Jinja2Templates(directory="templates")
 
 
-@router.get("/inicio")
+@router.get("/editais")
 #@requer_autenticacao("admin")
-async def get_perfil(request: Request):
+async def get_editais(request: Request):
     usuario_logado = obter_usuario_logado(request)
     admin = usuario_repo.obter_usuario_por_matricula(usuario_logado['matricula'])
-    response = templates.TemplateResponse("/admin/dashboard_admin.html", {"request": request, "admin": admin})
+    response = templates.TemplateResponse("/admin/editais.html", {"request": request, "admin": admin})
     return response
 
