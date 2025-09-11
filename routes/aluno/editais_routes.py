@@ -14,6 +14,8 @@ templates = Jinja2Templates(directory="templates")
 #@requer_autenticacao(["aluno"])
 async def get_editais(request: Request):
     usuario_logado = obter_usuario_logado(request)
+    if not usuario_logado:
+        return RedirectResponse(url="/login", status_code=302)
     if not usuario_logado['completo']:
         return RedirectResponse("/aluno/dadoscadastrais", status_code=303)
 
@@ -25,6 +27,8 @@ async def get_editais(request: Request):
 #@requer_autenticacao(["aluno"])
 async def get_editais_detalhes(request: Request):
     usuario_logado = obter_usuario_logado(request)
+    if not usuario_logado:
+        return RedirectResponse(url="/login", status_code=302)
     if not usuario_logado['completo']:
         return RedirectResponse("/aluno/dadoscadastrais", status_code=303)
 
@@ -36,6 +40,8 @@ async def get_editais_detalhes(request: Request):
 #@requer_autenticacao(["aluno"])
 async def get_editais_primeira_inscricao(request: Request):
     usuario_logado = obter_usuario_logado(request)
+    if not usuario_logado:
+        return RedirectResponse(url="/login", status_code=302)
     if not usuario_logado['completo']:
         return RedirectResponse("/aluno/dadoscadastrais", status_code=303)
 
@@ -47,6 +53,8 @@ async def get_editais_primeira_inscricao(request: Request):
 #@requer_autenticacao(["aluno"])
 async def get_editais_renovacao(request: Request):
     usuario_logado = obter_usuario_logado(request)
+    if not usuario_logado:
+        return RedirectResponse(url="/login", status_code=302)
     if not usuario_logado['completo']:
         return RedirectResponse("/aluno/dadoscadastrais", status_code=303)
 

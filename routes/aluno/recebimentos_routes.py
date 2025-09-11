@@ -14,6 +14,8 @@ templates = Jinja2Templates(directory="templates")
 #@requer_autenticacao(["aluno"])
 async def get_recebimentos(request: Request):
     usuario_logado = obter_usuario_logado(request)
+    if not usuario_logado:
+        return RedirectResponse(url="/login", status_code=302)
     if not usuario_logado['completo']:
         return RedirectResponse("/aluno/dadoscadastrais", status_code=303)
     aluno = usuario_repo.obter_usuario_por_matricula(usuario_logado['matricula'])

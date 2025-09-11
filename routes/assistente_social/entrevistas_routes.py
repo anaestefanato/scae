@@ -1,4 +1,5 @@
 from fastapi import APIRouter, Request
+from fastapi.responses import RedirectResponse
 from fastapi.templating import Jinja2Templates
 
 from repo import usuario_repo
@@ -13,14 +14,18 @@ templates = Jinja2Templates(directory="templates")
 #@requer_autenticacao("assistente")
 async def get_entrevistas(request: Request):
     usuario_logado = obter_usuario_logado(request)
+    if not usuario_logado:
+        return RedirectResponse(url="/login", status_code=302)
     assistente = usuario_repo.obter_usuario_por_matricula(usuario_logado['matricula'])
-    response = templates.TemplateResponse("/assistente/entrevistas.html", {"request": request})
+    response = templates.TemplateResponse("/assistente/entrevistas.html", {"request": request, "assistente": assistente})
     return response
 
 @router.get("/entrevistas/nova")
 #@requer_autenticacao("assistente")
 async def get_entrevistas_nova(request: Request):
     usuario_logado = obter_usuario_logado(request)
+    if not usuario_logado:
+        return RedirectResponse(url="/login", status_code=302)
     assistente = usuario_repo.obter_usuario_por_matricula(usuario_logado['matricula'])
-    response = templates.TemplateResponse("/assistente/nova_entrevista.html", {"request": request})
+    response = templates.TemplateResponse("/assistente/nova_entrevista.html", {"request": request, "assistente": assistente})
     return response

@@ -9,11 +9,12 @@ from util.auth_decorator import obter_usuario_logado, requer_autenticacao
 router = APIRouter()
 templates = Jinja2Templates(directory="templates")
 
-# TESTE COM USUARIO NO LUGAR DE ALUNO PORQUE A TABELA ALUNO NÃO ESTÁ FUNCIONANDO
 @router.get("/inicio")
 # @requer_autenticacao(["aluno"])
 async def get_root(request: Request):
     usuario_logado = obter_usuario_logado(request)
+    if not usuario_logado:
+        return RedirectResponse(url="/login", status_code=302)
     if not usuario_logado['completo']:
         return RedirectResponse("/aluno/dadoscadastrais", status_code=303)
 
