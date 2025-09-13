@@ -36,21 +36,6 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="/admin/editais" class="nav-link">
-                        <i class="bi bi-file-earmark-text"></i> <span>Gerenciar Editais</span>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a href="/admin/inscricoes" class="nav-link">
-                        <i class="bi bi-clipboard-check"></i> <span>Analisar Inscrições</span>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a href="/admin/pagamentos" class="nav-link">
-                        <i class="bi bi-credit-card"></i> <span>Pagamentos</span>
-                    </a>
-                </li>
-                <li class="nav-item">
                     <a  class="nav-link submenu-toggle" data-submenu="usuarios">
                         <div class="nav-content">
                             <i class="bi bi-people"></i> <span>Usuários</span>
@@ -81,8 +66,8 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="/admin/configuracoes" class="nav-link">
-                        <i class="bi bi-gear"></i> <span>Configurações</span>
+                    <a href="/admin/mensagens" class="nav-link">
+                        <i class="bi bi-envelope"></i> <span>Mensagens</span>
                     </a>
                 </li>
             </ul>
@@ -101,11 +86,18 @@
             <div class="row align-items-center">
                 <div class="col-md-8">
                     <h4 class="mb-3">Painel de Controle Administrativo</h4>
-                    <p>Gerencie editais, acompanhe inscrições, processe pagamentos e monitore todo o sistema de assistência estudantil em tempo real.</p>
+                    <p>Monitore todo o sistema de assistência estudantil em tempo real.</p>
                 </div>
-                <div class="col-md-4 text-end">
+                <div class="col-md-4 d-flex justify-content-end align-items-center gap-3">
+                    <button class="btn-notification position-relative" data-bs-toggle="modal" data-bs-target="#notificacoesModal">
+                        <i class="bi bi-bell"></i>
+                        <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger notification-badge">
+                            5
+                            <span class="visually-hidden">mensagens não lidas</span>
+                        </span>
+                    </button>
                     <div class="user-profile-card">
-                        <img src="/static/img/perfil-admin.jpg" alt="Perfil" class="mb-2">
+                        <img src="/static/img/perfil.jpg" alt="Perfil" class="mb-2">
                         <div>
                             <small class="text-muted">Administrador</small>
                             <div class="fw-bold">Ana Oliveira</div>
@@ -113,34 +105,9 @@
                     </div>
                 </div>
             </div>
-            <div class="row mt-4">
-                <div class="col-12 text-end">
-                    <button class="btn btn-criar-edital">
-                        <i class="bi bi-file-earmark-plus me-2"></i>Criar Novo Edital
-                    </button>
-                </div>
-            </div>
         </div>
 
          <div class="row mb-4">
-            <div class="col-md-3">
-                <div class="stats-card card editais">
-                    <div class="icon">
-                        <i class="bi bi-file-earmark-text"></i>
-                    </div>
-                    <div class="number">3</div>
-                    <div class="label">Editais Ativos</div>
-                </div>
-            </div>
-            <div class="col-md-3">
-                <div class="stats-card card inscricoes">
-                    <div class="icon">
-                        <i class="bi bi-clipboard-check"></i>
-                    </div>
-                    <div class="number">127</div>
-                    <div class="label">Inscrições Pendentes</div>
-                </div>
-            </div>
             <div class="col-md-3">
                 <div class="stats-card card beneficiados">
                     <div class="icon">
@@ -151,226 +118,88 @@
                 </div>
             </div>
             <div class="col-md-3">
-                <div class="stats-card card valor">
+                <div class="stats-card card assistentes">
                     <div class="icon">
-                        <i class="bi bi-currency-dollar"></i>
+                        <i class="bi bi-person-gear"></i>
                     </div>
-                    <div class="number">R$ 68.400</div>
-                    <div class="label">Valor Total Mensal</div>
+                    <div class="number">8</div>
+                    <div class="label">Assistentes Cadastrados</div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="stats-card card relatorios">
+                    <div class="icon">
+                        <i class="bi bi-file-earmark-bar-graph"></i>
+                    </div>
+                    <div class="number">127</div>
+                    <div class="label">Relatórios Emitidos</div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="stats-card card chamados">
+                    <div class="icon">
+                        <i class="bi bi-chat-square-dots"></i>
+                    </div>
+                    <div class="number">89</div>
+                    <div class="label">Chamados Respondidos</div>
                 </div>
             </div>
         </div>
 
         <div class="row">
             <div class="col-md-6">
-                <div class="table-card card h-100">
-                    <div class="card-header d-flex justify-content-between align-items-center">
-                        <span>Editais Recentes</span>
-                        <a href="/admin/editais" class="btn btn-sm btn-light">Ver Todos</a>
-                    </div>
-                    <div class="table-responsive">
-                        <table class="table">
-                            <thead>
-                                <tr>
-                                    <th>Número</th>
-                                    <th>Tipo</th>
-                                    <th>Status</th>
-                                    <th>Inscrições</th>
-                                    <th>Ações</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td><strong>01/2025</strong></td>
-                                    <td>Auxílio Alimentação</td>
-                                    <td><span class="badge bg-success">Ativo</span></td>
-                                    <td><span class="fw-bold text-success">215</span></td>
-                                    <td>
-                                        <div class="action-buttons">
-                                            <button class="btn btn-sm btn-outline-primary"><i class="bi bi-eye"></i></button>
-                                            <button class="btn btn-sm btn-outline-secondary"><i class="bi bi-pencil"></i></button>
-                                        </div>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td><strong>02/2025</strong></td>
-                                    <td>Auxílio Transporte</td>
-                                    <td><span class="badge bg-success">Ativo</span></td>
-                                    <td><span class="fw-bold text-success">187</span></td>
-                                    <td>
-                                        <div class="action-buttons">
-                                            <button class="btn btn-sm btn-outline-primary"><i class="bi bi-eye"></i></button>
-                                            <button class="btn btn-sm btn-outline-secondary"><i class="bi bi-pencil"></i></button>
-                                        </div>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td><strong>03/2025</strong></td>
-                                    <td>Material Didático</td>
-                                    <td><span class="badge bg-success">Ativo</span></td>
-                                    <td><span class="fw-bold text-success">67</span></td>
-                                    <td>
-                                        <div class="action-buttons">
-                                            <button class="btn btn-sm btn-outline-primary"><i class="bi bi-eye"></i></button>
-                                            <button class="btn btn-sm btn-outline-secondary"><i class="bi bi-pencil"></i></button>
-                                        </div>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td><strong>04/2024</strong></td>
-                                    <td>Auxílio Moradia</td>
-                                    <td><span class="badge bg-secondary">Encerrado</span></td>
-                                    <td><span class="fw-bold text-muted">42</span></td>
-                                    <td>
-                                        <div class="action-buttons">
-                                            <button class="btn btn-sm btn-outline-primary"><i class="bi bi-eye"></i></button>
-                                            <button class="btn btn-sm btn-outline-info"><i class="bi bi-arrow-clockwise"></i></button>
-                                        </div>
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-6">
-                <div class="card h-100 pagamentos-card">
+                <div class="card">
                     <div class="card-header">
-                        <i class="bi bi-credit-card me-2"></i>Próximos Pagamentos
+                        <i class="bi bi-person-plus me-2"></i>Solicitações de Cadastro
                     </div>
-                    <div class="card-body overflow-scroll" id="pagamentosContainer">
-                        <div class="pagamento-item">
+                    <div class="card-body">
+                        <div class="solicitation-item border-bottom pb-3 mb-3">
                             <div class="d-flex justify-content-between align-items-center">
                                 <div>
-                                    <h6 class="mb-1">Auxílio Alimentação - Setembro/2025</h6>
-                                    <small class="text-muted">
-                                        <i class="bi bi-people me-1"></i>215 alunos • 
-                                        <i class="bi bi-currency-dollar me-1"></i>R$ 43.000,00
-                                    </small>
+                                    <h6 class="mb-1">João Silva Santos</h6>
+                                    <small class="text-muted">Matrícula: 2025001234</small><br>
+                                    <small class="text-muted">E-mail: joao.silva@aluno.ifes.edu.br</small><br>
+                                    <small class="text-success">Solicitado há 2 horas</small>
                                 </div>
-                                <div class="text-end">
-                                    <span class="badge bg-warning text-dark mb-2">Pendente</span>
-                                    <br>
-                                    <small class="text-muted">Venc: 15/09</small>
+                                <div>
+                                    <button class="btn btn-sm btn-primary" onclick="visualizarCadastro('joao-silva')">
+                                        <i class="bi bi-eye"></i> Ver Detalhes
+                                    </button>
                                 </div>
                             </div>
                         </div>
                         
-                        <div class="pagamento-item">
+                        <div class="solicitation-item border-bottom pb-3 mb-3">
                             <div class="d-flex justify-content-between align-items-center">
                                 <div>
-                                    <h6 class="mb-1">Auxílio Transporte - Setembro/2025</h6>
-                                    <small class="text-muted">
-                                        <i class="bi bi-people me-1"></i>187 alunos • 
-                                        <i class="bi bi-currency-dollar me-1"></i>R$ 28.050,00
-                                    </small>
+                                    <h6 class="mb-1">Maria Fernanda Costa</h6>
+                                    <small class="text-muted">Matrícula: 2025001235</small><br>
+                                    <small class="text-muted">E-mail: maria.costa@aluno.ifes.edu.br</small><br>
+                                    <small class="text-success">Solicitado há 5 horas</small>
                                 </div>
-                                <div class="text-end">
-                                    <span class="badge bg-warning text-dark mb-2">Pendente</span>
-                                    <br>
-                                    <small class="text-muted">Venc: 15/09</small>
+                                <div>
+                                    <button class="btn btn-sm btn-primary" onclick="visualizarCadastro('maria-costa')">
+                                        <i class="bi bi-eye"></i> Ver Detalhes
+                                    </button>
                                 </div>
                             </div>
                         </div>
                         
-                        <div class="pagamento-item">
+                        <div class="solicitation-item">
                             <div class="d-flex justify-content-between align-items-center">
                                 <div>
-                                    <h6 class="mb-1">Material Didático - Setembro/2025</h6>
-                                    <small class="text-muted">
-                                        <i class="bi bi-people me-1"></i>67 alunos • 
-                                        <i class="bi bi-currency-dollar me-1"></i>R$ 13.400,00
-                                    </small>
+                                    <h6 class="mb-1">Pedro Henrique Oliveira</h6>
+                                    <small class="text-muted">Matrícula: 2025001236</small><br>
+                                    <small class="text-muted">E-mail: pedro.oliveira@aluno.ifes.edu.br</small><br>
+                                    <small class="text-success">Solicitado há 1 dia</small>
                                 </div>
-                                <div class="text-end">
-                                    <span class="badge bg-warning text-dark mb-2">Pendente</span>
-                                    <br>
-                                    <small class="text-muted">Venc: 20/09</small>
+                                <div>
+                                    <button class="btn btn-sm btn-primary" onclick="visualizarCadastro('pedro-oliveira')">
+                                        <i class="bi bi-eye"></i> Ver Detalhes
+                                    </button>
                                 </div>
                             </div>
                         </div>
-                        
-                        <div class="d-flex justify-content-end mt-4">
-                            <button class="btn btn-processar-pagamentos" id="processarPagamentosBtn">
-                                <i class="bi bi-credit-card me-2"></i>Processar Pagamentos
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        
-        <div class="row mt-4">
-            <div class="col-md-6">
-                <div class="table-card card">
-                    <div class="card-header d-flex justify-content-between align-items-center">
-                        <span>Inscrições Recentes</span>
-                        <a href="/admin/inscricoes" class="btn btn-sm btn-light">Ver Todas</a>
-                    </div>
-                    <div class="table-responsive">
-                        <table class="table">
-                            <thead>
-                                <tr>
-                                    <th>Aluno</th>
-                                    <th>Edital</th>
-                                    <th>Data</th>
-                                    <th>Status</th>
-                                    <th>Ações</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td><strong>João Silva</strong></td>
-                                    <td>Auxílio Transporte</td>
-                                    <td>01/09/2025</td>
-                                    <td><span class="badge bg-warning text-dark">Análise</span></td>
-                                    <td>
-                                        <div class="action-buttons">
-                                            <button class="btn btn-sm btn-outline-primary"><i class="bi bi-eye"></i></button>
-                                            <button class="btn btn-sm btn-outline-success"><i class="bi bi-check-lg"></i></button>
-                                            <button class="btn btn-sm btn-outline-danger"><i class="bi bi-x-lg"></i></button>
-                                        </div>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td><strong>Maria Santos</strong></td>
-                                    <td>Material Didático</td>
-                                    <td>02/09/2025</td>
-                                    <td><span class="badge bg-warning text-dark">Análise</span></td>
-                                    <td>
-                                        <div class="action-buttons">
-                                            <button class="btn btn-sm btn-outline-primary"><i class="bi bi-eye"></i></button>
-                                            <button class="btn btn-sm btn-outline-success"><i class="bi bi-check-lg"></i></button>
-                                            <button class="btn btn-sm btn-outline-danger"><i class="bi bi-x-lg"></i></button>
-                                        </div>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td><strong>Pedro Oliveira</strong></td>
-                                    <td>Auxílio Alimentação</td>
-                                    <td>03/09/2025</td>
-                                    <td><span class="badge bg-success">Aprovado</span></td>
-                                    <td>
-                                        <div class="action-buttons">
-                                            <button class="btn btn-sm btn-outline-primary"><i class="bi bi-eye"></i></button>
-                                            <button class="btn btn-sm btn-outline-secondary"><i class="bi bi-pencil"></i></button>
-                                        </div>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td><strong>Carla Mendes</strong></td>
-                                    <td>Auxílio Transporte</td>
-                                    <td>04/09/2025</td>
-                                    <td><span class="badge bg-danger">Indeferido</span></td>
-                                    <td>
-                                        <div class="action-buttons">
-                                            <button class="btn btn-sm btn-outline-primary"><i class="bi bi-eye"></i></button>
-                                            <button class="btn btn-sm btn-outline-info"><i class="bi bi-arrow-clockwise"></i></button>
-                                        </div>
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
                     </div>
                 </div>
             </div>
@@ -391,20 +220,6 @@
                             <div>
                                 <a href="/admin/chamados" class="btn btn-sm btn-outline-warning">
                                     <i class="bi bi-eye me-1"></i>Verificar
-                                </a>
-                            </div>
-                        </div>
-                        
-                        <div class="d-flex justify-content-between align-items-center mb-3 p-3 bg-light rounded">
-                            <div>
-                                <h6 class="mb-1 text-info">
-                                    <i class="bi bi-people me-1"></i>8 novos cadastros de usuários
-                                </h6>
-                                <small class="text-muted">Aguardando aprovação</small>
-                            </div>
-                            <div>
-                                <a href="/admin/usuarios" class="btn btn-sm btn-outline-info">
-                                    <i class="bi bi-check-circle me-1"></i>Analisar
                                 </a>
                             </div>
                         </div>
@@ -434,8 +249,332 @@
         </div>
     </div>
 
+    <!-- Modal de Notificações -->
+    <div class="modal fade" id="notificacoesModal" tabindex="-1" aria-labelledby="notificacoesModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="notificacoesModalLabel">
+                        <i class="bi bi-bell me-2"></i>Notificações
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="notification-item border-bottom pb-3 mb-3 unread" data-notification="1">
+                        <div class="d-flex justify-content-between align-items-start">
+                            <div class="flex-grow-1">
+                                <div class="d-flex align-items-center mb-1">
+                                    <div class="unread-indicator me-2"></div>
+                                    <h6 class="mb-0">Nova solicitação de cadastro</h6>
+                                </div>
+                                <p class="mb-1 text-muted">João Silva Santos solicitou cadastro no sistema. Matrícula: 2025001234</p>
+                                <small class="text-success">Há 2 horas - 13/09/2025 14:30</small>
+                            </div>
+                            <span class="badge bg-info">Cadastro</span>
+                        </div>
+                    </div>
+                    
+                    <div class="notification-item border-bottom pb-3 mb-3 unread" data-notification="2">
+                        <div class="d-flex justify-content-between align-items-start">
+                            <div class="flex-grow-1">
+                                <div class="d-flex align-items-center mb-1">
+                                    <div class="unread-indicator me-2"></div>
+                                    <h6 class="mb-0">Nova solicitação de cadastro</h6>
+                                </div>
+                                <p class="mb-1 text-muted">Maria Fernanda Costa solicitou cadastro no sistema. Matrícula: 2025001235</p>
+                                <small class="text-success">Há 5 horas - 13/09/2025 11:30</small>
+                            </div>
+                            <span class="badge bg-info">Cadastro</span>
+                        </div>
+                    </div>
+                    
+                    <div class="notification-item border-bottom pb-3 mb-3 read" data-notification="3">
+                        <div class="d-flex justify-content-between align-items-start">
+                            <div class="flex-grow-1">
+                                <h6 class="mb-1">Sistema atualizado</h6>
+                                <p class="mb-1 text-muted">O sistema foi atualizado com melhorias de segurança e novos recursos.</p>
+                                <small class="text-success">Há 1 dia - 12/09/2025 09:00</small>
+                            </div>
+                            <span class="badge bg-success">Sistema</span>
+                        </div>
+                    </div>
+                    
+                    <div class="notification-item border-bottom pb-3 mb-3 unread" data-notification="4">
+                        <div class="d-flex justify-content-between align-items-start">
+                            <div class="flex-grow-1">
+                                <div class="d-flex align-items-center mb-1">
+                                    <div class="unread-indicator me-2"></div>
+                                    <h6 class="mb-0">Nova solicitação de cadastro</h6>
+                                </div>
+                                <p class="mb-1 text-muted">Pedro Henrique Oliveira solicitou cadastro no sistema. Matrícula: 2025001236</p>
+                                <small class="text-success">Há 1 dia - 12/09/2025 16:45</small>
+                            </div>
+                            <span class="badge bg-info">Cadastro</span>
+                        </div>
+                    </div>
+                    
+                    <div class="notification-item unread" data-notification="5">
+                        <div class="d-flex justify-content-between align-items-start">
+                            <div class="flex-grow-1">
+                                <div class="d-flex align-items-center mb-1">
+                                    <div class="unread-indicator me-2"></div>
+                                    <h6 class="mb-0">Backup realizado</h6>
+                                </div>
+                                <p class="mb-1 text-muted">Backup automático do sistema realizado com sucesso.</p>
+                                <small class="text-success">Há 2 dias - 11/09/2025 03:00</small>
+                            </div>
+                            <span class="badge bg-secondary">Sistema</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-primary" id="marcarTodasLidas">Marcar todas como lidas</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de Detalhes do Aluno -->
+    <div class="modal fade" id="detalhesAlunoModal" tabindex="-1" aria-labelledby="detalhesAlunoModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="detalhesAlunoModalLabel">
+                        <i class="bi bi-person-circle me-2"></i>Detalhes da Solicitação de Cadastro
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="card h-100">
+                                <div class="card-header bg-light">
+                                    <h6 class="mb-0"><i class="bi bi-person me-2"></i>Informações Pessoais</h6>
+                                </div>
+                                <div class="card-body">
+                                    <div class="mb-3">
+                                        <label class="fw-bold">Nome Completo:</label>
+                                        <p class="mb-0" id="modalNomeCompleto">João Silva Santos</p>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label class="fw-bold">Matrícula:</label>
+                                        <p class="mb-0" id="modalMatricula">2025001234</p>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label class="fw-bold">E-mail:</label>
+                                        <p class="mb-0" id="modalEmail">joao.silva@aluno.ifes.edu.br</p>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label class="fw-bold">Data da Solicitação:</label>
+                                        <p class="mb-0" id="modalDataSolicitacao">13/09/2025 às 14:30</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="card h-100">
+                                <div class="card-header bg-light">
+                                    <h6 class="mb-0"><i class="bi bi-shield-check me-2"></i>Status da Solicitação</h6>
+                                </div>
+                                <div class="card-body">
+                                    <div class="mb-3">
+                                        <label class="fw-bold">Status Atual:</label>
+                                        <p class="mb-0"><span class="badge bg-warning">Aguardando Aprovação</span></p>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label class="fw-bold">Tempo Aguardando:</label>
+                                        <p class="mb-0">2 horas</p>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label class="fw-bold">Observações:</label>
+                                        <p class="mb-0 text-muted">Solicitação dentro do prazo regular. Documentação automática verificada.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Seção para motivo de recusa (aparece apenas quando "Recusar" é clicado) -->
+                    <div class="row mt-3 d-none" id="motivoRecusaSection">
+                        <div class="col-12">
+                            <div class="card border-danger">
+                                <div class="card-header bg-danger text-white">
+                                    <h6 class="mb-0"><i class="bi bi-exclamation-triangle me-2"></i>Motivo da Recusa</h6>
+                                </div>
+                                <div class="card-body">
+                                    <textarea class="form-control" id="motivoRecusa" rows="4" placeholder="Digite o motivo da recusa do cadastro..."></textarea>
+                                    <small class="text-muted">Este motivo será enviado por e-mail para o solicitante.</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-success" id="confirmarCadastro">
+                        <i class="bi bi-check-lg me-2"></i>Confirmar Cadastro
+                    </button>
+                    <button type="button" class="btn btn-danger" id="recusarCadastro">
+                        <i class="bi bi-x-lg me-2"></i>Recusar
+                    </button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
     <script src="/static/js/dashboard_admin.js"></script>
+    
+    <script>
+        // Dados dos alunos para o modal
+        const alunosData = {
+            'joao-silva': {
+                nome: 'João Silva Santos',
+                matricula: '2025001234',
+                email: 'joao.silva@aluno.ifes.edu.br',
+                dataSolicitacao: '13/09/2025 às 14:30'
+            },
+            'maria-costa': {
+                nome: 'Maria Fernanda Costa',
+                matricula: '2025001235',
+                email: 'maria.costa@aluno.ifes.edu.br',
+                dataSolicitacao: '13/09/2025 às 11:30'
+            },
+            'pedro-oliveira': {
+                nome: 'Pedro Henrique Oliveira',
+                matricula: '2025001236',
+                email: 'pedro.oliveira@aluno.ifes.edu.br',
+                dataSolicitacao: '12/09/2025 às 16:45'
+            }
+        };
+
+        // Função para visualizar cadastro
+        function visualizarCadastro(alunoId) {
+            const aluno = alunosData[alunoId];
+            if (aluno) {
+                document.getElementById('modalNomeCompleto').textContent = aluno.nome;
+                document.getElementById('modalMatricula').textContent = aluno.matricula;
+                document.getElementById('modalEmail').textContent = aluno.email;
+                document.getElementById('modalDataSolicitacao').textContent = aluno.dataSolicitacao;
+                
+                // Resetar seção de motivo de recusa
+                document.getElementById('motivoRecusaSection').classList.add('d-none');
+                document.getElementById('motivoRecusa').value = '';
+                
+                // Mostrar modal
+                const modal = new bootstrap.Modal(document.getElementById('detalhesAlunoModal'));
+                modal.show();
+            }
+        }
+
+        // Event listeners para os botões do modal
+        document.addEventListener('DOMContentLoaded', function() {
+            const confirmarBtn = document.getElementById('confirmarCadastro');
+            const recusarBtn = document.getElementById('recusarCadastro');
+            const motivoSection = document.getElementById('motivoRecusaSection');
+
+            // Botão confirmar cadastro
+            confirmarBtn.addEventListener('click', function() {
+                if (confirm('Deseja confirmar o cadastro deste aluno?')) {
+                    alert('Cadastro confirmado com sucesso! O aluno receberá um e-mail de confirmação.');
+                    bootstrap.Modal.getInstance(document.getElementById('detalhesAlunoModal')).hide();
+                    // Aqui você faria a requisição para o backend
+                }
+            });
+
+            // Botão recusar - mostrar campo de motivo
+            recusarBtn.addEventListener('click', function() {
+                if (motivoSection.classList.contains('d-none')) {
+                    motivoSection.classList.remove('d-none');
+                    recusarBtn.innerHTML = '<i class="bi bi-send me-2"></i>Enviar Recusa';
+                    recusarBtn.classList.remove('btn-danger');
+                    recusarBtn.classList.add('btn-warning');
+                } else {
+                    const motivo = document.getElementById('motivoRecusa').value.trim();
+                    if (motivo === '') {
+                        alert('Por favor, digite o motivo da recusa.');
+                        return;
+                    }
+                    
+                    if (confirm('Deseja recusar o cadastro deste aluno? O motivo será enviado por e-mail.')) {
+                        alert('Cadastro recusado. O aluno receberá um e-mail com o motivo da recusa.');
+                        bootstrap.Modal.getInstance(document.getElementById('detalhesAlunoModal')).hide();
+                        // Aqui você faria a requisição para o backend
+                    }
+                }
+            });
+
+            // Reset do botão recusar quando modal fechar
+            document.getElementById('detalhesAlunoModal').addEventListener('hidden.bs.modal', function() {
+                recusarBtn.innerHTML = '<i class="bi bi-x-lg me-2"></i>Recusar';
+                recusarBtn.classList.remove('btn-warning');
+                recusarBtn.classList.add('btn-danger');
+            });
+
+            // Funcionalidade para marcar notificações como lidas
+            const marcarTodasLidasBtn = document.getElementById('marcarTodasLidas');
+            const notificationBadge = document.querySelector('.notification-badge');
+            
+            marcarTodasLidasBtn.addEventListener('click', function() {
+                // Marcar todas as notificações como lidas
+                const unreadNotifications = document.querySelectorAll('.notification-item.unread');
+                
+                unreadNotifications.forEach(function(notification) {
+                    // Remover classe unread e adicionar read
+                    notification.classList.remove('unread');
+                    notification.classList.add('read');
+                    
+                    // Remover indicador visual de não lida
+                    const indicator = notification.querySelector('.unread-indicator');
+                    if (indicator) {
+                        indicator.remove();
+                    }
+                    
+                    // Adicionar opacidade para indicar que foi lida
+                    notification.style.opacity = '0.7';
+                });
+                
+                // Esconder badge de notificação
+                if (notificationBadge) {
+                    notificationBadge.style.display = 'none';
+                }
+                
+                // Atualizar badge da sidebar
+                const sidebarBadge = document.getElementById('mensagensBadge');
+                if (sidebarBadge) {
+                    sidebarBadge.style.display = 'none';
+                }
+                
+                // Mostrar mensagem de confirmação
+                marcarTodasLidasBtn.innerHTML = '<i class="bi bi-check-lg me-2"></i>Marcadas como lidas';
+                marcarTodasLidasBtn.classList.remove('btn-outline-primary');
+                marcarTodasLidasBtn.classList.add('btn-success');
+                marcarTodasLidasBtn.disabled = true;
+                
+                // Fechar modal após 1 segundo
+                setTimeout(function() {
+                    bootstrap.Modal.getInstance(document.getElementById('notificacoesModal')).hide();
+                }, 1000);
+            });
+            
+            // Reset do botão quando modal de notificações abrir novamente
+            document.getElementById('notificacoesModal').addEventListener('show.bs.modal', function() {
+                const unreadCount = document.querySelectorAll('.notification-item.unread').length;
+                if (unreadCount === 0) {
+                    marcarTodasLidasBtn.innerHTML = 'Todas as notificações foram lidas';
+                    marcarTodasLidasBtn.classList.remove('btn-outline-primary');
+                    marcarTodasLidasBtn.classList.add('btn-secondary');
+                    marcarTodasLidasBtn.disabled = true;
+                } else {
+                    marcarTodasLidasBtn.innerHTML = 'Marcar todas como lidas';
+                    marcarTodasLidasBtn.classList.remove('btn-success', 'btn-secondary');
+                    marcarTodasLidasBtn.classList.add('btn-outline-primary');
+                    marcarTodasLidasBtn.disabled = false;
+                }
+            });
+        });
+    </script>
 
     <footer class="footer bg-success text-white py-4">
         <div class="container">

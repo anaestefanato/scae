@@ -258,18 +258,6 @@ html, body, .body-cadastro-login {
     overflow: hidden;
 }
 
-.welcome-banner::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    right: 0;
-    width: 100px;
-    height: 100%;
-    background: linear-gradient(45deg, rgba(46, 125, 50, 0.05) 0%, rgba(76, 175, 80, 0.02) 100%);
-    transform: skewX(-15deg);
-    transform-origin: top right;
-}
-
 .welcome-banner:hover {
     transform: translateY(-3px);
     box-shadow: 0 10px 25px rgba(0, 0, 0, 0.12);
@@ -382,6 +370,18 @@ html, body, .body-cadastro-login {
 
 .stats-card.beneficiados .icon {
     background: linear-gradient(135deg, var(--ifes-purple), #BA68C8);
+}
+
+.stats-card.assistentes .icon {
+    background: linear-gradient(135deg, #28a745, #20c997);
+}
+
+.stats-card.relatorios .icon {
+    background: linear-gradient(135deg, var(--ifes-blue), #1565C0);
+}
+
+.stats-card.chamados .icon {
+    background: linear-gradient(135deg, #fd7e14, #f0ad4e);
 }
 
 .stats-card.valor .icon {
@@ -560,6 +560,42 @@ html, body, .body-cadastro-login {
     color: white;
 }
 
+/* Botão redondo de notificação */
+.btn-notification {
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    border: none;
+    background: linear-gradient(135deg, var(--ifes-green), var(--ifes-light-green));
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.2rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 8px rgba(46, 125, 50, 0.3);
+}
+
+.btn-notification:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(46, 125, 50, 0.4);
+    color: white;
+}
+
+.btn-notification:focus {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(46, 125, 50, 0.2);
+}
+
+/* Badge de notificação ajustado para o botão redondo */
+.notification-badge {
+    font-size: 0.65rem;
+    padding: 0.25em 0.4em;
+    margin-left: -8px;
+    margin-top: -2px;
+}
+
 .btn-processar-pagamentos {
     background: linear-gradient(135deg, var(--ifes-blue), #1565C0);
     border: none;
@@ -682,6 +718,18 @@ html, body, .body-cadastro-login {
     .welcome-banner h4 {
         font-size: 1.5rem;
     }
+    
+    /* Responsividade para o header com notificações e perfil */
+    .welcome-banner .col-md-4 {
+        flex-direction: column;
+        align-items: flex-start !important;
+        gap: 15px !important;
+        margin-top: 20px;
+    }
+    
+    .btn-notification {
+        align-self: flex-start;
+    }
 }
 
 @media (max-width: 992px) {
@@ -759,4 +807,117 @@ html, body, .body-cadastro-login {
 .footer p {
     margin: 0;
     font-weight: 500;
+}
+
+/* ===== NOVOS ESTILOS PARA NOTIFICAÇÕES E SOLICITAÇÕES ===== */
+
+/* Badge para mensagens na sidebar */
+.nav-link .badge {
+    font-size: 0.7rem;
+    padding: 0.25em 0.5em;
+}
+
+/* Itens de solicitação */
+.solicitation-item {
+    transition: all 0.2s ease;
+    padding: 10px;
+    border-radius: 8px;
+}
+
+.solicitation-item:hover {
+    background-color: rgba(46, 125, 50, 0.05);
+}
+
+/* Itens de notificação no modal */
+.notification-item {
+    transition: all 0.2s ease;
+    padding: 15px;
+    border-radius: 8px;
+}
+
+.notification-item:hover {
+    background-color: rgba(46, 125, 50, 0.02);
+}
+
+/* Indicador de notificação não lida */
+.unread-indicator {
+    width: 8px;
+    height: 8px;
+    background-color: var(--ifes-green);
+    border-radius: 50%;
+    flex-shrink: 0;
+}
+
+/* Notificações não lidas */
+.notification-item.unread {
+    background-color: rgba(46, 125, 50, 0.03);
+    border-left: 3px solid var(--ifes-green);
+}
+
+/* Notificações lidas */
+.notification-item.read {
+    opacity: 0.7;
+    background-color: #f8f9fa;
+}
+
+/* Estilos para o modal de detalhes */
+.modal-lg {
+    max-width: 800px;
+}
+
+/* Cards dentro do modal */
+.modal-body .card {
+    border: 1px solid #dee2e6;
+    margin-bottom: 0;
+}
+
+.modal-body .card-header {
+    background-color: #f8f9fa !important;
+    color: var(--ifes-dark-gray) !important;
+    font-size: 0.9rem;
+    padding: 12px 15px;
+}
+
+.modal-body .card-body {
+    padding: 15px;
+}
+
+/* Seção de motivo de recusa */
+#motivoRecusaSection .card {
+    border-color: #dc3545 !important;
+}
+
+#motivoRecusaSection .card-header {
+    background-color: #dc3545 !important;
+    color: white !important;
+}
+
+/* Botão com badge de notificação */
+.btn-criar-edital .badge {
+    font-size: 0.6rem;
+    padding: 0.25em 0.4em;
+    margin-left: -10px;
+    margin-top: -5px;
+}
+
+/* Responsividade para os modais */
+@media (max-width: 768px) {
+    .modal-lg {
+        max-width: 95%;
+        margin: 10px;
+    }
+    
+    .modal-body .row .col-md-6 {
+        margin-bottom: 15px;
+    }
+    
+    .solicitation-item .d-flex {
+        flex-direction: column;
+        align-items: flex-start !important;
+    }
+    
+    .solicitation-item .btn {
+        margin-top: 10px;
+        width: 100%;
+    }
 }

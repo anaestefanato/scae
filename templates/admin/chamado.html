@@ -1,0 +1,510 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SCAE - Chamados</title>
+    <link rel="icon" type="image/png" href="/static/img/logo.png">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="/static/css/dashboard_admin.css" />
+    <link rel="stylesheet" href="/static/css/chamado.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Menu Toggle Button (visible when sidebar is collapsed) -->
+    <button class="menu-toggle" id="menuToggle">
+        <i class="bi bi-list"></i>
+    </button>
+
+    <!-- Sidebar -->
+    <div class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <button class="close-sidebar" id="closeSidebar">
+                <i class="bi bi-x-lg"></i>
+            </button>
+            <img src="/static/img/logoifes.png" alt="Logo IFES" width="180">
+        </div>
+        <div class="d-flex flex-column p-3">
+            <div class="mb-4 text-center">
+                <h6 class="mb-0">Sistema de Controle de</h6>
+                <h6>Assistência Estudantil</h6>
+            </div>
+            <ul class="nav nav-pills flex-column mb-auto">
+                <li class="nav-item">
+                    <a href="/admin/dashboard" class="nav-link">
+                        <i class="bi bi-speedometer2"></i> <span>Início</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link submenu-toggle" data-submenu="usuarios">
+                        <div class="nav-content">
+                            <i class="bi bi-people"></i> <span>Usuários</span>
+                        </div>
+                        <i class="bi bi-chevron-down submenu-arrow"></i>
+                    </a>
+                    <ul class="submenu" id="submenu-usuarios">
+                        <li class="nav-item">
+                            <a href="/admin/usuarios/assistentes" class="nav-link">
+                                <i class="bi bi-person-badge"></i> <span>Assistentes Sociais</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="/admin/usuarios/solicitacoes" class="nav-link">
+                                <i class="bi bi-person-plus"></i> <span>Solicitações de Cadastro</span>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+                <li class="nav-item">
+                    <a href="/admin/relatorios" class="nav-link">
+                        <i class="bi bi-file-earmark-bar-graph"></i> <span>Relatórios</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="/admin/chamados" class="nav-link active bg-success">
+                        <i class="bi bi-chat-dots"></i> <span>Chamados</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="/admin/mensagens" class="nav-link">
+                        <i class="bi bi-envelope"></i> <span>Mensagens</span>
+                    </a>
+                </li>
+            </ul>
+            <hr>
+            <div class="text-center">
+                <a href="/logout" class="btn btn-outline-danger">
+                    <i class="bi bi-box-arrow-right"></i> <span>Sair</span>
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content" id="mainContent">
+        <!-- Header com Breadcrumb -->
+        <div class="page-header mb-4">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="/admin/dashboard">Dashboard</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">Chamados</li>
+                </ol>
+            </nav>
+            <div class="d-flex justify-content-between align-items-center">
+                <div>
+                    <h2 class="page-title" style="color: #333333;">Gerenciar Chamados</h2>
+                    <p class="page-subtitle">Visualize e responda aos chamados de suporte dos usuários</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Filtros de Chamados -->
+        <div class="card mb-4">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <div>
+                    <i class="bi bi-funnel me-2"></i>
+                    <span>Filtros</span>
+                </div>
+                <button class="btn btn-sm btn-outline-light" onclick="clearFilters()">
+                    <i class="bi bi-x-circle me-1"></i>Limpar Filtros
+                </button>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-3">
+                        <label for="filterStatus" class="form-label">Status</label>
+                        <select class="form-select" id="filterStatus" onchange="filterTickets()">
+                            <option value="">Todos os status</option>
+                            <option value="aberto">Aberto</option>
+                            <option value="em-andamento">Em Andamento</option>
+                            <option value="resolvido">Resolvido</option>
+                            <option value="fechado">Fechado</option>
+                        </select>
+                    </div>
+                    <div class="col-md-3">
+                        <label for="filterPriority" class="form-label">Prioridade</label>
+                        <select class="form-select" id="filterPriority" onchange="filterTickets()">
+                            <option value="">Todas as prioridades</option>
+                            <option value="baixa">Baixa</option>
+                            <option value="media">Média</option>
+                            <option value="alta">Alta</option>
+                            <option value="urgente">Urgente</option>
+                        </select>
+                    </div>
+                    <div class="col-md-3">
+                        <label for="filterCategory" class="form-label">Categoria</label>
+                        <select class="form-select" id="filterCategory" onchange="filterTickets()">
+                            <option value="">Todas as categorias</option>
+                            <option value="tecnico">Suporte Técnico</option>
+                            <option value="auxilio">Auxílios</option>
+                            <option value="cadastro">Cadastro</option>
+                            <option value="geral">Geral</option>
+                        </select>
+                    </div>
+                    <div class="col-md-3">
+                        <label for="searchTicket" class="form-label">Buscar</label>
+                        <div class="input-group">
+                            <input type="text" class="form-control" id="searchTicket" placeholder="Buscar por ID ou descrição">
+                            <button class="btn btn-outline-success" onclick="searchTickets()">
+                                <i class="bi bi-search"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Lista de Chamados -->
+        <div class="card">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <div>
+                    <i class="bi bi-chat-dots me-2"></i>
+                    <span>Lista de Chamados</span>
+                    <span class="badge bg-info ms-2" id="ticketsCount">12</span>
+                </div>
+                <div>
+                    <button class="btn btn-sm btn-outline-light me-2" onclick="exportTickets()">
+                        <i class="bi bi-download me-1"></i>Exportar
+                    </button>
+                    <button class="btn btn-sm btn-outline-light" onclick="refreshTickets()">
+                        <i class="bi bi-arrow-clockwise me-1"></i>Atualizar
+                    </button>
+                </div>
+            </div>
+            <div class="card-body p-0">
+                <div class="table-responsive">
+                    <table class="table table-hover mb-0" id="ticketsTable">
+                        <thead class="table-header">
+                            <tr>
+                                <th>ID</th>
+                                <th>Título</th>
+                                <th>Usuário</th>
+                                <th>Categoria</th>
+                                <th>Prioridade</th>
+                                <th>Status</th>
+                                <th>Data</th>
+                                <th>Ações</th>
+                            </tr>
+                        </thead>
+                        <tbody id="ticketsTableBody">
+                            <tr>
+                                <td><strong>#001</strong></td>
+                                <td>Problema no acesso ao sistema</td>
+                                <td>João Silva Santos</td>
+                                <td><span class="badge bg-info">Suporte Técnico</span></td>
+                                <td><span class="priority-badge alta">Alta</span></td>
+                                <td><span class="badge bg-warning">Em Andamento</span></td>
+                                <td>10/09/2025</td>
+                                <td>
+                                    <div class="action-buttons">
+                                        <button class="btn btn-sm btn-outline-info" onclick="viewTicket(1)" title="Visualizar">
+                                            <i class="bi bi-eye"></i>
+                                        </button>
+                                        <button class="btn btn-sm btn-outline-success" onclick="respondTicket(1)" title="Responder">
+                                            <i class="bi bi-reply"></i>
+                                        </button>
+                                        <button class="btn btn-sm btn-outline-primary" onclick="closeTicket(1)" title="Fechar">
+                                            <i class="bi bi-check-circle"></i>
+                                        </button>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><strong>#002</strong></td>
+                                <td>Dúvida sobre auxílio alimentação</td>
+                                <td>Maria Costa Lima</td>
+                                <td><span class="badge bg-success">Auxílios</span></td>
+                                <td><span class="priority-badge media">Média</span></td>
+                                <td><span class="badge bg-primary">Aberto</span></td>
+                                <td>11/09/2025</td>
+                                <td>
+                                    <div class="action-buttons">
+                                        <button class="btn btn-sm btn-outline-info" onclick="viewTicket(2)" title="Visualizar">
+                                            <i class="bi bi-eye"></i>
+                                        </button>
+                                        <button class="btn btn-sm btn-outline-success" onclick="respondTicket(2)" title="Responder">
+                                            <i class="bi bi-reply"></i>
+                                        </button>
+                                        <button class="btn btn-sm btn-outline-primary" onclick="closeTicket(2)" title="Fechar">
+                                            <i class="bi bi-check-circle"></i>
+                                        </button>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><strong>#003</strong></td>
+                                <td>Erro na atualização de dados cadastrais</td>
+                                <td>Pedro Oliveira</td>
+                                <td><span class="badge bg-warning">Cadastro</span></td>
+                                <td><span class="priority-badge urgente">Urgente</span></td>
+                                <td><span class="badge bg-danger">Aberto</span></td>
+                                <td>12/09/2025</td>
+                                <td>
+                                    <div class="action-buttons">
+                                        <button class="btn btn-sm btn-outline-info" onclick="viewTicket(3)" title="Visualizar">
+                                            <i class="bi bi-eye"></i>
+                                        </button>
+                                        <button class="btn btn-sm btn-outline-success" onclick="respondTicket(3)" title="Responder">
+                                            <i class="bi bi-reply"></i>
+                                        </button>
+                                        <button class="btn btn-sm btn-outline-primary" onclick="closeTicket(3)" title="Fechar">
+                                            <i class="bi bi-check-circle"></i>
+                                        </button>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><strong>#004</strong></td>
+                                <td>Solicitação de informações gerais</td>
+                                <td>Ana Ferreira</td>
+                                <td><span class="badge bg-secondary">Geral</span></td>
+                                <td><span class="priority-badge baixa">Baixa</span></td>
+                                <td><span class="badge bg-success">Resolvido</span></td>
+                                <td>13/09/2025</td>
+                                <td>
+                                    <div class="action-buttons">
+                                        <button class="btn btn-sm btn-outline-info" onclick="viewTicket(4)" title="Visualizar">
+                                            <i class="bi bi-eye"></i>
+                                        </button>
+                                        <button class="btn btn-sm btn-outline-secondary" onclick="reopenTicket(4)" title="Reabrir">
+                                            <i class="bi bi-arrow-clockwise"></i>
+                                        </button>
+                                        <button class="btn btn-sm btn-outline-danger" onclick="deleteTicket(4)" title="Excluir">
+                                            <i class="bi bi-trash"></i>
+                                        </button>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="card-footer">
+                <nav aria-label="Navegação da lista de chamados">
+                    <ul class="pagination pagination-sm justify-content-center mb-0">
+                        <li class="page-item disabled">
+                            <a class="page-link" href="#">Anterior</a>
+                        </li>
+                        <li class="page-item active">
+                            <a class="page-link" href="#">1</a>
+                        </li>
+                        <li class="page-item">
+                            <a class="page-link" href="#">2</a>
+                        </li>
+                        <li class="page-item">
+                            <a class="page-link" href="#">Próximo</a>
+                        </li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de Visualização de Chamado -->
+    <div class="modal fade" id="viewTicketModal" tabindex="-1" aria-labelledby="viewTicketModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="viewTicketModalLabel">
+                        <i class="bi bi-eye me-2"></i>Detalhes do Chamado
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <h6>Informações do Chamado</h6>
+                            <p><strong>ID:</strong> <span id="modalTicketId">#001</span></p>
+                            <p><strong>Título:</strong> <span id="modalTicketTitle">Problema no acesso ao sistema</span></p>
+                            <p><strong>Status:</strong> <span id="modalTicketStatus" class="badge bg-warning">Em Andamento</span></p>
+                            <p><strong>Prioridade:</strong> <span id="modalTicketPriority" class="priority-badge alta">Alta</span></p>
+                        </div>
+                        <div class="col-md-6">
+                            <h6>Dados do Usuário</h6>
+                            <p><strong>Nome:</strong> <span id="modalUserName">João Silva Santos</span></p>
+                            <p><strong>Email:</strong> <span id="modalUserEmail">joao.silva@aluno.ifes.edu.br</span></p>
+                            <p><strong>Data de Abertura:</strong> <span id="modalTicketDate">10/09/2025 14:30</span></p>
+                            <p><strong>Categoria:</strong> <span id="modalTicketCategory" class="badge bg-info">Suporte Técnico</span></p>
+                        </div>
+                    </div>
+                    <div class="row mt-3">
+                        <div class="col-12">
+                            <h6>Descrição do Problema</h6>
+                            <div class="ticket-description" id="modalTicketDescription">
+                                <p>Estou tendo dificuldades para acessar o sistema. Quando tento fazer login, aparece uma mensagem de erro dizendo que as credenciais estão incorretas, mas tenho certeza de que estou usando o usuário e senha corretos.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-success" onclick="respondTicketFromModal()">
+                        <i class="bi bi-reply me-2"></i>Responder
+                    </button>
+                    <button type="button" class="btn btn-primary" onclick="closeTicketFromModal()">
+                        <i class="bi bi-check-circle me-2"></i>Marcar como Resolvido
+                    </button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de Resposta de Chamado -->
+    <div class="modal fade" id="respondTicketModal" tabindex="-1" aria-labelledby="respondTicketModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="respondTicketModalLabel">
+                        <i class="bi bi-reply me-2"></i>Responder Chamado
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label for="responseText" class="form-label">Sua Resposta</label>
+                        <textarea class="form-control" id="responseText" rows="6" placeholder="Digite aqui sua resposta para o usuário..."></textarea>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <label for="responseStatus" class="form-label">Alterar Status</label>
+                            <select class="form-select" id="responseStatus">
+                                <option value="em-andamento">Em Andamento</option>
+                                <option value="resolvido">Resolvido</option>
+                                <option value="fechado">Fechado</option>
+                            </select>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="responsePriority" class="form-label">Alterar Prioridade</label>
+                            <select class="form-select" id="responsePriority">
+                                <option value="baixa">Baixa</option>
+                                <option value="media">Média</option>
+                                <option value="alta">Alta</option>
+                                <option value="urgente">Urgente</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-success" onclick="sendResponse()">
+                        <i class="bi bi-send me-2"></i>Enviar Resposta
+                    </button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="/static/js/dashboard_admin.js"></script>
+    
+    <script>
+        // Ticket management functions
+        function viewTicket(ticketId) {
+            // Show ticket details modal
+            const modal = new bootstrap.Modal(document.getElementById('viewTicketModal'));
+            modal.show();
+        }
+
+        function respondTicket(ticketId) {
+            // Show response modal
+            const modal = new bootstrap.Modal(document.getElementById('respondTicketModal'));
+            modal.show();
+        }
+
+        function closeTicket(ticketId) {
+            if (confirm('Tem certeza que deseja marcar este chamado como resolvido?')) {
+                alert(`Chamado #${ticketId} marcado como resolvido!`);
+                // Aqui você faria a requisição para fechar o chamado
+            }
+        }
+
+        function reopenTicket(ticketId) {
+            if (confirm('Tem certeza que deseja reabrir este chamado?')) {
+                alert(`Chamado #${ticketId} reaberto!`);
+                // Aqui você faria a requisição para reabrir o chamado
+            }
+        }
+
+        function deleteTicket(ticketId) {
+            if (confirm('Tem certeza que deseja excluir este chamado? Esta ação não pode ser desfeita.')) {
+                alert(`Chamado #${ticketId} excluído!`);
+                // Aqui você faria a requisição para excluir o chamado
+            }
+        }
+
+        function filterTickets() {
+            alert('Aplicando filtros...');
+            // Aqui você faria a filtragem dos chamados
+        }
+
+        function clearFilters() {
+            document.getElementById('filterStatus').value = '';
+            document.getElementById('filterPriority').value = '';
+            document.getElementById('filterCategory').value = '';
+            document.getElementById('searchTicket').value = '';
+            alert('Filtros limpos!');
+        }
+
+        function searchTickets() {
+            const searchTerm = document.getElementById('searchTicket').value;
+            if (searchTerm.trim() === '') {
+                alert('Digite um termo de busca');
+                return;
+            }
+            alert(`Buscando por: ${searchTerm}`);
+            // Aqui você faria a busca
+        }
+
+        function exportTickets() {
+            alert('Exportando lista de chamados...');
+            // Aqui você faria a exportação
+        }
+
+        function refreshTickets() {
+            alert('Atualizando lista de chamados...');
+            // Aqui você faria a atualização
+        }
+
+        function respondTicketFromModal() {
+            // Close view modal and open response modal
+            bootstrap.Modal.getInstance(document.getElementById('viewTicketModal')).hide();
+            setTimeout(() => {
+                const modal = new bootstrap.Modal(document.getElementById('respondTicketModal'));
+                modal.show();
+            }, 300);
+        }
+
+        function closeTicketFromModal() {
+            if (confirm('Tem certeza que deseja marcar este chamado como resolvido?')) {
+                bootstrap.Modal.getInstance(document.getElementById('viewTicketModal')).hide();
+                alert('Chamado marcado como resolvido!');
+            }
+        }
+
+        function sendResponse() {
+            const responseText = document.getElementById('responseText').value;
+            if (responseText.trim() === '') {
+                alert('Por favor, digite uma resposta antes de enviar.');
+                return;
+            }
+            
+            alert('Resposta enviada com sucesso!');
+            bootstrap.Modal.getInstance(document.getElementById('respondTicketModal')).hide();
+            // Aqui você faria o envio da resposta
+        }
+    </script>
+
+    <footer class="footer bg-success text-white py-4">
+        <div class="container">
+            <div class="row">
+                <div class="col-12 text-center">
+                    <p class="text-white mb-0">
+                        © 2025 IFES - Instituto Federal do Espírito Santo. Sistema de Controle de Assistência Estudantil.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>
