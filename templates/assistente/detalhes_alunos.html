@@ -3,9 +3,402 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Detalhes do Aluno</title>
+    <title>SCAE - Detalhes do Aluno</title>
+    <link rel="icon" type="image/png" href="/static/img/logo.png">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="/static/css/dashboard_assistente.css">
+    <link rel="stylesheet" href="/static/css/detalhes_aluno.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;700&display=swap" rel="stylesheet">
 </head>
 <body>
-    <h1>Detalhes do Aluno</h1>
+    <!-- Menu Toggle Button -->
+    <button class="menu-toggle" id="menuToggle">
+        <i class="bi bi-list"></i>
+    </button>
+
+    <!-- Sidebar -->
+    <div class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <button class="close-sidebar" id="closeSidebar">
+                <i class="bi bi-x-lg"></i>
+            </button>
+            <img src="/static/img/logoifes.png" alt="Logo SCAE" width="180">
+        </div>
+        <div class="d-flex flex-column p-3">
+            <div class="mb-4 text-center">
+                <h6 class="mb-0">Sistema de Controle de</h6>
+                <h6>Assistência Estudantil</h6>
+            </div>
+            <ul class="nav nav-pills flex-column mb-auto">
+                <li class="nav-item">
+                    <a href="/assistente/dashboard" class="nav-link">
+                        <i class="bi bi-speedometer2"></i> <span>Início</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="/assistente/analise-inscricoes" class="nav-link">
+                        <i class="bi bi-clipboard-check"></i> <span>Análise de Inscrições</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="/assistente/analise-recursos" class="nav-link">
+                        <i class="bi bi-journal-text"></i> <span>Análise de Recursos</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="/assistente/alunos" class="nav-link active bg-success">
+                        <i class="bi bi-people"></i> <span>Alunos</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="/assistente/entrevistas" class="nav-link">
+                        <i class="bi bi-file-earmark-text"></i> <span>Entrevistas Agendadas</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="/assistente/relatorios" class="nav-link">
+                        <i class="bi bi-file-earmark-bar-graph"></i> <span>Relatórios</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="/assistente/agenda" class="nav-link">
+                        <i class="bi bi-calendar-event"></i> <span>Agenda</span>
+                    </a>
+                </li>
+            </ul>
+            <hr>
+            <div class="text-center">
+                <a href="/" class="btn btn-outline-danger">
+                    <i class="bi bi-box-arrow-right"></i> <span>Sair</span>
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content" id="mainContent">
+        <!-- Header com volta -->
+        <div class="d-flex align-items-center mb-4">
+            <button class="btn btn-outline-secondary me-3" onclick="voltarParaLista()">
+                <i class="bi bi-arrow-left"></i> Voltar
+            </button>
+            <h4 class="mb-0">Detalhes do Aluno</h4>
+        </div>
+
+        <!-- Header com Foto e Nome -->
+        <div class="profile-header mb-4">
+            <div class="container-fluid">
+                <div class="row justify-content-center">
+                    <div class="col-12 text-center">
+                        <div class="position-relative d-inline-block">
+                            <img src="/static/img/perfil.jpg" alt="Foto de Perfil" class="profile-picture">
+                            <div class="status-badge active">
+                                <i class="bi bi-check-circle-fill"></i>
+                            </div>
+                        </div>
+                        <div class="profile-info">
+                            <h3 class="mb-1" id="alunoNome">Maria Silva Santos</h3>
+                            <p class="mb-0" id="alunoInfo">Aluno | Matrícula: 2023001234</p>
+                            <div class="auxilios-ativos mt-2" id="auxiliosAtivos">
+                                <span class="badge bg-primary">Auxílio Transporte</span>
+                                <span class="badge bg-success">Auxílio Alimentação</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="container-fluid">
+            <div class="row">
+                <!-- Coluna Esquerda - Dados Pessoais -->
+                <div class="col-lg-8">
+                    <!-- Dados Pessoais -->
+                    <div class="card data-card">
+                        <div class="card-header">
+                            <h5>
+                                <i class="bi bi-person-vcard me-2"></i>
+                                Dados Pessoais
+                            </h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="row g-3">
+                                <div class="col-md-6">
+                                    <div class="info-item">
+                                        <label class="info-label">Nome Completo</label>
+                                        <div class="info-value">Maria Silva Santos</div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="info-item">
+                                        <label class="info-label">CPF</label>
+                                        <div class="info-value">123.456.789-00</div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="info-item">
+                                        <label class="info-label">Data de Nascimento</label>
+                                        <div class="info-value">15/03/2005</div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="info-item">
+                                        <label class="info-label">E-mail</label>
+                                        <div class="info-value">maria.santos@aluno.ifes.edu.br</div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="info-item">
+                                        <label class="info-label">Telefone</label>
+                                        <div class="info-value">(27) 99999-8888</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Dados Acadêmicos -->
+                    <div class="card data-card">
+                        <div class="card-header">
+                            <h5>
+                                <i class="bi bi-mortarboard me-2"></i>
+                                Dados Acadêmicos
+                            </h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="row g-3">
+                                <div class="col-md-6">
+                                    <div class="info-item">
+                                        <label class="info-label">Matrícula</label>
+                                        <div class="info-value">2023001234</div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="info-item">
+                                        <label class="info-label">Curso</label>
+                                        <div class="info-value">Técnico em Informática</div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="info-item">
+                                        <label class="info-label">Período</label>
+                                        <div class="info-value">2º Período</div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="info-item">
+                                        <label class="info-label">Situação</label>
+                                        <div class="info-value">
+                                            <span class="badge bg-success">Ativo</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Endereço -->
+                    <div class="card data-card">
+                        <div class="card-header">
+                            <h5>
+                                <i class="bi bi-geo-alt me-2"></i>
+                                Endereço
+                            </h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="row g-3">
+                                <div class="col-md-6">
+                                    <div class="info-item">
+                                        <label class="info-label">CEP</label>
+                                        <div class="info-value">29123-456</div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="info-item">
+                                        <label class="info-label">Cidade</label>
+                                        <div class="info-value">Vila Velha</div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="info-item">
+                                        <label class="info-label">Bairro</label>
+                                        <div class="info-value">Centro</div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="info-item">
+                                        <label class="info-label">Rua</label>
+                                        <div class="info-value">Rua das Flores, 123</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Dados Socioeconômicos -->
+                    <div class="card data-card">
+                        <div class="card-header">
+                            <h5>
+                                <i class="bi bi-bank me-2"></i>
+                                Dados Socioeconômicos
+                            </h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="row g-3">
+                                <div class="col-md-6">
+                                    <div class="info-item">
+                                        <label class="info-label">Renda Familiar</label>
+                                        <div class="info-value">R$ 2.400,00</div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="info-item">
+                                        <label class="info-label">Membros da Família</label>
+                                        <div class="info-value">4 pessoas</div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="info-item">
+                                        <label class="info-label">Renda Per Capita</label>
+                                        <div class="info-value">R$ 600,00</div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="info-item">
+                                        <label class="info-label">Situação de Moradia</label>
+                                        <div class="info-value">Casa Própria</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Coluna Direita - Auxílios e Histórico -->
+                <div class="col-lg-4">
+                    <!-- Auxílios Ativos -->
+                    <div class="card data-card">
+                        <div class="card-header">
+                            <h5>
+                                <i class="bi bi-gift me-2"></i>
+                                Auxílios Ativos
+                            </h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="auxilio-item">
+                                <div class="auxilio-header">
+                                    <span class="auxilio-nome">Auxílio Transporte</span>
+                                    <span class="auxilio-valor">R$ 180,00</span>
+                                </div>
+                                <div class="auxilio-details">
+                                    <small class="text-muted">Vigência: Jan/2024 - Dez/2024</small>
+                                </div>
+                            </div>
+                            <div class="auxilio-item">
+                                <div class="auxilio-header">
+                                    <span class="auxilio-nome">Auxílio Alimentação</span>
+                                    <span class="auxilio-valor">R$ 100,00</span>
+                                </div>
+                                <div class="auxilio-details">
+                                    <small class="text-muted">Vigência: Jan/2024 - Dez/2024</small>
+                                </div>
+                            </div>
+                            <div class="total-auxilios">
+                                <strong>Total Mensal: R$ 280,00</strong>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Histórico de Recebimentos -->
+                    <div class="card data-card">
+                        <div class="card-header">
+                            <h5>
+                                <i class="bi bi-clock-history me-2"></i>
+                                Histórico de Recebimentos
+                            </h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="historico-item">
+                                <div class="historico-data">Setembro 2025</div>
+                                <div class="historico-details">
+                                    <div class="historico-auxilio">Auxílio Transporte</div>
+                                    <div class="historico-valor">R$ 180,00</div>
+                                    <div class="historico-status">
+                                        <span class="badge bg-success">Pago</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="historico-item">
+                                <div class="historico-data">Setembro 2025</div>
+                                <div class="historico-details">
+                                    <div class="historico-auxilio">Auxílio Alimentação</div>
+                                    <div class="historico-valor">R$ 100,00</div>
+                                    <div class="historico-status">
+                                        <span class="badge bg-success">Pago</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="historico-item">
+                                <div class="historico-data">Agosto 2025</div>
+                                <div class="historico-details">
+                                    <div class="historico-auxilio">Auxílio Transporte</div>
+                                    <div class="historico-valor">R$ 180,00</div>
+                                    <div class="historico-status">
+                                        <span class="badge bg-success">Pago</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="historico-item">
+                                <div class="historico-data">Agosto 2025</div>
+                                <div class="historico-details">
+                                    <div class="historico-auxilio">Auxílio Alimentação</div>
+                                    <div class="historico-valor">R$ 100,00</div>
+                                    <div class="historico-status">
+                                        <span class="badge bg-success">Pago</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="text-center mt-3">
+                                <button class="btn btn-outline-primary btn-sm">
+                                    <i class="bi bi-eye"></i> Ver Histórico Completo
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Ações Rápidas -->
+                    <div class="card data-card">
+                        <div class="card-header">
+                            <h5>
+                                <i class="bi bi-gear me-2"></i>
+                                Ações
+                            </h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="d-grid gap-2">
+                                <button class="btn btn-outline-primary">
+                                    <i class="bi bi-calendar-plus me-2"></i>
+                                    Agendar Entrevista
+                                </button>
+                                <button class="btn btn-outline-success">
+                                    <i class="bi bi-file-earmark-text me-2"></i>
+                                    Gerar Relatório
+                                </button>
+                                <button class="btn btn-outline-warning">
+                                    <i class="bi bi-exclamation-triangle me-2"></i>
+                                    Suspender Auxílio
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="/static/js/dashboard_assistente.js"></script>
+    <script src="/static/js/detalhes_aluno.js"></script>
 </body>
 </html>
