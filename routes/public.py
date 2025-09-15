@@ -124,7 +124,8 @@ async def post_cadastro(
             "publicas/cadastro.html",
             {"request": request, "erro": "Erro ao criar cadastro. Tente novamente."}
         )
-
+        
+    # Redirecionar para login com matrícula preenchida
     return RedirectResponse(f"/login?matricula={matricula}", status.HTTP_303_SEE_OTHER)
 
 @router.get("/sobre")
