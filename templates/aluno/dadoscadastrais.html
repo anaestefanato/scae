@@ -34,6 +34,8 @@
 
         <div class="container">
             
+            <form id="formCadastral" method="post" action="/aluno/dadoscadastrais">
+            
             <div class="card data-card">
                 <div class="card-header d-flex justify-content-between align-items-center">
                     <h5>
@@ -42,7 +44,6 @@
                     </h5>
                 </div>
                 <div class="card-body">
-                    <form id="formPessoal" method="post" action="/aluno/dadoscadastrais">
                         <div class="row g-3">
                             <div class="col-md-6">
                                 <label class="form-label">Nome Completo</label>
@@ -65,11 +66,9 @@
                                 <input type="tel" class="form-control" name="telefone" value="{{ aluno.telefone }}">
                             </div>
                         </div>
-                    </form>
                 </div>
             </div>
 
-            <!-- Dados Acadêmicos -->
             <div class="card data-card">
                 <div class="card-header">
                     <h5>
@@ -78,7 +77,6 @@
                     </h5>
                 </div>
                 <div class="card-body">
-                    <form id="formAcademico" method="post" action="/aluno/dadoscadastrais">
                         <div class="row g-3">
                             <div class="col-md-6">
                                 <label class="form-label">Matrícula</label>
@@ -89,11 +87,9 @@
                                 <input type="text" class="form-control" name="curso" value="{{ aluno.curso }}">
                             </div>
                         </div>
-                    </form>
                 </div>
             </div>
 
-            <!-- Endereço -->
             <div class="card data-card">
                 <div class="card-header d-flex justify-content-between align-items-center">
                     <h5>
@@ -102,7 +98,6 @@
                     </h5>
                 </div>
                 <div class="card-body">
-                    <form id="formEndereco" method="post" action="/aluno/dadoscadastrais">
                         <div class="row g-3">
                             <div class="col-md-6">
                                 <label class="form-label">CEP</label>
@@ -125,11 +120,9 @@
                                 <input type="text" class="form-control" name="numero" value="{{ aluno.numero }}">
                             </div>
                         </div>
-                    </form>
                 </div>
             </div>
 
-            <!-- Dados Bancários e Socioeconômicos -->
             <div class="card data-card">
                 <div class="card-header d-flex justify-content-between align-items-center">
                     <h5>
@@ -138,7 +131,6 @@
                     </h5>
                 </div>
                 <div class="card-body">
-                    <form id="formBancario" method="post" action="/aluno/dadoscadastrais">
                         <div class="row g-3">
                             <div class="col-md-4">
                                 <label class="form-label">Banco</label>
@@ -180,20 +172,19 @@
                                 </select>
                             </div>
                         </div>
-                    </form>
                 </div>
             </div>
 
-            <!-- Botão Salvar Alterações -->
             <div class="text-center mt-4 mb-4">
-                <button type="submit" class="btn btn-success btn-lg" onclick="saveAllChanges()">
+                <button type="submit" class="btn btn-success btn-lg">
                     <i class="bi bi-floppy"></i> Salvar Alterações
                 </button>
             </div>
+            
+            </form>
         </div>
     </div>
 
-    <!-- Modal de Alteração de Foto -->
     <div class="modal fade" id="changePhotoModal" tabindex="-1">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">

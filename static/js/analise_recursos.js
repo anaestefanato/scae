@@ -1,8 +1,3 @@
-/* =========================
-   ANALISE RECURSOS - JAVASCRIPT
-   ========================= */
-
-// Dados simulados para os recursos
 const recursosData = {
     'Maria Silva Santos': {
         aluno: 'Maria Silva Santos',
