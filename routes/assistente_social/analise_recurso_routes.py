@@ -11,11 +11,9 @@ templates = Jinja2Templates(directory="templates")
 
 
 @router.get("/analise-recursos")
-#@requer_autenticacao("assistente")
-async def get_analise_recursos(request: Request):
-    usuario_logado = obter_usuario_logado(request)
-    if not usuario_logado:
-        return RedirectResponse(url="/login", status_code=302)
+@requer_autenticacao("assistente")
+async def get_analise_recursos(request: Request, usuario_logado: dict = None):
+
     assistente = usuario_repo.obter_usuario_por_matricula(usuario_logado['matricula'])
     response = templates.TemplateResponse("/assistente/analise_recursos.html", {"request": request, "assistente": assistente})
     return response
