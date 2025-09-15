@@ -115,7 +115,7 @@ async def post_perfil(
     usuario_repo.alterar(usuario)
 
     # Se for aluno, atualizar dados adicionais
-    if usuario.perfil == 'aluno' and cpf and rg and telefone and curso and data_nascimento and filiacao and cep and cidade and bairro and rua and numero and nome_banco and agencia_bancaria and numero_conta_bancaria and renda_familiar and quantidade_pessoas:
+    if usuario.perfil == 'aluno' and cpf  and telefone and curso and data_nascimento and filiacao and cep and cidade and bairro and rua and numero and nome_banco and agencia_bancaria and numero_conta_bancaria and renda_familiar and quantidade_pessoas:
         try:
             from util.db_util import get_connection
             with get_connection() as conn:

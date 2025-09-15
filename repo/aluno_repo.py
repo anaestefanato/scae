@@ -29,7 +29,6 @@ def completar_cadastro(aluno: Aluno) -> Optional[bool]:
         cursor.execute(INSERIR, (
             aluno.id_usuario,
             aluno.cpf ,
-            aluno.rg,
             aluno.telefone,
             aluno.curso,
             aluno.data_nascimento,
@@ -42,7 +41,9 @@ def completar_cadastro(aluno: Aluno) -> Optional[bool]:
             aluno.nome_banco,
             aluno.agencia_bancaria,
             aluno.numero_conta_bancaria,
-            aluno.renda_familiar
+            aluno.renda_familiar,
+            aluno.quantidade_pessoas,
+            aluno.situacao_moradia
         ))
         return cursor.rowcount > 0
     
@@ -74,7 +75,8 @@ def obter_todos() -> list[Aluno]:
                 agencia_bancaria=row["agencia_bancaria"],
                 numero_conta_bancaria=row["numero_conta_bancaria"],
                 renda_familiar=row["renda_familiar"],
-                quantidade_pessoas=row["quantidade_pessoas"]
+                quantidade_pessoas=row["quantidade_pessoas"],
+                situacao_moradia=row["situacao_moradia"]
             )
             alunos.append(aluno)
         return alunos
@@ -106,7 +108,9 @@ def obter_por_id(id: int) -> Optional[Aluno]:
                 agencia_bancaria=row["agencia_bancaria"],
                 numero_conta_bancaria=row["numero_conta_bancaria"],
                 renda_familiar=row["renda_familiar"],
-                quantidade_pessoas=row["quantidade_pessoas"])
+                quantidade_pessoas=row["quantidade_pessoas"],
+                situacao_moradia=row["situacao_moradia"]
+            )
         return None
 
 
@@ -139,7 +143,9 @@ def obter_alunos_por_pagina(pagina: int, limite: int) -> list[Usuario]:
                 agencia_bancaria=row["agencia_bancaria"],
                 numero_conta_bancaria=row["numero_conta_bancaria"],
                 renda_familiar=row["renda_familiar"],
-                quantidade_pessoas=row["quantidade_pessoas"])
+                quantidade_pessoas=row["quantidade_pessoas"],
+                situacao_moradia=row["situacao_moradia"]
+            )
             for row in rows]
         return alunos
 
@@ -167,6 +173,7 @@ def atualizar(aluno: Usuario) -> bool:
             aluno.numero_conta_bancaria,
             aluno.renda_familiar,
             aluno.quantidade_pessoas,
+            aluno.situacao_moradia,
             aluno.id_usuario))
         return (cursor.rowcount > 0)
     

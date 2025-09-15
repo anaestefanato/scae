@@ -22,3 +22,4 @@ class Aluno(Usuario):
     numero_conta_bancaria: str
     renda_familiar: float
     quantidade_pessoas: int
+    situacao_moradia: str
