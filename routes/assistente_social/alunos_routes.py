@@ -12,21 +12,15 @@ templates = Jinja2Templates(directory="templates")
 
 
 @router.get("/alunos")
-#@requer_autenticacao("assistente")
-async def get_alunos(request: Request):
-    usuario_logado = obter_usuario_logado(request)
-    if not usuario_logado:
-        return RedirectResponse(url="/login", status_code=302)
+@requer_autenticacao("assistente")
+async def get_alunos(request: Request, usuario_logado: dict = None):
     assistente = usuario_repo.obter_usuario_por_matricula(usuario_logado['matricula'])
     response = templates.TemplateResponse("/assistente/alunos.html", {"request": request, "assistente": assistente})
     return response
 
 @router.get("/alunos/detalhes")
-#@requer_autenticacao("assistente")
-async def get_alunos_detalhes(request: Request):
-    usuario_logado = obter_usuario_logado(request)
-    if not usuario_logado:
-        return RedirectResponse(url="/login", status_code=302)
+@requer_autenticacao("assistente")
+async def get_alunos_detalhes(request: Request, usuario_logado: dict = None):
     assistente = usuario_repo.obter_usuario_por_matricula(usuario_logado['matricula'])
     response = templates.TemplateResponse("/assistente/detalhes_alunos.html", {"request": request, "assistente": assistente})
     return response

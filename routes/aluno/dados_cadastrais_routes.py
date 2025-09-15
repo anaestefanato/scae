@@ -11,11 +11,8 @@ templates = Jinja2Templates(directory="templates")
 
 
 @router.get("/dadoscadastrais")
-# @requer_autenticacao(["aluno"])
-async def get_dados_cadastrais(request: Request):
-    usuario_logado = obter_usuario_logado(request)
-    if not usuario_logado:
-        return RedirectResponse(url="/login", status_code=302)
+@requer_autenticacao(["aluno"])
+async def get_dados_cadastrais(request: Request, usuario_logado: dict = None):
     aluno = usuario_repo.obter_usuario_por_matricula(usuario_logado['matricula'])                 
     response = templates.TemplateResponse("/aluno/dadoscadastrais.html", {"request": request, "aluno": aluno})
     return response
