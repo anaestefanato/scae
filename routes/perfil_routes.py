@@ -5,7 +5,7 @@ from typing import Optional
 
 from model.usuario_model import Usuario
 from repo import aluno_repo, usuario_repo
-from sql.usuario_sql import obter_por_matricula
+from sql.usuario_sql import OBTER_POR_MATRICULA
 from sql.aluno_sql import ATUALIZAR
 from util.security import criar_hash_senha, verificar_senha, validar_forca_senha
 from util.auth_decorator import requer_autenticacao, obter_usuario_logado
@@ -20,7 +20,7 @@ templates = criar_templates("templates/dadoscadastrais")
 async def get_perfil(request: Request):
     usuario_logado = obter_usuario_logado(request)
     # Buscar dados completos do usuário
-    usuario = usuario_repo.obter_por_matricula(usuario_logado['matricula'])
+    usuario = usuario_repo.OBTER_POR_MATRICULA(usuario_logado['matricula'])
     if not usuario:
         return RedirectResponse("/login", status.HTTP_303_SEE_OTHER)
     
@@ -64,10 +64,10 @@ async def post_perfil(
     quantidade_pessoas: str = Form(None)
 ):
     usuario_logado = obter_usuario_logado(request)
-    usuario = usuario_repo.obter_por_matricula(usuario_logado['matricula'])
+    usuario = usuario_repo.OBTER_POR_MATRICULA(usuario_logado['matricula'])
     
     # Verificar se o email já está em uso por outro usuário
-    usuario_existente = usuario_repo.obter_por_matricula(matricula)
+    usuario_existente = usuario_repo.OBTER_POR_MATRICULA(matricula)
     if usuario_existente and usuario_existente.id != usuario.id:
         aluno = None
         if usuario.perfil == 'aluno':
@@ -75,7 +75,7 @@ async def post_perfil(
                 from util.db_util import get_connection
                 with get_connection() as conn:
                     cursor = conn.cursor()
-                    cursor.execute(obter_por_matricula, (usuario.matricula,))
+                    cursor.execute(OBTER_POR_MATRICULA, (usuario.matricula,))
                     row = cursor.fetchone()
                     if row:
                         aluno = {

@@ -16,20 +16,18 @@ def criar_tabela() -> bool:
         print("Erro ao criar tabela aluno:", e)
         return False
     
-def inserir(aluno: Aluno) -> Optional[int]:
+def inserir(usuario: Usuario) -> Optional[int]:
     with get_connection() as conn:
         cursor = conn.cursor()
         # Primeiro insere o usuário
-        id_usuario = usuario_repo.inserir(Usuario(
-            id_usuario=0,
-            nome=aluno.nome,
-            matricula=aluno.matricula,
-            email=aluno.email,
-            senha=aluno.senha
-        ))
-        # Depois insere na tabela aluno
+        id_usuario = usuario_repo.inserir(usuario)
+        return id_usuario
+    
+def completar_cadastro(aluno: Aluno) -> Optional[bool]:
+    with get_connection() as conn:
+        cursor = conn.cursor()
         cursor.execute(INSERIR, (
-            aluno.id_usuario if aluno.id_usuario else id_usuario,
+            aluno.id_usuario,
             aluno.cpf ,
             aluno.rg,
             aluno.telefone,
@@ -46,7 +44,7 @@ def inserir(aluno: Aluno) -> Optional[int]:
             aluno.numero_conta_bancaria,
             aluno.renda_familiar
         ))
-        return id_usuario
+        return cursor.rowcount > 0
     
 def obter_todos() -> list[Aluno]:
     with get_connection() as conn:

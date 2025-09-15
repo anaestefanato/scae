@@ -97,7 +97,27 @@ def obter_todos_por_perfil(perfil: str) -> list[Usuario]:
 def obter_usuario_por_matricula(matricula: str) -> Optional[Usuario]:
     with get_connection() as conn:
         cursor = conn.cursor()
-        cursor.execute(obter_por_matricula, (matricula,))
+        cursor.execute(OBTER_POR_MATRICULA, (matricula,))
+        row = cursor.fetchone()
+        if row:
+            usuario = Usuario(
+                id_usuario=row["id_usuario"],
+                nome=row["nome"],
+                matricula=row["matricula"],
+                email=row["email"],
+                senha=row["senha"],
+                perfil=row["perfil"],
+                foto=None,
+                token_redefinicao=None,
+                data_token=None,
+                data_cadastro=None)
+            return usuario
+        return None
+    
+def obter_usuario_por_email(email: str) -> Optional[Usuario]:
+    with get_connection() as conn:
+        cursor = conn.cursor()
+        cursor.execute(OBTER_POR_EMAIL, (email,))
         row = cursor.fetchone()
         if row:
             usuario = Usuario(

@@ -14,18 +14,21 @@
     <h1 class= "cadastro-title"><span>Cadastre-se</span></h1>
     <p class="subtitle mb-5 mt-5">Por favor, nos informe os dados abaixo para realizar o seu cadastro.</p>
 
-    <form id="formCadastro">
+    <form id="formCadastro" method="post" action="/cadastro">
       <div class="mb-3">
-        <input type="text" class="form-control cadastro-input rounded-pill" placeholder="Nome completo" required/>
+        <input type="text" class="form-control cadastro-input rounded-pill" placeholder="Nome completo" required name="nome"/>
       </div>
       <div class="mb-3">
-        <input type="text" class="form-control cadastro-input rounded-pill" placeholder="Matrícula" required/>
+        <input type="text" class="form-control cadastro-input rounded-pill" placeholder="Matrícula" required name="matricula"/>
       </div>
       <div class="mb-3">
-        <input type="email" class="form-control cadastro-input rounded-pill" placeholder="E-mail" required/>
+        <input type="email" class="form-control cadastro-input rounded-pill" placeholder="E-mail" required name="email"/>
       </div>
       <div class="mb-4 position-relative">
-        <input type="password" class="form-control cadastro-input rounded-pill pe-5" placeholder="Senha" required/>
+        <input type="password" class="form-control cadastro-input rounded-pill pe-5" placeholder="Senha" required name="senha"/>
+      </div>
+      <div class="mb-4 position-relative">
+        <input type="password" class="form-control cadastro-input rounded-pill pe-5" placeholder="Confirmar Senha" required name="conf_senha"/>
       </div>
       <div class="d-flex justify-content-center gap-3 mt-5">
         <button type="submit" class="btn btn-success rounded-pill px-4">Solicitar cadastro</button>

@@ -1,10 +1,12 @@
-from fastapi import APIRouter, Request, Form, status
+from fastapi import APIRouter, Query, Request, Form, status
 from fastapi.responses import RedirectResponse
 from fastapi.templating import Jinja2Templates
 
+from model.aluno_model import Aluno
+from model.usuario_model import Usuario
 from repo import aluno_repo, usuario_repo
 from util.auth_decorator import criar_sessao
-from util.security import verificar_senha
+from util.security import criar_hash_senha, verificar_senha
 
 
 router = APIRouter()
@@ -18,8 +20,8 @@ async def get_root(request: Request):
 
 
 @router.get("/login")
-async def get_login(request: Request):
-    response = templates.TemplateResponse("/publicas/login.html", {"request": request})
+async def get_login(request: Request, matricula: str = Query(None)):
+    response = templates.TemplateResponse("/publicas/login.html", {"request": request, "matricula": matricula})
     return response
 
 
@@ -73,6 +75,57 @@ async def logout(request: Request):
 async def get_cadastro(request: Request):
     response = templates.TemplateResponse("/publicas/cadastro.html", {"request": request})
     return response
+
+@router.post("/cadastro")
+async def post_cadastro(
+    request: Request,
+    nome: str = Form(...),
+    matricula: str = Form(...),
+    email: str = Form(...),
+    senha: str = Form(...),
+    conf_senha: str = Form(...),
+):
+    usuario = usuario_repo.obter_usuario_por_matricula(matricula)
+    if usuario:
+        return templates.TemplateResponse(
+                "publicas/cadastro.html",
+                {"request": request, "erro": "Matrícula já cadastrada"}
+        )
+        
+    usuario = usuario_repo.obter_usuario_por_email(email)
+    if usuario:
+            return templates.TemplateResponse(
+                    "publicas/cadastro.html",
+                    {"request": request, "erro": "E-mail já cadastrado"}
+            )
+            
+    if senha != conf_senha:
+        return templates.TemplateResponse(
+                "publicas/cadastro.html",
+                {"request": request, "erro": "Senhas não coincidem"}
+        )   
+    
+    aluno = Usuario(
+        id_usuario=None,
+        nome=nome,
+        matricula=matricula,
+        email=email,
+        senha=criar_hash_senha(senha),
+        perfil="aluno",
+        foto=None,
+        token_redefinicao=None,
+        data_token=None,
+        data_cadastro=None
+    )
+    
+    id_aluno = aluno_repo.inserir(aluno)
+    if not id_aluno:
+        return templates.TemplateResponse(
+            "publicas/cadastro.html",
+            {"request": request, "erro": "Erro ao criar cadastro. Tente novamente."}
+        )
+
+    return RedirectResponse(f"/login?matricula={matricula}", status.HTTP_303_SEE_OTHER)
 
 @router.get("/sobre")
 async def get_sobre(request: Request):

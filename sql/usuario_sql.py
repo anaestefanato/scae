@@ -32,12 +32,20 @@ FROM usuario
 WHERE id_usuario = ?
 """ 
 
-obter_por_matricula = """
+OBTER_POR_MATRICULA = """
 SELECT
 id_usuario, nome, matricula, email, senha, perfil
 FROM usuario
 WHERE matricula = ?
 """
+
+OBTER_POR_EMAIL = """
+SELECT
+id_usuario, nome, matricula, email, senha, perfil
+FROM usuario
+WHERE email = ?
+"""
+
 OBTER_TODOS_POR_PERFIL = """
 SELECT
 id_usuario, nome, matricula, email, senha, perfil
