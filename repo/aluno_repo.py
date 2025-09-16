@@ -43,6 +43,7 @@ def completar_cadastro(aluno: Aluno) -> Optional[bool]:
             aluno.numero_conta_bancaria,
             aluno.renda_familiar,
             aluno.quantidade_pessoas,
+            aluno.renda_per_capita,
             aluno.situacao_moradia
         ))
         return cursor.rowcount > 0

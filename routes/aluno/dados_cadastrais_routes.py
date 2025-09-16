@@ -28,7 +28,6 @@ async def post_perfil(
     nome: str = Form(...),
     matricula: str = Form(...),
     email: str = Form(...),
-
     cpf: str = Form(...),
     telefone: str = Form(...),
     curso: str = Form(...),
@@ -53,15 +52,6 @@ async def post_perfil(
     if not aluno_repo.possui_cadastro_completo(usuario.id_usuario):
         aluno = Aluno(
             id_usuario=usuario.id_usuario,
-            nome=usuario.nome,
-            matricula=usuario.matricula,
-            email=usuario.email,
-            senha=usuario.senha,
-            perfil=usuario.perfil,
-            foto=None,
-            token_redefinicao=None,
-            data_token=None,
-            data_cadastro=None,
             cpf=cpf,
             telefone=telefone,
             curso=curso,
@@ -80,7 +70,7 @@ async def post_perfil(
             renda_per_capita=float(renda_per_capita),
             situacao_moradia=situacao_moradia
         )
-        id_aluno = aluno_repo.atualizar(aluno)
+        id_aluno = aluno_repo.completar_cadastro(aluno)
 
         if id_aluno:
             aluno_repo.marcar_cadastro_completo(id_aluno)
