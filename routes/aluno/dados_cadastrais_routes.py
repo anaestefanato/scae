@@ -16,11 +16,17 @@ templates = Jinja2Templates(directory="templates")
 @router.get("/dadoscadastrais")
 @requer_autenticacao(["aluno"])
 async def get_dados_cadastrais(request: Request, usuario_logado: dict = None, sucesso: str = None):
-    aluno = usuario_repo.obter_usuario_por_matricula(usuario_logado['matricula'])
+    # Busca dados completos do aluno
+    aluno = aluno_repo.obter_por_matricula(usuario_logado['matricula'])
+    
+    # Se não encontrar dados completos, busca dados básicos do usuário
+    if not aluno:
+        usuario = usuario_repo.obter_usuario_por_matricula(usuario_logado['matricula'])
+        aluno = usuario
     
     context = {"request": request, "aluno": aluno}
     if sucesso:
-        context["sucesso"] = "Informações salvas com sucesso!"
+        context["mensagem_sucesso"] = "Informações salvas com sucesso!"
     
     response = templates.TemplateResponse("/aluno/dadoscadastrais.html", context)
     return response
