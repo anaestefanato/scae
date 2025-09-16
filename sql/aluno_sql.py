@@ -116,3 +116,31 @@ UPDATE aluno
 SET cadastro_completo = 1
 WHERE id_usuario = ?
 """
+OBTER_POR_MATRICULA = """
+SELECT
+    al.id_usuario AS id_usuario,
+    u.nome AS nome,
+    u.matricula AS matricula,
+    u.email AS email,
+    u.senha AS senha,
+    u.perfil AS perfil,
+    al.cpf AS cpf,
+    al.telefone AS telefone,
+    al.curso AS curso,
+    al.data_nascimento AS data_nascimento,
+    al.filiacao AS filiacao,
+    al.cep AS cep,
+    al.cidade AS cidade,
+    al.bairro AS bairro,
+    al.rua AS rua,
+    al.numero AS numero,
+    al.nome_banco AS nome_banco,
+    al.agencia_bancaria AS agencia_bancaria,
+    al.numero_conta_bancaria AS numero_conta_bancaria,
+    al.renda_familiar AS renda_familiar,
+    al.quantidade_pessoas AS quantidade_pessoas,
+    al.situacao_moradia AS situacao_moradia
+FROM aluno al
+JOIN usuario u ON al.id_usuario = u.id_usuario
+WHERE u.matricula = ?
+"""

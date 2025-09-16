@@ -41,7 +41,6 @@ def criar_aluno_padrao():
             perfil="aluno",
             matricula="aluno123",            
             cpf="000.000.000-00",
-            rg="00.000.000-0",
             telefone="(00) 00000-0000",
             curso="Curso Exemplo",
             data_nascimento="2000-01-01",
