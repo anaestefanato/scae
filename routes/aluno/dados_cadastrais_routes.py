@@ -15,9 +15,14 @@ templates = Jinja2Templates(directory="templates")
 
 @router.get("/dadoscadastrais")
 @requer_autenticacao(["aluno"])
-async def get_dados_cadastrais(request: Request, usuario_logado: dict = None):
-    aluno = usuario_repo.obter_usuario_por_matricula(usuario_logado['matricula'])                 
-    response = templates.TemplateResponse("/aluno/dadoscadastrais.html", {"request": request, "aluno": aluno})
+async def get_dados_cadastrais(request: Request, usuario_logado: dict = None, sucesso: str = None):
+    aluno = usuario_repo.obter_usuario_por_matricula(usuario_logado['matricula'])
+    
+    context = {"request": request, "aluno": aluno}
+    if sucesso:
+        context["sucesso"] = "Informações salvas com sucesso!"
+    
+    response = templates.TemplateResponse("/aluno/dadoscadastrais.html", context)
     return response
 
 @router.post("/dadoscadastrais")
@@ -52,6 +57,15 @@ async def post_perfil(
     if not aluno_repo.possui_cadastro_completo(usuario.id_usuario):
         aluno = Aluno(
             id_usuario=usuario.id_usuario,
+            nome=usuario.nome,
+            matricula=usuario.matricula,
+            email=usuario.email,
+            senha=usuario.senha,
+            perfil=usuario.perfil,
+            foto=getattr(usuario, 'foto', None),
+            token_redefinicao=getattr(usuario, 'token_redefinicao', None),
+            data_token=getattr(usuario, 'data_token', None),
+            data_cadastro=getattr(usuario, 'data_cadastro', None),
             cpf=cpf,
             telefone=telefone,
             curso=curso,
@@ -70,11 +84,11 @@ async def post_perfil(
             renda_per_capita=float(renda_per_capita),
             situacao_moradia=situacao_moradia
         )
-        id_aluno = aluno_repo.completar_cadastro(aluno)
+        sucesso = aluno_repo.completar_cadastro(aluno)
 
-        if id_aluno:
-            aluno_repo.marcar_cadastro_completo(id_aluno)
-            return RedirectResponse("/aluno/dadoscadastrais", status_code=status.HTTP_303_SEE_OTHER)
+        if sucesso:
+            aluno_repo.marcar_cadastro_completo(usuario.id_usuario)
+            return RedirectResponse("/aluno/inicio?sucesso=1", status_code=status.HTTP_303_SEE_OTHER)
 
     return templates.TemplateResponse(
         "aluno/dadoscadastrais.html",
