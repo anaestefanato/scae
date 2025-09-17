@@ -94,6 +94,9 @@ async def post_perfil(
 
         if sucesso:
             aluno_repo.marcar_cadastro_completo(usuario.id_usuario)
+            # Atualiza a sessão para refletir cadastro completo
+            if hasattr(request, 'session'):
+                request.session['usuario']['completo'] = True
             return RedirectResponse("/aluno/inicio?sucesso=1", status_code=status.HTTP_303_SEE_OTHER)
 
     return templates.TemplateResponse(
