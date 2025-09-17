@@ -1,6 +1,5 @@
-from msilib.schema import File
 import os
-from fastapi import APIRouter, Form, Request, UploadFile, status
+from fastapi import APIRouter, Form, Request, UploadFile, File, status
 from fastapi.responses import RedirectResponse
 from fastapi.templating import Jinja2Templates
 

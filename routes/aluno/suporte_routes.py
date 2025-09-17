@@ -16,7 +16,7 @@ async def get_suporte(request: Request, usuario_logado: dict = None):
     if not usuario_logado['completo']:
         return RedirectResponse("/aluno/perfil", status_code=303)
 
-    aluno = usuario_repo.obter_usuario_por_matricula([usuario_logado['matricula']])
+    aluno = usuario_repo.obter_usuario_por_matricula(usuario_logado['matricula'])
     response = templates.TemplateResponse("/aluno/suporte.html", {"request": request, "aluno": aluno})
     return response
 
