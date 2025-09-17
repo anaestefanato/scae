@@ -14,7 +14,7 @@ templates = Jinja2Templates(directory="templates")
 @requer_autenticacao(["aluno"])
 async def get_editais(request: Request, usuario_logado: dict = None):
     if not usuario_logado['completo']:
-        return RedirectResponse("/aluno/dadoscadastrais", status_code=303)
+        return RedirectResponse("/aluno/perfil", status_code=303)
 
     aluno = usuario_repo.obter_usuario_por_matricula(usuario_logado['matricula'])
     response = templates.TemplateResponse("/aluno/editais.html", {"request": request, "aluno": aluno})
@@ -24,7 +24,7 @@ async def get_editais(request: Request, usuario_logado: dict = None):
 @requer_autenticacao(["aluno"])
 async def get_editais_detalhes(request: Request, usuario_logado: dict = None):
     if not usuario_logado['completo']:
-        return RedirectResponse("/aluno/dadoscadastrais", status_code=303)
+        return RedirectResponse("/aluno/perfil", status_code=303)
 
     aluno = usuario_repo.obter_usuario_por_matricula(usuario_logado['matricula'])
     response = templates.TemplateResponse("/aluno/editais_detalhes.html", {"request": request, "aluno": aluno})
@@ -34,7 +34,7 @@ async def get_editais_detalhes(request: Request, usuario_logado: dict = None):
 @requer_autenticacao(["aluno"])
 async def get_editais_primeira_inscricao(request: Request, usuario_logado: dict = None):
     if not usuario_logado['completo']:
-        return RedirectResponse("/aluno/dadoscadastrais", status_code=303)
+        return RedirectResponse("/aluno/perfil", status_code=303)
 
     aluno = usuario_repo.obter_usuario_por_matricula(usuario_logado['matricula'])
     response = templates.TemplateResponse("/aluno/editais_primeira_inscricao.html", {"request": request, "aluno": aluno})
@@ -44,7 +44,7 @@ async def get_editais_primeira_inscricao(request: Request, usuario_logado: dict 
 @requer_autenticacao(["aluno"])
 async def get_editais_renovacao(request: Request, usuario_logado: dict = None):
     if not usuario_logado['completo']:
-        return RedirectResponse("/aluno/dadoscadastrais", status_code=303)
+        return RedirectResponse("/aluno/perfil", status_code=303)
 
     aluno = usuario_repo.obter_usuario_por_matricula(usuario_logado['matricula'])
     response = templates.TemplateResponse("/aluno/editais_renovacao.html", {"request": request, "aluno": aluno})
