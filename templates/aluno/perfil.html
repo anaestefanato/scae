@@ -198,30 +198,49 @@
         </div>
     </div>
 
-    <div class="modal fade" id="changePhotoModal" tabindex="-1">
-        <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title">Alterar Foto de Perfil</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                </div>
-                <div class="modal-body">
-                    <div class="text-center mb-4">
-                        <img src="/static/img/perfil.jpg" alt="Preview" class="rounded-circle" style="width: 150px; height: 150px; object-fit: cover;">
-                    </div>
-                    <div class="mb-3">
-                        <label for="photoInput" class="form-label">Escolha uma nova foto</label>
-                        <input type="file" class="form-control" id="photoInput" accept="image/*">
-                        <div class="form-text">A foto deve ter no máximo 5MB e estar nos formatos JPG, PNG ou JPEG.</div>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                    <button type="button" class="btn btn-success" onclick="savePhoto()">Salvar Foto</button>
-                </div>
-            </div>
-        </div>
+    <!-- templates/perfil/dados.html -->
+
+<!-- Container centralizado para foto atual -->
+<div class="d-flex justify-content-center">
+    <img id="foto-atual"
+         src="{{ aluno.foto or '/static/img/user-default.png' }}"
+         class="rounded-circle mb-3"
+         style="width: 150px; height: 150px; object-fit: cover; border: 3px solid #dee2e6;"
+         alt="Foto do perfil">
+</div>
+
+<!-- Preview da nova foto (inicialmente oculto) -->
+<div id="preview-foto-container" style="display: none;">
+    <div class="d-flex justify-content-center">
+        <img id="preview-foto"
+             src=""
+             class="rounded-circle mb-2"
+             style="width: 150px; height: 150px; object-fit: cover; border: 3px solid #28a745;"
+             alt="Preview da nova foto">
     </div>
+    <div class="small text-success mb-2">
+        <i class="bi-check-circle"></i> Nova foto selecionada
+    </div>
+</div>
+
+<!-- Formulário de upload -->
+<form action="/perfil/alterar-foto" method="post" enctype="multipart/form-data">
+    <div class="mb-2">
+        <label for="foto" class="form-label small">Selecionar Nova Foto</label>
+        <input type="file"
+               class="form-control form-control-sm"
+               id="foto"
+               name="foto"
+               accept="image/*">  <!-- ← Aceita apenas imagens -->
+        <div class="form-text small">JPG, JPEG ou PNG</div>
+    </div>
+    <button type="submit" class="btn btn-sm btn-outline-primary" id="btn-alterar" disabled>
+        <i class="bi-camera"></i> Alterar Foto
+    </button>
+    <button type="button" class="btn btn-sm btn-outline-secondary" id="btn-cancelar" onclick="cancelarSelecao()" style="display: none;">
+        <i class="bi-x"></i> Cancelar
+    </button>
+</form>
 
     {% endblock %}
 
