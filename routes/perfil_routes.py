@@ -12,10 +12,10 @@ from util.auth_decorator import requer_autenticacao, obter_usuario_logado
 from util.template_util import criar_templates
 
 router = APIRouter()
-templates = criar_templates("templates/dadoscadastrais")
+templates = criar_templates("templates/perfil")
 
 
-@router.get("/dadoscadastrais")
+@router.get("/perfil")
 @requer_autenticacao()
 async def get_perfil(request: Request):
     usuario_logado = obter_usuario_logado(request)
@@ -39,7 +39,7 @@ async def get_perfil(request: Request):
     )
 
 
-# @router.post("/dadoscadastrais")
+# @router.post("/perfil")
 # @requer_autenticacao()
 # async def post_perfil(
 #     request: Request,
