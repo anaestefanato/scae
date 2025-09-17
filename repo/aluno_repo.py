@@ -230,7 +230,7 @@ def obter_por_matricula(matricula: str) -> Optional[Aluno]:
                 telefone=row["telefone"],
                 curso=row["curso"],
                 data_nascimento=row["data_nascimento"],
-                filiacao=row.get("filiacao"),
+                filiacao=row["filiacao"],
                 cep=row["cep"],
                 cidade=row["cidade"],
                 bairro=row["bairro"],
