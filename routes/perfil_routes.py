@@ -39,75 +39,75 @@ async def get_perfil(request: Request):
     )
 
 
-@router.post("/dadoscadastrais")
-@requer_autenticacao()
-async def post_perfil(
-    request: Request,
-    nome: str = Form(...),
-    matricula: str = Form(...),
-    email: str = Form(...),
-    cpf: str = Form(None),
-    rg: str = Form(None),
-    telefone: str = Form(None),
-    curso: str = Form(None),
-    data_nascimento: str = Form(None),
-    filiacao: str = Form(None),
-    cep: str = Form(None),
-    cidade: str = Form(None),
-    bairro: str = Form(None),
-    rua: str = Form(None),
-    numero: str = Form(None),
-    nome_banco: str = Form(None),
-    agencia_bancaria: str = Form(None),
-    numero_conta_bancaria: str = Form(None),
-    renda_familiar: str = Form(None),
-    quantidade_pessoas: str = Form(None)
-):
-    usuario_logado = obter_usuario_logado(request)
-    usuario = usuario_repo.OBTER_POR_MATRICULA(usuario_logado['matricula'])
+# @router.post("/dadoscadastrais")
+# @requer_autenticacao()
+# async def post_perfil(
+#     request: Request,
+#     nome: str = Form(...),
+#     matricula: str = Form(...),
+#     email: str = Form(...),
+#     cpf: str = Form(None),
+#     rg: str = Form(None),
+#     telefone: str = Form(None),
+#     curso: str = Form(None),
+#     data_nascimento: str = Form(None),
+#     filiacao: str = Form(None),
+#     cep: str = Form(None),
+#     cidade: str = Form(None),
+#     bairro: str = Form(None),
+#     rua: str = Form(None),
+#     numero: str = Form(None),
+#     nome_banco: str = Form(None),
+#     agencia_bancaria: str = Form(None),
+#     numero_conta_bancaria: str = Form(None),
+#     renda_familiar: str = Form(None),
+#     quantidade_pessoas: str = Form(None)
+# ):
+#     usuario_logado = obter_usuario_logado(request)
+#     usuario = usuario_repo.OBTER_POR_MATRICULA(usuario_logado['matricula'])
     
-    # Verificar se o email já está em uso por outro usuário
-    usuario_existente = usuario_repo.OBTER_POR_MATRICULA(matricula)
-    if usuario_existente and usuario_existente.id != usuario.id:
-        aluno = None
-        if usuario.perfil == 'aluno':
-            try:
-                from util.db_util import get_connection
-                with get_connection() as conn:
-                    cursor = conn.cursor()
-                    cursor.execute(OBTER_POR_MATRICULA, (usuario.matricula,))
-                    row = cursor.fetchone()
-                    if row:
-                        aluno = {
-                            'cpf': row["cpf"],
-                            'rg': row["rg"],
-                            'telefone': row["telefone"],
-                            'curso': row["curso"],
-                            'data_nascimento': row["data_nascimento"],
-                            'filiacao': row["filiacao"],
-                            'cep': row["cep"],
-                            'cidade': row["cidade"],
-                            'bairro': row["bairro"],
-                            'rua': row["rua"],
-                            'numero': row["numero"],
-                            'nome_banco': row["nome_banco"],
-                            'agencia_bancaria': row["agencia_bancaria"],
-                            'numero_conta_bancaria': row["numero_conta_bancaria"],
-                            'renda_familiar': row["renda_familiar"],
-                            'quantidade_pessoas': row["quantidade_pessoas"]
-                        }
-            except:
-                pass
+#     # Verificar se o email já está em uso por outro usuário
+#     usuario_existente = usuario_repo.OBTER_POR_MATRICULA(matricula)
+#     if usuario_existente and usuario_existente.id != usuario.id:
+#         aluno = None
+#         if usuario.perfil == 'aluno':
+#             try:
+#                 from util.db_util import get_connection
+#                 with get_connection() as conn:
+#                     cursor = conn.cursor()
+#                     cursor.execute(OBTER_POR_MATRICULA, (usuario.matricula,))
+#                     row = cursor.fetchone()
+#                     if row:
+#                         aluno = {
+#                             'cpf': row["cpf"],
+#                             'rg': row["rg"],
+#                             'telefone': row["telefone"],
+#                             'curso': row["curso"],
+#                             'data_nascimento': row["data_nascimento"],
+#                             'filiacao': row["filiacao"],
+#                             'cep': row["cep"],
+#                             'cidade': row["cidade"],
+#                             'bairro': row["bairro"],
+#                             'rua': row["rua"],
+#                             'numero': row["numero"],
+#                             'nome_banco': row["nome_banco"],
+#                             'agencia_bancaria': row["agencia_bancaria"],
+#                             'numero_conta_bancaria': row["numero_conta_bancaria"],
+#                             'renda_familiar': row["renda_familiar"],
+#                             'quantidade_pessoas': row["quantidade_pessoas"]
+#                         }
+#             except:
+#                 pass
         
-        return templates.TemplateResponse(
-            "dados_cadastrais.html",
-            {
-                "request": request,
-                "usuario": usuario,
-                "aluno_dados": aluno,
-                "erro": "Esta matrícula já está em uso"
-            }
-        )
+#         return templates.TemplateResponse(
+#             "dados_cadastrais.html",
+#             {
+#                 "request": request,
+#                 "usuario": usuario,
+#                 "aluno_dados": aluno,
+#                 "erro": "Esta matrícula já está em uso"
+#             }
+#         )
     
     # Atualizar dados do usuário
     usuario.nome = nome
