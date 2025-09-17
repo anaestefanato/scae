@@ -1,206 +1,278 @@
 {% extends 'base2.html' %}
-{% block title %}Histórico de Recebimentos{% endblock %}
+{% set active_page = 'recebimentos' %}
+
+{% block title %}SCAE - Histórico de Recebimentos{% endblock %}
 
 {% block head %}
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;700&display=swap" rel="stylesheet">
-<style>
-body, .main-content, .container, .card, .table, h2, h3, h4, h5, h6, .btn, .form-select, .modal-content {
-    font-family: 'Poppins', sans-serif !important;
-}
-</style>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/static/css/recebimentos_aluno.css">
 {% endblock %}
+
 {% block content %}
-<div class="page-historico" style="min-height: 100vh; display: flex; flex-direction: column;">
-    <main style="flex: 1; display: flex; flex-direction: column; justify-content: flex-start;">
-        <div class="container py-4">
-            <h2 class="mb-4">Histórico de Recebimentos</h2>
-            <div class="row mb-4">
-                <div class="col-md-4 mb-3">
-                    <div class="card stats-card text-center">
-                        <div class="number">R$ 1.400,00</div>
-                        <div class="label">Total Recebido</div>
-                    </div>
+<div class="main-content" id="mainContent">
+    <!-- Welcome Banner similar to dashboard -->
+    <div class="welcome-banner mb-4">
+        <div class="row align-items-center">
+            <div class="col-12">
+                <div class="d-flex align-items-center mb-3">
+                    <h4 class="mb-0">Histórico de Recebimentos</h4>
                 </div>
-                <div class="col-md-4 mb-3">
-                    <div class="card stats-card text-center">
-                        <div class="number">7</div>
-                        <div class="label">Meses Recebidos</div>
-                    </div>
-                </div>
-                <div class="col-md-4 mb-3">
-                    <div class="card stats-card text-center">
-                        <div class="number">2</div>
-                        <div class="label">Tipos de Auxílio</div>
-                    </div>
-                </div>
+                <p>Acompanhe todos os seus recebimentos de auxílios estudantis e tenha controle total sobre suas finanças.</p>
             </div>
-            <div class="row mb-4">
-                <div class="col-md-8 mb-3">
-                    <div class="card table-card">
-                        <div class="card-header d-flex justify-content-between align-items-center">
-                            <span>Recebimentos Recentes</span>
-                            <select class="form-select w-auto" style="font-size:0.95rem;" onchange="filtrarAuxilio(this.value)">
-                                <option value="todos">Todos</option>
-                                <option value="alimentacao">Alimentação</option>
-                                <option value="transporte">Transporte</option>
-                            </select>
-                        </div>
-                        <div class="card-body p-0">
-                            <table class="table table-striped mb-0" id="tabelaRecebimentos">
-                                <thead>
-                                    <tr>
-                                        <th>Auxílio</th>
-                                        <th>Referente ao Mês</th>
-                                        <th>Valor</th>
-                                        <th>Status</th>
-                                        <th>Data de Recebimento</th>
-                                        <th>Detalhes</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr data-auxilio="alimentacao">
-                                        <td>Alimentação</td>
-                                        <td>Julho/2025</td>
-                                        <td>R$ 200,00</td>
-                                        <td><span class="status-badge status-deferido">Confirmado</span></td>
-                                        <td>10/07/2025</td>
-                                        <td><button class="btn btn-sm btn-outline-info" onclick="mostrarDetalhes('Alimentação', 'Julho/2025', 'R$ 200,00', '10/07/2025')">Ver</button></td>
-                                    </tr>
-                                    <tr data-auxilio="transporte">
-                                        <td>Transporte</td>
-                                        <td>Julho/2025</td>
-                                        <td>R$ 150,00</td>
-                                        <td><span class="status-badge status-deferido">Confirmado</span></td>
-                                        <td>10/07/2025</td>
-                                        <td><button class="btn btn-sm btn-outline-info" onclick="mostrarDetalhes('Transporte', 'Julho/2025', 'R$ 150,00', '10/07/2025')">Ver</button></td>
-                                    </tr>
-                                    <tr data-auxilio="alimentacao">
-                                        <td>Alimentação</td>
-                                        <td>Junho/2025</td>
-                                        <td>R$ 200,00</td>
-                                        <td><span class="status-badge status-deferido">Confirmado</span></td>
-                                        <td>10/06/2025</td>
-                                        <td><button class="btn btn-sm btn-outline-info" onclick="mostrarDetalhes('Alimentação', 'Junho/2025', 'R$ 200,00', '10/06/2025')">Ver</button></td>
-                                    </tr>
-                                    <tr data-auxilio="transporte">
-                                        <td>Transporte</td>
-                                        <td>Junho/2025</td>
-                                        <td>R$ 150,00</td>
-                                        <td><span class="status-badge status-deferido">Confirmado</span></td>
-                                        <td>10/06/2025</td>
-                                        <td><button class="btn btn-sm btn-outline-info" onclick="mostrarDetalhes('Transporte', 'Junho/2025', 'R$ 150,00', '10/06/2025')">Ver</button></td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
+        </div>
+    </div>
+
+    <!-- Cards de Estatísticas -->
+    <div class="row mb-4">
+        <div class="col-md-4">
+            <div class="card stats-card">
+                <div class="number">R$ 1.400,00</div>
+                <div class="label">Total Recebido</div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card stats-card">
+                <div class="number">7</div>
+                <div class="label">Meses Recebidos</div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card stats-card">
+                <div class="number">2</div>
+                <div class="label">Tipos de Auxílio</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Conteúdo Principal -->
+    <div class="row align-items-stretch">
+        <div class="col-md-8 d-flex flex-column">
+            <div class="card flex-grow-1">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <span><i class="bi bi-cash-coin me-2"></i>Histórico de Pagamentos</span>
+                    <select class="form-select w-auto" style="font-size:0.95rem;" onchange="filtrarAuxilio(this.value)">
+                        <option value="todos">Todos os Auxílios</option>
+                        <option value="alimentacao">Auxílio Alimentação</option>
+                        <option value="transporte">Auxílio Transporte</option>
+                    </select>
                 </div>
-                <div class="col-md-4 mb-3 d-flex align-items-center justify-content-center">
-                    <div class="card w-100 p-3">
-                        <h6 class="mb-3">Gráfico de Recebimentos</h6>
-                        <canvas id="graficoRecebimentos" style="width:100%;max-width:300px;height:180px;"></canvas>
+                <div class="card-body p-0">
+                    <div class="table-responsive">
+                        <table class="table table-striped mb-0" id="tabelaRecebimentos">
+                            <thead>
+                                <tr>
+                                    <th>Auxílio</th>
+                                    <th>Referente ao Mês</th>
+                                    <th>Valor</th>
+                                    <th>Status</th>
+                                    <th>Data de Recebimento</th>
+                                    <th>Ações</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr data-auxilio="alimentacao">
+                                    <td><i class="bi bi-cup-hot me-2 text-success"></i>Alimentação</td>
+                                    <td>Julho/2025</td>
+                                    <td class="fw-bold text-success">R$ 200,00</td>
+                                    <td><span class="status-badge status-deferido">Confirmado</span></td>
+                                    <td>10/07/2025</td>
+                                    <td>
+                                        <button class="btn btn-sm btn-outline-info" onclick="mostrarDetalhes('Alimentação', 'Julho/2025', 'R$ 200,00', '10/07/2025')">
+                                            <i class="bi bi-eye me-1"></i>Ver
+                                        </button>
+                                    </td>
+                                </tr>
+                                <tr data-auxilio="transporte">
+                                    <td><i class="bi bi-bus-front me-2 text-success"></i>Transporte</td>
+                                    <td>Julho/2025</td>
+                                    <td class="fw-bold text-success">R$ 150,00</td>
+                                    <td><span class="status-badge status-deferido">Confirmado</span></td>
+                                    <td>10/07/2025</td>
+                                    <td>
+                                        <button class="btn btn-sm btn-outline-info" onclick="mostrarDetalhes('Transporte', 'Julho/2025', 'R$ 150,00', '10/07/2025')">
+                                            <i class="bi bi-eye me-1"></i>Ver
+                                        </button>
+                                    </td>
+                                </tr>
+                                <tr data-auxilio="alimentacao">
+                                    <td><i class="bi bi-cup-hot me-2 text-success"></i>Alimentação</td>
+                                    <td>Junho/2025</td>
+                                    <td class="fw-bold text-success">R$ 200,00</td>
+                                    <td><span class="status-badge status-deferido">Confirmado</span></td>
+                                    <td>10/06/2025</td>
+                                    <td>
+                                        <button class="btn btn-sm btn-outline-info" onclick="mostrarDetalhes('Alimentação', 'Junho/2025', 'R$ 200,00', '10/06/2025')">
+                                            <i class="bi bi-eye me-1"></i>Ver
+                                        </button>
+                                    </td>
+                                </tr>
+                                <tr data-auxilio="transporte">
+                                    <td><i class="bi bi-bus-front me-2 text-success"></i>Transporte</td>
+                                    <td>Junho/2025</td>
+                                    <td class="fw-bold text-success">R$ 150,00</td>
+                                    <td><span class="status-badge status-deferido">Confirmado</span></td>
+                                    <td>10/06/2025</td>
+                                    <td>
+                                        <button class="btn btn-sm btn-outline-info" onclick="mostrarDetalhes('Transporte', 'Junho/2025', 'R$ 150,00', '10/06/2025')">
+                                            <i class="bi bi-eye me-1"></i>Ver
+                                        </button>
+                                    </td>
+                                </tr>
+                                <tr data-auxilio="alimentacao">
+                                    <td><i class="bi bi-cup-hot me-2 text-success"></i>Alimentação</td>
+                                    <td>Maio/2025</td>
+                                    <td class="fw-bold text-success">R$ 200,00</td>
+                                    <td><span class="status-badge status-deferido">Confirmado</span></td>
+                                    <td>10/05/2025</td>
+                                    <td>
+                                        <button class="btn btn-sm btn-outline-info" onclick="mostrarDetalhes('Alimentação', 'Maio/2025', 'R$ 200,00', '10/05/2025')">
+                                            <i class="bi bi-eye me-1"></i>Ver
+                                        </button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
                     </div>
                 </div>
             </div>
         </div>
-    </main>
-    <!-- Modal Detalhes Recebimento -->
-    <div id="modalDetalhesRecebimento" class="modal fade" tabindex="-1" role="dialog" aria-modal="true" style="display:none; background: rgba(0,0,0,0.4);">
-        <div class="modal-dialog modal-md modal-dialog-centered" role="document">
-            <div class="modal-content shadow-lg">
-                <div class="modal-header bg-success text-white">
-                    <h5 class="modal-title">Detalhes do Recebimento</h5>
-                    <button type="button" class="btn-close btn-close-white" aria-label="Fechar" onclick="fecharModalDetalhesRecebimento()"></button>
+
+        <div class="col-md-4 d-flex flex-column">
+            <div class="card chart-card flex-grow-1">
+                <div class="card-header">
+                    <i class="bi bi-graph-up me-2"></i>Recebimentos por Mês
                 </div>
-                <div class="modal-body" id="detalhesRecebimentoBody">
+                <div class="card-body">
+                    <canvas id="graficoRecebimentos" style="width:100%;max-width:350px;height:250px;"></canvas>
                 </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" onclick="fecharModalDetalhesRecebimento()">Fechar</button>
+            </div>
+            
+            <!-- Card de Resumo -->
+            <div class="card mt-3">
+                <div class="card-header">
+                    <i class="bi bi-info-circle me-2"></i>Resumo Mensal
+                </div>
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center mb-2">
+                        <span class="text-muted">Último Recebimento:</span>
+                        <span class="fw-bold text-success">R$ 350,00</span>
+                    </div>
+                    <div class="d-flex justify-content-between align-items-center mb-2">
+                        <span class="text-muted">Próximo Pagamento:</span>
+                        <span class="fw-bold">10/09/2025</span>
+                    </div>
+                    <div class="d-flex justify-content-between align-items-center">
+                        <span class="text-muted">Média Mensal:</span>
+                        <span class="fw-bold">R$ 350,00</span>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
 </div>
-<style>
-@media (max-width: 768px) {
-    .container { padding: 10px !important; }
-    h2 { font-size: 1.1rem; }
-    .stats-card .number { font-size: 1.5rem; }
-    .stats-card .label { font-size: 0.95rem; }
-    .table-card { margin-bottom: 20px; }
-    .table th, .table td { font-size: 0.90rem; padding: 7px; }
-    .card { font-size: 0.95rem; }
-    .btn { font-size: 0.95rem; }
-}
-/* Gráfico fictício */
-</style>
+    </div>
+</div>
+
+<!-- Modal Detalhes Recebimento -->
+<div id="modalDetalhesRecebimento" class="modal fade" tabindex="-1" role="dialog" aria-modal="true" style="display:none; background: rgba(0,0,0,0.4);">
+    <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">
+                    <i class="bi bi-receipt me-2"></i>Detalhes do Recebimento
+                </h5>
+                <button type="button" class="btn-close btn-close-white" aria-label="Fechar" onclick="fecharModalDetalhesRecebimento()"></button>
+            </div>
+            <div class="modal-body" id="detalhesRecebimentoBody">
+                <!-- Conteúdo será preenchido via JavaScript -->
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" onclick="fecharModalDetalhesRecebimento()">
+                    <i class="bi bi-x-circle me-1"></i>Fechar
+                </button>
+                <button type="button" class="btn btn-success" onclick="baixarComprovante()">
+                    <i class="bi bi-download me-1"></i>Baixar Comprovante
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="/static/js/recebimentos_aluno.js"></script>
 <script>
-// Filtro de auxílio
-function filtrarAuxilio(tipo) {
-    var linhas = document.querySelectorAll('#tabelaRecebimentos tbody tr');
-    linhas.forEach(function(linha) {
-        if (tipo === 'todos' || linha.getAttribute('data-auxilio') === tipo) {
-            linha.style.display = '';
-        } else {
-            linha.style.display = 'none';
-        }
-    });
-}
-// Modal detalhes
-function mostrarDetalhes(auxilio, mes, valor, data) {
-    var body = document.getElementById('detalhesRecebimentoBody');
-    body.innerHTML = `<p><strong>Auxílio:</strong> ${auxilio}</p>
-        <p><strong>Mês:</strong> ${mes}</p>
-        <p><strong>Valor:</strong> ${valor}</p>
-        <p><strong>Data de Recebimento:</strong> ${data}</p>
-        <p><strong>Status:</strong> <span class='status-badge status-deferido'>Confirmado</span></p>
-        <p><strong>Observações:</strong> Recebimento realizado com sucesso. Para dúvidas, entre em contato com a assistência social.</p>`;
-    document.getElementById('modalDetalhesRecebimento').style.display = 'block';
-    document.getElementById('modalDetalhesRecebimento').classList.add('show');
-}
-function fecharModalDetalhesRecebimento() {
-    document.getElementById('modalDetalhesRecebimento').style.display = 'none';
-    document.getElementById('modalDetalhesRecebimento').classList.remove('show');
-}
-// Gráfico fictício
+// Gráfico de recebimentos - apenas esta função fica aqui
 document.addEventListener('DOMContentLoaded', function() {
-    var ctx = document.getElementById('graficoRecebimentos').getContext('2d');
-    new Chart(ctx, {
-        type: 'bar',
-        data: {
-            labels: ['Abr', 'Mai', 'Jun', 'Jul'],
-            datasets: [
-                {
-                    label: 'Alimentação',
-                    data: [200, 200, 200, 200],
-                    backgroundColor: '#2E7D32',
+    // Aguarda um pouco para garantir que o DOM esteja totalmente carregado
+    setTimeout(function() {
+        var ctx = document.getElementById('graficoRecebimentos');
+        if (ctx) {
+            ctx = ctx.getContext('2d');
+            new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: ['Abril', 'Maio', 'Junho', 'Julho', 'Agosto'],
+                    datasets: [
+                        {
+                            label: 'Alimentação',
+                            data: [200, 200, 200, 200, 0],
+                            backgroundColor: '#2E7D32',
+                            borderRadius: 8,
+                        },
+                        {
+                            label: 'Transporte',
+                            data: [150, 150, 150, 150, 0],
+                            backgroundColor: '#4CAF50',
+                            borderRadius: 8,
+                        }
+                    ]
                 },
-                {
-                    label: 'Transporte',
-                    data: [150, 150, 150, 150],
-                    backgroundColor: '#4CAF50',
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: { 
+                        legend: { 
+                            position: 'bottom',
+                            labels: {
+                                padding: 20,
+                                usePointStyle: true,
+                                font: {
+                                    family: 'Poppins'
+                                }
+                            }
+                        }
+                    },
+                    scales: { 
+                        y: { 
+                            beginAtZero: true,
+                            grid: {
+                                color: 'rgba(0,0,0,0.1)'
+                            },
+                            ticks: {
+                                font: {
+                                    family: 'Poppins'
+                                }
+                            }
+                        },
+                        x: {
+                            grid: {
+                                display: false
+                            },
+                            ticks: {
+                                font: {
+                                    family: 'Poppins'
+                                }
+                            }
+                        }
+                    },
+                    animation: {
+                        duration: 1000,
+                        easing: 'easeInOutQuart'
+                    }
                 }
-            ]
-        },
-        options: {
-            responsive: true,
-            plugins: { legend: { position: 'bottom' } },
-            scales: { y: { beginAtZero: true } }
+            });
         }
-    });
+    }, 100);
 });
 </script>
-</style>
 {% endblock %}
-<!DOCTYPE html>
-<html lang="pt-br">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Recebimentos</title>
-</head>
-<body>
-    <h1>Recebimentos</h1>
-</body>
-</html>
