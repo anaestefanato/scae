@@ -16,7 +16,7 @@ templates = Jinja2Templates(directory="templates")
 
 @router.get("/perfil")
 @requer_autenticacao(["aluno"])
-async def get_dados_cadastrais(request: Request, usuario_logado: dict = None, sucesso: str = None):
+async def get_dados_cadastrais(request: Request, usuario_logado: dict = None, sucesso: str = None, foto_sucesso: str = None, erro: str = None):
     # Busca dados completos do aluno
     aluno = aluno_repo.obter_por_matricula(usuario_logado['matricula'])
     
@@ -26,8 +26,18 @@ async def get_dados_cadastrais(request: Request, usuario_logado: dict = None, su
         aluno = usuario
     
     context = {"request": request, "aluno": aluno}
+    
+    # Tratar mensagens de sucesso
     if sucesso:
         context["mensagem_sucesso"] = "Informações salvas com sucesso!"
+    elif foto_sucesso:
+        context["mensagem_sucesso"] = "Foto do perfil alterada com sucesso!"
+    
+    # Tratar mensagens de erro
+    if erro == "tipo_invalido":
+        context["mensagem_erro"] = "Tipo de arquivo inválido. Use apenas JPG, JPEG ou PNG."
+    elif erro == "upload_falhou":
+        context["mensagem_erro"] = "Erro ao fazer upload da foto. Tente novamente."
     
     response = templates.TemplateResponse("/aluno/perfil.html", context)
     return response
@@ -147,7 +157,7 @@ async def alterar_foto(
     # 1. Validar tipo de arquivo
     tipos_permitidos = ["image/jpeg", "image/png", "image/jpg"]
     if foto.content_type not in tipos_permitidos:
-        return RedirectResponse("/perfil?erro=tipo_invalido", status.HTTP_303_SEE_OTHER)
+        return RedirectResponse("/aluno/perfil?erro=tipo_invalido", status.HTTP_303_SEE_OTHER)
 
     # 2. Criar diretório se não existir
     upload_dir = "static/uploads/usuarios"
@@ -175,6 +185,6 @@ async def alterar_foto(
         criar_sessao(request, usuario_logado)
 
     except Exception as e:
-        return RedirectResponse("/perfil?erro=upload_falhou", status.HTTP_303_SEE_OTHER)
+        return RedirectResponse("/aluno/perfil?erro=upload_falhou", status.HTTP_303_SEE_OTHER)
 
-    return RedirectResponse("/perfil?foto_sucesso=1", status.HTTP_303_SEE_OTHER)
+    return RedirectResponse("/aluno/perfil?foto_sucesso=1", status.HTTP_303_SEE_OTHER)
