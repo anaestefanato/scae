@@ -241,7 +241,7 @@ def obter_por_matricula(matricula: str) -> Optional[Aluno]:
                 numero_conta_bancaria=row["numero_conta_bancaria"],
                 renda_familiar=row["renda_familiar"],
                 quantidade_pessoas=row["quantidade_pessoas"],
-                    renda_per_capita=row["renda_per_capita"],
+                renda_per_capita=row["renda_per_capita"],
                 situacao_moradia=row["situacao_moradia"]
             )
         return None
