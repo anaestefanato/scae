@@ -18,7 +18,7 @@
                     <div class="col-12 text-center">
                         <div class="position-relative d-inline-block">
                             <img id="foto-atual"
-                                src="{{ aluno.foto or '/static/img/perfil.jpg' }}"
+                                src="{{ aluno.foto or '/static/img/perfil.jpg' }}?v={{ range(1, 999999) | random }}"
                                 class="rounded-circle mb-3"
                                 style="width: 150px; height: 150px; object-fit: cover; border: 3px solid #dee2e6;"
                                 alt="Foto do perfil">
@@ -274,22 +274,30 @@
         // Preview de foto de perfil no modal
         document.addEventListener('DOMContentLoaded', function() {
             const fotoInput = document.getElementById('foto');
-            const fotoAtualModal = document.getElementById('foto-atual-modal');
             const previewContainer = document.getElementById('preview-foto-container');
             const previewFoto = document.getElementById('preview-foto');
             const btnAlterarFoto = document.getElementById('btn-alterar-foto');
             const modal = document.getElementById('changePhotoModal');
+            const fotoAtual = document.getElementById('foto-atual');
 
             console.log('Modal script carregado'); // Debug
             
             // Verificar se todos os elementos foram encontrados
             console.log('Elementos encontrados:');
             console.log('fotoInput:', fotoInput);
-            console.log('fotoAtualModal:', fotoAtualModal);
             console.log('previewContainer:', previewContainer);
             console.log('previewFoto:', previewFoto);
             console.log('btnAlterarFoto:', btnAlterarFoto);
             console.log('modal:', modal);
+
+            // Função para atualizar a foto atual com cache busting
+            function atualizarFotoAtual() {
+                if (fotoAtual) {
+                    const timestamp = new Date().getTime();
+                    const srcAtual = fotoAtual.src.split('?')[0]; // Remove query string existente
+                    fotoAtual.src = srcAtual + '?v=' + timestamp;
+                }
+            }
 
             // Função para cancelar seleção
             function cancelarSelecao() {

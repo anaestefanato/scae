@@ -17,7 +17,8 @@ templates = criar_templates("templates/perfil")
 
 @router.get("/perfil")
 @requer_autenticacao()
-async def get_perfil(request: Request, usuario_logado: dict = None):
+async def get_perfil(request: Request):
+    usuario_logado = obter_usuario_logado(request)
     # Buscar dados completos do usuário
     usuario = usuario_repo.OBTER_POR_MATRICULA(usuario_logado['matricula'])
     if not usuario:
@@ -143,7 +144,8 @@ async def get_perfil(request: Request, usuario_logado: dict = None):
 #MEXER daqui pra baixo
 @router.get("/perfil/alterar-senha")
 @requer_autenticacao()
-async def get_alterar_senha(request: Request, usuario_logado: dict = None):
+async def get_alterar_senha(request: Request):
+    usuario_logado = obter_usuario_logado(request)
     return templates.TemplateResponse(
         "alterar_senha.html",
         {"request": request, "usuario_logado": usuario_logado}
@@ -156,9 +158,9 @@ async def post_alterar_senha(
     request: Request,
     senha_atual: str = Form(...),
     senha_nova: str = Form(...),
-    confirmar_senha: str = Form(...),
-    usuario_logado: dict = None
+    confirmar_senha: str = Form(...)
 ):
+    usuario_logado = obter_usuario_logado(request)
     usuario = usuario_repo.obter_por_id(usuario_logado['id'])
     
     # Verificar senha atual
@@ -209,9 +211,9 @@ async def post_alterar_senha(
 @requer_autenticacao()
 async def alterar_foto(
     request: Request,
-    foto: UploadFile = File(...),
-    usuario_logado: dict = None
+    foto: UploadFile = File(...)
 ):
+    usuario_logado = obter_usuario_logado(request)
     # Validar tipo de arquivo
     tipos_permitidos = ["image/jpeg", "image/png", "image/jpg"]
     if foto.content_type not in tipos_permitidos:
