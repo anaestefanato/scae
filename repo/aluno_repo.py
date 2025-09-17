@@ -222,11 +222,15 @@ def obter_por_matricula(matricula: str) -> Optional[Aluno]:
                 email=row["email"],
                 senha=row["senha"],
                 perfil=row["perfil"],
+                foto=None,
+                token_redefinicao=None,
+                data_token=None,
+                data_cadastro=None,
                 cpf=row["cpf"],
                 telefone=row["telefone"],
                 curso=row["curso"],
                 data_nascimento=row["data_nascimento"],
-                filiacao=row["filiacao"],
+                filiacao=row.get("filiacao"),
                 cep=row["cep"],
                 cidade=row["cidade"],
                 bairro=row["bairro"],
@@ -237,6 +241,7 @@ def obter_por_matricula(matricula: str) -> Optional[Aluno]:
                 numero_conta_bancaria=row["numero_conta_bancaria"],
                 renda_familiar=row["renda_familiar"],
                 quantidade_pessoas=row["quantidade_pessoas"],
+                renda_per_capita=row("renda_per_capita"),
                 situacao_moradia=row["situacao_moradia"]
             )
         return None
