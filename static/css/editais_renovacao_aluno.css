@@ -11,7 +11,7 @@
 
 body {
     font-family: 'Poppins', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+    background-color: #f0f7f0 !important;
     min-height: 100vh;
 }
 
@@ -19,12 +19,17 @@ body {
 .main-content {
     margin-left: 0;
     padding: 2rem;
+    padding-top: 20px; /* Reduzido para alinhar com o ícone do menu */
     transition: margin-left 0.3s ease;
     min-height: 100vh;
+    max-width: 1400px; /* Aumentado para cards um pouco mais largos */
+    margin: 0 auto; /* Centraliza o conteúdo */
 }
 
 .main-content.shifted {
     margin-left: 250px;
+    max-width: calc(100vw - 290px); /* Ajustado para nova largura */
+    margin-right: 0;
 }
 
 /* Sidebar Backdrop */
@@ -53,7 +58,9 @@ body {
     border-left: 6px solid #2E7D32;
     padding: 2rem;
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
-    margin-bottom: 2rem;
+    margin-bottom: 1.5rem;
+    width: 100%;
+    max-width: 100%;
 }
 
 .welcome-banner h4 {
@@ -77,6 +84,8 @@ body {
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
     border-left: 5px solid #4CAF50;
     overflow: hidden;
+    width: 100%;
+    max-width: 100%;
 }
 
 .card-header {
@@ -100,7 +109,9 @@ body {
     border-left: 6px solid #2E7D32;
     box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
     padding: 2.5rem;
-    margin-bottom: 2rem;
+    margin-bottom: 1.5rem;
+    width: 100%;
+    max-width: 100%;
 }
 
 .form-title {
@@ -333,8 +344,10 @@ body {
     background: #f8f9fa;
     border-radius: 10px;
     padding: 1.5rem;
-    margin-bottom: 2rem;
+    margin-bottom: 1.5rem;
     border-left: 4px solid #4CAF50;
+    width: 100%;
+    max-width: 100%;
 }
 
 .checklist-item {
@@ -364,12 +377,18 @@ body {
 @media (max-width: 1200px) {
     .main-content.shifted {
         margin-left: 0;
+        max-width: 100%;
+        margin: 0;
+        padding-top: 20px;
     }
 }
 
 @media (max-width: 768px) {
     .main-content {
         padding: 1rem;
+        padding-top: 20px; /* Mantém o mesmo espaçamento reduzido */
+        max-width: 100%;
+        margin: 0;
     }
     
     .welcome-banner {
