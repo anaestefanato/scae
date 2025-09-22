@@ -107,7 +107,7 @@ def obter_usuario_por_matricula(matricula: str) -> Optional[Usuario]:
                 email=row["email"],
                 senha=row["senha"],
                 perfil=row["perfil"],
-                foto=None,
+                foto=row["foto"],
                 token_redefinicao=None,
                 data_token=None,
                 data_cadastro=None)
@@ -127,7 +127,7 @@ def obter_usuario_por_email(email: str) -> Optional[Usuario]:
                 email=row["email"],
                 senha=row["senha"],
                 perfil=row["perfil"],
-                foto=None,
+                foto=row["foto"],
                 token_redefinicao=None,
                 data_token=None,
                 data_cadastro=None)

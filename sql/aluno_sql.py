@@ -127,6 +127,7 @@ SELECT
     u.email AS email,
     u.senha AS senha,
     u.perfil AS perfil,
+    u.foto AS foto,
     al.cpf AS cpf,
     al.telefone AS telefone,
     al.curso AS curso,
