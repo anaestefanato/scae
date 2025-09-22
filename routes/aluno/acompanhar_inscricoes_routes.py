@@ -14,7 +14,7 @@ templates = Jinja2Templates(directory="templates")
 @requer_autenticacao(["aluno"])
 async def get_acompanhar_inscricoes(request: Request, usuario_logado: dict = None):
     if not usuario_logado['completo']:
-        return RedirectResponse("/aluno/dadoscadastrais", status_code=303)
+        return RedirectResponse("/aluno/perfil", status_code=303)
 
     aluno = usuario_repo.obter_usuario_por_matricula(usuario_logado['matricula'])
     response = templates.TemplateResponse("/aluno/acompanhar_inscricoes.html", {"request": request, "aluno": aluno})
@@ -24,7 +24,7 @@ async def get_acompanhar_inscricoes(request: Request, usuario_logado: dict = Non
 @requer_autenticacao(["aluno"])
 async def get_acompanhar_inscricoes_recurso(request: Request, usuario_logado: dict = None):
     if not usuario_logado['completo']:
-        return RedirectResponse("/aluno/dadoscadastrais", status_code=303)
+        return RedirectResponse("/aluno/perfil", status_code=303)
     
     aluno = usuario_repo.obter_usuario_por_matricula(usuario_logado['matricula'])
     response = templates.TemplateResponse("/aluno/solicitar_recurso.html", {"request": request, "aluno": aluno})

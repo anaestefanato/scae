@@ -95,3 +95,12 @@ EXCLUIR = """
 DELETE FROM usuario
 WHERE id_usuario = ?
 """
+# Adicionar coluna foto à tabela existente (se não existir)
+ADICIONAR_COLUNA_FOTO = """
+ALTER TABLE usuario ADD COLUMN foto TEXT
+"""
+
+# Atualizar apenas a foto do usuário
+ATUALIZAR_FOTO = """
+UPDATE usuario SET foto = ? WHERE id_usuario = ?
+"""

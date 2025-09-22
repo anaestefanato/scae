@@ -1,12 +1,352 @@
-body, .main-content, .container, .card, .table, h2, h4, h6, .stats-card, .table-card, .btn, .form-select, .modal-content {
+/* =========================
+   DASHBOARD ALUNO - CSS ESPECÍFICO
+   ========================= */
+
+/* ===== VARIÁVEIS CSS ===== */
+:root {
+    --ifes-green: #2E7D32;
+    --ifes-red: #C62828;
+    --ifes-light-green: #4CAF50;
+    --ifes-light-gray: #f5f7f5;
+    --ifes-dark-gray: #333333;
+    --ifes-bg-color: #f0f7f0;
+    --ifes-hover-bg: #e8f5e8;
+    --calendar-primary: #2E7D32;
+    --calendar-secondary: #4CAF50;
+    --calendar-accent: #81C784;
+    --calendar-light: #E8F5E9;
+    --calendar-text: #1B5E20;
+}
+
+/* ===== BODY E FONT ===== */
+html, body, .body-cadastro-login {
+    font-family: 'Poppins', Arial, Helvetica, sans-serif !important;
+    background-color: #f0f7f0 !important;
+}
+
+body, .main-content, .container, .card, .table, h2, h3, h4, h5, h6, .btn, .form-select, .modal-content {
     font-family: 'Poppins', sans-serif !important;
 }
-.modal.fade[style*="display:block"] { z-index: 2000; }
+
+/* ===== MAIN CONTENT ===== */
+.main-content {
+    padding: 30px;
+    padding-left: 80px;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    z-index: 1;
+}
+
+/* ===== SIDEBAR BEHAVIOR - SEMPRE FECHADA POR PADRÃO ===== */
+/* Garantir que a sidebar sempre comece fechada, independente do tamanho da tela */
+.sidebar {
+    transform: translateX(-100%) !important; /* Força a sidebar a ficar fechada */
+    transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1) !important;
+    opacity: 0;
+    visibility: hidden;
+}
+
+/* Apenas quando explicitamente não collapsed, a sidebar pode aparecer */
+.sidebar:not(.collapsed) {
+    transform: translateX(-100%) !important; /* Ainda fechada mesmo sem .collapsed */
+}
+
+/* A sidebar só aparece quando tem a classe 'open' ou quando é explicitamente ativada */
+.sidebar.open {
+    transform: translateX(0) !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+}
+
+/* Backdrop para escurecer o fundo quando sidebar aberta */
+.sidebar-backdrop {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.25); /* Reduzido de 0.5 para 0.25 - menos escuro */
+    z-index: 1040;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.sidebar-backdrop.visible {
+    opacity: 1;
+    visibility: visible;
+}
+
+/* Main content com comportamento igual ao assistente */
+.main-content {
+    margin-left: 0;
+    padding: 30px;
+    padding-left: 80px;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    z-index: 1;
+}
+
+.main-content.shifted {
+    margin-left: 250px;
+    padding-left: 30px;
+}
+
+/* Responsividade - em desktop maior que 992px, sidebar ainda começa fechada */
+@media (min-width: 993px) {
+    .sidebar {
+        transform: translateX(-100%) !important; /* Força fechada mesmo em desktop */
+        opacity: 0;
+        visibility: hidden;
+    }
+    
+    .sidebar.open {
+        transform: translateX(0) !important; /* Só abre quando classe 'open' for adicionada */
+        opacity: 1 !important;
+        visibility: visible !important;
+    }
+    
+    /* Main content sempre com margin normal até a sidebar abrir */
+    .main-content {
+        margin-left: 0 !important;
+        padding-left: 80px !important;
+    }
+    
+    /* Quando sidebar abrir, estreitar o main content */
+    .main-content.shifted {
+        margin-left: 250px !important;
+        padding-left: 30px !important;
+    }
+}
+
+@media (max-width: 992px) {
+    /* Em mobile, main content não deve recuar */
+    .main-content.shifted {
+        margin-left: 0 !important;
+        padding-left: 80px !important;
+    }
+    
+    .sidebar.open {
+        transform: translateX(0) !important;
+        opacity: 1 !important;
+        visibility: visible !important;
+    }
+}
+
+/* ===== USER PROFILE ===== */
+.user-profile {
+    display: inline-flex;
+    align-items: center;
+    background: rgba(255, 255, 255, 0.9);
+    padding: 15px;
+    border-radius: 10px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.user-profile img {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    margin-right: 15px;
+    border: 2px solid var(--ifes-light-green);
+}
+
+/* ===== WELCOME BANNER ===== */
+.welcome-banner {
+    background-color: white;
+    border-radius: 10px;
+    padding: 25px;
+    margin-bottom: 30px;
+    border-left: 4px solid var(--ifes-green);
+    cursor: default;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    transform: translateY(0);
+}
+
+.welcome-banner:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+}
+
+.welcome-banner h4 {
+    color: var(--ifes-dark-gray);
+    font-weight: 600;
+    margin-bottom: 10px;
+}
+
+.welcome-banner p {
+    color: #666;
+    margin-bottom: 0;
+    font-size: 1.1em;
+}
+
+/* ===== CARDS GERAIS ===== */
+.card {
+    border: none;
+    border-radius: 10px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    margin-bottom: 20px;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    transform: translateY(0);
+    cursor: default;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+}
+
+.card-header {
+    background-color: var(--ifes-green);
+    color: white;
+    border-radius: 10px 10px 0 0 !important;
+    padding: 15px 20px;
+    font-weight: 600;
+}
+
+.card-body {
+    padding: 20px;
+}
+
+/* ===== CALENDAR CARD ===== */
+.calendar-card {
+    background-color: white;
+    border-radius: 10px;
+    overflow: hidden;
+    margin-bottom: 30px;
+}
+
+.calendar-card .card-body {
+    padding: 15px;
+}
+
+.calendar-event {
+    padding: 10px;
+    margin-bottom: 10px;
+    background-color: var(--ifes-light-gray);
+    border-radius: 5px;
+    border-left: 3px solid var(--ifes-green);
+}
+
+.calendar-event .date {
+    font-weight: 500;
+    color: var(--ifes-green);
+}
+
+.calendar-event .description {
+    color: var(--ifes-dark-gray);
+}
+
+/* ===== STATUS BADGES ===== */
+.status-badge {
+    padding: 8px 15px;
+    border-radius: 20px;
+    font-weight: 500;
+    font-size: 0.9rem;
+}
+
+.status-pendente {
+    background-color: #FFF3CD;
+    color: #856404;
+}
+
+.status-deferido {
+    background-color: #D4EDDA;
+    color: #155724;
+}
+
+.status-indeferido {
+    background-color: #F8D7DA;
+    color: #721C24;
+}
+
+/* ===== BUTTON STYLES ===== */
+.btn-success {
+    background-color: var(--ifes-green);
+    border-color: var(--ifes-green);
+    transition: all 0.3s ease;
+}
+
+.btn-success:hover {
+    background-color: #1b5e20;
+    border-color: #1b5e20;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.btn-outline-success {
+    border-color: var(--ifes-green);
+    color: var(--ifes-green);
+    transition: all 0.3s ease;
+}
+
+.btn-outline-success:hover {
+    background-color: var(--ifes-green);
+    border-color: var(--ifes-green);
+    transform: translateY(-2px);
+}
+
+.btn-outline-secondary {
+    transition: all 0.3s ease;
+}
+
+.btn-outline-secondary:hover {
+    transform: translateY(-2px);
+}
+
+/* ===== MODAL STYLES ===== */
+.modal.fade[style*="display:block"] { 
+    z-index: 2000; 
+}
+
+.modal-content {
+    border: none;
+    border-radius: 12px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+}
+
+.modal-header {
+    background: linear-gradient(135deg, var(--ifes-green), var(--ifes-light-green));
+    color: white;
+    border-radius: 12px 12px 0 0;
+    border-bottom: none;
+    padding: 20px 25px;
+}
+
+.modal-title {
+    font-weight: 600;
+    font-size: 1.3rem;
+}
+
+.modal-header .btn-close {
+    filter: brightness(0) invert(1);
+    opacity: 0.8;
+}
+
+.modal-header .btn-close:hover {
+    opacity: 1;
+}
+
+.modal-body {
+    padding: 25px;
+    background-color: #fafafa;
+}
+
+.modal-footer {
+    border-top: 1px solid #e9ecef;
+    padding: 20px 25px;
+    background-color: white;
+    border-radius: 0 0 12px 12px;
+}
+
+/* ===== TIMELINE STYLES ===== */
 .timeline {
     list-style: none;
     padding-left: 0;
     position: relative;
 }
+
 .timeline:before {
     content: '';
     position: absolute;
@@ -14,13 +354,15 @@ body, .main-content, .container, .card, .table, h2, h4, h6, .stats-card, .table-
     top: 0;
     bottom: 0;
     width: 2px;
-    background: #4CAF50;
+    background: var(--ifes-light-green);
 }
+
 .timeline-item {
     position: relative;
     margin-bottom: 30px;
     padding-left: 40px;
 }
+
 .timeline-item:before {
     content: '';
     position: absolute;
@@ -30,23 +372,132 @@ body, .main-content, .container, .card, .table, h2, h4, h6, .stats-card, .table-
     height: 16px;
     border-radius: 50%;
     background: #fff;
-    border: 2px solid #4CAF50;
+    border: 2px solid var(--ifes-light-green);
     z-index: 1;
 }
+
 .timeline-item.completed:before {
-    background: #4CAF50;
+    background: var(--ifes-light-green);
 }
+
 .timeline-item.active:before {
     background: #FFC107;
     border-color: #FFC107;
 }
+
 .timeline-date {
     font-size: 0.85rem;
     color: #888;
     margin-bottom: 2px;
     display: block;
 }
+
 .timeline-content {
     font-size: 1rem;
-    color: #333;
+    color: var(--ifes-dark-gray);
+}
+
+/* ===== RESPONSIVE DESIGN ===== */
+@media (max-width: 768px) {
+    .main-content {
+        padding: 20px;
+        padding-left: 80px;
+    }
+    
+    .modal-dialog {
+        margin: 10px;
+        max-width: calc(100% - 20px);
+    }
+    
+    .modal-body {
+        padding: 20px;
+    }
+    
+    .modal-footer {
+        padding: 15px 20px;
+        flex-direction: column;
+        gap: 10px;
+    }
+    
+    .modal-footer .btn {
+        width: 100%;
+        margin: 0;
+    }
+    
+    .user-profile {
+        flex-direction: column;
+        text-align: center;
+        padding: 10px;
+    }
+    
+    .user-profile img {
+        margin-right: 0;
+        margin-bottom: 10px;
+    }
+}
+
+@media (max-width: 480px) {
+    .main-content {
+        padding: 15px;
+        padding-left: 80px;
+    }
+    
+    .welcome-banner {
+        margin-bottom: 20px;
+        padding: 20px;
+    }
+    
+    .card-body {
+        padding: 15px;
+    }
+}
+
+/* ===== ANIMATIONS ===== */
+@keyframes slideInFromTop {
+    0% {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* ===== MODAL ANIMATIONS ===== */
+.modal.fade .modal-dialog {
+    transition: transform 0.3s ease-out;
+    transform: translate(0, -50px);
+}
+
+.modal.show .modal-dialog {
+    transform: none;
+}
+
+/* ===== FULLCALENDAR CUSTOMIZATIONS ===== */
+#fc-calendar {
+    font-family: 'Poppins', sans-serif;
+}
+
+.fc-theme-bootstrap5 .fc-button-primary {
+    background-color: var(--ifes-green);
+    border-color: var(--ifes-green);
+}
+
+.fc-theme-bootstrap5 .fc-button-primary:hover {
+    background-color: #1b5e20;
+    border-color: #1b5e20;
+}
+
+.fc-event {
+    background-color: var(--ifes-light-green);
+    border-color: var(--ifes-green);
+}
+
+.fc-daygrid-day-number {
+    color: var(--ifes-dark-gray);
+}
+
+.fc-day-today {
+    background-color: var(--ifes-light-gray) !important;
 }

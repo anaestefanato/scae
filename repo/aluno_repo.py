@@ -43,6 +43,7 @@ def completar_cadastro(aluno: Aluno) -> Optional[bool]:
             aluno.numero_conta_bancaria,
             aluno.renda_familiar,
             aluno.quantidade_pessoas,
+            aluno.renda_per_capita,
             aluno.situacao_moradia
         ))
         return cursor.rowcount > 0
@@ -149,18 +150,26 @@ def obter_alunos_por_pagina(pagina: int, limite: int) -> list[Usuario]:
             for row in rows]
         return alunos
 
-def atualizar(aluno: Usuario) -> bool:
+def atualizar(aluno: Aluno) -> bool:
     with get_connection() as conn:
         cursor = conn.cursor()
         usuario = Usuario(
             id_usuario=aluno.id_usuario,
             nome=aluno.nome,
+            matricula=aluno.matricula,
             email=aluno.email,
             senha=aluno.senha,
-            perfil=aluno.perfil)
+            perfil=aluno.perfil,
+            foto=None,
+            token_redefinicao=None,
+            data_token=None,
+            data_cadastro=None
+        )
         usuario_repo.atualizar(usuario)
         cursor.execute(ATUALIZAR, (
             aluno.cpf, 
+            aluno.telefone,
+            aluno.curso,
             aluno.data_nascimento,
             aluno.filiacao,
             aluno.cep,
@@ -173,6 +182,7 @@ def atualizar(aluno: Usuario) -> bool:
             aluno.numero_conta_bancaria,
             aluno.renda_familiar,
             aluno.quantidade_pessoas,
+            aluno.renda_per_capita,
             aluno.situacao_moradia,
             aluno.id_usuario))
         return (cursor.rowcount > 0)
@@ -198,3 +208,40 @@ def marcar_cadastro_completo(id: int) -> bool:
         cursor = conn.cursor()
         cursor.execute(MARCAR_CADASTRO_COMPLETO, (id,))
         return (cursor.rowcount > 0)
+    
+def obter_por_matricula(matricula: str) -> Optional[Aluno]:
+    with get_connection() as conn:
+        cursor = conn.cursor()
+        cursor.execute(OBTER_POR_MATRICULA, (matricula,))
+        row = cursor.fetchone()
+        if row:
+            return Aluno(
+                id_usuario=row["id_usuario"],
+                nome=row["nome"],
+                matricula=row["matricula"],
+                email=row["email"],
+                senha=row["senha"],
+                perfil=row["perfil"],
+                foto=None,
+                token_redefinicao=None,
+                data_token=None,
+                data_cadastro=None,
+                cpf=row["cpf"],
+                telefone=row["telefone"],
+                curso=row["curso"],
+                data_nascimento=row["data_nascimento"],
+                filiacao=row["filiacao"],
+                cep=row["cep"],
+                cidade=row["cidade"],
+                bairro=row["bairro"],
+                rua=row["rua"],
+                numero=row["numero"],
+                nome_banco=row["nome_banco"],
+                agencia_bancaria=row["agencia_bancaria"],
+                numero_conta_bancaria=row["numero_conta_bancaria"],
+                renda_familiar=row["renda_familiar"],
+                quantidade_pessoas=row["quantidade_pessoas"],
+                renda_per_capita=row["renda_per_capita"],
+                situacao_moradia=row["situacao_moradia"]
+            )
+        return None

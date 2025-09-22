@@ -5,76 +5,208 @@
 
 {% block head %}
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;700&display=swap" rel="stylesheet">
-    <style>
-        .form-container {
-            max-width: 800px;
-            margin: 40px auto;
-            background: #fff;
-            border-radius: 16px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
-            padding: 40px 32px;
-        }
-        h1 { font-weight: 700; margin-bottom: 24px; color: #1b5e20; }
-        label { font-weight: 500; margin-top: 18px; }
-        .form-control, .form-select {
-            border-radius: 8px;
-            margin-bottom: 18px;
-        }
-        .btn-enviar {
-            background: #1976d2;
-            color: #fff;
-            border-radius: 8px;
-            padding: 10px 22px;
-            font-weight: 500;
-            border: none;
-            cursor: pointer;
-            transition: background 0.2s;
-        }
-        .btn-enviar:hover {
-            background: #1565c0;
-        }
-        @media (max-width: 900px) {
-            .form-container { padding: 18px 8px; max-width: 100%; }
-            .btn-enviar { padding: 8px 10px; font-size: 0.95rem; }
-        }
-    </style>
+    <link rel="stylesheet" href="/static/css/editais_renovacao_aluno.css">
 {% endblock %}
 
 {% block content %}
-<div class="form-container">
-    <h1>Renovação - Edital 2025</h1>
-    <form method="post" enctype="multipart/form-data">
-        <label for="nome">Nome Completo</label>
-        <input type="text" class="form-control" id="nome" name="nome" required>
+<div class="main-content" id="mainContent">
+    <!-- Welcome Banner -->
+    <div class="welcome-banner mb-4">
+        <div class="row align-items-center">
+            <div class="col-12">
+                <div class="d-flex align-items-center mb-3">
+                    <i class="bi bi-arrow-clockwise text-success me-3" style="font-size: 2rem;"></i>
+                    <h4 class="mb-0">Renovação do Auxílio Estudantil</h4>
+                </div>
+                <p>Complete o formulário para renovar sua participação no programa de assistência estudantil. Todos os campos marcados com <span class="text-danger">*</span> são obrigatórios.</p>
+            </div>
+        </div>
+    </div>
 
-        <label for="cpf">CPF</label>
-        <input type="text" class="form-control" id="cpf" name="cpf" required>
+    <!-- Progress Indicator -->
+    <div class="card mb-4">
+        <div class="card-header">
+            <i class="bi bi-list-check me-2"></i>Progresso da Renovação
+        </div>
+        <div class="card-body">
+            <div class="form-progress">
+                <div class="progress-bar" style="width: 0%"></div>
+            </div>
+            <p class="mb-0 text-muted">Complete todos os campos para finalizar sua renovação</p>
+        </div>
+    </div>
 
-        <label for="matricula">Matrícula</label>
-        <input type="text" class="form-control" id="matricula" name="matricula" required>
+    <!-- Document Checklist -->
+    <div class="document-checklist mb-4">
+        <h6 class="mb-3"><i class="bi bi-file-earmark-check me-2"></i>Documentos Necessários</h6>
+        <div class="row">
+            <div class="col-md-6">
+                <div class="checklist-item">
+                    <i class="bi bi-file-earmark-pdf checklist-icon"></i>
+                    <span>Comprovante de Frequência Escolar</span>
+                </div>
+                <div class="checklist-item">
+                    <i class="bi bi-file-earmark-pdf checklist-icon"></i>
+                    <span>Comprovante de Renda Familiar</span>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="checklist-item">
+                    <i class="bi bi-file-earmark-pdf checklist-icon"></i>
+                    <span>Comprovante de Residência</span>
+                </div>
+                <div class="checklist-item">
+                    <i class="bi bi-file-earmark-pdf checklist-icon"></i>
+                    <span>Histórico Escolar Atualizado</span>
+                </div>
+            </div>
+        </div>
+    </div>
 
-        <label for="curso">Curso</label>
-        <input type="text" class="form-control" id="curso" name="curso" required>
+    <!-- Form Container -->
+    <div class="form-container">
+        <div class="form-title">
+            <i class="bi bi-person-circle"></i>
+            Formulário de Renovação 2025
+        </div>
+        <p class="form-subtitle">
+            Mantenha seus dados atualizados para continuar recebendo o auxílio estudantil.
+        </p>
 
-        <label for="email">E-mail</label>
-        <input type="email" class="form-control" id="email" name="email" required>
+        <form method="post" enctype="multipart/form-data">
+            <!-- Dados Pessoais -->
+            <div class="form-section">
+                <div class="section-title">
+                    <i class="bi bi-person"></i>
+                    Dados Pessoais
+                </div>
+                
+                <div class="row">
+                    <div class="col-md-6">
+                        <label for="nome" class="form-label required-field">Nome Completo</label>
+                        <input type="text" class="form-control" id="nome" name="nome" required>
+                    </div>
+                    <div class="col-md-6">
+                        <label for="cpf" class="form-label required-field">CPF</label>
+                        <input type="text" class="form-control" id="cpf" name="cpf" placeholder="000.000.000-00" required>
+                    </div>
+                </div>
 
-        <label for="telefone">Telefone</label>
-        <input type="text" class="form-control" id="telefone" name="telefone" required>
+                <div class="row">
+                    <div class="col-md-6">
+                        <label for="email" class="form-label required-field">E-mail</label>
+                        <input type="email" class="form-control" id="email" name="email" required>
+                        <div class="form-text">Será usado para envio de confirmações e comunicados</div>
+                    </div>
+                    <div class="col-md-6">
+                        <label for="telefone" class="form-label required-field">Telefone</label>
+                        <input type="text" class="form-control" id="telefone" name="telefone" placeholder="(00) 00000-0000" required>
+                    </div>
+                </div>
+            </div>
 
-        <label for="comprovante_frequencia">Comprovante de Frequência (PDF)</label>
-        <input type="file" class="form-control" id="comprovante_frequencia" name="comprovante_frequencia" accept="application/pdf" required>
+            <!-- Dados Acadêmicos -->
+            <div class="form-section">
+                <div class="section-title">
+                    <i class="bi bi-mortarboard"></i>
+                    Dados Acadêmicos
+                </div>
+                
+                <div class="row">
+                    <div class="col-md-6">
+                        <label for="matricula" class="form-label required-field">Matrícula</label>
+                        <input type="text" class="form-control" id="matricula" name="matricula" required>
+                    </div>
+                    <div class="col-md-6">
+                        <label for="curso" class="form-label required-field">Curso</label>
+                        <input type="text" class="form-control" id="curso" name="curso" required>
+                    </div>
+                </div>
+            </div>
 
-        <label for="comprovante_renda">Comprovante de Renda (PDF)</label>
-        <input type="file" class="form-control" id="comprovante_renda" name="comprovante_renda" accept="application/pdf" required>
+            <!-- Upload de Documentos -->
+            <div class="form-section">
+                <div class="section-title">
+                    <i class="bi bi-cloud-upload"></i>
+                    Documentos Obrigatórios
+                </div>
+                
+                <div class="row">
+                    <div class="col-md-6">
+                        <label for="comprovante_frequencia" class="form-label required-field">Comprovante de Frequência</label>
+                        <input type="file" class="form-control" id="comprovante_frequencia" name="comprovante_frequencia" accept="application/pdf" required>
+                        <div class="file-upload-helper">
+                            <i class="bi bi-info-circle"></i>
+                            Apenas arquivos PDF, máximo 10MB
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <label for="comprovante_renda" class="form-label required-field">Comprovante de Renda</label>
+                        <input type="file" class="form-control" id="comprovante_renda" name="comprovante_renda" accept="application/pdf" required>
+                        <div class="file-upload-helper">
+                            <i class="bi bi-info-circle"></i>
+                            Incluir renda de todos os membros da família
+                        </div>
+                    </div>
+                </div>
 
-        <label for="comprovante_residencia">Comprovante de Residência (PDF)</label>
-        <input type="file" class="form-control" id="comprovante_residencia" name="comprovante_residencia" accept="application/pdf" required>
+                <div class="row">
+                    <div class="col-md-6">
+                        <label for="comprovante_residencia" class="form-label required-field">Comprovante de Residência</label>
+                        <input type="file" class="form-control" id="comprovante_residencia" name="comprovante_residencia" accept="application/pdf" required>
+                        <div class="file-upload-helper">
+                            <i class="bi bi-info-circle"></i>
+                            Documento recente (até 3 meses)
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <label for="historico_escolar" class="form-label required-field">Histórico Escolar</label>
+                        <input type="file" class="form-control" id="historico_escolar" name="historico_escolar" accept="application/pdf" required>
+                        <div class="file-upload-helper">
+                            <i class="bi bi-info-circle"></i>
+                            Histórico atualizado com notas do período atual
+                        </div>
+                    </div>
+                </div>
+            </div>
 
-        <label for="historico_escolar">Histórico Escolar (PDF)</label>
-        <input type="file" class="form-control" id="historico_escolar" name="historico_escolar" accept="application/pdf" required>
+            <!-- Form Actions -->
+            <div class="form-actions">
+                <button type="button" class="btn btn-secondary" onclick="window.history.back()">
+                    <i class="bi bi-arrow-left me-2"></i>Voltar
+                </button>
+                <button type="submit" class="btn btn-primary">
+                    <i class="bi bi-send me-2"></i>Enviar Renovação
+                </button>
+            </div>
+        </form>
+    </div>
 
-        <button type="submit" class="btn-enviar">Enviar Renovação</button>
-    </form>
+    <!-- Information Card -->
+    <div class="card mt-4">
+        <div class="card-header">
+            <i class="bi bi-lightbulb me-2"></i>Informações Importantes
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-6">
+                    <h6 class="text-success">Prazos</h6>
+                    <ul class="list-unstyled">
+                        <li><i class="bi bi-calendar-check text-success me-2"></i>Envio até: <strong>28/02/2025</strong></li>
+                        <li><i class="bi bi-clock text-warning me-2"></i>Resultado: <strong>15/03/2025</strong></li>
+                    </ul>
+                </div>
+                <div class="col-md-6">
+                    <h6 class="text-success">Contato</h6>
+                    <ul class="list-unstyled">
+                        <li><i class="bi bi-envelope text-primary me-2"></i>assistencia@ifes.edu.br</li>
+                        <li><i class="bi bi-telephone text-primary me-2"></i>(27) 3333-2222</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
+
+<script src="/static/js/editais_renovacao_aluno.js"></script>
 {% endblock %}

@@ -7,7 +7,6 @@ from model.usuario_model import Usuario
 class Aluno(Usuario):
     id_usuario: int
     cpf: str
-    rg: str
     telefone: str
     curso: str
     data_nascimento: str
@@ -22,4 +21,5 @@ class Aluno(Usuario):
     numero_conta_bancaria: str
     renda_familiar: float
     quantidade_pessoas: int
+    renda_per_capita: float 
     situacao_moradia: str

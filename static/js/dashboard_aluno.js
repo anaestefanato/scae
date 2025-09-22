@@ -1,3 +1,64 @@
+/* =========================
+   DASHBOARD ALUNO - JAVASCRIPT
+   ========================= */
+
+// Menu toggle functionality - Igual ao dashboard assistente
+document.addEventListener('DOMContentLoaded', function() {
+    const sidebar = document.getElementById('sidebar');
+    const mainContent = document.getElementById('mainContent');
+    const menuToggle = document.getElementById('menuToggle');
+    const closeSidebar = document.getElementById('closeSidebar');
+    
+    // Criar backdrop igual ao assistente
+    const sidebarBackdrop = document.createElement('div');
+    sidebarBackdrop.className = 'sidebar-backdrop';
+    document.body.appendChild(sidebarBackdrop);
+    
+    function closeSidebarFunction() {
+        if (sidebar) {
+            sidebar.classList.remove('open');
+            sidebar.classList.add('collapsed');
+        }
+        if (mainContent) mainContent.classList.remove('shifted');
+        if (menuToggle) menuToggle.classList.remove('hidden');
+        if (sidebarBackdrop) sidebarBackdrop.classList.remove('visible');
+        document.body.style.overflow = ''; // Permite scroll novamente
+    }
+    
+    function openSidebarFunction() {
+        if (sidebar) {
+            sidebar.classList.add('open');
+            sidebar.classList.remove('collapsed');
+        }
+        if (mainContent) mainContent.classList.add('shifted');
+        if (menuToggle) menuToggle.classList.add('hidden');
+        if (sidebarBackdrop) sidebarBackdrop.classList.add('visible');
+        document.body.style.overflow = 'hidden'; // Impede scroll da página
+    }
+    
+    // Close sidebar button
+    if (closeSidebar) {
+        closeSidebar.addEventListener('click', closeSidebarFunction);
+    }
+    
+    // Open sidebar button
+    if (menuToggle) {
+        menuToggle.addEventListener('click', openSidebarFunction);
+    }
+
+    // Close sidebar when clicking on backdrop
+    if (sidebarBackdrop) {
+        sidebarBackdrop.addEventListener('click', closeSidebarFunction);
+    }
+
+    // Close sidebar when pressing ESC key
+    document.addEventListener('keydown', function(event) {
+        if (event.key === 'Escape' && sidebar && sidebar.classList.contains('open')) {
+            closeSidebarFunction();
+        }
+    });
+});
+
 // Modal Confirmar Recebimento
 if(document.getElementById('btnConfirmarRecebimento')){
     document.getElementById('btnConfirmarRecebimento').addEventListener('click', function() {
@@ -50,32 +111,34 @@ window.addEventListener("DOMContentLoaded", function () {
             themeSystem: "bootstrap5",
             initialView: "dayGridMonth",
             locale: "pt-br",
+            events: [
+                {
+                    title: "Período de Inscrições - Auxílio Transporte",
+                    start: "2025-04-10",
+                    end: "2025-04-30",
+                    backgroundColor: "#4CAF50",
+                    borderColor: "#2E7D32"
+                },
+                {
+                    title: "Resultado - Auxílio Moradia",
+                    start: "2025-04-15",
+                    backgroundColor: "#FF9800",
+                    borderColor: "#F57C00"
+                },
+                {
+                    title: "Entrevista Presencial",
+                    start: "2025-04-18T14:00:00",
+                    backgroundColor: "#2196F3",
+                    borderColor: "#1976D2"
+                }
+            ],
             headerToolbar: {
                 left: "prev,next today",
                 center: "title",
-                right: "",
+                right: "dayGridMonth,timeGridWeek"
             },
-            buttonText: {
-                today: "Hoje",
-            },
-            events: [
-                {
-                    title: "Início das inscrições para Auxílio Material Didático",
-                    start: "2025-04-20",
-                },
-                {
-                    title: "Resultado da análise do Auxílio Transporte",
-                    start: "2025-04-30",
-                },
-                {
-                    title: "Fim das inscrições para Auxílio Material Didático",
-                    start: "2025-05-05",
-                },
-                {
-                    title: "Prazo para confirmação de recebimento do Auxílio Alimentação",
-                    start: "2025-05-10",
-                },
-            ],
+            height: "auto",
+            contentHeight: 300
         });
         calendar.render();
     }

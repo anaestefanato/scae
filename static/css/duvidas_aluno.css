@@ -1,0 +1,464 @@
+/* =========================
+   DÚVIDAS ALUNO - CSS ESPECÍFICO
+   ========================= */
+
+/* ===== VARIÁVEIS CSS ===== */
+:root {
+    --ifes-green: #2E7D32;
+    --ifes-red: #C62828;
+    --ifes-light-green: #4CAF50;
+    --ifes-light-gray: #f5f7f5;
+    --ifes-dark-gray: #333333;
+    --ifes-bg-color: #f0f7f0;
+    --ifes-hover-bg: #e8f5e8;
+}
+
+/* ===== BODY E FONT ===== */
+html, body, .body-cadastro-login {
+    font-family: 'Poppins', Arial, Helvetica, sans-serif !important;
+    background-color: #f0f7f0 !important;
+}
+
+body, .main-content, .container, .card, .table, h2, h3, h4, h5, h6, .btn, .form-select, .modal-content {
+    font-family: 'Poppins', sans-serif !important;
+}
+
+/* ===== MAIN CONTENT ===== */
+.main-content {
+    padding: 30px;
+    padding-left: 80px;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    z-index: 1;
+}
+
+/* ===== SIDEBAR BEHAVIOR - SEMPRE FECHADA POR PADRÃO ===== */
+/* Garantir que a sidebar sempre comece fechada, independente do tamanho da tela */
+.sidebar {
+    transform: translateX(-100%) !important; /* Força a sidebar a ficar fechada */
+    transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1) !important;
+    opacity: 0;
+    visibility: hidden;
+}
+
+/* Apenas quando explicitamente não collapsed, a sidebar pode aparecer */
+.sidebar:not(.collapsed) {
+    transform: translateX(-100%) !important; /* Ainda fechada mesmo sem .collapsed */
+}
+
+/* A sidebar só aparece quando tem a classe 'open' ou quando é explicitamente ativada */
+.sidebar.open {
+    transform: translateX(0) !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+}
+
+/* Backdrop para escurecer o fundo quando sidebar aberta */
+.sidebar-backdrop {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.25); /* Menos escuro */
+    z-index: 1040;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.sidebar-backdrop.visible {
+    opacity: 1;
+    visibility: visible;
+}
+
+/* Main content com comportamento igual ao assistente */
+.main-content {
+    margin-left: 0;
+    padding: 30px;
+    padding-left: 80px;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    z-index: 1;
+}
+
+.main-content.shifted {
+    margin-left: 250px;
+    padding-left: 30px;
+}
+
+/* Responsividade - em desktop maior que 992px, sidebar ainda começa fechada */
+@media (min-width: 993px) {
+    .sidebar {
+        transform: translateX(-100%) !important; /* Força fechada mesmo em desktop */
+        opacity: 0;
+        visibility: hidden;
+    }
+    
+    .sidebar.open {
+        transform: translateX(0) !important;
+        opacity: 1 !important;
+        visibility: visible !important;
+    }
+    
+    .main-content {
+        padding-left: 80px;
+    }
+    
+    .main-content.shifted {
+        margin-left: 250px;
+        padding-left: 30px;
+    }
+}
+
+@media (max-width: 992px) {
+    .sidebar {
+        transform: translateX(-100%) !important;
+        opacity: 0;
+        visibility: hidden;
+    }
+    
+    .sidebar.open {
+        transform: translateX(0) !important;
+        opacity: 1 !important;
+        visibility: visible !important;
+    }
+    
+    .main-content {
+        padding: 20px;
+        margin-left: 0;
+    }
+    
+    .main-content.shifted {
+        margin-left: 0; /* Em mobile não desloca */
+        padding: 20px;
+    }
+}
+
+/* ===== ELEMENTOS ESPECÍFICOS DA PÁGINA DE DÚVIDAS ===== */
+
+/* Header da página similar ao admin */
+.page-header {
+    margin-bottom: 2rem;
+}
+
+.breadcrumb {
+    background: none;
+    padding: 0;
+    margin-bottom: 1rem;
+}
+
+.breadcrumb-item a {
+    color: var(--ifes-green);
+    text-decoration: none;
+}
+
+.breadcrumb-item.active {
+    color: #6c757d;
+}
+
+.page-title {
+    font-size: 1.75rem;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+}
+
+.page-subtitle {
+    color: #6c757d;
+    margin-bottom: 0;
+}
+
+/* Cards de filtros similar ao admin */
+.card {
+    border: none;
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+    background: white;
+}
+
+.card-header {
+    background: var(--ifes-green);
+    color: white;
+    border-bottom: none;
+    border-radius: 12px 12px 0 0;
+    padding: 1rem 1.5rem;
+    font-weight: 500;
+}
+
+.card-header .btn-outline-light {
+    border-color: rgba(255, 255, 255, 0.3);
+    color: white;
+}
+
+.card-header .btn-outline-light:hover {
+    background: rgba(255, 255, 255, 0.1);
+    border-color: white;
+}
+
+.card-body {
+    padding: 1.5rem;
+}
+
+.card-footer {
+    background: #f8f9fa;
+    border-top: 1px solid #e9ecef;
+    border-radius: 0 0 12px 12px;
+    padding: 1rem 1.5rem;
+}
+
+/* Cards FAQ com hover melhorado */
+.faq-card {
+    border: none;
+    border-radius: 8px;
+    margin-bottom: 1px;
+    transition: all 0.3s ease;
+    background: white;
+    border-left: 4px solid transparent;
+}
+
+.faq-card:hover {
+    border-left-color: var(--ifes-green);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.faq-card:first-child {
+    border-radius: 8px 8px 0 0;
+}
+
+.faq-card:last-child {
+    border-radius: 0 0 8px 8px;
+}
+
+/* Accordion personalizado */
+.accordion-button:not(.collapsed) {
+    background-color: var(--ifes-light-green);
+    color: var(--ifes-dark-gray);
+    border-color: var(--ifes-green);
+}
+
+.accordion-button:focus {
+    border-color: var(--ifes-green);
+    box-shadow: 0 0 0 0.25rem rgba(46, 125, 50, 0.25);
+}
+
+.accordion-button {
+    color: var(--ifes-dark-gray);
+    font-weight: 500;
+    padding: 1rem 1.5rem;
+}
+
+.accordion-body {
+    padding: 1.5rem;
+}
+
+/* Badges de categoria */
+.category-badge {
+    font-size: 0.8rem;
+    padding: 0.3rem 0.6rem;
+    border-radius: 50px;
+    margin-right: 0.5rem;
+    background-color: var(--ifes-light-green);
+    color: white;
+    font-weight: 500;
+}
+
+/* Metadados da resposta */
+.answer-meta {
+    font-size: 0.9rem;
+    color: #666;
+    margin-top: 15px;
+    padding-top: 15px;
+    border-top: 1px solid #eee;
+}
+
+/* Campo de busca */
+.input-group {
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.input-group-text {
+    background: var(--ifes-light-green);
+    color: white;
+    border: none;
+}
+
+.form-control {
+    border: none;
+    padding: 12px 15px;
+}
+
+.form-control:focus {
+    box-shadow: none;
+    border-color: var(--ifes-green);
+}
+
+.form-select {
+    border: 1px solid #ced4da;
+    border-radius: 6px;
+}
+
+.form-select:focus {
+    border-color: var(--ifes-green);
+    box-shadow: 0 0 0 0.2rem rgba(46, 125, 50, 0.25);
+}
+
+/* Botões */
+.btn-success {
+    background: var(--ifes-green);
+    border-color: var(--ifes-green);
+}
+
+.btn-success:hover {
+    background: #1b5e20;
+    border-color: #1b5e20;
+}
+
+.btn-outline-success {
+    color: var(--ifes-green);
+    border-color: var(--ifes-green);
+}
+
+.btn-outline-success:hover {
+    background: var(--ifes-green);
+    border-color: var(--ifes-green);
+}
+
+/* Modal customizado */
+.modal-content {
+    border: none;
+    border-radius: 15px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+}
+
+.modal-header {
+    background: var(--ifes-light-green);
+    color: white;
+    border-bottom: none;
+    border-radius: 15px 15px 0 0;
+}
+
+.modal-header .btn-close {
+    filter: brightness(0) invert(1);
+}
+
+/* User profile no header */
+.user-profile {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.user-profile img {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 3px solid var(--ifes-light-green);
+}
+
+.user-profile div {
+    text-align: right;
+}
+
+/* Responsividade específica para dúvidas */
+@media (max-width: 768px) {
+    .page-header .d-flex {
+        flex-direction: column;
+        gap: 1rem;
+    }
+    
+    .user-profile {
+        flex-direction: column;
+        gap: 10px;
+        text-align: center;
+    }
+    
+    .user-profile div {
+        text-align: center;
+    }
+    
+    .user-profile img {
+        width: 40px;
+        height: 40px;
+    }
+    
+    .card-body .row {
+        margin-bottom: 1rem;
+    }
+    
+    .card-body .col-md-4 {
+        margin-bottom: 1rem;
+    }
+}
+
+@media (max-width: 576px) {
+    .page-title {
+        font-size: 1.5rem;
+    }
+    
+    .category-badge {
+        font-size: 0.7rem;
+        padding: 0.2rem 0.4rem;
+    }
+    
+    .accordion-button {
+        padding: 0.75rem 1rem;
+        font-size: 0.9rem;
+    }
+    
+    .accordion-body {
+        padding: 1rem;
+    }
+}
+
+/* Paginação */
+.pagination {
+    --bs-pagination-active-bg: var(--ifes-green);
+    --bs-pagination-active-border-color: var(--ifes-green);
+}
+
+.pagination .page-link {
+    color: var(--ifes-green);
+}
+
+.pagination .page-link:hover {
+    color: var(--ifes-green);
+    background-color: var(--ifes-hover-bg);
+}
+
+/* ===== FOOTER ===== */
+.footer {
+    margin-top: 50px;
+    background: linear-gradient(135deg, var(--ifes-green) 0%, var(--ifes-light-green) 100%) !important;
+    color: white;
+    text-align: center;
+    padding: 30px 0;
+    box-shadow: 0 -4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.footer p {
+    margin: 0;
+    font-weight: 500;
+}
+
+/* ===== CARD PRINCIPAL ===== */
+.main-card {
+    background: white;
+    border: none;
+    border-radius: 12px;
+    border-left: 5px solid var(--ifes-green);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+    transition: all 0.3s ease;
+    margin-bottom: 30px;
+}
+
+.main-card:hover {
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.12);
+    transform: translateY(-2px);
+}
+
+.main-card .card-body {
+    padding: 2rem;
+}
