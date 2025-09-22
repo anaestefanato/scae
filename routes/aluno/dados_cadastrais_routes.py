@@ -205,14 +205,43 @@ async def alterar_foto(
     if foto.content_type not in tipos_permitidos:
         return RedirectResponse("/aluno/perfil?erro=tipo_invalido", status.HTTP_303_SEE_OTHER)
 
-    # 2. Sobrescrever diretamente o perfil.jpg
-    caminho_arquivo = "static/img/perfil.jpg"
+    # 2. Buscar foto atual do usuário para remover o arquivo antigo
+    usuario_atual = usuario_repo.obter_usuario_por_matricula(usuario_logado['matricula'])
+    foto_atual = usuario_atual.foto if usuario_atual else None
 
-    # 3. Salvar arquivo no sistema (sobrescrever perfil.jpg)
+    # 3. Criar diretório se não existir
+    upload_dir = "static/uploads/usuarios"
+    os.makedirs(upload_dir, exist_ok=True)
+
+    # 4. Gerar nome único para evitar conflitos
+    import secrets
+    extensao = foto.filename.split(".")[-1]
+    nome_arquivo = f"{usuario_logado['id']}_{secrets.token_hex(8)}.{extensao}"
+    caminho_arquivo = os.path.join(upload_dir, nome_arquivo)
+
+    # 5. Salvar arquivo no sistema
     try:
         conteudo = await foto.read()  # ← Lê conteúdo do arquivo
         with open(caminho_arquivo, "wb") as f:
             f.write(conteudo)
+
+        # 6. Remover arquivo antigo se existir
+        if foto_atual and foto_atual.startswith("/static/uploads/usuarios/"):
+            caminho_antigo = foto_atual.replace("/static/uploads/usuarios/", "static/uploads/usuarios/")
+            if os.path.exists(caminho_antigo):
+                try:
+                    os.remove(caminho_antigo)
+                except Exception as e:
+                    print(f"Erro ao remover arquivo antigo: {e}")
+
+        # 7. Salvar caminho no banco de dados
+        caminho_relativo = f"/static/uploads/usuarios/{nome_arquivo}"
+        usuario_repo.atualizar_foto(usuario_logado['id'], caminho_relativo)
+
+        # 8. Atualizar sessão do usuário
+        usuario_logado['foto'] = caminho_relativo
+        from util.auth_decorator import criar_sessao
+        criar_sessao(request, usuario_logado)
 
     except Exception as e:
         return RedirectResponse("/aluno/perfil?erro=upload_falhou", status.HTTP_303_SEE_OTHER)
