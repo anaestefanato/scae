@@ -9,70 +9,35 @@ let assistants = [
         nome: "Dra. Maria Silva Costa",
         matricula: "AS001",
         email: "maria.costa@ifes.edu.br",
-        telefone: "(27) 99999-1111",
-        cpf: "123.456.789-10",
-        area: "Psicologia",
-        status: "ativo",
-        dataAdmissao: "2020-03-15",
-        casosAtendidos: 45,
-        formacao: "Doutora em Psicologia Clínica",
-        especializacao: "Atendimento Psicológico Estudantil"
+        siap: "12345678"
     },
     {
         id: 2,
         nome: "Dr. João Pedro Santos",
         matricula: "AS002",
         email: "joao.santos@ifes.edu.br",
-        telefone: "(27) 99999-2222",
-        cpf: "987.654.321-00",
-        area: "Serviço Social",
-        status: "ativo",
-        dataAdmissao: "2019-08-20",
-        casosAtendidos: 52,
-        formacao: "Doutor em Serviço Social",
-        especializacao: "Políticas de Assistência Estudantil"
+        siap: "87654321"
     },
     {
         id: 3,
         nome: "Dra. Ana Beatriz Lima",
         matricula: "AS003",
         email: "ana.lima@ifes.edu.br",
-        telefone: "(27) 99999-3333",
-        cpf: "456.789.123-45",
-        area: "Pedagogia",
-        status: "ferias",
-        dataAdmissao: "2021-01-10",
-        casosAtendidos: 38,
-        formacao: "Doutora em Pedagogia",
-        especializacao: "Orientação Pedagógica e Educacional"
+        siap: "45678912"
     },
     {
         id: 4,
         nome: "Dra. Carla Fernandes",
         matricula: "AS004",
         email: "carla.fernandes@ifes.edu.br",
-        telefone: "(27) 99999-4444",
-        cpf: "789.123.456-78",
-        area: "Nutrição",
-        status: "ativo",
-        dataAdmissao: "2022-05-03",
-        casosAtendidos: 28,
-        formacao: "Doutora em Nutrição",
-        especializacao: "Nutrição e Segurança Alimentar"
+        siap: "78912345"
     },
     {
         id: 5,
         nome: "Dr. Rafael Oliveira",
         matricula: "AS005",
         email: "rafael.oliveira@ifes.edu.br",
-        telefone: "(27) 99999-5555",
-        cpf: "321.654.987-12",
-        area: "Coordenação",
-        status: "ativo",
-        dataAdmissao: "2018-02-14",
-        casosAtendidos: 65,
-        formacao: "Doutor em Administração Pública",
-        especializacao: "Gestão de Políticas Estudantis"
+        siap: "32165498"
     }
 ];
 
@@ -103,15 +68,11 @@ function loadAssistantsList() {
 function createAssistantRow(assistant) {
     const row = document.createElement('tr');
     
-    const statusBadge = getStatusBadge(assistant.status);
-    const areaBadge = getAreaBadge(assistant.area);
-    
     row.innerHTML = `
         <td><strong>${assistant.nome}</strong></td>
         <td>${assistant.matricula}</td>
         <td>${assistant.email}</td>
-        <td>${areaBadge}</td>
-        <td>${statusBadge}</td>
+        <td>${assistant.siap}</td>
         <td>
             <div class="action-buttons">
                 <button class="btn btn-sm btn-outline-info" onclick="viewAssistant(${assistant.id})" title="Visualizar">
@@ -130,38 +91,18 @@ function createAssistantRow(assistant) {
     return row;
 }
 
-// ===== FUNÇÃO PARA OBTER BADGE DE STATUS =====
-function getStatusBadge(status) {
-    const statusMap = {
-        'ativo': '<span class="badge bg-success">Ativo</span>',
-        'inativo': '<span class="badge bg-danger">Inativo</span>',
-        'ferias': '<span class="badge bg-warning text-dark">Férias</span>',
-        'licenca': '<span class="badge bg-info">Licença</span>'
-    };
-    
-    return statusMap[status] || '<span class="badge bg-secondary">Indefinido</span>';
-}
-
-// ===== FUNÇÃO PARA OBTER BADGE DE ÁREA =====
-function getAreaBadge(area) {
-    const areaClass = area.toLowerCase().replace(/\s+/g, '-').replace('ç', 'c');
-    return `<span class="area-badge ${areaClass}">${area}</span>`;
-}
-
 // ===== FUNÇÃO PARA ATUALIZAR ESTATÍSTICAS =====
 function updateStatistics() {
-    const assistentesAtivos = assistants.filter(a => a.status === 'ativo').length;
-    const totalCasosAtendidos = assistants.reduce((total, a) => total + a.casosAtendidos, 0);
+    const totalAssistentes = assistants.length;
+    const totalEmails = assistants.filter(a => a.email).length;
+    const totalMatriculas = assistants.filter(a => a.matricula).length;
+    const totalSiap = assistants.filter(a => a.siap).length;
     
-    // Simular dados para as outras estatísticas
-    const inscricoesAnalisadas = 342;
-    const mediaProdutividade = Math.round((totalCasosAtendidos / assistentesAtivos) * 1.8);
-
     // Atualizar cards de estatísticas
-    document.querySelector('.assistentes-ativos .number').textContent = assistentesAtivos;
-    document.querySelector('.casos-atendidos .number').textContent = totalCasosAtendidos;
-    document.querySelector('.inscricoes-analisadas .number').textContent = inscricoesAnalisadas;
-    document.querySelector('.media-produtividade .number').textContent = `${mediaProdutividade}%`;
+    document.querySelector('.assistentes-ativos .number').textContent = totalAssistentes;
+    document.querySelector('.casos-atendidos .number').textContent = totalEmails;
+    document.querySelector('.inscricoes-analisadas .number').textContent = totalMatriculas;
+    document.querySelector('.media-produtividade .number').textContent = totalSiap;
 }
 
 // ===== FUNÇÃO PARA ATUALIZAR CONTADOR =====
@@ -184,7 +125,8 @@ function searchAssistant() {
     const results = assistants.filter(assistant => 
         assistant.nome.toLowerCase().includes(searchTerm) ||
         assistant.matricula.toLowerCase().includes(searchTerm) ||
-        assistant.email.toLowerCase().includes(searchTerm)
+        assistant.email.toLowerCase().includes(searchTerm) ||
+        assistant.siap.toLowerCase().includes(searchTerm)
     );
 
     if (results.length === 0) {
@@ -220,31 +162,15 @@ function showSearchResult(assistant) {
                         <div class="info-label">Matrícula:</div>
                         <div class="info-value">${assistant.matricula}</div>
                     </div>
-                    <div class="info-row">
-                        <div class="info-label">CPF:</div>
-                        <div class="info-value">${assistant.cpf}</div>
-                    </div>
+                </div>
+                <div class="col-md-6">
                     <div class="info-row">
                         <div class="info-label">Email:</div>
                         <div class="info-value">${assistant.email}</div>
                     </div>
-                </div>
-                <div class="col-md-6">
                     <div class="info-row">
-                        <div class="info-label">Telefone:</div>
-                        <div class="info-value">${assistant.telefone}</div>
-                    </div>
-                    <div class="info-row">
-                        <div class="info-label">Área de Atuação:</div>
-                        <div class="info-value">${getAreaBadge(assistant.area)}</div>
-                    </div>
-                    <div class="info-row">
-                        <div class="info-label">Status:</div>
-                        <div class="info-value">${getStatusBadge(assistant.status)}</div>
-                    </div>
-                    <div class="info-row">
-                        <div class="info-label">Casos Atendidos:</div>
-                        <div class="info-value">${assistant.casosAtendidos}</div>
+                        <div class="info-label">SIAP:</div>
+                        <div class="info-value">${assistant.siap}</div>
                     </div>
                 </div>
             </div>
@@ -269,23 +195,6 @@ function clearSearch() {
     document.getElementById('searchResult').style.display = 'none';
     filteredAssistants = [...assistants];
     loadAssistantsList();
-}
-
-// ===== FUNÇÃO DE FILTRO =====
-function filterAssistants() {
-    const filterValue = document.getElementById('filterStatus').value;
-    
-    if (!filterValue) {
-        filteredAssistants = [...assistants];
-    } else {
-        filteredAssistants = assistants.filter(assistant => assistant.status === filterValue);
-    }
-    
-    loadAssistantsList();
-    
-    if (filterValue) {
-        showToast(`Filtro aplicado: ${filteredAssistants.length} assistentes encontrados.`, 'info');
-    }
 }
 
 // ===== FUNÇÃO PARA ABRIR MODAL DE NOVO ASSISTENTE =====
@@ -325,43 +234,8 @@ function openNewAssistantModal() {
                                 </div>
                                 <div class="col-md-6">
                                     <div class="form-floating mb-3">
-                                        <input type="tel" class="form-control" id="newTelefone" required>
-                                        <label for="newTelefone">Telefone</label>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-md-6">
-                                    <div class="form-floating mb-3">
-                                        <input type="text" class="form-control" id="newCpf" required>
-                                        <label for="newCpf">CPF</label>
-                                    </div>
-                                </div>
-                                <div class="col-md-6">
-                                    <div class="form-floating mb-3">
-                                        <select class="form-select" id="newArea" required>
-                                            <option value="">Selecione...</option>
-                                            <option value="Psicologia">Psicologia</option>
-                                            <option value="Serviço Social">Serviço Social</option>
-                                            <option value="Pedagogia">Pedagogia</option>
-                                            <option value="Nutrição">Nutrição</option>
-                                            <option value="Coordenação">Coordenação</option>
-                                        </select>
-                                        <label for="newArea">Área de Atuação</label>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-md-6">
-                                    <div class="form-floating mb-3">
-                                        <input type="text" class="form-control" id="newFormacao" required>
-                                        <label for="newFormacao">Formação</label>
-                                    </div>
-                                </div>
-                                <div class="col-md-6">
-                                    <div class="form-floating mb-3">
-                                        <input type="text" class="form-control" id="newEspecializacao">
-                                        <label for="newEspecializacao">Especialização</label>
+                                        <input type="text" class="form-control" id="newSiap" required>
+                                        <label for="newSiap">SIAP</label>
                                     </div>
                                 </div>
                             </div>
@@ -391,7 +265,6 @@ function openNewAssistantModal() {
 // ===== FUNÇÃO PARA SALVAR NOVO ASSISTENTE =====
 function saveNewAssistant() {
     const form = document.getElementById('newAssistantForm');
-    const formData = new FormData(form);
     
     // Validar formulário
     if (!form.checkValidity()) {
@@ -404,19 +277,18 @@ function saveNewAssistant() {
         nome: document.getElementById('newNome').value,
         matricula: document.getElementById('newMatricula').value,
         email: document.getElementById('newEmail').value,
-        telefone: document.getElementById('newTelefone').value,
-        cpf: document.getElementById('newCpf').value,
-        area: document.getElementById('newArea').value,
-        formacao: document.getElementById('newFormacao').value,
-        especializacao: document.getElementById('newEspecializacao').value,
-        status: 'ativo',
-        dataAdmissao: new Date().toISOString().split('T')[0],
-        casosAtendidos: 0
+        siap: document.getElementById('newSiap').value
     };
     
     // Verificar se matrícula já existe
     if (assistants.find(a => a.matricula === newAssistant.matricula)) {
         showToast('Matrícula já cadastrada no sistema.', 'error');
+        return;
+    }
+    
+    // Verificar se SIAP já existe
+    if (assistants.find(a => a.siap === newAssistant.siap)) {
+        showToast('SIAP já cadastrado no sistema.', 'error');
         return;
     }
     
@@ -452,7 +324,7 @@ function viewAssistant(id) {
                     </div>
                     <div class="modal-body">
                         <div class="assistant-detail-card">
-                            <h6><i class="bi bi-person me-2"></i>Informações Pessoais</h6>
+                            <h6><i class="bi bi-person me-2"></i>Informações do Assistente</h6>
                             <div class="row">
                                 <div class="col-md-6">
                                     <div class="info-row">
@@ -460,76 +332,18 @@ function viewAssistant(id) {
                                         <div class="info-value">${assistant.nome}</div>
                                     </div>
                                     <div class="info-row">
-                                        <div class="info-label">CPF:</div>
-                                        <div class="info-value">${assistant.cpf}</div>
+                                        <div class="info-label">Matrícula:</div>
+                                        <div class="info-value">${assistant.matricula}</div>
                                     </div>
+                                </div>
+                                <div class="col-md-6">
                                     <div class="info-row">
                                         <div class="info-label">Email:</div>
                                         <div class="info-value">${assistant.email}</div>
                                     </div>
-                                </div>
-                                <div class="col-md-6">
                                     <div class="info-row">
-                                        <div class="info-label">Matrícula:</div>
-                                        <div class="info-value">${assistant.matricula}</div>
-                                    </div>
-                                    <div class="info-row">
-                                        <div class="info-label">Telefone:</div>
-                                        <div class="info-value">${assistant.telefone}</div>
-                                    </div>
-                                    <div class="info-row">
-                                        <div class="info-label">Status:</div>
-                                        <div class="info-value">${getStatusBadge(assistant.status)}</div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <div class="assistant-detail-card">
-                            <h6><i class="bi bi-mortarboard me-2"></i>Informações Profissionais</h6>
-                            <div class="row">
-                                <div class="col-md-6">
-                                    <div class="info-row">
-                                        <div class="info-label">Área de Atuação:</div>
-                                        <div class="info-value">${getAreaBadge(assistant.area)}</div>
-                                    </div>
-                                    <div class="info-row">
-                                        <div class="info-label">Formação:</div>
-                                        <div class="info-value">${assistant.formacao}</div>
-                                    </div>
-                                </div>
-                                <div class="col-md-6">
-                                    <div class="info-row">
-                                        <div class="info-label">Especialização:</div>
-                                        <div class="info-value">${assistant.especializacao}</div>
-                                    </div>
-                                    <div class="info-row">
-                                        <div class="info-label">Data de Admissão:</div>
-                                        <div class="info-value">${new Date(assistant.dataAdmissao).toLocaleDateString('pt-BR')}</div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <div class="assistant-detail-card">
-                            <h6><i class="bi bi-graph-up me-2"></i>Estatísticas de Produtividade</h6>
-                            <div class="row">
-                                <div class="col-md-4">
-                                    <div class="info-row">
-                                        <div class="info-label">Casos Atendidos:</div>
-                                        <div class="info-value"><strong>${assistant.casosAtendidos}</strong></div>
-                                    </div>
-                                </div>
-                                <div class="col-md-4">
-                                    <div class="info-row">
-                                        <div class="info-label">Média Mensal:</div>
-                                        <div class="info-value"><strong>${Math.round(assistant.casosAtendidos / 12)}</strong></div>
-                                    </div>
-                                </div>
-                                <div class="col-md-4">
-                                    <div class="info-row">
-                                        <div class="info-label">Avaliação:</div>
-                                        <div class="info-value"><span class="badge bg-success">Excelente</span></div>
+                                        <div class="info-label">SIAP:</div>
+                                        <div class="info-value">${assistant.siap}</div>
                                     </div>
                                 </div>
                             </div>
@@ -573,76 +387,27 @@ function editAssistant(id) {
                     </div>
                     <div class="modal-body">
                         <form id="editAssistantForm">
+                            <div class="form-floating mb-3">
+                                <input type="text" class="form-control" id="editNome" value="${assistant.nome}" required>
+                                <label for="editNome">Nome Completo</label>
+                            </div>
                             <div class="row">
-                                <div class="col-md-6">
-                                    <div class="form-floating mb-3">
-                                        <input type="text" class="form-control" id="editNome" value="${assistant.nome}" required>
-                                        <label for="editNome">Nome Completo</label>
-                                    </div>
-                                </div>
                                 <div class="col-md-6">
                                     <div class="form-floating mb-3">
                                         <input type="text" class="form-control" id="editMatricula" value="${assistant.matricula}" required>
                                         <label for="editMatricula">Matrícula</label>
                                     </div>
                                 </div>
-                            </div>
-                            <div class="row">
                                 <div class="col-md-6">
                                     <div class="form-floating mb-3">
                                         <input type="email" class="form-control" id="editEmail" value="${assistant.email}" required>
                                         <label for="editEmail">Email</label>
                                     </div>
                                 </div>
-                                <div class="col-md-6">
-                                    <div class="form-floating mb-3">
-                                        <input type="tel" class="form-control" id="editTelefone" value="${assistant.telefone}" required>
-                                        <label for="editTelefone">Telefone</label>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-md-6">
-                                    <div class="form-floating mb-3">
-                                        <input type="text" class="form-control" id="editCpf" value="${assistant.cpf}" required>
-                                        <label for="editCpf">CPF</label>
-                                    </div>
-                                </div>
-                                <div class="col-md-6">
-                                    <div class="form-floating mb-3">
-                                        <select class="form-select" id="editArea" required>
-                                            <option value="Psicologia" ${assistant.area === 'Psicologia' ? 'selected' : ''}>Psicologia</option>
-                                            <option value="Serviço Social" ${assistant.area === 'Serviço Social' ? 'selected' : ''}>Serviço Social</option>
-                                            <option value="Pedagogia" ${assistant.area === 'Pedagogia' ? 'selected' : ''}>Pedagogia</option>
-                                            <option value="Nutrição" ${assistant.area === 'Nutrição' ? 'selected' : ''}>Nutrição</option>
-                                            <option value="Coordenação" ${assistant.area === 'Coordenação' ? 'selected' : ''}>Coordenação</option>
-                                        </select>
-                                        <label for="editArea">Área de Atuação</label>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-md-6">
-                                    <div class="form-floating mb-3">
-                                        <select class="form-select" id="editStatus" required>
-                                            <option value="ativo" ${assistant.status === 'ativo' ? 'selected' : ''}>Ativo</option>
-                                            <option value="inativo" ${assistant.status === 'inativo' ? 'selected' : ''}>Inativo</option>
-                                            <option value="ferias" ${assistant.status === 'ferias' ? 'selected' : ''}>Férias</option>
-                                            <option value="licenca" ${assistant.status === 'licenca' ? 'selected' : ''}>Licença</option>
-                                        </select>
-                                        <label for="editStatus">Status</label>
-                                    </div>
-                                </div>
-                                <div class="col-md-6">
-                                    <div class="form-floating mb-3">
-                                        <input type="text" class="form-control" id="editFormacao" value="${assistant.formacao}" required>
-                                        <label for="editFormacao">Formação</label>
-                                    </div>
-                                </div>
                             </div>
                             <div class="form-floating mb-3">
-                                <input type="text" class="form-control" id="editEspecializacao" value="${assistant.especializacao}">
-                                <label for="editEspecializacao">Especialização</label>
+                                <input type="text" class="form-control" id="editSiap" value="${assistant.siap}" required>
+                                <label for="editSiap">SIAP</label>
                             </div>
                         </form>
                     </div>
@@ -686,12 +451,7 @@ function saveEditAssistant(id) {
         nome: document.getElementById('editNome').value,
         matricula: document.getElementById('editMatricula').value,
         email: document.getElementById('editEmail').value,
-        telefone: document.getElementById('editTelefone').value,
-        cpf: document.getElementById('editCpf').value,
-        area: document.getElementById('editArea').value,
-        status: document.getElementById('editStatus').value,
-        formacao: document.getElementById('editFormacao').value,
-        especializacao: document.getElementById('editEspecializacao').value
+        siap: document.getElementById('editSiap').value
     };
     
     // Atualizar lista filtrada
@@ -726,10 +486,6 @@ function deleteAssistant(id) {
                     <div class="modal-body">
                         <p>Tem certeza que deseja excluir o assistente <strong>${assistant.nome}</strong>?</p>
                         <p class="text-muted">Esta ação não pode ser desfeita. Todos os dados relacionados a este assistente serão removidos permanentemente.</p>
-                        <div class="alert alert-warning">
-                            <i class="bi bi-info-circle me-2"></i>
-                            <strong>Atenção:</strong> Este assistente possui ${assistant.casosAtendidos} casos atendidos registrados.
-                        </div>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
