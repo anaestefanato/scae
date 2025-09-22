@@ -23,7 +23,7 @@
                 </div>
                 <div class="col-md-4 text-end">
                     <div class="user-profile">
-                        <img src="/static/img/perfil.jpg" alt="Perfil" />
+                        <img src="{{ aluno.foto or '/static/img/perfil.jpg' }}" alt="Perfil" />
                         <div>
                             <small class="text-muted">Aluno</small>
                             <div class="fw-bold">{{ aluno.nome }}</div>

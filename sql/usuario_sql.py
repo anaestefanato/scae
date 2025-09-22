@@ -34,7 +34,7 @@ WHERE id_usuario = ?
 
 OBTER_POR_MATRICULA = """
 SELECT
-id_usuario, nome, matricula, email, senha, perfil
+id_usuario, nome, matricula, email, senha, perfil, foto, token_redefinicao, data_token, data_cadastro
 FROM usuario
 WHERE matricula = ?
 """
@@ -81,7 +81,7 @@ WHERE email=?
 ATUALIZAR_FOTO = """
 UPDATE usuario
 SET foto=?
-WHERE id=?
+WHERE id_usuario=?
 """
 
 OBTER_POR_TOKEN = """
