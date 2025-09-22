@@ -16,7 +16,7 @@
         </div>
         <form method="post" action="/login">
             <div class="mb-2 mt-5 text-center">
-                <input type="text" name="matricula" class="form-control login-input rounded-pill" placeholder="Matrícula" required value="{{ matricula }}">
+                <input type="text" name="matricula" class="form-control login-input rounded-pill" placeholder="Matrícula" required value="{{ matricula or '' }}">
             </div>
             <div class="mb-3 mt-4 position-relative text-center">
                 <input type="password" name="senha" class="form-control login-input rounded-pill" placeholder="Senha" required>

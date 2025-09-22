@@ -191,36 +191,7 @@ async def post_perfil(
             "aluno/perfil.html",
             {"request": request, "aluno": usuario, "erro": "Erro ao completar cadastro."}
         )    # # Atualizar dados do usuário
-    # usuario.nome = nome
-    # usuario.email = email
-    # usuario_repo.alterar(usuario)
-
-    # # Se for aluno, atualizar dados adicionais
-    # if usuario.perfil == 'aluno' and cpf  and telefone and curso and data_nascimento and filiacao and cep and cidade and bairro and rua and numero and nome_banco and agencia_bancaria and numero_conta_bancaria and renda_familiar and quantidade_pessoas:
-    #     try:
-    #         from util.db_util import get_connection
-    #         with get_connection() as conn:
-    #             cursor = conn.cursor()
-    #             cursor.execute(
-    #                 ATUALIZAR,
-    #                 (cpf, rg, telefone, data_nascimento, filiacao, cep, cidade, bairro, rua, numero, nome_banco, agencia_bancaria, numero_conta_bancaria, renda_familiar, quantidade_pessoas, usuario.matricula)
-    #             )
-    #             conn.commit()
-    #     except:
-    #         pass
     
-    # # Atualizar sessão
-    # from util.auth_decorator import criar_sessao
-    # usuario_dict = {
-    #     "id": usuario.id,
-    #     "nome": nome,
-    #     "email": email,
-    #     "perfil": usuario.perfil,
-    #     "foto": usuario.foto
-    # }
-    # criar_sessao(request, usuario_dict)
-    
-    # return RedirectResponse("/perfil?sucesso=1", status.HTTP_303_SEE_OTHER)
 
 @router.post("/perfil/alterar-foto")
 @requer_autenticacao()
