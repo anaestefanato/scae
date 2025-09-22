@@ -70,13 +70,90 @@ async def post_perfil(
 ):
     usuario = usuario_repo.obter_usuario_por_matricula(usuario_logado['matricula'])
     
-    
-    if not aluno_repo.possui_cadastro_completo(usuario.id_usuario):
+    # Verificar se o cadastro já está completo (atualização) ou é primeira vez (inserção)
+    if aluno_repo.possui_cadastro_completo(usuario.id_usuario):
+        # Atualizar dados existentes do aluno
+        aluno = Aluno(
+            id_usuario=usuario.id_usuario,
+            nome=nome,
+            matricula=matricula,
+            email=email,
+            senha=usuario.senha,
+            perfil=usuario.perfil,
+            foto=getattr(usuario, 'foto', None),
+            token_redefinicao=getattr(usuario, 'token_redefinicao', None),
+            data_token=getattr(usuario, 'data_token', None),
+            data_cadastro=getattr(usuario, 'data_cadastro', None),
+            cpf=cpf,
+            telefone=telefone,
+            curso=curso,
+            data_nascimento=data_nascimento,
+            filiacao=filiacao,
+            cep=cep,
+            cidade=cidade,
+            bairro=bairro,
+            rua=rua,
+            numero=numero,
+            nome_banco=nome_banco,
+            agencia_bancaria=agencia_bancaria,
+            numero_conta_bancaria=numero_conta_bancaria,
+            renda_familiar=float(renda_familiar),
+            quantidade_pessoas=int(quantidade_pessoas),
+            renda_per_capita=float(renda_per_capita),
+            situacao_moradia=situacao_moradia
+        )
+        
+        # Atualizar dados do usuário (nome e email)
+        usuario.nome = nome
+        usuario.email = email
+        usuario_repo.atualizar(usuario)
+        
+        # Atualizar dados específicos do aluno
+        sucesso = aluno_repo.atualizar(aluno)
+        
+        if sucesso:
+            return RedirectResponse("/aluno/perfil?sucesso=1", status_code=status.HTTP_303_SEE_OTHER)
+        else:
+            return templates.TemplateResponse(
+                "aluno/perfil.html",
+                {"request": request, "aluno": aluno, "erro": "Erro ao atualizar dados."}
+            )
         aluno = Aluno(
             id_usuario=usuario.id_usuario,
             nome=usuario.nome,
             matricula=usuario.matricula,
             email=usuario.email,
+            senha=usuario.senha,
+            perfil=usuario.perfil,
+            foto=getattr(usuario, 'foto', None),
+            token_redefinicao=getattr(usuario, 'token_redefinicao', None),
+            data_token=getattr(usuario, 'data_token', None),
+            data_cadastro=getattr(usuario, 'data_cadastro', None),
+            cpf=cpf,
+            telefone=telefone,
+            curso=curso,
+            data_nascimento=data_nascimento,
+            filiacao=filiacao,
+            cep=cep,
+            cidade=cidade,
+            bairro=bairro,
+            rua=rua,
+            numero=numero,
+            nome_banco=nome_banco,
+            agencia_bancaria=agencia_bancaria,
+            numero_conta_bancaria=numero_conta_bancaria,
+            renda_familiar=float(renda_familiar),
+            quantidade_pessoas=int(quantidade_pessoas),
+            renda_per_capita=float(renda_per_capita),
+            situacao_moradia=situacao_moradia
+            )
+    else:
+        # Primeiro cadastro (inserção)
+        aluno = Aluno(
+            id_usuario=usuario.id_usuario,
+            nome=nome,
+            matricula=matricula,
+            email=email,
             senha=usuario.senha,
             perfil=usuario.perfil,
             foto=getattr(usuario, 'foto', None),
@@ -110,12 +187,10 @@ async def post_perfil(
                 request.session['usuario']['completo'] = True
             return RedirectResponse("/aluno/inicio?sucesso=1", status_code=status.HTTP_303_SEE_OTHER)
 
-    return templates.TemplateResponse(
-        "aluno/perfil.html",
-        {"request": request, "aluno": usuario, "erro": "Erro ao completar cadastro."}
-    )
-    
-    # # Atualizar dados do usuário
+        return templates.TemplateResponse(
+            "aluno/perfil.html",
+            {"request": request, "aluno": usuario, "erro": "Erro ao completar cadastro."}
+        )    # # Atualizar dados do usuário
     # usuario.nome = nome
     # usuario.email = email
     # usuario_repo.alterar(usuario)
