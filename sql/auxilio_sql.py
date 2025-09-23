@@ -65,3 +65,22 @@ EXCLUIR = """
 DELETE FROM auxilio
 WHERE id_auxilio = ?
 """
+
+OBTER_POR_ALUNO = """
+SELECT
+    a.id_auxilio,
+    a.id_edital,
+    a.id_inscricao,
+    a.descricao,
+    a.valor_mensal,
+    a.data_inicio,
+    a.data_fim,
+    a.tipo_auxilio,
+    e.titulo as edital_titulo,
+    i.status as status_inscricao
+FROM auxilio a
+INNER JOIN inscricao i ON a.id_inscricao = i.id_inscricao
+INNER JOIN edital e ON a.id_edital = e.id_edital
+WHERE i.id_aluno = ?
+ORDER BY a.data_inicio DESC
+"""

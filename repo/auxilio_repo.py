@@ -81,3 +81,25 @@ def excluir(id: int) -> bool:
         cursor = conn.cursor()
         cursor.execute(EXCLUIR, (id,))
         return (cursor.rowcount > 0)
+
+def obter_por_aluno(id_aluno: int) -> list[dict]:
+    with get_connection() as conn:
+        cursor = conn.cursor()
+        cursor.execute(OBTER_POR_ALUNO, (id_aluno,))
+        rows = cursor.fetchall()
+        auxilios = []
+        for row in rows:
+            auxilio = {
+                'id_auxilio': row["id_auxilio"],
+                'id_edital': row["id_edital"],
+                'id_inscricao': row["id_inscricao"],
+                'tipo_auxilio': row["tipo_auxilio"],
+                'descricao': row["descricao"],
+                'valor_mensal': row["valor_mensal"],
+                'data_inicio': row["data_inicio"],
+                'data_fim': row["data_fim"],
+                'edital_titulo': row["edital_titulo"],
+                'status_inscricao': row["status_inscricao"]
+            }
+            auxilios.append(auxilio)
+        return auxilios

@@ -60,6 +60,44 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 // Modal Confirmar Recebimento
+function confirmarRecebimento(idAuxilio) {
+    // Aqui você pode implementar a lógica para confirmar o recebimento
+    // Por enquanto, apenas simula a confirmação
+    console.log('Confirmando recebimento do auxílio ID:', idAuxilio);
+    
+    // Exibir modal de confirmação (exemplo)
+    if(confirm('Tem certeza que deseja confirmar o recebimento deste auxílio?')) {
+        // Aqui você faria uma requisição AJAX para o backend
+        alert('Recebimento confirmado com sucesso!');
+        
+        // Desabilitar o botão após confirmação
+        const btn = event.target.closest('button');
+        if(btn) {
+            btn.textContent = 'Recebimento Confirmado';
+            btn.classList.remove('btn-outline-success');
+            btn.classList.add('btn-success');
+            btn.disabled = true;
+        }
+    }
+}
+
+// Modal Detalhes Auxílio
+function verDetalhes(idAuxilio) {
+    console.log('Visualizando detalhes do auxílio ID:', idAuxilio);
+    // Aqui você pode implementar a lógica para buscar e exibir os detalhes
+    // Por enquanto, apenas abre um modal simples
+    alert('Detalhes do auxílio ID: ' + idAuxilio + '\n\nEsta funcionalidade será implementada em breve.');
+}
+
+// Modal de acompanhamento de inscrição
+function acompanharInscricao(idInscricao) {
+    console.log('Acompanhando inscrição ID:', idInscricao);
+    // Aqui você pode implementar a lógica para acompanhar a inscrição
+    // Por enquanto, apenas abre um modal simples
+    alert('Acompanhamento da inscrição ID: ' + idInscricao + '\n\nEsta funcionalidade será implementada em breve.');
+}
+
+// Manter as funções antigas para compatibilidade com elementos estáticos
 if(document.getElementById('btnConfirmarRecebimento')){
     document.getElementById('btnConfirmarRecebimento').addEventListener('click', function() {
         document.getElementById('modalConfirmarRecebimento').style.display = 'block';
@@ -67,19 +105,24 @@ if(document.getElementById('btnConfirmarRecebimento')){
     });
 }
 function fecharModalConfirmarRecebimento() {
-    document.getElementById('modalConfirmarRecebimento').style.display = 'none';
-    document.getElementById('modalConfirmarRecebimento').classList.remove('show');
+    const modal = document.getElementById('modalConfirmarRecebimento');
+    if(modal) {
+        modal.style.display = 'none';
+        modal.classList.remove('show');
+    }
 }
-function confirmarRecebimento() {
+function confirmarRecebimentoModal() {
     fecharModalConfirmarRecebimento();
     var btn = document.getElementById('btnConfirmarRecebimento');
-    btn.textContent = 'Recebimento Confirmado';
-    btn.classList.remove('btn-outline-success');
-    btn.classList.add('btn-success');
-    btn.disabled = true;
+    if(btn) {
+        btn.textContent = 'Recebimento Confirmado';
+        btn.classList.remove('btn-outline-success');
+        btn.classList.add('btn-success');
+        btn.disabled = true;
+    }
 }
 
-// Modal Detalhes Auxílio
+// Modal Detalhes Auxílio  
 if(document.getElementById('btnDetalhesAuxilio')){
     document.getElementById('btnDetalhesAuxilio').addEventListener('click', function() {
         document.getElementById('modalDetalhesAuxilio').style.display = 'block';
@@ -87,8 +130,11 @@ if(document.getElementById('btnDetalhesAuxilio')){
     });
 }
 function fecharModalDetalhesAuxilio() {
-    document.getElementById('modalDetalhesAuxilio').style.display = 'none';
-    document.getElementById('modalDetalhesAuxilio').classList.remove('show');
+    const modal = document.getElementById('modalDetalhesAuxilio');
+    if(modal) {
+        modal.style.display = 'none';
+        modal.classList.remove('show');
+    }
 }
 
 // Modal de acompanhamento de inscrição
@@ -99,8 +145,11 @@ if(document.getElementById('btnAcompanhar')){
     });
 }
 function fecharModalAcompanhar() {
-    document.getElementById('modalAcompanhar').style.display = 'none';
-    document.getElementById('modalAcompanhar').classList.remove('show');
+    const modal = document.getElementById('modalAcompanhar');
+    if(modal) {
+        modal.style.display = 'none';
+        modal.classList.remove('show');
+    }
 }
 
 // FullCalendar
