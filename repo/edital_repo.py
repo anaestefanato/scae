@@ -81,3 +81,23 @@ def excluir(id: int) -> bool:
         cursor = conn.cursor()
         cursor.execute(EXCLUIR, (id,))
         return (cursor.rowcount > 0)
+
+def obter_editais_abertos() -> list[dict]:
+    with get_connection() as conn:
+        cursor = conn.cursor()
+        cursor.execute(OBTER_EDITAIS_ABERTOS)
+        rows = cursor.fetchall()
+        editais = []
+        for row in rows:
+            edital = {
+                'id_edital': row["id_edital"],
+                'titulo': row["titulo"],
+                'descricao': row["descricao"],
+                'data_publicacao': row["data_publicacao"],
+                'data_encerramento': row["data_encerramento"],
+                'arquivo': row["arquivo"],
+                'status': row["status"],
+                'valor_medio': row["valor_medio"] or 0.0
+            }
+            editais.append(edital)
+        return editais

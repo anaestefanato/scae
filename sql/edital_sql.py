@@ -38,3 +38,15 @@ EXCLUIR = """
 DELETE FROM edital
 WHERE id_edital = ?
 """
+
+OBTER_EDITAIS_ABERTOS = """
+SELECT 
+    e.id_edital, e.titulo, e.descricao, e.data_publicacao, e.data_encerramento, e.arquivo, e.status,
+    (SELECT ROUND(AVG(a.valor_mensal), 2) FROM auxilio a 
+     INNER JOIN inscricao i ON a.id_inscricao = i.id_inscricao 
+     WHERE i.id_edital = e.id_edital) as valor_medio
+FROM edital e
+WHERE e.status = 'ativo' 
+    AND date('now') <= e.data_encerramento
+ORDER BY e.data_encerramento ASC
+"""

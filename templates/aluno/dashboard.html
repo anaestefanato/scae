@@ -109,24 +109,54 @@
 
                     <div class="mt-4 flex-grow-1 d-flex flex-column justify-content-end">
                         <h4 class="mb-4">Editais Abertos</h4>
-                        <div class="card">
-                            <div class="card-header">
-                                <i class="bi bi-file-earmark-text me-2"></i>Edital 02/2025 - Auxílio Material Didático
-                            </div>
-                            <div class="card-body">
-                                <p><strong>Período de Inscrição:</strong> 20/04/2025 a 05/05/2025</p>
-                                <p><strong>Valor do Auxílio:</strong> R$ 300,00 (parcela única)</p>
-                                <p>
-                                    Auxílio destinado à aquisição de materiais didáticos necessários para as
-                                    atividades acadêmicas.
-                                </p>
-                                <div class="d-flex justify-content-end mt-3">
-                                    <a href="#" class="btn btn-success">
-                                        <i class="bi bi-plus-circle me-1"></i>Inscrever-se
-                                    </a>
+                        
+                        {% if editais_abertos %}
+                            {% for edital in editais_abertos %}
+                            <div class="card">
+                                <div class="card-header">
+                                    {% if 'alimenta' in edital.titulo.lower() %}
+                                        <i class="bi bi-cup-hot me-2"></i>
+                                    {% elif 'transporte' in edital.titulo.lower() %}
+                                        <i class="bi bi-bus-front me-2"></i>
+                                    {% elif 'moradia' in edital.titulo.lower() %}
+                                        <i class="bi bi-house me-2"></i>
+                                    {% elif 'material' in edital.titulo.lower() or 'didático' in edital.titulo.lower() %}
+                                        <i class="bi bi-book me-2"></i>
+                                    {% else %}
+                                        <i class="bi bi-file-earmark-text me-2"></i>
+                                    {% endif %}
+                                    {{ edital.titulo }}
+                                </div>
+                                <div class="card-body">
+                                    <p><strong>Período de Inscrição:</strong> {{ edital.data_publicacao }} a {{ edital.data_encerramento }}</p>
+                                    {% if edital.valor_medio > 0 %}
+                                        <p><strong>Valor do Auxílio:</strong> R$ {{ "%.2f"|format(edital.valor_medio) }}</p>
+                                    {% endif %}
+                                    <p><strong>Descrição:</strong> {{ edital.descricao }}</p>
+                                    {% if edital.arquivo %}
+                                        <p><strong>Edital:</strong> 
+                                            <a href="{{ edital.arquivo }}" target="_blank" class="text-decoration-none">
+                                                <i class="bi bi-download me-1"></i>Baixar Edital
+                                            </a>
+                                        </p>
+                                    {% endif %}
+                                    <div class="d-flex justify-content-end mt-3">
+                                        <a href="/aluno/inscricao/{{ edital.id_edital }}" class="btn btn-success">
+                                            <i class="bi bi-plus-circle me-1"></i>Inscrever-se
+                                        </a>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
+                            {% endfor %}
+                        {% else %}
+                            <div class="card">
+                                <div class="card-body text-center py-5">
+                                    <i class="bi bi-file-earmark-x text-muted" style="font-size: 3rem;"></i>
+                                    <h5 class="mt-3 text-muted">Nenhum edital aberto</h5>
+                                    <p class="text-muted">No momento não há editais com inscrições abertas. Fique atento às próximas publicações!</p>
+                                </div>
+                            </div>
+                        {% endif %}
                     </div>
                 </div>
 
