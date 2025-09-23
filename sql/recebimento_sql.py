@@ -109,3 +109,27 @@ INNER JOIN inscricao i ON a.id_inscricao = i.id_inscricao
 WHERE i.id_aluno = ? AND r.status = 'confirmado'
 """
 
+INSERIR_DADOS_EXEMPLO = """
+-- Dados de exemplo inseridos pela função inserir_dados_exemplo() no repositório
+INSERT INTO recebimento (id_auxilio, mes_referencia, ano_referencia, valor, data_recebimento, status, observacoes) 
+SELECT a.id_auxilio, 'Janeiro', 2025, 200.00, datetime('now', '-60 days'), 'confirmado', 'Primeiro recebimento'
+FROM auxilio a
+INNER JOIN inscricao i ON a.id_inscricao = i.id_inscricao
+WHERE a.status = 'aprovado' AND i.id_aluno = ?
+LIMIT 1;
+
+INSERT INTO recebimento (id_auxilio, mes_referencia, ano_referencia, valor, data_recebimento, status, observacoes) 
+SELECT a.id_auxilio, 'Fevereiro', 2025, 200.00, datetime('now', '-30 days'), 'confirmado', 'Segundo recebimento'
+FROM auxilio a
+INNER JOIN inscricao i ON a.id_inscricao = i.id_inscricao
+WHERE a.status = 'aprovado' AND i.id_aluno = ?
+LIMIT 1;
+
+INSERT INTO recebimento (id_auxilio, mes_referencia, ano_referencia, valor, data_recebimento, status, observacoes) 
+SELECT a.id_auxilio, 'Março', 2025, 200.00, datetime('now', '-5 days'), 'pendente', 'Terceiro recebimento - aguardando confirmação'
+FROM auxilio a
+INNER JOIN inscricao i ON a.id_inscricao = i.id_inscricao
+WHERE a.status = 'aprovado' AND i.id_aluno = ?
+LIMIT 1
+"""
+
