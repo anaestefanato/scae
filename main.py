@@ -6,7 +6,7 @@ import secrets
 from routes import public
 from routes.admin import analisar_cadastro_routes, editaisadmin_routes, pagamentos_routes, perfiladmin_routes, responder_chamado_routes, usuarios_routes
 from routes.aluno import acompanhar_inscricoes_routes, dados_cadastrais_routes, duvidas_frequentes_routes, editais_routes, notificacao_routes, perfilaluno_routes, recebimentos_routes, suporte_routes
-from repo import administrador_repo, aluno_repo, assistente_social_repo, auxilio_moradia_repo, auxilio_repo, auxilio_transporte_repo, chamado_repo, duvida_edital_repo, edital_repo, inscricao_repo, notificacao_repo, recurso_repo, resposta_chamado_repo, usuario_repo
+from repo import administrador_repo, aluno_repo, assistente_social_repo, auxilio_moradia_repo, auxilio_repo, auxilio_transporte_repo, chamado_repo, duvida_edital_repo, edital_repo, inscricao_repo, notificacao_repo, recurso_repo, resposta_chamado_repo, usuario_repo, recebimento_repo
 from routes.assistente_social import alunos_routes, analise_inscricoes_routes, analise_recurso_routes, perfilassistente_routes, entrevistas_routes, relatorios_routes, agenda_routes
 from util import seed_db
 
@@ -15,6 +15,7 @@ aluno_repo.criar_tabela()
 administrador_repo.criar_tabela()
 assistente_social_repo.criar_tabela()
 auxilio_repo.criar_tabela()
+recebimento_repo.criar_tabela()
 chamado_repo.criar_tabela()
 edital_repo.criar_tabela()
 duvida_edital_repo.criar_tabela()
@@ -27,6 +28,7 @@ auxilio_transporte_repo.AuxilioTransporteRepo.criar_tabela()
 seed_db.criar_admin_padrao()
 seed_db.criar_aluno_padrao()
 seed_db.criar_assistente_padrao()
+recebimento_repo.inserir_dados_exemplo()
 
 
 app = FastAPI()

@@ -26,19 +26,19 @@
     <div class="row mb-4">
         <div class="col-md-4">
             <div class="card stats-card">
-                <div class="number">R$ 1.400,00</div>
+                <div class="number">R$ {{ "%.2f"|format(estatisticas.total_valor) }}</div>
                 <div class="label">Total Recebido</div>
             </div>
         </div>
         <div class="col-md-4">
             <div class="card stats-card">
-                <div class="number">7</div>
-                <div class="label">Meses Recebidos</div>
+                <div class="number">{{ estatisticas.total_recebimentos }}</div>
+                <div class="label">Recebimentos Confirmados</div>
             </div>
         </div>
         <div class="col-md-4">
             <div class="card stats-card">
-                <div class="number">2</div>
+                <div class="number">{{ estatisticas.tipos_auxilio }}</div>
                 <div class="label">Tipos de Auxílio</div>
             </div>
         </div>
@@ -52,8 +52,20 @@
                     <span><i class="bi bi-cash-coin me-2"></i>Histórico de Pagamentos</span>
                     <select class="form-select w-auto" style="font-size:0.95rem;" onchange="filtrarAuxilio(this.value)">
                         <option value="todos">Todos os Auxílios</option>
-                        <option value="alimentacao">Auxílio Alimentação</option>
-                        <option value="transporte">Auxílio Transporte</option>
+                        {% set tipos_vistos = [] %}
+                        {% for recebimento in recebimentos %}
+                            {% set tipo_normalizado = recebimento.tipo_auxilio.replace(' ', '_').replace('auxilio_', '') %}
+                            {% if tipo_normalizado not in tipos_vistos %}
+                                {% set _ = tipos_vistos.append(tipo_normalizado) %}
+                                <option value="{{ tipo_normalizado }}">
+                                    {% if recebimento.tipo_auxilio == 'auxilio alimentacao' %}Auxílio Alimentação
+                                    {% elif recebimento.tipo_auxilio == 'auxilio transporte' %}Auxílio Transporte
+                                    {% elif recebimento.tipo_auxilio == 'auxilio moradia' %}Auxílio Moradia
+                                    {% elif recebimento.tipo_auxilio == 'auxilio material' %}Auxílio Material Didático
+                                    {% else %}{{ recebimento.tipo_auxilio|title }}{% endif %}
+                                </option>
+                            {% endif %}
+                        {% endfor %}
                     </select>
                 </div>
                 <div class="card-body p-0">
@@ -70,66 +82,51 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr data-auxilio="alimentacao">
-                                    <td><i class="bi bi-cup-hot me-2 text-success"></i>Alimentação</td>
-                                    <td>Julho/2025</td>
-                                    <td class="fw-bold text-success">R$ 200,00</td>
-                                    <td><span class="status-badge status-deferido">Confirmado</span></td>
-                                    <td>10/07/2025</td>
-                                    <td>
-                                        <button class="btn btn-sm btn-outline-info" onclick="mostrarDetalhes('Alimentação', 'Julho/2025', 'R$ 200,00', '10/07/2025')">
-                                            <i class="bi bi-eye me-1"></i>Ver
-                                        </button>
-                                    </td>
-                                </tr>
-                                <tr data-auxilio="transporte">
-                                    <td><i class="bi bi-bus-front me-2 text-success"></i>Transporte</td>
-                                    <td>Julho/2025</td>
-                                    <td class="fw-bold text-success">R$ 150,00</td>
-                                    <td><span class="status-badge status-deferido">Confirmado</span></td>
-                                    <td>10/07/2025</td>
-                                    <td>
-                                        <button class="btn btn-sm btn-outline-info" onclick="mostrarDetalhes('Transporte', 'Julho/2025', 'R$ 150,00', '10/07/2025')">
-                                            <i class="bi bi-eye me-1"></i>Ver
-                                        </button>
-                                    </td>
-                                </tr>
-                                <tr data-auxilio="alimentacao">
-                                    <td><i class="bi bi-cup-hot me-2 text-success"></i>Alimentação</td>
-                                    <td>Junho/2025</td>
-                                    <td class="fw-bold text-success">R$ 200,00</td>
-                                    <td><span class="status-badge status-deferido">Confirmado</span></td>
-                                    <td>10/06/2025</td>
-                                    <td>
-                                        <button class="btn btn-sm btn-outline-info" onclick="mostrarDetalhes('Alimentação', 'Junho/2025', 'R$ 200,00', '10/06/2025')">
-                                            <i class="bi bi-eye me-1"></i>Ver
-                                        </button>
-                                    </td>
-                                </tr>
-                                <tr data-auxilio="transporte">
-                                    <td><i class="bi bi-bus-front me-2 text-success"></i>Transporte</td>
-                                    <td>Junho/2025</td>
-                                    <td class="fw-bold text-success">R$ 150,00</td>
-                                    <td><span class="status-badge status-deferido">Confirmado</span></td>
-                                    <td>10/06/2025</td>
-                                    <td>
-                                        <button class="btn btn-sm btn-outline-info" onclick="mostrarDetalhes('Transporte', 'Junho/2025', 'R$ 150,00', '10/06/2025')">
-                                            <i class="bi bi-eye me-1"></i>Ver
-                                        </button>
-                                    </td>
-                                </tr>
-                                <tr data-auxilio="alimentacao">
-                                    <td><i class="bi bi-cup-hot me-2 text-success"></i>Alimentação</td>
-                                    <td>Maio/2025</td>
-                                    <td class="fw-bold text-success">R$ 200,00</td>
-                                    <td><span class="status-badge status-deferido">Confirmado</span></td>
-                                    <td>10/05/2025</td>
-                                    <td>
-                                        <button class="btn btn-sm btn-outline-info" onclick="mostrarDetalhes('Alimentação', 'Maio/2025', 'R$ 200,00', '10/05/2025')">
-                                            <i class="bi bi-eye me-1"></i>Ver
-                                        </button>
-                                    </td>
-                                </tr>
+                                {% if recebimentos %}
+                                    {% for recebimento in recebimentos %}
+                                    <tr data-auxilio="{{ recebimento.tipo_auxilio.replace(' ', '_').replace('auxilio_', '') }}">
+                                        <td>
+                                            {% if recebimento.tipo_auxilio == 'auxilio alimentacao' %}
+                                                <i class="bi bi-cup-hot me-2 text-success"></i>Alimentação
+                                            {% elif recebimento.tipo_auxilio == 'auxilio transporte' %}
+                                                <i class="bi bi-bus-front me-2 text-success"></i>Transporte
+                                            {% elif recebimento.tipo_auxilio == 'auxilio moradia' %}
+                                                <i class="bi bi-house me-2 text-success"></i>Moradia
+                                            {% elif recebimento.tipo_auxilio == 'auxilio material' %}
+                                                <i class="bi bi-book me-2 text-success"></i>Material Didático
+                                            {% else %}
+                                                <i class="bi bi-gift me-2 text-success"></i>{{ recebimento.tipo_auxilio|title }}
+                                            {% endif %}
+                                        </td>
+                                        <td>{{ recebimento.mes_referencia }}/{{ recebimento.ano_referencia }}</td>
+                                        <td class="fw-bold text-success">R$ {{ "%.2f"|format(recebimento.valor) }}</td>
+                                        <td>
+                                            <span class="status-badge 
+                                                {% if recebimento.status == 'confirmado' %}status-deferido
+                                                {% elif recebimento.status == 'pendente' %}status-pendente
+                                                {% else %}status-indeferido{% endif %}">
+                                                {% if recebimento.status == 'confirmado' %}Confirmado
+                                                {% elif recebimento.status == 'pendente' %}Pendente
+                                                {% else %}{{ recebimento.status|title }}{% endif %}
+                                            </span>
+                                        </td>
+                                        <td>{{ recebimento.data_recebimento }}</td>
+                                        <td>
+                                            <button class="btn btn-sm btn-outline-info" onclick="mostrarDetalhes({{ recebimento.id_recebimento }})">
+                                                <i class="bi bi-eye me-1"></i>Ver
+                                            </button>
+                                        </td>
+                                    </tr>
+                                    {% endfor %}
+                                {% else %}
+                                    <tr>
+                                        <td colspan="6" class="text-center py-5">
+                                            <i class="bi bi-inbox text-muted" style="font-size: 2rem;"></i>
+                                            <div class="mt-2 text-muted">Nenhum recebimento encontrado</div>
+                                            <small class="text-muted">Você ainda não possui histórico de recebimentos.</small>
+                                        </td>
+                                    </tr>
+                                {% endif %}
                             </tbody>
                         </table>
                     </div>
@@ -153,18 +150,26 @@
                     <i class="bi bi-info-circle me-2"></i>Resumo Mensal
                 </div>
                 <div class="card-body">
-                    <div class="d-flex justify-content-between align-items-center mb-2">
-                        <span class="text-muted">Último Recebimento:</span>
-                        <span class="fw-bold text-success">R$ 350,00</span>
-                    </div>
-                    <div class="d-flex justify-content-between align-items-center mb-2">
-                        <span class="text-muted">Próximo Pagamento:</span>
-                        <span class="fw-bold">10/09/2025</span>
-                    </div>
-                    <div class="d-flex justify-content-between align-items-center">
-                        <span class="text-muted">Média Mensal:</span>
-                        <span class="fw-bold">R$ 350,00</span>
-                    </div>
+                    {% if recebimentos %}
+                        {% set ultimo_recebimento = recebimentos[0] %}
+                        <div class="d-flex justify-content-between align-items-center mb-2">
+                            <span class="text-muted">Último Recebimento:</span>
+                            <span class="fw-bold text-success">R$ {{ "%.2f"|format(ultimo_recebimento.valor) }}</span>
+                        </div>
+                        <div class="d-flex justify-content-between align-items-center mb-2">
+                            <span class="text-muted">Último Mês:</span>
+                            <span class="fw-bold">{{ ultimo_recebimento.mes_referencia }}/{{ ultimo_recebimento.ano_referencia }}</span>
+                        </div>
+                        <div class="d-flex justify-content-between align-items-center">
+                            <span class="text-muted">Média por Recebimento:</span>
+                            <span class="fw-bold">R$ {{ "%.2f"|format(estatisticas.valor_medio) }}</span>
+                        </div>
+                    {% else %}
+                        <div class="text-center py-3">
+                            <i class="bi bi-info-circle text-muted"></i>
+                            <p class="text-muted mb-0">Nenhum dados disponível</p>
+                        </div>
+                    {% endif %}
                 </div>
             </div>
         </div>
