@@ -2,7 +2,7 @@ from fastapi import APIRouter, Request
 from fastapi.responses import RedirectResponse
 from fastapi.templating import Jinja2Templates
 
-from repo import usuario_repo
+from repo import usuario_repo, inscricao_repo
 from util.auth_decorator import obter_usuario_logado, requer_autenticacao
 
 
@@ -17,7 +17,15 @@ async def get_acompanhar_inscricoes(request: Request, usuario_logado: dict = Non
         return RedirectResponse("/aluno/perfil", status_code=303)
 
     aluno = usuario_repo.obter_usuario_por_matricula(usuario_logado['matricula'])
-    response = templates.TemplateResponse("/aluno/acompanhar_inscricoes.html", {"request": request, "aluno": aluno})
+    
+    # Buscar todas as inscrições do aluno
+    inscricoes = inscricao_repo.obter_por_aluno(aluno.id_usuario)
+    
+    response = templates.TemplateResponse("/aluno/acompanhar_inscricoes.html", {
+        "request": request, 
+        "aluno": aluno,
+        "inscricoes": inscricoes
+    })
     return response
 
 @router.get("/acompanhar-inscricoes/recurso")

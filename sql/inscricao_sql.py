@@ -70,3 +70,28 @@ EXCLUIR = """
 DELETE FROM inscricao
 WHERE id_inscricao = ?
 """
+
+OBTER_POR_ALUNO = """
+SELECT
+    i.id_inscricao,
+    i.id_aluno,
+    i.id_edital,
+    i.data_inscricao,
+    i.status,
+    i.urlDocumentoIdentificacao,
+    i.urlDeclaracaoRenda,
+    i.urlTermoResponsabilidade,
+    e.titulo as edital_titulo,
+    e.data_publicacao,
+    e.data_encerramento,
+    a.id_auxilio,
+    a.tipo_auxilio,
+    a.valor_mensal,
+    a.data_inicio,
+    a.data_fim
+FROM inscricao i
+INNER JOIN edital e ON i.id_edital = e.id_edital
+LEFT JOIN auxilio a ON i.id_inscricao = a.id_inscricao
+WHERE i.id_aluno = ?
+ORDER BY i.data_inscricao DESC
+"""

@@ -82,15 +82,15 @@
                                 </div>
                                 <div class="d-flex justify-content-end mt-3">
                                     {% if auxilio.status_inscricao == 'deferido' %}
-                                        <button class="btn btn-sm btn-outline-success me-2" onclick="confirmarRecebimento({{ auxilio.id_auxilio }})">
+                                        <button class="btn btn-sm btn-outline-success me-2" onclick="confirmarRecebimento('{{ auxilio.id_auxilio }}')">
                                             <i class="bi bi-check-circle me-1"></i>Confirmar Recebimento
                                         </button>
                                     {% elif auxilio.status_inscricao == 'em_analise' %}
-                                        <button class="btn btn-sm btn-outline-secondary me-2" onclick="acompanharInscricao({{ auxilio.id_inscricao }})">
+                                        <a href="/aluno/acompanhar-inscricoes" class="btn btn-sm btn-outline-secondary me-2">
                                             <i class="bi bi-search me-1"></i>Acompanhar
-                                        </button>
+                                        </a>
                                     {% endif %}
-                                    <button class="btn btn-sm btn-outline-secondary" onclick="verDetalhes({{ auxilio.id_auxilio }})">
+                                    <button class="btn btn-sm btn-outline-secondary" onclick="verDetalhes('{{ auxilio.id_auxilio }}')">
                                         <i class="bi bi-eye me-1"></i>Detalhes
                                     </button>
                                 </div>
@@ -233,85 +233,27 @@
         <div class="modal-content shadow-lg">
             <div class="modal-header">
                 <h5 class="modal-title">
-                    <i class="bi bi-file-earmark-text me-2"></i>Detalhes do Auxílio Alimentação
+                    <i class="bi bi-file-earmark-text me-2"></i><span id="modalTituloDetalhes">Detalhes do Auxílio</span>
                 </h5>
                 <button type="button" class="btn-close" aria-label="Fechar" onclick="fecharModalDetalhesAuxilio()"></button>
             </div>
             <div class="modal-body">
                 <div class="row mb-3">
                     <div class="col-md-6">
-                        <p><strong>Edital:</strong> 01/2025</p>
-                        <p><strong>Valor:</strong> R$ 200,00</p>
-                        <p><strong>Data de Aprovação:</strong> 15/03/2025</p>
-                        <p><strong>Último Recebimento:</strong> 10/04/2025</p>
+                        <p><strong>Edital:</strong> <span id="detalheEdital">-</span></p>
+                        <p><strong>Valor:</strong> R$ <span id="detalheValor">-</span></p>
+                        <p><strong>Data de Aprovação:</strong> <span id="detalheDataAprovacao">-</span></p>
+                        <p><strong>Vigência:</strong> <span id="detalheVigencia">-</span></p>
                     </div>
                     <div class="col-md-6">
-                        <p><strong>Status:</strong> <span class="status-badge status-deferido">Deferido</span></p>
-                        <p><strong>Observações:</strong></p>
-                        <ul class="list-group list-group-flush">
-                            <li class="list-group-item">Auxílio concedido após análise socioeconômica.</li>
-                            <li class="list-group-item">Recebimento mensal até o final do semestre.</li>
-                        </ul>
+                        <p><strong>Status:</strong> <span id="detalheStatus" class="status-badge">-</span></p>
+                        <p><strong>Tipo de Auxílio:</strong> <span id="detalheTipo">-</span></p>
+                        <p><strong>Descrição:</strong> <span id="detalheDescricao">-</span></p>
                     </div>
                 </div>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" onclick="fecharModalDetalhesAuxilio()">
-                    <i class="bi bi-x-circle me-1"></i>Fechar
-                </button>
-            </div>
-        </div>
-    </div>
-</div>
-
-<!-- Modal de acompanhamento de inscrição -->
-<div id="modalAcompanhar" class="modal fade" tabindex="-1" role="dialog" aria-modal="true" style="display:none; background: rgba(0,0,0,0.4);">
-    <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
-        <div class="modal-content shadow-lg">
-            <div class="modal-header">
-                <h5 class="modal-title">
-                    <i class="bi bi-search me-2"></i>Acompanhamento da Inscrição
-                </h5>
-                <button type="button" class="btn-close" aria-label="Fechar" onclick="fecharModalAcompanhar()"></button>
-            </div>
-            <div class="modal-body">
-                <div class="row mb-3">
-                    <div class="col-md-6">
-                        <p><strong>Edital:</strong> 01/2025</p>
-                        <p><strong>Tipo de Auxílio:</strong> Transporte</p>
-                        <p><strong>Valor Previsto:</strong> R$ 150,00</p>
-                        <p><strong>Data de Inscrição:</strong> 01/04/2025</p>
-                    </div>
-                    <div class="col-md-6">
-                        <p><strong>Documentos Enviados:</strong></p>
-                        <ul class="list-group list-group-flush">
-                            <li class="list-group-item">Comprovante de residência</li>
-                            <li class="list-group-item">Declaração de matrícula</li>
-                            <li class="list-group-item">RG</li>
-                        </ul>
-                    </div>
-                </div>
-                <div class="mb-4">
-                    <span class="status-badge status-pendente">Aguardando análise da assistência social</span>
-                </div>
-                <h6 class="mb-3">Linha do Tempo</h6>
-                <ul class="timeline">
-                    <li class="timeline-item completed">
-                        <span class="timeline-date">01/04/2025</span>
-                        <span class="timeline-content">Inscrição submetida</span>
-                    </li>
-                    <li class="timeline-item active">
-                        <span class="timeline-date">Em andamento</span>
-                        <span class="timeline-content">Em análise pela assistência social</span>
-                    </li>
-                    <li class="timeline-item">
-                        <span class="timeline-date">Previsto: 30/04/2025</span>
-                        <span class="timeline-content">Resultado da análise</span>
-                    </li>
-                </ul>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" onclick="fecharModalAcompanhar()">
                     <i class="bi bi-x-circle me-1"></i>Fechar
                 </button>
             </div>
