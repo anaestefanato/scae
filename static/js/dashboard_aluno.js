@@ -84,17 +84,57 @@ function confirmarRecebimento(idAuxilio) {
 // Modal Detalhes Auxílio
 function verDetalhes(idAuxilio) {
     console.log('Visualizando detalhes do auxílio ID:', idAuxilio);
-    // Aqui você pode implementar a lógica para buscar e exibir os detalhes
-    // Por enquanto, apenas abre um modal simples
-    alert('Detalhes do auxílio ID: ' + idAuxilio + '\n\nEsta funcionalidade será implementada em breve.');
+    
+    // Buscar dados do auxílio e popular o modal
+    // Por enquanto, vamos buscar do DOM os dados do auxílio
+    const auxilioCards = document.querySelectorAll('.card');
+    let auxilioData = null;
+    
+    auxilioCards.forEach(card => {
+        const button = card.querySelector(`button[onclick*="${idAuxilio}"]`);
+        if (button) {
+            const cardBody = card.querySelector('.card-body');
+            if (cardBody) {
+                const edital = cardBody.querySelector('p:nth-child(1) strong').nextSibling.textContent.trim();
+                const valor = cardBody.querySelector('p:nth-child(2)').textContent.match(/R\$ ([\d,\.]+)/)?.[1] || '0,00';
+                const dataInicio = cardBody.querySelector('p:nth-child(4)').textContent.split(':')[1]?.trim() || '-';
+                const tipoAuxilio = card.querySelector('.card-header span').textContent.trim();
+                const status = card.querySelector('.status-badge').textContent.trim();
+                
+                auxilioData = { edital, valor, dataInicio, tipoAuxilio, status };
+            }
+        }
+    });
+    
+    if (auxilioData) {
+        // Popular o modal com os dados encontrados
+        document.getElementById('detalheEdital').textContent = auxilioData.edital;
+        document.getElementById('detalheValor').textContent = auxilioData.valor;
+        document.getElementById('detalheDataAprovacao').textContent = auxilioData.dataInicio;
+        document.getElementById('detalheVigencia').textContent = auxilioData.dataInicio + ' a ' + (auxilioData.dataFim || 'indefinido');
+        document.getElementById('detalheTipo').textContent = auxilioData.tipoAuxilio;
+        document.getElementById('modalTituloDetalhes').textContent = 'Detalhes do ' + auxilioData.tipoAuxilio;
+        
+        const statusElement = document.getElementById('detalheStatus');
+        statusElement.textContent = auxilioData.status;
+        statusElement.className = 'status-badge status-' + auxilioData.status.toLowerCase();
+        
+        // Abrir o modal
+        const modal = document.getElementById('modalDetalhesAuxilio');
+        if (modal) {
+            modal.style.display = 'block';
+            modal.classList.add('show');
+        }
+    } else {
+        alert('Não foi possível carregar os detalhes do auxílio.');
+    }
 }
 
-// Modal de acompanhamento de inscrição
-function acompanharInscricao(idInscricao) {
-    console.log('Acompanhando inscrição ID:', idInscricao);
-    // Aqui você pode implementar a lógica para acompanhar a inscrição
-    // Por enquanto, apenas abre um modal simples
-    alert('Acompanhamento da inscrição ID: ' + idInscricao + '\n\nEsta funcionalidade será implementada em breve.');
+// Modal de acompanhamento de inscrição - Removido, agora redireciona para página dedicada
+
+// Remover as funções antigas que não são mais necessárias
+function fecharModalAcompanhar() {
+    // Função removida - modal não existe mais
 }
 
 // Manter as funções antigas para compatibilidade com elementos estáticos
@@ -123,12 +163,6 @@ function confirmarRecebimentoModal() {
 }
 
 // Modal Detalhes Auxílio  
-if(document.getElementById('btnDetalhesAuxilio')){
-    document.getElementById('btnDetalhesAuxilio').addEventListener('click', function() {
-        document.getElementById('modalDetalhesAuxilio').style.display = 'block';
-        document.getElementById('modalDetalhesAuxilio').classList.add('show');
-    });
-}
 function fecharModalDetalhesAuxilio() {
     const modal = document.getElementById('modalDetalhesAuxilio');
     if(modal) {
@@ -137,20 +171,8 @@ function fecharModalDetalhesAuxilio() {
     }
 }
 
-// Modal de acompanhamento de inscrição
-if(document.getElementById('btnAcompanhar')){
-    document.getElementById('btnAcompanhar').addEventListener('click', function() {
-        document.getElementById('modalAcompanhar').style.display = 'block';
-        document.getElementById('modalAcompanhar').classList.add('show');
-    });
-}
-function fecharModalAcompanhar() {
-    const modal = document.getElementById('modalAcompanhar');
-    if(modal) {
-        modal.style.display = 'none';
-        modal.classList.remove('show');
-    }
-}
+// Remover eventos antigos que não são mais necessários
+// Modal de acompanhamento removido - agora usa página dedicada
 
 // FullCalendar
 window.addEventListener("DOMContentLoaded", function () {

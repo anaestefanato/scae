@@ -115,11 +115,11 @@ def obter_por_aluno(id_aluno: int) -> list[dict]:
                 'edital_titulo': row["edital_titulo"],
                 'data_publicacao': row["data_publicacao"],
                 'data_encerramento': row["data_encerramento"],
-                'id_auxilio': row.get("id_auxilio"),
-                'tipo_auxilio': row.get("tipo_auxilio"),
-                'valor_mensal': row.get("valor_mensal"),
-                'data_inicio': row.get("data_inicio"),
-                'data_fim': row.get("data_fim")
+                'id_auxilio': row["id_auxilio"],
+                'tipo_auxilio': row["tipo_auxilio"],
+                'valor_mensal': row["valor_mensal"],
+                'data_inicio': row["data_inicio"],
+                'data_fim': row["data_fim"]
             }
             inscricoes.append(inscricao)
         return inscricoes
