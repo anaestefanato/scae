@@ -26,19 +26,19 @@
     <div class="row mb-4">
         <div class="col-md-4">
             <div class="card stats-card">
-                <div class="number">R$ {{ "%.2f"|format(estatisticas.total_valor) }}</div>
+                <div class="number">R$ {{ "%.2f"|format(estatisticas.total_valor or '0') }}</div>
                 <div class="label">Total Recebido</div>
             </div>
         </div>
         <div class="col-md-4">
             <div class="card stats-card">
-                <div class="number">{{ estatisticas.total_recebimentos }}</div>
+                <div class="number">{{ estatisticas.total_recebimentos or '0' }}</div>
                 <div class="label">Recebimentos Confirmados</div>
             </div>
         </div>
         <div class="col-md-4">
             <div class="card stats-card">
-                <div class="number">{{ estatisticas.tipos_auxilio }}</div>
+                <div class="number">{{ estatisticas.tipos_auxilio or '0' }}</div>
                 <div class="label">Tipos de Auxílio</div>
             </div>
         </div>
