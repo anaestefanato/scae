@@ -153,7 +153,11 @@
                                 <label class="form-label">Rua</label>
                                 <input type="text" class="form-control" id="rua" name="rua" value="{{ aluno.rua }}" required>
                             </div>
-                            <div class="col-md-6">
+                            <div class="col-md-3">
+                                <label class="form-label">Estado</label>
+                                <input type="text" class="form-control" id="estado" name="estado" value="{{ aluno.estado }}" required>
+                            </div>
+                            <div class="col-md-3">
                                 <label class="form-label">Número</label>
                                 <input type="text" class="form-control" name="numero" value="{{ aluno.numero }}" required>
                             </div>
@@ -293,6 +297,7 @@
             const cidadeInput = document.getElementById('cidade');
             const bairroInput = document.getElementById('bairro');
             const ruaInput = document.getElementById('rua');
+            const estadoInput = document.getElementById('estado');
 
             // Função para formatar CEP
             function formatarCEP(cep) {
@@ -314,6 +319,7 @@
                 ruaInput.value = '';
                 bairroInput.value = '';
                 cidadeInput.value = '';
+                estadoInput.value = '';
             }
 
             // Função para buscar CEP na API ViaCEP
@@ -349,6 +355,12 @@
                         cidadeInput.value = data.localidade;
                         cidadeInput.classList.add('campo-preenchido');
                         setTimeout(() => cidadeInput.classList.remove('campo-preenchido'), 2000);
+                    }
+                    
+                    if (data.uf) {
+                        estadoInput.value = data.uf;
+                        estadoInput.classList.add('campo-preenchido');
+                        setTimeout(() => estadoInput.classList.remove('campo-preenchido'), 2000);
                     }
 
                     // Mostrar mensagem de sucesso temporariamente
