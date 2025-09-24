@@ -14,6 +14,6 @@ templates = Jinja2Templates(directory="templates")
 @requer_autenticacao("admin")
 async def get_responder_chamado(request: Request, usuario_logado: dict = None):
     admin = usuario_repo.obter_usuario_por_matricula(usuario_logado['matricula'])
-    response = templates.TemplateResponse("/admin/responder_chamado.html", {"request": request, "admin": admin})
+    response = templates.TemplateResponse("/admin/chamado.html", {"request": request, "admin": admin})
     return response
 

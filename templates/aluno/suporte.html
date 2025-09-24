@@ -159,7 +159,7 @@
                 <img src="/static/img/perfil.png" alt="Perfil">
                 <div>
                     <small class="text-muted">Aluno</small>
-                    <div class="fw-bold">João Silva</div>
+                    <div class="fw-bold">{{ aluno.nome }}</div>
                 </div>
             </div>
         </div>
@@ -223,111 +223,75 @@
         <div class="filter-tabs">
             <ul class="nav nav-pills" id="ticketTabs">
                 <li class="nav-item">
-                    <button class="nav-link active" data-status="todos">Todos (5)</button>
+                    <button class="nav-link active" data-status="todos">Todos ({{ estatisticas.total }})</button>
                 </li>
                 <li class="nav-item">
-                    <button class="nav-link" data-status="aberto">Abertos (2)</button>
+                    <button class="nav-link" data-status="aberto">Abertos ({{ estatisticas.abertos }})</button>
                 </li>
                 <li class="nav-item">
-                    <button class="nav-link" data-status="em-andamento">Em Andamento (1)</button>
+                    <button class="nav-link" data-status="em-andamento">Em Andamento ({{ estatisticas.em_andamento }})</button>
                 </li>
                 <li class="nav-item">
-                    <button class="nav-link" data-status="resolvido">Resolvidos (2)</button>
+                    <button class="nav-link" data-status="resolvido">Resolvidos ({{ estatisticas.resolvidos }})</button>
                 </li>
             </ul>
         </div>
 
         <!-- Lista de Chamados -->
         <div id="ticketsList">
-            <!-- Chamado 1 -->
-            <div class="ticket-card" data-status="aberto">
-                <div class="ticket-status status-aberto"></div>
+            {% for chamado in chamados %}
+            <div class="ticket-card" data-status="{{ chamado.status }}">
+                <div class="ticket-status {% if chamado.status == 'aberto' %}status-aberto{% elif chamado.status == 'em-andamento' %}status-em-andamento{% else %}status-resolvido{% endif %}"></div>
                 <div class="card-body">
                     <div class="d-flex justify-content-between align-items-start">
                         <div>
-                            <h5 class="mb-2">Erro ao anexar documento</h5>
-                            <p class="mb-3">Não estou conseguindo anexar o comprovante de residência na inscrição do auxílio moradia. O sistema apresenta erro ao fazer upload do arquivo PDF.</p>
+                            <h5 class="mb-2">{{ chamado.titulo }}</h5>
+                            <p class="mb-3">
+                                {% if chamado.status == 'resolvido' %}
+                                    {% if chamado.categoria == 'erro' %}
+                                        Resolvido: O problema foi solucionado pela equipe de suporte.
+                                    {% else %}
+                                        Resolvido: {{ chamado.descricao[:100] }}...
+                                    {% endif %}
+                                {% else %}
+                                    {{ chamado.descricao }}
+                                {% endif %}
+                            </p>
                             <div class="ticket-meta">
-                                <span class="me-3"><i class="bi bi-clock me-1"></i>Aberto há 2 horas</span>
-                                <span class="me-3"><i class="bi bi-tag me-1"></i>Erro Técnico</span>
-                                <span><i class="bi bi-hash me-1"></i>Ticket #2025081</span>
+                                <span class="me-3">
+                                    <i class="bi bi-clock me-1"></i>
+                                    {% if chamado.status == 'aberto' %}
+                                        Aberto em {{ chamado.data_criacao[:16].replace('T', ' às ') if 'T' in chamado.data_criacao else chamado.data_criacao[:16] }}
+                                    {% elif chamado.status == 'em-andamento' %}
+                                        Em andamento - Última atualização: {{ chamado.data_ultima_atualizacao[:16].replace('T', ' às ') if chamado.data_ultima_atualizacao and 'T' in chamado.data_ultima_atualizacao else chamado.data_ultima_atualizacao[:16] if chamado.data_ultima_atualizacao else 'N/A' }}
+                                    {% else %}
+                                        Resolvido em {{ chamado.data_ultima_atualizacao[:16].replace('T', ' às ') if chamado.data_ultima_atualizacao and 'T' in chamado.data_ultima_atualizacao else chamado.data_ultima_atualizacao[:16] if chamado.data_ultima_atualizacao else 'N/A' }}
+                                    {% endif %}
+                                </span>
+                                <span class="me-3">
+                                    <i class="bi bi-tag me-1"></i>
+                                    {% if chamado.categoria == 'erro' %}Erro Técnico
+                                    {% elif chamado.categoria == 'duvida' %}Dúvida
+                                    {% elif chamado.categoria == 'sugestao' %}Sugestão
+                                    {% else %}Outros{% endif %}
+                                </span>
+                                <span><i class="bi bi-hash me-1"></i>Ticket #{{ 2025000 + chamado.id_chamado }}</span>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-
-            <!-- Chamado 2 -->
-            <div class="ticket-card" data-status="em-andamento">
-                <div class="ticket-status status-em-andamento"></div>
-                <div class="card-body">
-                    <div class="d-flex justify-content-between align-items-start">
-                        <div>
-                            <h5 class="mb-2">Dúvida sobre prazo de inscrição</h5>
-                            <p class="mb-3">Gostaria de saber se haverá prorrogação do prazo de inscrição para o auxílio material didático.</p>
-                            <div class="ticket-meta">
-                                <span class="me-3"><i class="bi bi-clock me-1"></i>Em andamento - Última atualização: 1 hora atrás</span>
-                                <span class="me-3"><i class="bi bi-tag me-1"></i>Dúvida</span>
-                                <span><i class="bi bi-hash me-1"></i>Ticket #2025080</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+            {% else %}
+            <!-- Mensagem quando não há chamados -->
+            <div class="text-center py-5">
+                <i class="bi bi-headset" style="font-size: 4rem; opacity: 0.5; margin-bottom: 20px;"></i>
+                <h4>Nenhum chamado encontrado</h4>
+                <p>Você ainda não abriu nenhum chamado de suporte.</p>
+                <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#newTicketModal">
+                    <i class="bi bi-plus-lg me-1"></i>Abrir Primeiro Chamado
+                </button>
             </div>
-
-            <!-- Chamado 3 -->
-            <div class="ticket-card" data-status="aberto">
-                <div class="ticket-status status-aberto"></div>
-                <div class="card-body">
-                    <div class="d-flex justify-content-between align-items-start">
-                        <div>
-                            <h5 class="mb-2">Não recebi a confirmação por email</h5>
-                            <p class="mb-3">Fiz a inscrição no auxílio alimentação ontem, mas ainda não recebi o email de confirmação da inscrição.</p>
-                            <div class="ticket-meta">
-                                <span class="me-3"><i class="bi bi-clock me-1"></i>Aberto há 1 dia</span>
-                                <span class="me-3"><i class="bi bi-tag me-1"></i>Notificação</span>
-                                <span><i class="bi bi-hash me-1"></i>Ticket #2025079</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Chamado 4 -->
-            <div class="ticket-card" data-status="resolvido">
-                <div class="ticket-status status-resolvido"></div>
-                <div class="card-body">
-                    <div class="d-flex justify-content-between align-items-start">
-                        <div>
-                            <h5 class="mb-2">Problema ao acessar histórico</h5>
-                            <p class="mb-3">Resolvido: A página do histórico de recebimentos voltou a funcionar normalmente após a manutenção.</p>
-                            <div class="ticket-meta">
-                                <span class="me-3"><i class="bi bi-clock me-1"></i>Resolvido - 2 dias atrás</span>
-                                <span class="me-3"><i class="bi bi-tag me-1"></i>Erro Técnico</span>
-                                <span><i class="bi bi-hash me-1"></i>Ticket #2025078</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Chamado 5 -->
-            <div class="ticket-card" data-status="resolvido">
-                <div class="ticket-status status-resolvido"></div>
-                <div class="card-body">
-                    <div class="d-flex justify-content-between align-items-start">
-                        <div>
-                            <h5 class="mb-2">Atualização de dados cadastrais</h5>
-                            <p class="mb-3">Resolvido: Dados atualizados com sucesso no sistema.</p>
-                            <div class="ticket-meta">
-                                <span class="me-3"><i class="bi bi-clock me-1"></i>Resolvido - 3 dias atrás</span>
-                                <span class="me-3"><i class="bi bi-tag me-1"></i>Cadastro</span>
-                                <span><i class="bi bi-hash me-1"></i>Ticket #2025077</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+            {% endfor %}
         </div>
     </div>
 

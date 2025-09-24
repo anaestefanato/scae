@@ -127,33 +127,29 @@ def inserir_dados_exemplo() -> bool:
     try:
         with get_connection() as conn:
             cursor = conn.cursor()
-            # Executar cada comando SQL separadamente
+            # Primeiro, obtém um ID de aluno que tenha auxílio deferido
+            cursor.execute("""
+                SELECT DISTINCT i.id_aluno 
+                FROM inscricao i 
+                INNER JOIN auxilio a ON i.id_inscricao = a.id_inscricao
+                WHERE i.status = 'deferido' 
+                LIMIT 1
+            """)
+            result = cursor.fetchone()
+            if not result:
+                print("Nenhum aluno com auxílio deferido encontrado para inserir dados de exemplo")
+                return True
+            
+            id_aluno = result[0]
+            
+            # Executar cada comando SQL separadamente com o ID do aluno
             comandos = INSERIR_DADOS_EXEMPLO.split(';')
             for comando in comandos:
                 comando = comando.strip()
                 if comando and not comando.startswith('--') and comando != '':
-                    cursor.execute(comando)
+                    cursor.execute(comando, (id_aluno,))
             conn.commit()
         return True
     except Exception as e:
         print(f"Erro ao inserir dados de exemplo: {e}")
         return False
-
-def obter_estatisticas_aluno(id_aluno: int) -> dict:
-    with get_connection() as conn:
-        cursor = conn.cursor()
-        cursor.execute(OBTER_ESTATISTICAS_ALUNO, (id_aluno,))
-        row = cursor.fetchone()
-        if row is None:
-            return {
-                'total_recebimentos': 0,
-                'total_valor': 0.0,
-                'tipos_auxilio': 0,
-                'valor_medio': 0.0
-            }
-        return {
-            'total_recebimentos': row["total_recebimentos"] or 0,
-            'total_valor': row["total_valor"] or 0.0,
-            'tipos_auxilio': row["tipos_auxilio"] or 0,
-            'valor_medio': row["valor_medio"] or 0.0
-        }
