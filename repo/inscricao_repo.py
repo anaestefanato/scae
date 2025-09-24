@@ -123,3 +123,56 @@ def obter_por_aluno(id_aluno: int) -> list[dict]:
             }
             inscricoes.append(inscricao)
         return inscricoes
+
+
+def obter_estatisticas_analise() -> dict:
+    """Obtém estatísticas das inscrições para análise"""
+    with get_connection() as conn:
+        cursor = conn.cursor()
+        cursor.execute(OBTER_ESTATISTICAS_ANALISE)
+        row = cursor.fetchone()
+        return {
+            'pendentes': row["pendentes"] or 0,
+            'em_analise': row["em_analise"] or 0,
+            'analisadas_hoje': row["analisadas_hoje"] or 0,
+            'total_analisadas': row["total_analisadas"] or 0
+        }
+
+
+def obter_inscricoes_para_analise(pagina: int = 1, limite: int = 10) -> tuple[list[dict], int]:
+    """Obtém inscrições pendentes para análise com paginação"""
+    offset = (pagina - 1) * limite
+    
+    with get_connection() as conn:
+        cursor = conn.cursor()
+        
+        # Buscar total de registros
+        cursor.execute(CONTAR_INSCRICOES_PARA_ANALISE)
+        total = cursor.fetchone()["total"]
+        
+        # Buscar registros da página
+        cursor.execute(OBTER_INSCRICOES_PARA_ANALISE, (limite, offset))
+        rows = cursor.fetchall()
+        
+        inscricoes = []
+        for row in rows:
+            inscricao = {
+                'id_inscricao': row["id_inscricao"],
+                'id_aluno': row["id_aluno"],
+                'id_edital': row["id_edital"],
+                'data_inscricao': row["data_inscricao"],
+                'status': row["status"],
+                'urlDocumentoIdentificacao': row["urlDocumentoIdentificacao"],
+                'urlDeclaracaoRenda': row["urlDeclaracaoRenda"],
+                'urlTermoResponsabilidade': row["urlTermoResponsabilidade"],
+                'edital_titulo': row["edital_titulo"],
+                'data_encerramento': row["data_encerramento"],
+                'aluno_nome': row["aluno_nome"],
+                'aluno_matricula': row["aluno_matricula"],
+                'tipo_auxilio': row["tipo_auxilio"] if "tipo_auxilio" in row else "Não especificado",
+                'valor_mensal': row["valor_mensal"] if "valor_mensal" in row else 0,
+                'prioridade': row["prioridade"]
+            }
+            inscricoes.append(inscricao)
+        
+        return inscricoes, total
