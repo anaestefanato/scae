@@ -69,3 +69,36 @@ def excluir(id: int) -> bool:
         cursor = conn.cursor()
         cursor.execute(EXCLUIR, (id,))
         return cursor.rowcount > 0
+
+def obter_por_chamado(id_chamado: int) -> list[RespostaChamado]:
+    """Obtém todas as respostas de um chamado específico"""
+    with get_connection() as conn:
+        cursor = conn.cursor()
+        cursor.execute("""
+            SELECT 
+                r.id_resposta_chamado,
+                r.id_chamado,
+                r.id_usuario_autor,
+                r.mensagem,
+                r.data_resposta,
+                u.nome as nome_autor
+            FROM resposta_chamado r
+            INNER JOIN usuario u ON r.id_usuario_autor = u.id_usuario
+            WHERE r.id_chamado = ?
+            ORDER BY r.data_resposta ASC
+        """, (id_chamado,))
+        rows = cursor.fetchall()
+        respostas = []
+        for row in rows:
+            resposta = RespostaChamado(
+                id_resposta=row["id_resposta_chamado"],
+                id_chamado=row["id_chamado"],
+                id_usuario=row["id_usuario_autor"],
+                mensagem=row["mensagem"],
+                data_resposta=row["data_resposta"],
+                status=""
+            )
+            # Adicionar nome do autor como atributo extra
+            resposta.nome_autor = row["nome_autor"]
+            respostas.append(resposta)
+        return respostas

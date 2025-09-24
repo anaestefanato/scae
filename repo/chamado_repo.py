@@ -147,3 +147,168 @@ def excluir(id: int) -> bool:
         cursor = conn.cursor()
         cursor.execute(EXCLUIR, (id,))
         return cursor.rowcount > 0
+
+def obter_todos_com_usuario() -> List[dict]:
+    """Obtém todos os chamados com informações do usuário para o admin"""
+    with get_connection() as conn:
+        cursor = conn.cursor()
+        cursor.execute("""
+            SELECT
+                c.id_chamado,
+                c.id_usuario_criador,
+                c.id_administrador_responsavel,
+                c.titulo,
+                c.descricao,
+                c.categoria,
+                c.data_criacao,
+                c.data_ultima_atualizacao,
+                c.status,
+                u.nome as usuario_nome,
+                u.email as usuario_email,
+                u.matricula as usuario_matricula
+            FROM chamado c
+            INNER JOIN usuario u ON c.id_usuario_criador = u.id_usuario
+            ORDER BY c.data_criacao DESC
+        """)
+        rows = cursor.fetchall()
+        chamados = []
+        for row in rows:
+            chamado = {
+                'id_chamado': row["id_chamado"],
+                'id_usuario_criador': row["id_usuario_criador"],
+                'id_administrador_responsavel': row["id_administrador_responsavel"],
+                'titulo': row["titulo"],
+                'descricao': row["descricao"],
+                'categoria': row["categoria"],
+                'data_criacao': row["data_criacao"],
+                'data_ultima_atualizacao': row["data_ultima_atualizacao"],
+                'status': row["status"],
+                'usuario_nome': row["usuario_nome"],
+                'usuario_email': row["usuario_email"],
+                'usuario_matricula': row["usuario_matricula"]
+            }
+            chamados.append(chamado)
+        return chamados
+
+def obter_por_pagina_com_usuario(pagina: int = 1, limit: int = 10, filtro_status: str = None, filtro_categoria: str = None) -> dict:
+    """Obtém chamados paginados com informações do usuário e filtros para o admin"""
+    offset = (pagina - 1) * limit
+    
+    # Construir WHERE clause baseado nos filtros
+    where_clause = ""
+    params = []
+    
+    if filtro_status:
+        where_clause += " AND c.status = ?"
+        params.append(filtro_status)
+    
+    if filtro_categoria:
+        where_clause += " AND c.categoria = ?"
+        params.append(filtro_categoria)
+    
+    with get_connection() as conn:
+        cursor = conn.cursor()
+        
+        # Query para contar total
+        count_query = f"""
+            SELECT COUNT(*)
+            FROM chamado c
+            INNER JOIN usuario u ON c.id_usuario_criador = u.id_usuario
+            WHERE 1=1 {where_clause}
+        """
+        cursor.execute(count_query, params)
+        total = cursor.fetchone()[0]
+        
+        # Query para obter dados paginados
+        data_query = f"""
+            SELECT
+                c.id_chamado,
+                c.id_usuario_criador,
+                c.id_administrador_responsavel,
+                c.titulo,
+                c.descricao,
+                c.categoria,
+                c.data_criacao,
+                c.data_ultima_atualizacao,
+                c.status,
+                u.nome as usuario_nome,
+                u.email as usuario_email,
+                u.matricula as usuario_matricula
+            FROM chamado c
+            INNER JOIN usuario u ON c.id_usuario_criador = u.id_usuario
+            WHERE 1=1 {where_clause}
+            ORDER BY c.data_criacao DESC
+            LIMIT ? OFFSET ?
+        """
+        
+        cursor.execute(data_query, params + [limit, offset])
+        rows = cursor.fetchall()
+        
+        chamados = []
+        for row in rows:
+            chamado = {
+                'id_chamado': row["id_chamado"],
+                'id_usuario_criador': row["id_usuario_criador"],
+                'id_administrador_responsavel': row["id_administrador_responsavel"],
+                'titulo': row["titulo"],
+                'descricao': row["descricao"],
+                'categoria': row["categoria"],
+                'data_criacao': row["data_criacao"],
+                'data_ultima_atualizacao': row["data_ultima_atualizacao"],
+                'status': row["status"],
+                'usuario_nome': row["usuario_nome"],
+                'usuario_email': row["usuario_email"],
+                'usuario_matricula': row["usuario_matricula"]
+            }
+            chamados.append(chamado)
+        
+        total_pages = (total + limit - 1) // limit
+        
+        return {
+            'chamados': chamados,
+            'total': total,
+            'total_pages': total_pages,
+            'current_page': pagina,
+            'has_next': pagina < total_pages,
+            'has_prev': pagina > 1
+        }
+
+def obter_estatisticas_gerais() -> dict:
+    """Obtém estatísticas gerais dos chamados para o admin"""
+    with get_connection() as conn:
+        cursor = conn.cursor()
+        cursor.execute("""
+            SELECT
+                COUNT(*) as total,
+                SUM(CASE WHEN status = 'aberto' THEN 1 ELSE 0 END) as abertos,
+                SUM(CASE WHEN status = 'em-andamento' THEN 1 ELSE 0 END) as em_andamento,
+                SUM(CASE WHEN status = 'resolvido' THEN 1 ELSE 0 END) as resolvidos
+            FROM chamado
+        """)
+        row = cursor.fetchone()
+        if row:
+            return {
+                'total': row['total'],
+                'abertos': row['abertos'],
+                'em_andamento': row['em_andamento'],
+                'resolvidos': row['resolvidos']
+            }
+        return {
+            'total': 0,
+            'abertos': 0,
+            'em_andamento': 0,
+            'resolvidos': 0
+        }
+
+def atualizar_status(id_chamado: int, status: str, id_administrador: int = None) -> bool:
+    """Atualiza o status de um chamado"""
+    with get_connection() as conn:
+        cursor = conn.cursor()
+        cursor.execute("""
+            UPDATE chamado 
+            SET status = ?, 
+                data_ultima_atualizacao = datetime('now', 'localtime'),
+                id_administrador_responsavel = COALESCE(?, id_administrador_responsavel)
+            WHERE id_chamado = ?
+        """, (status, id_administrador, id_chamado))
+        return cursor.rowcount > 0

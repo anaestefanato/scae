@@ -52,6 +52,11 @@
     color: var(--ifes-green);
 }
 
+.card-header.bg-success {
+    background: #198754 !important;
+    color: white !important;
+}
+
 /* ===== FORMULÁRIOS DE FILTRO ===== */
 .form-label {
     font-weight: 600;

@@ -94,6 +94,42 @@
             </div>
         </div>
 
+        <!-- Estatísticas dos Chamados -->
+        <div class="row mb-4">
+            <div class="col-md-3">
+                <div class="card text-center">
+                    <div class="card-body">
+                        <h5 class="card-title text-primary">{{ estatisticas.total }}</h5>
+                        <p class="card-text">Total de Chamados</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card text-center">
+                    <div class="card-body">
+                        <h5 class="card-title text-danger">{{ estatisticas.abertos }}</h5>
+                        <p class="card-text">Abertos</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card text-center">
+                    <div class="card-body">
+                        <h5 class="card-title text-warning">{{ estatisticas.em_andamento }}</h5>
+                        <p class="card-text">Em Andamento</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card text-center">
+                    <div class="card-body">
+                        <h5 class="card-title text-success">{{ estatisticas.resolvidos }}</h5>
+                        <p class="card-text">Resolvidos</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <!-- Filtros de Chamados -->
         <div class="card mb-4">
             <div class="card-header d-flex justify-content-between align-items-center">
@@ -106,57 +142,52 @@
                 </button>
             </div>
             <div class="card-body">
-                <div class="row">
-                    <div class="col-md-3">
-                        <label for="filterStatus" class="form-label">Status</label>
-                        <select class="form-select" id="filterStatus" onchange="filterTickets()">
-                            <option value="">Todos os status</option>
-                            <option value="aberto">Aberto</option>
-                            <option value="em-andamento">Em Andamento</option>
-                            <option value="resolvido">Resolvido</option>
-                            <option value="fechado">Fechado</option>
-                        </select>
-                    </div>
-                    <div class="col-md-3">
-                        <label for="filterPriority" class="form-label">Prioridade</label>
-                        <select class="form-select" id="filterPriority" onchange="filterTickets()">
-                            <option value="">Todas as prioridades</option>
-                            <option value="baixa">Baixa</option>
-                            <option value="media">Média</option>
-                            <option value="alta">Alta</option>
-                            <option value="urgente">Urgente</option>
-                        </select>
-                    </div>
-                    <div class="col-md-3">
-                        <label for="filterCategory" class="form-label">Categoria</label>
-                        <select class="form-select" id="filterCategory" onchange="filterTickets()">
-                            <option value="">Todas as categorias</option>
-                            <option value="tecnico">Suporte Técnico</option>
-                            <option value="auxilio">Auxílios</option>
-                            <option value="cadastro">Cadastro</option>
-                            <option value="geral">Geral</option>
-                        </select>
-                    </div>
-                    <div class="col-md-3">
-                        <label for="searchTicket" class="form-label">Buscar</label>
-                        <div class="input-group">
-                            <input type="text" class="form-control" id="searchTicket" placeholder="Buscar por ID ou descrição">
-                            <button class="btn btn-outline-success" onclick="searchTickets()">
-                                <i class="bi bi-search"></i>
+                <form method="GET" action="/admin/chamados" id="filterForm">
+                    <div class="row">
+                        <div class="col-md-3">
+                            <label for="status" class="form-label">Status</label>
+                            <select class="form-select" id="status" name="status" onchange="submitFilters()">
+                                <option value="">Todos os status</option>
+                                <option value="aberto" {% if filtros.status == 'aberto' %}selected{% endif %}>Aberto</option>
+                                <option value="em-andamento" {% if filtros.status == 'em-andamento' %}selected{% endif %}>Em Andamento</option>
+                                <option value="resolvido" {% if filtros.status == 'resolvido' %}selected{% endif %}>Resolvido</option>
+                            </select>
+                        </div>
+                        <div class="col-md-3">
+                            <label for="categoria" class="form-label">Categoria</label>
+                            <select class="form-select" id="categoria" name="categoria" onchange="submitFilters()">
+                                <option value="">Todas as categorias</option>
+                                <option value="erro" {% if filtros.categoria == 'erro' %}selected{% endif %}>Erro</option>
+                                <option value="duvida" {% if filtros.categoria == 'duvida' %}selected{% endif %}>Dúvida</option>
+                                <option value="outros" {% if filtros.categoria == 'outros' %}selected{% endif %}>Outros</option>
+                            </select>
+                        </div>
+                        <div class="col-md-3">
+                            <label for="busca" class="form-label">Buscar</label>
+                            <div class="input-group">
+                                <input type="text" class="form-control" id="busca" name="busca" placeholder="Buscar por título" value="{{ filtros.busca or '' }}">
+                                <button class="btn btn-outline-success" type="submit">
+                                    <i class="bi bi-search"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="col-md-3 d-flex align-items-end">
+                            <button type="button" class="btn btn-outline-secondary" onclick="clearFilters()">
+                                <i class="bi bi-arrow-clockwise me-1"></i>Limpar
                             </button>
                         </div>
                     </div>
-                </div>
+                </form>
             </div>
         </div>
 
         <!-- Lista de Chamados -->
         <div class="card">
-            <div class="card-header d-flex justify-content-between align-items-center">
+            <div class="card-header d-flex justify-content-between align-items-center" style="background-color: #28a745 !important; color: white !important; font-weight: 600;">
                 <div>
                     <i class="bi bi-chat-dots me-2"></i>
                     <span>Lista de Chamados</span>
-                    <span class="badge bg-info ms-2" id="ticketsCount">12</span>
+                    <span class="badge bg-info ms-2" id="ticketsCount">{{ pagination.total }}</span>
                 </div>
                 <div>
                     <button class="btn btn-sm btn-outline-light me-2" onclick="exportTickets()">
@@ -176,101 +207,72 @@
                                 <th>Título</th>
                                 <th>Usuário</th>
                                 <th>Categoria</th>
-                                <th>Prioridade</th>
                                 <th>Status</th>
                                 <th>Data</th>
                                 <th>Ações</th>
                             </tr>
                         </thead>
                         <tbody id="ticketsTableBody">
-                            <tr>
-                                <td><strong>#001</strong></td>
-                                <td>Problema no acesso ao sistema</td>
-                                <td>João Silva Santos</td>
-                                <td><span class="badge bg-info">Suporte Técnico</span></td>
-                                <td><span class="priority-badge alta">Alta</span></td>
-                                <td><span class="badge bg-warning">Em Andamento</span></td>
-                                <td>10/09/2025</td>
-                                <td>
-                                    <div class="action-buttons">
-                                        <button class="btn btn-sm btn-outline-info" onclick="viewTicket(1)" title="Visualizar">
-                                            <i class="bi bi-eye"></i>
-                                        </button>
-                                        <button class="btn btn-sm btn-outline-success" onclick="respondTicket(1)" title="Responder">
-                                            <i class="bi bi-reply"></i>
-                                        </button>
-                                        <button class="btn btn-sm btn-outline-primary" onclick="closeTicket(1)" title="Fechar">
-                                            <i class="bi bi-check-circle"></i>
-                                        </button>
-                                    </div>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td><strong>#002</strong></td>
-                                <td>Dúvida sobre auxílio alimentação</td>
-                                <td>Maria Costa Lima</td>
-                                <td><span class="badge bg-success">Auxílios</span></td>
-                                <td><span class="priority-badge media">Média</span></td>
-                                <td><span class="badge bg-primary">Aberto</span></td>
-                                <td>11/09/2025</td>
-                                <td>
-                                    <div class="action-buttons">
-                                        <button class="btn btn-sm btn-outline-info" onclick="viewTicket(2)" title="Visualizar">
-                                            <i class="bi bi-eye"></i>
-                                        </button>
-                                        <button class="btn btn-sm btn-outline-success" onclick="respondTicket(2)" title="Responder">
-                                            <i class="bi bi-reply"></i>
-                                        </button>
-                                        <button class="btn btn-sm btn-outline-primary" onclick="closeTicket(2)" title="Fechar">
-                                            <i class="bi bi-check-circle"></i>
-                                        </button>
-                                    </div>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td><strong>#003</strong></td>
-                                <td>Erro na atualização de dados cadastrais</td>
-                                <td>Pedro Oliveira</td>
-                                <td><span class="badge bg-warning">Cadastro</span></td>
-                                <td><span class="priority-badge urgente">Urgente</span></td>
-                                <td><span class="badge bg-danger">Aberto</span></td>
-                                <td>12/09/2025</td>
-                                <td>
-                                    <div class="action-buttons">
-                                        <button class="btn btn-sm btn-outline-info" onclick="viewTicket(3)" title="Visualizar">
-                                            <i class="bi bi-eye"></i>
-                                        </button>
-                                        <button class="btn btn-sm btn-outline-success" onclick="respondTicket(3)" title="Responder">
-                                            <i class="bi bi-reply"></i>
-                                        </button>
-                                        <button class="btn btn-sm btn-outline-primary" onclick="closeTicket(3)" title="Fechar">
-                                            <i class="bi bi-check-circle"></i>
-                                        </button>
-                                    </div>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td><strong>#004</strong></td>
-                                <td>Solicitação de informações gerais</td>
-                                <td>Ana Ferreira</td>
-                                <td><span class="badge bg-secondary">Geral</span></td>
-                                <td><span class="priority-badge baixa">Baixa</span></td>
-                                <td><span class="badge bg-success">Resolvido</span></td>
-                                <td>13/09/2025</td>
-                                <td>
-                                    <div class="action-buttons">
-                                        <button class="btn btn-sm btn-outline-info" onclick="viewTicket(4)" title="Visualizar">
-                                            <i class="bi bi-eye"></i>
-                                        </button>
-                                        <button class="btn btn-sm btn-outline-secondary" onclick="reopenTicket(4)" title="Reabrir">
-                                            <i class="bi bi-arrow-clockwise"></i>
-                                        </button>
-                                        <button class="btn btn-sm btn-outline-danger" onclick="deleteTicket(4)" title="Excluir">
-                                            <i class="bi bi-trash"></i>
-                                        </button>
-                                    </div>
-                                </td>
-                            </tr>
+                            {% if chamados %}
+                                {% for chamado in chamados %}
+                                <tr>
+                                    <td><strong>#{{ chamado.id_chamado }}</strong></td>
+                                    <td>{{ chamado.titulo[:50] }}{% if chamado.titulo|length > 50 %}...{% endif %}</td>
+                                    <td>{{ chamado.usuario_nome }}</td>
+                                    <td>
+                                        {% if chamado.categoria == 'erro' %}
+                                            <span class="badge bg-danger">Erro</span>
+                                        {% elif chamado.categoria == 'duvida' %}
+                                            <span class="badge bg-info">Dúvida</span>
+                                        {% elif chamado.categoria == 'outros' %}
+                                            <span class="badge bg-secondary">Outros</span>
+                                        {% else %}
+                                            <span class="badge bg-light text-dark">{{ chamado.categoria.title() }}</span>
+                                        {% endif %}
+                                    </td>
+                                    <td>
+                                        {% if chamado.status == 'aberto' %}
+                                            <span class="badge bg-primary">Aberto</span>
+                                        {% elif chamado.status == 'em-andamento' %}
+                                            <span class="badge bg-warning">Em Andamento</span>
+                                        {% elif chamado.status == 'resolvido' %}
+                                            <span class="badge bg-success">Resolvido</span>
+                                        {% else %}
+                                            <span class="badge bg-light text-dark">{{ chamado.status.title() }}</span>
+                                        {% endif %}
+                                    </td>
+                                    <td>{{ chamado.data_criacao.strftime('%d/%m/%Y') if chamado.data_criacao else 'N/A' }}</td>
+                                    <td>
+                                        <div class="action-buttons">
+                                            <button class="btn btn-sm btn-outline-info" onclick="viewTicket({{ chamado.id_chamado }})" title="Visualizar">
+                                                <i class="bi bi-eye"></i>
+                                            </button>
+                                            {% if chamado.status != 'resolvido' %}
+                                                <button class="btn btn-sm btn-outline-success" onclick="respondTicket({{ chamado.id_chamado }})" title="Responder">
+                                                    <i class="bi bi-reply"></i>
+                                                </button>
+                                                <button class="btn btn-sm btn-outline-primary" onclick="closeTicket({{ chamado.id_chamado }})" title="Marcar como Resolvido">
+                                                    <i class="bi bi-check-circle"></i>
+                                                </button>
+                                            {% else %}
+                                                <button class="btn btn-sm btn-outline-secondary" onclick="reopenTicket({{ chamado.id_chamado }})" title="Reabrir">
+                                                    <i class="bi bi-arrow-clockwise"></i>
+                                                </button>
+                                            {% endif %}
+                                        </div>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            {% else %}
+                                <tr>
+                                    <td colspan="7" class="text-center py-5">
+                                        <div class="text-muted">
+                                            <i class="bi bi-inbox display-4"></i>
+                                            <p class="mt-2">Nenhum chamado encontrado</p>
+                                        </div>
+                                    </td>
+                                </tr>
+                            {% endif %}
                         </tbody>
                     </table>
                 </div>
@@ -278,18 +280,37 @@
             <div class="card-footer">
                 <nav aria-label="Navegação da lista de chamados">
                     <ul class="pagination pagination-sm justify-content-center mb-0">
-                        <li class="page-item disabled">
-                            <a class="page-link" href="#">Anterior</a>
-                        </li>
-                        <li class="page-item active">
-                            <a class="page-link" href="#">1</a>
-                        </li>
-                        <li class="page-item">
-                            <a class="page-link" href="#">2</a>
-                        </li>
-                        <li class="page-item">
-                            <a class="page-link" href="#">Próximo</a>
-                        </li>
+                        {% if pagination.has_prev %}
+                            <li class="page-item">
+                                <a class="page-link" href="?pagina={{ pagination.current_page - 1 }}{% if filtros.status %}&status={{ filtros.status }}{% endif %}{% if filtros.categoria %}&categoria={{ filtros.categoria }}{% endif %}{% if filtros.busca %}&busca={{ filtros.busca }}{% endif %}">Anterior</a>
+                            </li>
+                        {% else %}
+                            <li class="page-item disabled">
+                                <a class="page-link" href="#">Anterior</a>
+                            </li>
+                        {% endif %}
+                        
+                        {% for page_num in range(1, pagination.total_pages + 1) %}
+                            {% if page_num == pagination.current_page %}
+                                <li class="page-item active">
+                                    <a class="page-link" href="#">{{ page_num }}</a>
+                                </li>
+                            {% else %}
+                                <li class="page-item">
+                                    <a class="page-link" href="?pagina={{ page_num }}{% if filtros.status %}&status={{ filtros.status }}{% endif %}{% if filtros.categoria %}&categoria={{ filtros.categoria }}{% endif %}{% if filtros.busca %}&busca={{ filtros.busca }}{% endif %}">{{ page_num }}</a>
+                                </li>
+                            {% endif %}
+                        {% endfor %}
+                        
+                        {% if pagination.has_next %}
+                            <li class="page-item">
+                                <a class="page-link" href="?pagina={{ pagination.current_page + 1 }}{% if filtros.status %}&status={{ filtros.status }}{% endif %}{% if filtros.categoria %}&categoria={{ filtros.categoria }}{% endif %}{% if filtros.busca %}&busca={{ filtros.busca }}{% endif %}">Próximo</a>
+                            </li>
+                        {% else %}
+                            <li class="page-item disabled">
+                                <a class="page-link" href="#">Próximo</a>
+                            </li>
+                        {% endif %}
                     </ul>
                 </nav>
             </div>
@@ -349,43 +370,35 @@
     <div class="modal fade" id="respondTicketModal" tabindex="-1" aria-labelledby="respondTicketModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="respondTicketModalLabel">
-                        <i class="bi bi-reply me-2"></i>Responder Chamado
-                    </h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <div class="mb-3">
-                        <label for="responseText" class="form-label">Sua Resposta</label>
-                        <textarea class="form-control" id="responseText" rows="6" placeholder="Digite aqui sua resposta para o usuário..."></textarea>
+                <form id="responseForm" method="POST">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="respondTicketModalLabel">
+                            <i class="bi bi-reply me-2"></i>Responder Chamado
+                        </h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
-                    <div class="row">
-                        <div class="col-md-6">
-                            <label for="responseStatus" class="form-label">Alterar Status</label>
-                            <select class="form-select" id="responseStatus">
-                                <option value="em-andamento">Em Andamento</option>
-                                <option value="resolvido">Resolvido</option>
-                                <option value="fechado">Fechado</option>
-                            </select>
+                    <div class="modal-body">
+                        <div class="mb-3">
+                            <label for="responseText" class="form-label">Sua Resposta</label>
+                            <textarea class="form-control" id="responseText" name="mensagem" rows="6" placeholder="Digite aqui sua resposta para o usuário..." required></textarea>
                         </div>
-                        <div class="col-md-6">
-                            <label for="responsePriority" class="form-label">Alterar Prioridade</label>
-                            <select class="form-select" id="responsePriority">
-                                <option value="baixa">Baixa</option>
-                                <option value="media">Média</option>
-                                <option value="alta">Alta</option>
-                                <option value="urgente">Urgente</option>
-                            </select>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <label for="responseStatus" class="form-label">Alterar Status</label>
+                                <select class="form-select" id="responseStatus" name="status">
+                                    <option value="em-andamento">Em Andamento</option>
+                                    <option value="resolvido">Resolvido</option>
+                                </select>
+                            </div>
                         </div>
                     </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-success" onclick="sendResponse()">
-                        <i class="bi bi-send me-2"></i>Enviar Resposta
-                    </button>
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-success">
+                            <i class="bi bi-send me-2"></i>Enviar Resposta
+                        </button>
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    </div>
+                </form>
             </div>
         </div>
     </div>
@@ -394,99 +407,161 @@
     <script src="/static/js/dashboard_admin.js"></script>
     
     <script>
+        // Funções de filtro
+        function submitFilters() {
+            document.getElementById('filterForm').submit();
+        }
+
+        function clearFilters() {
+            window.location.href = '/admin/chamados';
+        }
+
+        function refreshTickets() {
+            window.location.reload();
+        }
+
         // Ticket management functions
         function viewTicket(ticketId) {
-            // Show ticket details modal
-            const modal = new bootstrap.Modal(document.getElementById('viewTicketModal'));
-            modal.show();
+            // Buscar detalhes do chamado via AJAX
+            fetch(`/admin/chamados/${ticketId}/detalhes`)
+                .then(response => response.json())
+                .then(data => {
+                    // Preencher modal com dados
+                    document.getElementById('modalTicketId').textContent = `#${data.chamado.id_chamado}`;
+                    document.getElementById('modalTicketTitle').textContent = data.chamado.titulo;
+                    document.getElementById('modalTicketDescription').textContent = data.chamado.descricao;
+                    
+                    // Status badge
+                    const statusBadge = document.getElementById('modalTicketStatus');
+                    statusBadge.textContent = data.chamado.status;
+                    statusBadge.className = `badge ${getStatusBadgeClass(data.chamado.status)}`;
+                    
+                    // Categoria badge
+                    const categoriaBadge = document.getElementById('modalTicketCategory');
+                    categoriaBadge.textContent = data.chamado.categoria;
+                    categoriaBadge.className = `badge ${getCategoriaBadgeClass(data.chamado.categoria)}`;
+                    
+                    // Dados do usuário
+                    if (data.usuario) {
+                        document.getElementById('modalUserName').textContent = data.usuario.nome;
+                        document.getElementById('modalUserEmail').textContent = data.usuario.email;
+                    }
+                    
+                    // Data de criação
+                    const dataFormatada = new Date(data.chamado.data_criacao).toLocaleDateString('pt-BR');
+                    document.getElementById('modalTicketDate').textContent = dataFormatada;
+                    
+                    // Mostrar modal
+                    const modal = new bootstrap.Modal(document.getElementById('viewTicketModal'));
+                    modal.show();
+                })
+                .catch(error => {
+                    console.error('Erro ao carregar detalhes do chamado:', error);
+                    alert('Erro ao carregar detalhes do chamado');
+                });
         }
 
         function respondTicket(ticketId) {
-            // Show response modal
+            // Configurar o formulário de resposta
+            const form = document.getElementById('responseForm');
+            form.action = `/admin/chamados/${ticketId}/responder`;
+            
+            // Armazenar ID do ticket para uso na resposta
+            window.currentTicketId = ticketId;
             const modal = new bootstrap.Modal(document.getElementById('respondTicketModal'));
             modal.show();
         }
 
         function closeTicket(ticketId) {
             if (confirm('Tem certeza que deseja marcar este chamado como resolvido?')) {
-                alert(`Chamado #${ticketId} marcado como resolvido!`);
-                // Aqui você faria a requisição para fechar o chamado
+                // Enviar requisição para atualizar status
+                const formData = new FormData();
+                formData.append('status', 'resolvido');
+                
+                fetch(`/admin/chamados/${ticketId}/status`, {
+                    method: 'POST',
+                    body: formData
+                })
+                .then(response => {
+                    if (response.ok) {
+                        window.location.reload();
+                    } else {
+                        alert('Erro ao atualizar status do chamado');
+                    }
+                })
+                .catch(error => {
+                    console.error('Erro:', error);
+                    alert('Erro ao atualizar status do chamado');
+                });
             }
         }
 
         function reopenTicket(ticketId) {
             if (confirm('Tem certeza que deseja reabrir este chamado?')) {
-                alert(`Chamado #${ticketId} reaberto!`);
-                // Aqui você faria a requisição para reabrir o chamado
+                // Enviar requisição para atualizar status
+                const formData = new FormData();
+                formData.append('status', 'aberto');
+                
+                fetch(`/admin/chamados/${ticketId}/status`, {
+                    method: 'POST',
+                    body: formData
+                })
+                .then(response => {
+                    if (response.ok) {
+                        window.location.reload();
+                    } else {
+                        alert('Erro ao reabrir chamado');
+                    }
+                })
+                .catch(error => {
+                    console.error('Erro:', error);
+                    alert('Erro ao reabrir chamado');
+                });
             }
-        }
-
-        function deleteTicket(ticketId) {
-            if (confirm('Tem certeza que deseja excluir este chamado? Esta ação não pode ser desfeita.')) {
-                alert(`Chamado #${ticketId} excluído!`);
-                // Aqui você faria a requisição para excluir o chamado
-            }
-        }
-
-        function filterTickets() {
-            alert('Aplicando filtros...');
-            // Aqui você faria a filtragem dos chamados
-        }
-
-        function clearFilters() {
-            document.getElementById('filterStatus').value = '';
-            document.getElementById('filterPriority').value = '';
-            document.getElementById('filterCategory').value = '';
-            document.getElementById('searchTicket').value = '';
-            alert('Filtros limpos!');
-        }
-
-        function searchTickets() {
-            const searchTerm = document.getElementById('searchTicket').value;
-            if (searchTerm.trim() === '') {
-                alert('Digite um termo de busca');
-                return;
-            }
-            alert(`Buscando por: ${searchTerm}`);
-            // Aqui você faria a busca
         }
 
         function exportTickets() {
-            alert('Exportando lista de chamados...');
-            // Aqui você faria a exportação
-        }
-
-        function refreshTickets() {
-            alert('Atualizando lista de chamados...');
-            // Aqui você faria a atualização
+            alert('Funcionalidade de exportação será implementada em breve...');
         }
 
         function respondTicketFromModal() {
             // Close view modal and open response modal
             bootstrap.Modal.getInstance(document.getElementById('viewTicketModal')).hide();
             setTimeout(() => {
-                const modal = new bootstrap.Modal(document.getElementById('respondTicketModal'));
-                modal.show();
+                const ticketIdText = document.getElementById('modalTicketId').textContent;
+                const ticketId = ticketIdText.replace('#', '');
+                respondTicket(ticketId);
             }, 300);
         }
 
         function closeTicketFromModal() {
             if (confirm('Tem certeza que deseja marcar este chamado como resolvido?')) {
                 bootstrap.Modal.getInstance(document.getElementById('viewTicketModal')).hide();
-                alert('Chamado marcado como resolvido!');
+                
+                // Buscar ID do ticket do modal
+                const ticketIdText = document.getElementById('modalTicketId').textContent;
+                const ticketId = ticketIdText.replace('#', '');
+                closeTicket(ticketId);
             }
         }
 
-        function sendResponse() {
-            const responseText = document.getElementById('responseText').value;
-            if (responseText.trim() === '') {
-                alert('Por favor, digite uma resposta antes de enviar.');
-                return;
+        // Funções auxiliares para badges
+        function getStatusBadgeClass(status) {
+            switch(status) {
+                case 'aberto': return 'bg-primary';
+                case 'em-andamento': return 'bg-warning';
+                case 'resolvido': return 'bg-success';
+                default: return 'bg-secondary';
             }
-            
-            alert('Resposta enviada com sucesso!');
-            bootstrap.Modal.getInstance(document.getElementById('respondTicketModal')).hide();
-            // Aqui você faria o envio da resposta
+        }
+
+        function getCategoriaBadgeClass(categoria) {
+            switch(categoria) {
+                case 'erro': return 'bg-danger';
+                case 'duvida': return 'bg-info';
+                case 'outros': return 'bg-secondary';
+                default: return 'bg-light text-dark';
+            }
         }
     </script>
 
