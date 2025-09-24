@@ -157,3 +157,9 @@ FROM aluno al
 JOIN usuario u ON al.id_usuario = u.id_usuario
 WHERE u.matricula = ?
 """
+ADICIONAR_COLUNA_ESTADO = """
+ALTER TABLE aluno ADD COLUMN estado TEXT NOT NULL
+"""
+ADICIONAR_COLUNA_COMPLEMENTO = """
+ALTER TABLE aluno ADD COLUMN complemento TEXT NOT NULL
+"""
