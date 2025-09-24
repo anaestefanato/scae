@@ -223,16 +223,16 @@
         <div class="filter-tabs">
             <ul class="nav nav-pills" id="ticketTabs">
                 <li class="nav-item">
-                    <button class="nav-link active" data-status="todos">Todos ({{ estatisticas.total }})</button>
+                    <button class="nav-link active" data-status="todos">Todos ({{ estatisticas.total or '0'}})</button>
                 </li>
                 <li class="nav-item">
-                    <button class="nav-link" data-status="aberto">Abertos ({{ estatisticas.abertos }})</button>
+                    <button class="nav-link" data-status="aberto">Abertos ({{ estatisticas.abertos or '0'}})</button>
                 </li>
                 <li class="nav-item">
-                    <button class="nav-link" data-status="em-andamento">Em Andamento ({{ estatisticas.em_andamento }})</button>
+                    <button class="nav-link" data-status="em-andamento">Em Andamento ({{ estatisticas.em_andamento or '0'}})</button>
                 </li>
                 <li class="nav-item">
-                    <button class="nav-link" data-status="resolvido">Resolvidos ({{ estatisticas.resolvidos }})</button>
+                    <button class="nav-link" data-status="resolvido">Resolvidos ({{ estatisticas.resolvidos or '0'}})</button>
                 </li>
             </ul>
         </div>

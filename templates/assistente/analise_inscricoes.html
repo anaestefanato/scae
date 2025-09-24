@@ -1,193 +1,251 @@
-<!DOCTYPE html>
-<html lang="pt-br">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SCAE - Análise de Inscrições</title>
-    <link rel="icon" type="image/png" href="/static/img/logo.png">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+{% extends 'base2.html' %}
+{% set active_page = 'analise-inscricoes' %}
+
+{% block title %}Análise de Inscrições - SCAE{% endblock %}
+
+{% block head %}
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="/static/css/dashboard_assistente.css">
     <link rel="stylesheet" href="/static/css/analise_inscricoes.css">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;700&display=swap" rel="stylesheet">
-</head>
-<body>
-    <!-- Menu Toggle Button -->
-    <button class="menu-toggle" id="menuToggle">
-        <i class="bi bi-list"></i>
-    </button>
+{% endblock %}
 
-    <!-- Sidebar -->
-    <div class="sidebar" id="sidebar">
-        <div class="sidebar-header">
-            <button class="close-sidebar" id="closeSidebar">
-                <i class="bi bi-x-lg"></i>
-            </button>
-            <img src="/static/img/logoifes.png" alt="Logo SCAE" width="180">
-        </div>
-        <div class="d-flex flex-column p-3">
-            <div class="mb-4 text-center">
-                <h6 class="mb-0">Sistema de Controle de</h6>
-                <h6>Assistência Estudantil</h6>
-            </div>
-            <ul class="nav nav-pills flex-column mb-auto">
-                <li class="nav-item">
-                    <a href="/assistente/inicio" class="nav-link">
-                        <i class="bi bi-speedometer2"></i> <span>Início</span>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a href="/assistente/analise-inscricoes" class="nav-link active bg-success">
-                        <i class="bi bi-clipboard-check"></i> <span>Análise de Inscrições</span>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a href="/assistente/analise-recursos" class="nav-link">
-                        <i class="bi bi-journal-text"></i> <span>Análise de Recursos</span>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a href="/assistente/alunos" class="nav-link">
-                        <i class="bi bi-people"></i> <span>Alunos</span>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a href="/assistente/entrevistas" class="nav-link">
-                        <i class="bi bi-file-earmark-text"></i> <span>Entrevistas Agendadas</span>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a href="/assistente/relatorios" class="nav-link">
-                        <i class="bi bi-file-earmark-bar-graph"></i> <span>Relatórios</span>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a href="/assistente/agenda" class="nav-link">
-                        <i class="bi bi-calendar-event"></i> <span>Agenda</span>
-                    </a>
-                </li>
-            </ul>
-            <hr>
-            <div class="text-center">
-                <a href="/" class="btn btn-outline-danger">
-                    <i class="bi bi-box-arrow-right"></i> <span>Sair</span>
-                </a>
+{% block content %}
+<div class="main-content" id="mainContent">
+    <div class="welcome-banner mb-4">
+        <div class="row align-items-center">
+            <div class="col">
+                <h4 class="mb-3">Análise de Inscrições</h4>
+                <p>Gerencie e analise as inscrições dos alunos nos programas de auxílio estudantil.</p>
             </div>
         </div>
     </div>
 
-    <!-- Main Content -->
-    <div class="main-content" id="mainContent">
-        <div class="welcome-banner mb-4">
-            <div class="row align-items-center">
-                <div class="col">
-                    <h4 class="mb-3">Análise de Inscrições</h4>
-                    <p>Gerencie e analise as inscrições dos alunos nos programas de auxílio estudantil.</p>
-                </div>
+    <div class="row mb-4">
+        <div class="col-md-3">
+            <div class="stats-card">
+                <div class="number">{{ estatisticas.pendentes }}</div>
+                <div class="label">Inscrições Pendentes</div>
             </div>
         </div>
-
-        <div class="row mb-4">
-            <div class="col-md-3">
-                <div class="stats-card">
-                    <div class="number">127</div>
-                    <div class="label">Inscrições Pendentes</div>
-                </div>
-            </div>
-            <div class="col-md-3">
-                <div class="stats-card">
-                    <div class="number">45</div>
-                    <div class="label">Em Análise</div>
-                </div>
-            </div>
-            <div class="col-md-3">
-                <div class="stats-card">
-                    <div class="number">89</div>
-                    <div class="label">Analisadas Hoje</div>
-                </div>
-            </div>
-            <div class="col-md-3">
-                <div class="stats-card">
-                    <div class="number">342</div>
-                    <div class="label">Total Analisadas</div>
-                </div>
+        <div class="col-md-3">
+            <div class="stats-card">
+                <div class="number">{{ estatisticas.em_analise }}</div>
+                <div class="label">Em Análise</div>
             </div>
         </div>
+        <div class="col-md-3">
+            <div class="stats-card">
+                <div class="number">{{ estatisticas.analisadas_hoje }}</div>
+                <div class="label">Analisadas Hoje</div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="stats-card">
+                <div class="number">{{ estatisticas.total_analisadas }}</div>
+                <div class="label">Total Analisadas</div>
+            </div>
+        </div>
+    </div>
 
-        <div class="card">
-            <div class="card-header d-flex justify-content-between align-items-center">
-                <div>
-                    <h5 class="mb-0">Lista de Inscrições</h5>
-                </div>
-                <div class="d-flex gap-2">
-                    <div class="input-group">
-                        <input type="text" class="form-control" placeholder="Buscar inscrição...">
-                        <button class="btn btn-outline-secondary" type="button">
-                            <i class="bi bi-search"></i>
-                        </button>
-                    </div>
-                    <button class="btn btn-success">
-                        <i class="bi bi-filter"></i> Filtrar
+    <div class="card">
+        <div class="card-header d-flex justify-content-between align-items-center">
+            <div>
+                <h5 class="mb-0">Lista de Inscrições</h5>
+                {% if total_inscricoes > 0 %}
+                <small class="text-muted">{{ total_inscricoes }} inscrição{{ 'ões' if total_inscricoes != 1 else '' }} encontrada{{ 's' if total_inscricoes != 1 else '' }}</small>
+                {% endif %}
+            </div>
+            <div class="d-flex gap-2">
+                <div class="input-group">
+                    <input type="text" class="form-control" placeholder="Buscar inscrição..." id="buscarInscricao">
+                    <button class="btn btn-outline-secondary" type="button">
+                        <i class="bi bi-search"></i>
                     </button>
                 </div>
-            </div>
-            <div class="card-body">
-                <div class="table-responsive">
-                    <table class="table table-hover">
-                        <thead>
-                            <tr>
-                                <th>Aluno</th>
-                                <th>Auxílio</th>
-                                <th>Data</th>
-                                <th>Status</th>
-                                <th>Prioridade</th>
-                                <th>Ações</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td>João Silva</td>
-                                <td>Auxílio Transporte</td>
-                                <td>01/04/2025</td>
-                                <td><span class="badge bg-warning text-dark">Pendente</span></td>
-                                <td><span class="priority-high">Alta</span></td>
-                                <td>
-                                    <div class="action-buttons">
-                                        <button class="btn btn-sm btn-outline-primary" title="Ver Detalhes">
-                                            <i class="bi bi-eye"></i>
-                                        </button>
-                                        <button class="btn btn-sm btn-outline-success" title="Aprovar">
-                                            <i class="bi bi-check-lg"></i>
-                                        </button>
-                                        <button class="btn btn-sm btn-outline-danger" title="Reprovar">
-                                            <i class="bi bi-x-lg"></i>
-                                        </button>
-                                    </div>
-                                </td>
-                            </tr>
-                            <!-- Adicione mais linhas conforme necessário -->
-                        </tbody>
-                    </table>
-                </div>
-                
-                <nav aria-label="Navegação de páginas" class="mt-4">
-                    <ul class="pagination justify-content-center">
-                        <li class="page-item disabled">
-                            <a class="page-link" href="#" tabindex="-1">Anterior</a>
-                        </li>
-                        <li class="page-item active"><a class="page-link" href="#">1</a></li>
-                        <li class="page-item"><a class="page-link" href="#">2</a></li>
-                        <li class="page-item"><a class="page-link" href="#">3</a></li>
-                        <li class="page-item">
-                            <a class="page-link" href="#">Próximo</a>
-                        </li>
-                    </ul>
-                </nav>
+                <button class="btn btn-success">
+                    <i class="bi bi-filter"></i> Filtrar
+                </button>
             </div>
         </div>
+        <div class="card-body">
+            {% if inscricoes %}
+            <div class="table-responsive">
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th>Aluno</th>
+                            <th>Auxílio</th>
+                            <th>Data</th>
+                            <th>Status</th>
+                            <th>Prioridade</th>
+                            <th>Ações</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for inscricao in inscricoes %}
+                        <tr>
+                            <td>
+                                <div>
+                                    <div class="fw-bold">{{ inscricao.aluno_nome }}</div>
+                                    <small class="text-muted">{{ inscricao.aluno_matricula }}</small>
+                                </div>
+                            </td>
+                            <td>
+                                <div>
+                                    <div class="fw-bold">{{ inscricao.edital_titulo }}</div>
+                                    <small class="text-muted">
+                                        {% if inscricao.tipo_auxilio == 'auxilio alimentacao' %}
+                                            <i class="bi bi-cup-hot me-1"></i>Auxílio Alimentação
+                                        {% elif inscricao.tipo_auxilio == 'auxilio transporte' %}
+                                            <i class="bi bi-bus-front me-1"></i>Auxílio Transporte
+                                        {% elif inscricao.tipo_auxilio == 'auxilio moradia' %}
+                                            <i class="bi bi-house me-1"></i>Auxílio Moradia
+                                        {% elif inscricao.tipo_auxilio == 'auxilio material' %}
+                                            <i class="bi bi-book me-1"></i>Auxílio Material
+                                        {% else %}
+                                            {{ inscricao.tipo_auxilio }}
+                                        {% endif %}
+                                        {% if inscricao.valor_mensal > 0 %}
+                                            - R$ {{ "%.2f"|format(inscricao.valor_mensal) }}
+                                        {% endif %}
+                                    </small>
+                                </div>
+                            </td>
+                            <td>
+                                <div>{{ inscricao.data_inscricao }}</div>
+                                <small class="text-muted">Prazo: {{ inscricao.data_encerramento }}</small>
+                            </td>
+                            <td>
+                                {% if inscricao.status == 'pendente' %}
+                                    <span class="badge bg-warning text-dark">
+                                        <i class="bi bi-clock me-1"></i>Pendente
+                                    </span>
+                                {% elif inscricao.status == 'em_analise' %}
+                                    <span class="badge bg-info">
+                                        <i class="bi bi-search me-1"></i>Em Análise
+                                    </span>
+                                {% elif inscricao.status == 'deferido' %}
+                                    <span class="badge bg-success">
+                                        <i class="bi bi-check-lg me-1"></i>Deferido
+                                    </span>
+                                {% elif inscricao.status == 'indeferido' %}
+                                    <span class="badge bg-danger">
+                                        <i class="bi bi-x-lg me-1"></i>Indeferido
+                                    </span>
+                                {% else %}
+                                    <span class="badge bg-secondary">{{ inscricao.status|title }}</span>
+                                {% endif %}
+                            </td>
+                            <td>
+                                {% if inscricao.prioridade == 'Alta' %}
+                                    <span class="priority-high text-danger fw-bold">
+                                        <i class="bi bi-exclamation-triangle me-1"></i>Alta
+                                    </span>
+                                {% elif inscricao.prioridade == 'Média' %}
+                                    <span class="priority-medium text-warning fw-bold">
+                                        <i class="bi bi-dash-circle me-1"></i>Média
+                                    </span>
+                                {% else %}
+                                    <span class="priority-low text-success">
+                                        <i class="bi bi-check-circle me-1"></i>Baixa
+                                    </span>
+                                {% endif %}
+                            </td>
+                            <td>
+                                <div class="action-buttons">
+                                    <button class="btn btn-sm btn-outline-primary" title="Ver Detalhes" 
+                                            onclick="verDetalhes('{{ inscricao.id_inscricao }}')">
+                                        <i class="bi bi-eye"></i>
+                                    </button>
+                                    {% if inscricao.status in ['pendente', 'em_analise'] %}
+                                    <button class="btn btn-sm btn-outline-success" title="Aprovar" 
+                                            onclick="aprovarInscricao('{{ inscricao.id_inscricao }}')">
+                                        <i class="bi bi-check-lg"></i>
+                                    </button>
+                                    <button class="btn btn-sm btn-outline-danger" title="Reprovar" 
+                                            onclick="reprovarInscricao('{{ inscricao.id_inscricao }}')">
+                                        <i class="bi bi-x-lg"></i>
+                                    </button>
+                                    {% endif %}
+                                </div>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            
+            {% if total_paginas > 1 %}
+            <nav aria-label="Navegação de páginas" class="mt-4">
+                <ul class="pagination justify-content-center">
+                    <li class="page-item {{ 'disabled' if not tem_anterior else '' }}">
+                        <a class="page-link" href="?pagina={{ pagina_atual - 1 if tem_anterior else 1 }}" 
+                           {{ 'tabindex="-1"' if not tem_anterior else '' }}>
+                            Anterior
+                        </a>
+                    </li>
+                    
+                    {% set start_page = [1, pagina_atual - 2]|max %}
+                    {% set end_page = [total_paginas, pagina_atual + 2]|min %}
+                    
+                    {% if start_page > 1 %}
+                        <li class="page-item"><a class="page-link" href="?pagina=1">1</a></li>
+                        {% if start_page > 2 %}
+                            <li class="page-item disabled"><span class="page-link">...</span></li>
+                        {% endif %}
+                    {% endif %}
+                    
+                    {% for p in range(start_page, end_page + 1) %}
+                        <li class="page-item {{ 'active' if p == pagina_atual else '' }}">
+                            <a class="page-link" href="?pagina={{ p }}">{{ p }}</a>
+                        </li>
+                    {% endfor %}
+                    
+                    {% if end_page < total_paginas %}
+                        {% if end_page < total_paginas - 1 %}
+                            <li class="page-item disabled"><span class="page-link">...</span></li>
+                        {% endif %}
+                        <li class="page-item"><a class="page-link" href="?pagina={{ total_paginas }}">{{ total_paginas }}</a></li>
+                    {% endif %}
+                    
+                    <li class="page-item {{ 'disabled' if not tem_proximo else '' }}">
+                        <a class="page-link" href="?pagina={{ pagina_atual + 1 if tem_proximo else total_paginas }}">
+                            Próximo
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+            {% endif %}
+            
+            {% else %}
+            <div class="text-center py-5">
+                <i class="bi bi-inbox text-muted mb-3" style="font-size: 4rem;"></i>
+                <h5 class="text-muted mb-3">Nenhuma inscrição para análise</h5>
+                <p class="text-muted">Todas as inscrições foram analisadas ou não há inscrições pendentes no momento.</p>
+            </div>
+            {% endif %}
+        </div>
     </div>
+</div>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="/static/js/dashboard_assistente.js"></script>
-</body>
-</html>
+<script>
+function verDetalhes(idInscricao) {
+    // Implementar visualização de detalhes
+    window.location.href = `/assistente/analise-inscricoes/detalhes?id=${idInscricao}`;
+}
+
+function aprovarInscricao(idInscricao) {
+    if (confirm('Tem certeza que deseja aprovar esta inscrição?')) {
+        // Implementar aprovação
+        console.log('Aprovar inscrição:', idInscricao);
+    }
+}
+
+function reprovarInscricao(idInscricao) {
+    if (confirm('Tem certeza que deseja reprovar esta inscrição?')) {
+        // Implementar reprovação
+        console.log('Reprovar inscrição:', idInscricao);
+    }
+}
+</script>
+{% endblock %}
