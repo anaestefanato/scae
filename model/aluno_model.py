@@ -16,6 +16,8 @@ class Aluno(Usuario):
     bairro: str
     rua: str
     numero: str
+    estado: str
+    complemento: str
     nome_banco: str
     agencia_bancaria: str
     numero_conta_bancaria: str
