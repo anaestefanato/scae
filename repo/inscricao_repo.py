@@ -93,3 +93,33 @@ def excluir(id: int) -> bool:
         cursor = conn.cursor()
         cursor.execute(EXCLUIR, (id,))
         return (cursor.rowcount > 0)
+
+
+def obter_por_aluno(id_aluno: int) -> list[dict]:
+    """Obtém todas as inscrições de um aluno com informações relacionadas"""
+    with get_connection() as conn:
+        cursor = conn.cursor()
+        cursor.execute(OBTER_POR_ALUNO, (id_aluno,))
+        rows = cursor.fetchall()
+        inscricoes = []
+        for row in rows:
+            inscricao = {
+                'id_inscricao': row["id_inscricao"],
+                'id_aluno': row["id_aluno"],
+                'id_edital': row["id_edital"],
+                'data_inscricao': row["data_inscricao"],
+                'status': row["status"],
+                'urlDocumentoIdentificacao': row["urlDocumentoIdentificacao"],
+                'urlDeclaracaoRenda': row["urlDeclaracaoRenda"],
+                'urlTermoResponsabilidade': row["urlTermoResponsabilidade"],
+                'edital_titulo': row["edital_titulo"],
+                'data_publicacao': row["data_publicacao"],
+                'data_encerramento': row["data_encerramento"],
+                'id_auxilio': row.get("id_auxilio"),
+                'tipo_auxilio': row.get("tipo_auxilio"),
+                'valor_mensal': row.get("valor_mensal"),
+                'data_inicio': row.get("data_inicio"),
+                'data_fim': row.get("data_fim")
+            }
+            inscricoes.append(inscricao)
+        return inscricoes

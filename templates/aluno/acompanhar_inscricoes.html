@@ -6,44 +6,117 @@
     <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
         <div class="modal-content shadow-lg">
             <div class="modal-header bg-success text-white">
-                <h5 class="modal-title">Acompanhamento da Inscrição</h5>
+                <h5 class="modal-title">Acompanhamento de Inscrições</h5>
                 <button type="button" class="btn-close btn-close-white" aria-label="Fechar" onclick="window.history.back()"></button>
             </div>
             <div class="modal-body">
-                <div class="row mb-3">
-                    <div class="col-md-6">
-                        <p><strong>Edital:</strong> 01/2025</p>
-                        <p><strong>Tipo de Auxílio:</strong> Transporte</p>
-                        <p><strong>Valor Previsto:</strong> R$ 150,00</p>
-                        <p><strong>Data de Inscrição:</strong> 01/04/2025</p>
+                {% if inscricoes %}
+                    {% for inscricao in inscricoes %}
+                    <div class="card mb-3">
+                        <div class="card-header">
+                            <h6 class="mb-0">{{ inscricao.edital_titulo or 'Edital sem título' }}</h6>
+                        </div>
+                        <div class="card-body">
+                            <div class="row mb-3">
+                                <div class="col-md-6">
+                                    <p><strong>Tipo de Auxílio:</strong> {{ inscricao.tipo_auxilio or 'Não especificado' }}</p>
+                                    <p><strong>Valor Previsto:</strong> 
+                                        {% if inscricao.valor_mensal %}
+                                            R$ {{ "%.2f"|format(inscricao.valor_mensal) }}
+                                        {% else %}
+                                            A definir
+                                        {% endif %}
+                                    </p>
+                                    <p><strong>Data de Inscrição:</strong> {{ inscricao.data_inscricao }}</p>
+                                    <p><strong>Status:</strong> 
+                                        <span class="status-badge status-{{ inscricao.status.lower() }}">
+                                            {% if inscricao.status == 'pendente' %}
+                                                Aguardando análise
+                                            {% elif inscricao.status == 'deferido' %}
+                                                Deferido
+                                            {% elif inscricao.status == 'indeferido' %}
+                                                Indeferido
+                                            {% else %}
+                                                {{ inscricao.status }}
+                                            {% endif %}
+                                        </span>
+                                    </p>
+                                </div>
+                                <div class="col-md-6">
+                                    <p><strong>Documentos Enviados:</strong></p>
+                                    <ul class="list-group list-group-flush">
+                                        {% if inscricao.urlDocumentoIdentificacao %}
+                                        <li class="list-group-item">
+                                            <i class="bi bi-check-circle text-success me-2"></i>Documento de identificação
+                                        </li>
+                                        {% endif %}
+                                        {% if inscricao.urlDeclaracaoRenda %}
+                                        <li class="list-group-item">
+                                            <i class="bi bi-check-circle text-success me-2"></i>Declaração de renda
+                                        </li>
+                                        {% endif %}
+                                        {% if inscricao.urlTermoResponsabilidade %}
+                                        <li class="list-group-item">
+                                            <i class="bi bi-check-circle text-success me-2"></i>Termo de responsabilidade
+                                        </li>
+                                        {% endif %}
+                                    </ul>
+                                </div>
+                            </div>
+                            
+                            <h6 class="mb-3">Linha do Tempo</h6>
+                            <ul class="timeline">
+                                <li class="timeline-item completed">
+                                    <span class="timeline-date">{{ inscricao.data_inscricao }}</span>
+                                    <span class="timeline-content">Inscrição submetida</span>
+                                </li>
+                                <li class="timeline-item {% if inscricao.status == 'pendente' %}active{% elif inscricao.status in ['deferido', 'indeferido'] %}completed{% endif %}">
+                                    <span class="timeline-date">
+                                        {% if inscricao.status == 'pendente' %}
+                                            Em andamento
+                                        {% else %}
+                                            Concluído
+                                        {% endif %}
+                                    </span>
+                                    <span class="timeline-content">
+                                        {% if inscricao.status == 'pendente' %}
+                                            Em análise pela assistência social
+                                        {% elif inscricao.status == 'deferido' %}
+                                            Inscrição deferida
+                                        {% elif inscricao.status == 'indeferido' %}
+                                            Inscrição indeferida
+                                        {% endif %}
+                                    </span>
+                                </li>
+                                {% if inscricao.status == 'deferido' and inscricao.data_inicio %}
+                                <li class="timeline-item {% if inscricao.data_inicio <= now().strftime('%Y-%m-%d') %}completed{% endif %}">
+                                    <span class="timeline-date">{{ inscricao.data_inicio }}</span>
+                                    <span class="timeline-content">Início do auxílio</span>
+                                </li>
+                                {% endif %}
+                            </ul>
+                            
+                            {% if inscricao.status == 'indeferido' %}
+                            <div class="mt-3">
+                                <a href="/aluno/acompanhar-inscricoes/recurso" class="btn btn-warning btn-sm">
+                                    <i class="bi bi-file-earmark-text me-1"></i>Solicitar Recurso
+                                </a>
+                            </div>
+                            {% endif %}
+                        </div>
                     </div>
-                    <div class="col-md-6">
-                        <p><strong>Documentos Enviados:</strong></p>
-                        <ul class="list-group list-group-flush">
-                            <li class="list-group-item">Comprovante de residência</li>
-                            <li class="list-group-item">Declaração de matrícula</li>
-                            <li class="list-group-item">RG</li>
-                        </ul>
+                    {% if not loop.last %}<hr class="my-4">{% endif %}
+                    {% endfor %}
+                {% else %}
+                    <div class="text-center py-5">
+                        <i class="bi bi-inbox display-1 text-muted"></i>
+                        <h5 class="mt-3 text-muted">Nenhuma inscrição encontrada</h5>
+                        <p class="text-muted">Você ainda não fez nenhuma inscrição em editais.</p>
+                        <a href="/aluno/editais" class="btn btn-primary">
+                            <i class="bi bi-search me-1"></i>Ver Editais Disponíveis
+                        </a>
                     </div>
-                </div>
-                <div class="mb-4">
-                    <span class="status-badge status-pendente">Aguardando análise da assistência social</span>
-                </div>
-                <h6 class="mb-3">Linha do Tempo</h6>
-                <ul class="timeline">
-                    <li class="timeline-item completed">
-                        <span class="timeline-date">01/04/2025</span>
-                        <span class="timeline-content">Inscrição submetida</span>
-                    </li>
-                    <li class="timeline-item active">
-                        <span class="timeline-date">Em andamento</span>
-                        <span class="timeline-content">Em análise pela assistência social</span>
-                    </li>
-                    <li class="timeline-item">
-                        <span class="timeline-date">Previsto: 30/04/2025</span>
-                        <span class="timeline-content">Resultado da análise</span>
-                    </li>
-                </ul>
+                {% endif %}
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" onclick="window.history.back()">Fechar</button>
@@ -54,6 +127,32 @@
 
 <style>
 .modal.fade.show.d-block { z-index: 2000; }
+
+.status-badge {
+    padding: 0.25rem 0.75rem;
+    border-radius: 1rem;
+    font-size: 0.875rem;
+    font-weight: 500;
+}
+
+.status-pendente {
+    background-color: #fff3cd;
+    color: #856404;
+    border: 1px solid #ffeaa7;
+}
+
+.status-deferido {
+    background-color: #d1ecf1;
+    color: #0c5460;
+    border: 1px solid #bee5eb;
+}
+
+.status-indeferido {
+    background-color: #f8d7da;
+    color: #721c24;
+    border: 1px solid #f5c6cb;
+}
+
 .timeline {
     list-style: none;
     padding-left: 0;
