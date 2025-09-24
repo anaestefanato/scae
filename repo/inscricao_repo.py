@@ -176,9 +176,7 @@ def obter_inscricoes_para_analise(pagina: int = 1, limite: int = 10) -> tuple[li
             inscricoes.append(inscricao)
         
         return inscricoes, total
-    except Exception as e:
-        print("Erro ao obter inscrições para análise:", e)
-        return [], 0
+    
 
 
 def obter_estatisticas_dashboard() -> Optional[dict]:
