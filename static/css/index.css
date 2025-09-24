@@ -304,3 +304,50 @@ body {
         font-size: 0.9rem;
     }
 }
+
+/* Estilos para o logo rotativo */
+.logo-rotativa {
+    animation: float 6s ease-in-out infinite;
+    max-width: 100%;
+    height: auto;
+    width: 600px;
+    display: block;
+    margin: 0 auto;
+}
+
+@keyframes float {
+    0% {
+        transform: translateY(0px);
+    }
+    50% {
+        transform: translateY(-15px);
+    }
+    100% {
+        transform: translateY(0px);
+    }
+}
+
+/* Responsividade para o logo */
+@media (max-width: 992px) {
+    .logo-rotativa {
+        width: 450px;
+    }
+}
+
+@media (max-width: 768px) {
+    .logo-rotativa {
+        width: 300px;
+    }
+}
+
+@media (max-width: 576px) {
+    .logo-rotativa {
+        width: 250px;
+    }
+}
+
+@media (max-width: 480px) {
+    .logo-rotativa {
+        width: 200px;
+    }
+}

@@ -57,11 +57,21 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 
-        window.addEventListener('scroll', function () {
+    let scrollTimeout;
+    window.addEventListener('scroll', function () {
         const logo = document.querySelector('.logo-rotativa');
         if (logo) {
             const rotation = window.scrollY / 5; 
+            // Remove a animação float temporariamente durante o scroll
+            logo.style.animation = 'none';
             logo.style.transform = `rotate(${rotation}deg)`;
+            
+            // Restaura a animação float após parar de rolar
+            clearTimeout(scrollTimeout);
+            scrollTimeout = setTimeout(() => {
+                logo.style.animation = 'float 6s ease-in-out infinite';
+                logo.style.transform = `rotate(${rotation}deg)`;
+            }, 150);
         }
     });
 });

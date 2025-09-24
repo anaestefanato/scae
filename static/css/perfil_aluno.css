@@ -1,0 +1,132 @@
+/* Estilos para o perfil do aluno */
+
+.profile-header {
+    background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+    padding: 2rem 0;
+    margin-bottom: 2rem;
+}
+
+.profile-info h3 {
+    color: #2c3e50;
+    font-weight: 600;
+}
+
+.profile-info p {
+    color: #6c757d;
+    font-size: 1.1rem;
+}
+
+.data-card {
+    margin-bottom: 1.5rem;
+    border: none;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+}
+
+.data-card .card-header {
+    background: linear-gradient(135deg, #28a745, #20c997);
+    color: white;
+    border-radius: 10px 10px 0 0 !important;
+    padding: 1rem 1.25rem;
+}
+
+.data-card .card-header h5 {
+    margin: 0;
+    font-weight: 600;
+}
+
+.data-card .card-body {
+    padding: 1.5rem;
+}
+
+/* Estilos específicos para o campo CEP */
+.input-group .btn-outline-primary {
+    border-color: #28a745;
+    color: #28a745;
+}
+
+.input-group .btn-outline-primary:hover {
+    background-color: #28a745;
+    border-color: #28a745;
+    color: white;
+}
+
+.input-group .btn-outline-primary:disabled {
+    border-color: #6c757d;
+    color: #6c757d;
+    background-color: transparent;
+}
+
+/* Animação para os campos sendo preenchidos automaticamente */
+.campo-preenchido {
+    animation: preenchimentoSucesso 0.5s ease-in-out;
+    border-color: #28a745 !important;
+    box-shadow: 0 0 0 0.2rem rgba(40, 167, 69, 0.25) !important;
+}
+
+@keyframes preenchimentoSucesso {
+    0% {
+        background-color: #d4edda;
+    }
+    100% {
+        background-color: white;
+    }
+}
+
+/* Estilos responsivos */
+@media (max-width: 768px) {
+    .profile-header {
+        padding: 1.5rem 0;
+    }
+    
+    .data-card .card-body {
+        padding: 1rem;
+    }
+    
+    .profile-info h3 {
+        font-size: 1.5rem;
+    }
+}
+
+/* Melhorias no modal de foto */
+.modal-content {
+    border-radius: 10px;
+    border: none;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+}
+
+.modal-header {
+    background: linear-gradient(135deg, #28a745, #20c997);
+    color: white;
+    border-radius: 10px 10px 0 0;
+}
+
+.modal-header .btn-close {
+    filter: invert(1);
+}
+
+/* Estilo para campos obrigatórios */
+.form-label::after {
+    content: " *";
+    color: #dc3545;
+}
+
+/* Hover effects nos cards */
+.data-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+    transition: all 0.3s ease;
+}
+
+/* Botão principal */
+.btn-success.btn-lg {
+    padding: 0.75rem 2rem;
+    font-weight: 600;
+    border-radius: 25px;
+    transition: all 0.3s ease;
+}
+
+.btn-success.btn-lg:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(40, 167, 69, 0.4);
+}

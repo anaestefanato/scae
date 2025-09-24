@@ -1,5 +1,97 @@
 <!DOCTYPE html>
 <html lang="pt-br">
+<<<<<<< HEAD
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>{% block title %}SCAE - Base{% endblock %}</title>
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+        <link rel="stylesheet" href="/static/css/styles.css">
+        <link rel="icon" type="image/png" href="/static/img/logo.png">
+        {% block head %}{% endblock %}
+    </head>
+    <body>
+        <button class="menu-toggle visible" id="menuToggle">
+            <i class="bi bi-list"></i>
+        </button>
+        <div class="sidebar collapsed" id="sidebar">
+            <div class="sidebar-header">
+                <button class="close-sidebar" id="closeSidebar">
+                    <i class="bi bi-x-lg"></i>
+                </button>
+                <img src="/static/img/logoifes.png" alt="Logo IFES" width="180">
+            </div>
+            <div class="d-flex flex-column p-3">
+                <div class="mb-4 text-center">
+                    <h6 class="mb-0">Sistema de Controle de</h6>
+                    <h6>Assistência Estudantil</h6>
+                </div>
+                <ul class="nav nav-pills flex-column mb-auto">
+                    <li class="nav-item">
+                        <a href="/aluno/inicio" class="nav-link {% if active_page == 'inicio' %}bg-success text-white{% endif %}">
+                            <i class="bi bi-house-door"></i>
+                            <span>Início</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="/aluno/editais" class="nav-link {% if active_page == 'editais' %}bg-success text-white{% endif %}">
+                            <i class="bi bi-file-earmark-text"></i>
+                            <span>Editais</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="/aluno/recebimentos" class="nav-link {% if active_page == 'recebimentos' %}bg-success text-white{% endif %}">
+                            <i class="bi bi-clipboard-check"></i>
+                            <span>Histórico de Recebimentos</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="/aluno/duvidas" class="nav-link {% if active_page == 'duvidas' %}bg-success text-white{% endif %}">
+                            <i class="bi bi-question-circle"></i>
+                            <span>Dúvidas Frequentes</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="/aluno/notificacoes" class="nav-link {% if active_page == 'notificacoes' %}bg-success text-white{% endif %}">
+                            <i class="bi bi-bell"></i>
+                            <span>Notificações</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="/aluno/perfil" class="nav-link {% if active_page == 'perfil' %}bg-success text-white{% endif %}">
+                            <i class="bi bi-person"></i>
+                            <span>Meu Perfil</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="/aluno/suporte" class="nav-link {% if active_page == 'suporte' %}bg-success text-white{% endif %}">
+                            <i class="bi bi-question-circle"></i>
+                            <span>Suporte</span>
+                        </a>
+                    </li>
+                </ul>
+                <hr>
+                <div class="text-center">
+                    <a href="/logout" class="btn btn-outline-danger">
+                        <i class="bi bi-box-arrow-right"></i>
+                        <span>Sair</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+        <!-- Backdrop for overlay sidebar -->
+        <div class="sidebar-backdrop" id="sidebarBackdrop"></div>
+        {% block content %}{% endblock %}
+        <footer class="footer bg-success text-white py-4">
+            <div class="container">
+                <div class="row">
+                    <div class="col-12 text-center">
+                        <p class="text-white mb-0">
+                            &copy; 2025 Sistema de Controle de Assistência Estudantil. Todos os direitos reservados.
+                        </p>
+                    </div>
+=======
 	<head>
 		<meta charset="UTF-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -99,13 +191,12 @@
                   <p class="text-white mb-0">
                     &copy; 2025 Sistema de Controle de Assistência Estudantil. Todos os direitos reservados.
                   </p>
+>>>>>>> 6086eeb64accc974a1fb5ed7fb0d6df4084764a3
                 </div>
-              </div>
             </div>
         </footer>
-
-		<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
-		<script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+        <script>
 			document.addEventListener("DOMContentLoaded", function () {
 				const sidebar = document.getElementById("sidebar");
 				const mainContent = document.getElementById("mainContent");
@@ -146,8 +237,8 @@
 					});
 				}
 			});
-		</script>
-
-
-	</body>
+        </script>
+		{% block scripts %}
+		{% endblock %}
+    </body>
 </html>
