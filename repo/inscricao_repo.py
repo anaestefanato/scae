@@ -176,3 +176,57 @@ def obter_inscricoes_para_analise(pagina: int = 1, limite: int = 10) -> tuple[li
             inscricoes.append(inscricao)
         
         return inscricoes, total
+    except Exception as e:
+        print("Erro ao obter inscrições para análise:", e)
+        return [], 0
+
+
+def obter_estatisticas_dashboard() -> Optional[dict]:
+    """
+    Obtém estatísticas gerais do dashboard para assistente social
+    """
+    try:
+        with get_connection() as conn:
+            cursor = conn.cursor()
+            cursor.execute(OBTER_ESTATISTICAS_DASHBOARD)
+            row = cursor.fetchone()
+            
+            if row:
+                return {
+                    'editais_ativos': row[0] or 0,
+                    'inscricoes_pendentes': row[1] or 0,
+                    'alunos_beneficiados': row[2] or 0,
+                    'valor_total_mensal': row[3] or 0.0
+                }
+            return None
+    except Exception as e:
+        print("Erro ao obter estatísticas do dashboard:", e)
+        return None
+
+
+def obter_inscricoes_recentes_dashboard() -> list[dict]:
+    """
+    Obtém inscrições recentes com prioridade para o dashboard
+    """
+    try:
+        with get_connection() as conn:
+            cursor = conn.cursor()
+            cursor.execute(OBTER_INSCRICOES_RECENTES_DASHBOARD)
+            rows = cursor.fetchall()
+            
+            inscricoes = []
+            for row in rows:
+                inscricao = {
+                    'id_inscricao': row[0],
+                    'data_inscricao': row[1],
+                    'aluno_nome': row[2],
+                    'edital_titulo': row[3],
+                    'tipo_auxilio': row[4] or 'Não definido',
+                    'prioridade': row[5]
+                }
+                inscricoes.append(inscricao)
+            
+            return inscricoes
+    except Exception as e:
+        print("Erro ao obter inscrições recentes para dashboard:", e)
+        return []
