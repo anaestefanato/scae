@@ -161,6 +161,10 @@
                                 <label class="form-label">Número</label>
                                 <input type="text" class="form-control" name="numero" value="{{ aluno.numero }}" required>
                             </div>
+                            <div class="col-md-6">
+                                <label class="form-label">Complemento</label>
+                                <input type="text" class="form-control" name="complemento" value="{{ aluno.complemento }}" required>
+                            </div>
                         </div>
                 </div>
             </div>
@@ -206,12 +210,12 @@
                             </div>
                             <div class="col-md-6">
                                 <label class="form-label">Situação de Moradia</label>
-                                <select class="form-select" name="situacao_moradia" value="{{ aluno.situacao_moradia }}" required>
-                                    <option value="" disabled selected>Selecione</option>
-                                    <option value="Casa Própria">Casa Própria</option>
-                                    <option value="Alugada">Alugada</option>
-                                    <option value="Cedida">Cedida</option>
-                                    <option value="Financiada">Financiada</option>
+                                <select class="form-select" name="situacao_moradia" required>
+                                    <option value="" disabled {% if not aluno.situacao_moradia %}selected{% endif %}>Selecione</option>
+                                    <option value="Casa Própria" {% if aluno.situacao_moradia == "Casa Própria" %}selected{% endif %}>Casa Própria</option>
+                                    <option value="Alugada" {% if aluno.situacao_moradia == "Alugada" %}selected{% endif %}>Alugada</option>
+                                    <option value="Cedida" {% if aluno.situacao_moradia == "Cedida" %}selected{% endif %}>Cedida</option>
+                                    <option value="Financiada" {% if aluno.situacao_moradia == "Financiada" %}selected{% endif %}>Financiada</option>
                                 </select>
                             </div>
                         </div>
