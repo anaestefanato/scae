@@ -60,6 +60,8 @@ async def post_perfil(
     bairro: str = Form(...),
     rua: str = Form(...),
     numero: str = Form(...),
+    estado: str = Form(...),
+    complemento: str = Form(...),
     nome_banco: str = Form(...),
     agencia_bancaria: str = Form(...),
     numero_conta_bancaria: str = Form(...),
@@ -94,6 +96,8 @@ async def post_perfil(
             bairro=bairro,
             rua=rua,
             numero=numero,
+            estado=estado,
+            complemento=complemento,
             nome_banco=nome_banco,
             agencia_bancaria=agencia_bancaria,
             numero_conta_bancaria=numero_conta_bancaria,
@@ -118,35 +122,6 @@ async def post_perfil(
                 "aluno/perfil.html",
                 {"request": request, "aluno": aluno, "erro": "Erro ao atualizar dados."}
             )
-        aluno = Aluno(
-            id_usuario=usuario.id_usuario,
-            nome=usuario.nome,
-            matricula=usuario.matricula,
-            email=usuario.email,
-            senha=usuario.senha,
-            perfil=usuario.perfil,
-            foto=getattr(usuario, 'foto', None),
-            token_redefinicao=getattr(usuario, 'token_redefinicao', None),
-            data_token=getattr(usuario, 'data_token', None),
-            data_cadastro=getattr(usuario, 'data_cadastro', None),
-            cpf=cpf,
-            telefone=telefone,
-            curso=curso,
-            data_nascimento=data_nascimento,
-            filiacao=filiacao,
-            cep=cep,
-            cidade=cidade,
-            bairro=bairro,
-            rua=rua,
-            numero=numero,
-            nome_banco=nome_banco,
-            agencia_bancaria=agencia_bancaria,
-            numero_conta_bancaria=numero_conta_bancaria,
-            renda_familiar=float(renda_familiar),
-            quantidade_pessoas=int(quantidade_pessoas),
-            renda_per_capita=float(renda_per_capita),
-            situacao_moradia=situacao_moradia
-            )
     else:
         # Primeiro cadastro (inserção)
         aluno = Aluno(
@@ -170,6 +145,8 @@ async def post_perfil(
             bairro=bairro,
             rua=rua,
             numero=numero,
+            estado=estado,
+            complemento=complemento,
             nome_banco=nome_banco,
             agencia_bancaria=agencia_bancaria,
             numero_conta_bancaria=numero_conta_bancaria,
