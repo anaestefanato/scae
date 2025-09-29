@@ -50,6 +50,8 @@ def criar_aluno_padrao():
             bairro="Bairro Exemplo",
             rua="Rua Exemplo",
             numero="123",
+            estado="ES",
+            complemento="",
             nome_banco="Banco Exemplo",
             agencia_bancaria="0001",
             numero_conta_bancaria="12345-6",

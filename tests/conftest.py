@@ -52,7 +52,37 @@ def lista_alunos_exemplo():
     from model.aluno_model import Aluno
     alunos = []
     for i in range(1, 11):
-        aluno = Aluno(0, f"Aluno {i:02d}", f"aluno{i:02d}@email.com", f"123456{i:02d}", "aluno", f"1234567890{i:02d}", datetime(2000, 1, i).date(), f"Pai {i:02d}", "Rua A", "Banco A", "1234", "56789", 1500.00, f"ALUNO{i:02d}")
+        aluno = Aluno(
+            id_usuario=0,
+            nome=f"Aluno {i:02d}",
+            matricula=f"ALUNO{i:02d}",
+            email=f"aluno{i:02d}@email.com",
+            senha=f"123456{i:02d}",
+            perfil="aluno",
+            foto=None,
+            token_redefinicao=None,
+            data_token=None,
+            data_cadastro=None,
+            cpf=f"1234567890{i:02d}",
+            telefone="(00) 00000-0000",
+            curso="Curso de Exemplo",
+            data_nascimento=f"2000-01-{i:02d}",
+            filiacao=f"Pai {i:02d}",
+            cep="00000-000",
+            cidade="Cidade A",
+            bairro="Bairro A",
+            rua="Rua A",
+            numero="123",
+            estado="ES",
+            complemento="",
+            nome_banco="Banco A",
+            agencia_bancaria="1234",
+            numero_conta_bancaria="56789",
+            renda_familiar=1500.00,
+            quantidade_pessoas=3,
+            renda_per_capita=500.00,
+            situacao_moradia="Casa Própria"
+        )
         alunos.append(aluno)
     return alunos
 
