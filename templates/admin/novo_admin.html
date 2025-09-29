@@ -87,38 +87,38 @@
     </div>
 
     <!-- Main Content -->
-    <div class="main-content bg-light-green" id="mainContent" style="background: linear-gradient(135deg, #f8fff8 0%, #e8f5e8 100%); min-height: 100vh;">
+    <div class="main-content" id="mainContent" style="background-color: #f8f9fa; min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 2rem;">
         <!-- Formulário de Cadastro -->
-        <div class="form-container">
-            <div class="card">
-                <div class="card-header">
+        <div class="form-container" style="width: 100%; max-width: 800px;">
+            <div class="card shadow-lg">
+                <div class="card-header text-center">
                     <h5 class="mb-0">
                         <i class="bi bi-person-plus-fill me-2"></i>Cadastrar Novo Administrador
                     </h5>
                 </div>
                 <div class="card-body">
                     <form id="adminForm" class="needs-validation" novalidate>
-                        <!-- Dados Pessoais -->
+                        <!-- Dados do Administrador -->
                         <div class="form-section mb-4">
                             <h6 class="form-section-title">
-                                <i class="bi bi-person-circle me-2"></i>Dados Pessoais
+                                <i class="bi bi-person-circle me-2"></i>Dados do Administrador
                             </h6>
                             <div class="row">
                                 <div class="col-md-6">
                                     <div class="mb-3">
-                                        <label for="nomeCompleto" class="form-label">Nome Completo *</label>
-                                        <input type="text" class="form-control" id="nomeCompleto" name="nomeCompleto" required>
+                                        <label for="nome" class="form-label">Nome *</label>
+                                        <input type="text" class="form-control" id="nome" name="nome" required>
                                         <div class="invalid-feedback">
-                                            Por favor, informe o nome completo.
+                                            Por favor, informe o nome.
                                         </div>
                                     </div>
                                 </div>
                                 <div class="col-md-6">
                                     <div class="mb-3">
-                                        <label for="cpf" class="form-label">CPF *</label>
-                                        <input type="text" class="form-control" id="cpf" name="cpf" placeholder="000.000.000-00" required>
+                                        <label for="matricula" class="form-label">Matrícula *</label>
+                                        <input type="text" class="form-control" id="matricula" name="matricula" required>
                                         <div class="invalid-feedback">
-                                            Por favor, informe um CPF válido.
+                                            Por favor, informe a matrícula.
                                         </div>
                                     </div>
                                 </div>
@@ -135,149 +135,12 @@
                                 </div>
                                 <div class="col-md-6">
                                     <div class="mb-3">
-                                        <label for="telefone" class="form-label">Telefone *</label>
-                                        <input type="tel" class="form-control" id="telefone" name="telefone" placeholder="(27) 99999-9999" required>
-                                        <div class="invalid-feedback">
-                                            Por favor, informe o telefone.
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Dados de Acesso -->
-                        <div class="form-section mb-4">
-                            <h6 class="form-section-title">
-                                <i class="bi bi-key me-2"></i>Dados de Acesso
-                            </h6>
-                            <div class="row">
-                                <div class="col-md-6">
-                                    <div class="mb-3">
                                         <label for="senha" class="form-label">Senha *</label>
                                         <input type="password" class="form-control" id="senha" name="senha" required>
                                         <div class="form-text">A senha deve ter no mínimo 8 caracteres.</div>
                                         <div class="invalid-feedback">
                                             Por favor, informe uma senha válida.
                                         </div>
-                                    </div>
-                                </div>
-                                <div class="col-md-6">
-                                    <div class="mb-3">
-                                        <label for="confirmarSenha" class="form-label">Confirmar Senha *</label>
-                                        <input type="password" class="form-control" id="confirmarSenha" name="confirmarSenha" required>
-                                        <div class="invalid-feedback">
-                                            As senhas não coincidem.
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Configurações do Administrador -->
-                        <div class="form-section mb-4">
-                            <h6 class="form-section-title">
-                                <i class="bi bi-shield-check me-2"></i>Configurações do Administrador
-                            </h6>
-                            <div class="row">
-                                <div class="col-md-6">
-                                    <div class="mb-3">
-                                        <label for="nivelAcesso" class="form-label">Nível de Acesso *</label>
-                                        <select class="form-select" id="nivelAcesso" name="nivelAcesso" required>
-                                            <option value="">Selecione o nível</option>
-                                            <option value="admin">Administrador</option>
-                                            <option value="superadmin">Super Administrador</option>
-                                        </select>
-                                        <div class="form-text">
-                                            Super Administrador tem acesso total ao sistema.
-                                        </div>
-                                        <div class="invalid-feedback">
-                                            Por favor, selecione o nível de acesso.
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-md-6">
-                                    <div class="mb-3">
-                                        <label for="status" class="form-label">Status *</label>
-                                        <select class="form-select" id="status" name="status" required>
-                                            <option value="">Selecione o status</option>
-                                            <option value="ativo" selected>Ativo</option>
-                                            <option value="inativo">Inativo</option>
-                                        </select>
-                                        <div class="invalid-feedback">
-                                            Por favor, selecione o status.
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Permissões -->
-                        <div class="form-section mb-4">
-                            <h6 class="form-section-title">
-                                <i class="bi bi-list-check me-2"></i>Permissões de Acesso
-                            </h6>
-                            <div class="row">
-                                <div class="col-md-6">
-                                    <div class="form-check mb-3">
-                                        <input class="form-check-input" type="checkbox" id="permUsuarios" name="permissoes[]" value="usuarios">
-                                        <label class="form-check-label" for="permUsuarios">
-                                            <strong>Gerenciar Usuários</strong><br>
-                                            <small class="text-muted">Criar, editar e excluir alunos, assistentes e administradores</small>
-                                        </label>
-                                    </div>
-                                    <div class="form-check mb-3">
-                                        <input class="form-check-input" type="checkbox" id="permRelatorios" name="permissoes[]" value="relatorios">
-                                        <label class="form-check-label" for="permRelatorios">
-                                            <strong>Visualizar Relatórios</strong><br>
-                                            <small class="text-muted">Acessar relatórios e estatísticas do sistema</small>
-                                        </label>
-                                    </div>
-                                </div>
-                                <div class="col-md-6">
-                                    <div class="form-check mb-3">
-                                        <input class="form-check-input" type="checkbox" id="permChamados" name="permissoes[]" value="chamados">
-                                        <label class="form-check-label" for="permChamados">
-                                            <strong>Gerenciar Chamados</strong><br>
-                                            <small class="text-muted">Visualizar e responder chamados de suporte</small>
-                                        </label>
-                                    </div>
-                                    <div class="form-check mb-3">
-                                        <input class="form-check-input" type="checkbox" id="permMensagens" name="permissoes[]" value="mensagens">
-                                        <label class="form-check-label" for="permMensagens">
-                                            <strong>Enviar Mensagens</strong><br>
-                                            <small class="text-muted">Enviar notificações e comunicados</small>
-                                        </label>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="alert alert-info mt-3">
-                                <i class="bi bi-info-circle me-2"></i>
-                                <strong>Nota:</strong> Super Administradores têm todas as permissões automaticamente.
-                            </div>
-                        </div>
-
-                        <!-- Configurações Avançadas -->
-                        <div class="form-section mb-4">
-                            <h6 class="form-section-title">
-                                <i class="bi bi-gear me-2"></i>Configurações Avançadas
-                            </h6>
-                            <div class="row">
-                                <div class="col-md-6">
-                                    <div class="form-check mb-3">
-                                        <input class="form-check-input" type="checkbox" id="enviarCredenciais" name="enviarCredenciais" checked>
-                                        <label class="form-check-label" for="enviarCredenciais">
-                                            <strong>Enviar credenciais por email</strong><br>
-                                            <small class="text-muted">Enviar login e senha temporária para o email do administrador</small>
-                                        </label>
-                                    </div>
-                                </div>
-                                <div class="col-md-6">
-                                    <div class="form-check mb-3">
-                                        <input class="form-check-input" type="checkbox" id="alterarSenha" name="alterarSenha" checked>
-                                        <label class="form-check-label" for="alterarSenha">
-                                            <strong>Forçar alteração de senha</strong><br>
-                                            <small class="text-muted">Obrigar alteração da senha no primeiro acesso</small>
-                                        </label>
                                     </div>
                                 </div>
                             </div>
@@ -289,14 +152,9 @@
                                 <a href="/admin/usuarios/administradores" class="btn btn-outline-secondary">
                                     <i class="bi bi-arrow-left me-2"></i>Cancelar
                                 </a>
-                                <div>
-                                    <button type="button" class="btn btn-outline-info me-2" onclick="previewData()">
-                                        <i class="bi bi-eye me-2"></i>Visualizar Dados
-                                    </button>
-                                    <button type="submit" class="btn btn-success">
-                                        <i class="bi bi-check-circle me-2"></i>Cadastrar Administrador
-                                    </button>
-                                </div>
+                                <button type="submit" class="btn btn-success">
+                                    <i class="bi bi-check-circle me-2"></i>Cadastrar Administrador
+                                </button>
                             </div>
                         </div>
                     </form>
@@ -319,36 +177,13 @@
                     <p>Deseja confirmar o cadastro do administrador?</p>
                     <div class="alert alert-warning">
                         <i class="bi bi-exclamation-triangle me-2"></i>
-                        <strong>Atenção:</strong> O administrador terá acesso às permissões selecionadas imediatamente após a criação.
+                        <strong>Atenção:</strong> O administrador terá acesso ao sistema imediatamente após a criação.
                     </div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
                     <button type="button" class="btn btn-success" onclick="confirmCadastro()">
                         <i class="bi bi-check-circle me-1"></i>Confirmar Cadastro
-                    </button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Modal de Visualização de Dados -->
-    <div class="modal fade" id="previewModal" tabindex="-1" aria-labelledby="previewModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-lg">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="previewModalLabel">
-                        <i class="bi bi-eye me-2"></i>Visualizar Dados do Administrador
-                    </h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body" id="previewContent">
-                    <!-- Conteúdo será preenchido via JavaScript -->
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
-                    <button type="button" class="btn btn-primary" onclick="editData()" data-bs-dismiss="modal">
-                        <i class="bi bi-pencil me-1"></i>Editar Dados
                     </button>
                 </div>
             </div>
