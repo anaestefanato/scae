@@ -3,7 +3,7 @@ from fastapi import APIRouter, Request
 from fastapi.responses import RedirectResponse
 from fastapi.templating import Jinja2Templates
 
-from repo import usuario_repo
+from repo import usuario_repo, aluno_repo
 from util.auth_decorator import obter_usuario_logado, requer_autenticacao
 
 
@@ -15,7 +15,23 @@ templates = Jinja2Templates(directory="templates")
 @requer_autenticacao("assistente")
 async def get_alunos(request: Request, usuario_logado: dict = None):
     assistente = usuario_repo.obter_usuario_por_matricula(usuario_logado['matricula'])
-    response = templates.TemplateResponse("/assistente/alunos.html", {"request": request, "assistente": assistente})
+    
+    # Buscar alunos aprovados
+    alunos = aluno_repo.obter_alunos_aprovados()
+    
+    # Estatísticas básicas
+    total_alunos = len(alunos)
+    alunos_ativos = len([a for a in alunos if a['situacao'] == 'Ativo'])
+    
+    context = {
+        "request": request, 
+        "assistente": assistente,
+        "alunos": alunos,
+        "total_alunos": total_alunos,
+        "alunos_ativos": alunos_ativos
+    }
+    
+    response = templates.TemplateResponse("/assistente/alunos.html", context)
     return response
 
 @router.get("/alunos/detalhes")

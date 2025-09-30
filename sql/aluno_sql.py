@@ -21,6 +21,7 @@ CREATE TABLE IF NOT EXISTS aluno (
     renda_per_capita REAL NOT NULL,
     situacao_moradia TEXT NOT NULL,
     cadastro_completo BOOLEAN DEFAULT 0,
+    possivel_aluno BOOLEAN DEFAULT 1,
     FOREIGN KEY (id_usuario) REFERENCES usuario(id_usuario) ON DELETE CASCADE
 )
 """
@@ -35,7 +36,38 @@ SELECT
 al.id_usuario, al.cpf, al.telefone, al.curso, al.data_nascimento, al.filiacao, al.cep, al.cidade, al.bairro, al.rua, al.numero, al.estado, al.complemento, al.nome_banco, al.agencia_bancaria, al.numero_conta_bancaria, al.renda_familiar, al.quantidade_pessoas, al.renda_per_capita, al.situacao_moradia, u.nome, u.matricula, u.email, u.senha
 FROM aluno al 
 INNER JOIN usuario u ON al.id_usuario = u.id_usuario    
-ORDER BY al.matricula
+ORDER BY u.nome
+""" 
+
+# Obter apenas alunos aprovados (não pendentes) com seus auxílios
+OBTER_ALUNOS_APROVADOS = """
+    SELECT 
+        u.id_usuario,
+        u.nome,
+        u.matricula,
+        u.email,
+        a.curso,
+        CASE 
+            WHEN i.status = 'aprovado' THEN 'Ativo'
+            WHEN i.status = 'suspenso' THEN 'Suspenso'
+            ELSE 'Inativo'
+        END as situacao,
+        GROUP_CONCAT(DISTINCT e.titulo) as auxilios,
+        COALESCE(SUM(DISTINCT 
+            CASE 
+                WHEN e.titulo LIKE '%Transporte%' THEN 150.00
+                WHEN e.titulo LIKE '%Alimentação%' OR e.titulo LIKE '%Alimentacao%' THEN 300.00  
+                WHEN e.titulo LIKE '%Moradia%' THEN 400.00
+                WHEN e.titulo LIKE '%Material%' THEN 200.00
+                ELSE 100.00
+            END), 0) as valor_mensal
+    FROM usuario u
+    INNER JOIN aluno a ON u.id_usuario = a.id_usuario  
+    LEFT JOIN inscricao i ON a.id_usuario = i.id_aluno AND i.status = 'aprovado'
+    LEFT JOIN edital e ON i.id_edital = e.id_edital
+    WHERE a.possivel_aluno = 0
+    GROUP BY u.id_usuario, u.nome, u.matricula, u.email, a.curso
+    ORDER BY u.nome
 """ 
 
 OBTER_POR_ID = """
@@ -162,4 +194,29 @@ ALTER TABLE aluno ADD COLUMN estado TEXT NOT NULL
 """
 ADICIONAR_COLUNA_COMPLEMENTO = """
 ALTER TABLE aluno ADD COLUMN complemento TEXT NOT NULL
+"""
+
+# Queries para sistema de aprovação
+OBTER_POSSIVEIS_ALUNOS = """
+SELECT 
+    u.id_usuario, u.nome, u.matricula, u.email, u.data_cadastro
+FROM usuario u
+LEFT JOIN aluno al ON u.id_usuario = al.id_usuario
+WHERE u.perfil = 'aluno' AND (al.possivel_aluno = 1 OR al.id_usuario IS NULL)
+ORDER BY u.data_cadastro DESC
+"""
+
+APROVAR_ALUNO = """
+UPDATE aluno
+SET possivel_aluno = 0
+WHERE id_usuario = ?
+"""
+
+REJEITAR_ALUNO = """
+DELETE FROM aluno
+WHERE id_usuario = ? AND possivel_aluno = 1
+"""
+
+ADICIONAR_COLUNA_POSSIVEL_ALUNO = """
+ALTER TABLE aluno ADD COLUMN possivel_aluno BOOLEAN DEFAULT 1
 """
