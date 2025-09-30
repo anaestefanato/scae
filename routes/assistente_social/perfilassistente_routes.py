@@ -1,85 +1,42 @@
-from fastapi import APIRouter, Request, Formfrom fastapi import APIRouter, Request
+from fastapi import APIRouter, Request, Form
+from fastapi.responses import RedirectResponse
+from fastapi.templating import Jinja2Templates
 
-from fastapi.responses import RedirectResponsefrom fastapi.responses import RedirectResponse
-
-from fastapi.templating import Jinja2Templatesfrom fastapi.templating import Jinja2Templates
-
-
-
-from repo import usuario_repofrom repo import usuario_repo
-
-from repo.inscricao_repo import obter_estatisticas_dashboard, obter_inscricoes_recentes_dashboardfrom repo.inscricao_repo import obter_estatisticas_dashboard, obter_inscricoes_recentes_dashboard
-
-from util.auth_decorator import obter_usuario_logado, requer_autenticacaofrom util.auth_decorator import obter_usuario_logado, requer_autenticacao
-
-from util.security import criptografar_senha, verificar_senha
-
-
+from repo import usuario_repo
+from repo.inscricao_repo import obter_estatisticas_dashboard, obter_inscricoes_recentes_dashboard
+from util.auth_decorator import obter_usuario_logado, requer_autenticacao
+from util.security import criar_hash_senha, verificar_senha
 
 router = APIRouter()
-
-router = APIRouter()templates = Jinja2Templates(directory="templates")
-
 templates = Jinja2Templates(directory="templates")
 
 
-
 @router.get("/inicio")
-
-@router.get("/inicio")@requer_autenticacao("assistente")
-
-@requer_autenticacao("assistente")async def get_perfil(request: Request, usuario_logado: dict = None):
-
-async def get_inicio(request: Request, usuario_logado: dict = None):    
-
-        assistente = usuario_repo.obter_usuario_por_matricula(usuario_logado['matricula'])
-
-    assistente = usuario_repo.obter_usuario_por_matricula(usuario_logado['matricula'])    
-
-        # Buscar estatísticas do dashboard
-
-    # Buscar estatísticas do dashboard    estatisticas = obter_estatisticas_dashboard()
-
-    estatisticas = obter_estatisticas_dashboard()    if not estatisticas:
-
-    if not estatisticas:        estatisticas = {
-
-        estatisticas = {            'editais_ativos': 0,
-
-            'editais_ativos': 0,            'inscricoes_pendentes': 0,
-
-            'inscricoes_pendentes': 0,            'alunos_beneficiados': 0,
-
-            'alunos_beneficiados': 0,            'valor_total_mensal': 0.0
-
-            'valor_total_mensal': 0.0        }
-
-        }    
-
-        # Buscar inscrições recentes com prioridade
-
-    # Buscar inscrições recentes com prioridade    inscricoes_recentes = obter_inscricoes_recentes_dashboard()
-
-    inscricoes_recentes = obter_inscricoes_recentes_dashboard()    
-
-        context = {
-
-    context = {        "request": request, 
-
-        "request": request,         "assistente": assistente,
-
-        "assistente": assistente,        "estatisticas": estatisticas,
-
-        "estatisticas": estatisticas,        "inscricoes_recentes": inscricoes_recentes
-
-        "inscricoes_recentes": inscricoes_recentes    }
-
-    }    
-
-        response = templates.TemplateResponse("/assistente/dashboard_assistente.html", context)
-
-    response = templates.TemplateResponse("/assistente/dashboard_assistente.html", context)    return response
-
+@requer_autenticacao("assistente")
+async def get_inicio(request: Request, usuario_logado: dict = None):
+    assistente = usuario_repo.obter_usuario_por_matricula(usuario_logado['matricula'])
+    
+    # Buscar estatísticas do dashboard
+    estatisticas = obter_estatisticas_dashboard()
+    if not estatisticas:
+        estatisticas = {
+            'editais_ativos': 0,
+            'inscricoes_pendentes': 0,
+            'alunos_beneficiados': 0,
+            'valor_total_mensal': 0.0
+        }
+    
+    # Buscar inscrições recentes com prioridade
+    inscricoes_recentes = obter_inscricoes_recentes_dashboard()
+    
+    context = {
+        "request": request,
+        "assistente": assistente,
+        "estatisticas": estatisticas,
+        "inscricoes_recentes": inscricoes_recentes
+    }
+    
+    response = templates.TemplateResponse("/assistente/dashboard_assistente.html", context)
     return response
 
 
@@ -123,7 +80,7 @@ async def alterar_senha_assistente(request: Request,
         return RedirectResponse(url="/assistente/perfil?erro=senha_pequena", status_code=302)
     
     # Atualizar a senha
-    nova_senha_criptografada = criptografar_senha(new_password)
+    nova_senha_criptografada = criar_hash_senha(new_password)
     sucesso = usuario_repo.atualizar_senha(assistente.id_usuario, nova_senha_criptografada)
     
     if sucesso:
