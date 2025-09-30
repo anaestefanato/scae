@@ -10,6 +10,56 @@
     <link rel="stylesheet" href="/static/css/dashboard_assistente.css">
     <link rel="stylesheet" href="/static/css/alunos.css">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;700&display=swap" rel="stylesheet">
+    
+    <style>
+        /* Estilos específicos para a página de alunos */
+        .avatar-placeholder {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #007bff, #0056b3);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 14px;
+        }
+        
+        .badge {
+            font-size: 11px;
+        }
+        
+        .btn-group .btn {
+            border-radius: 4px !important;
+        }
+        
+        .table td {
+            vertical-align: middle;
+        }
+        
+        /* Estados de loading e sem resultados */
+        #loadingState, #noResultsState {
+            min-height: 200px;
+        }
+        
+        /* Responsividade */
+        @media (max-width: 768px) {
+            .table-responsive {
+                font-size: 14px;
+            }
+            
+            .btn-group .btn {
+                padding: 4px 8px;
+            }
+            
+            .avatar-placeholder {
+                width: 32px;
+                height: 32px;
+                font-size: 12px;
+            }
+        }
+    </style>
 </head>
 <body>
     <!-- Menu Toggle Button -->
@@ -85,7 +135,12 @@
     <div class="main-content" id="mainContent">
         <!-- Header -->
         <div class="d-flex justify-content-between align-items-center mb-4">
-            <h4 class="mb-0">Alunos com Auxílios</h4>
+            <div>
+                <h4 class="mb-0">Alunos com Auxílios</h4>
+                <small class="text-muted">
+                    Total: {{ total_alunos }} alunos | Ativos: {{ alunos_ativos }}
+                </small>
+            </div>
             <div class="d-flex gap-2">
                 <button class="btn btn-outline-primary" onclick="exportarDados()">
                     <i class="bi bi-download me-2"></i>
@@ -133,7 +188,6 @@
                                 <th>Nome</th>
                                 <th>Matrícula</th>
                                 <th>Curso</th>
-                                <th>Período</th>
                                 <th>Auxílios</th>
                                 <th>Valor Mensal</th>
                                 <th>Situação</th>
@@ -141,7 +195,72 @@
                             </tr>
                         </thead>
                         <tbody id="alunosTableBody">
-                            <!-- Os alunos serão carregados aqui via JavaScript -->
+                            {% if alunos %}
+                                {% for aluno in alunos %}
+                                <tr data-aluno-id="{{ aluno.id_usuario }}" data-curso="{{ aluno.curso }}" data-situacao="{{ aluno.situacao }}">
+                                    <td>
+                                        <div class="d-flex align-items-center">
+                                            <div class="avatar-placeholder me-3">
+                                                {{ aluno.nome[0].upper() }}
+                                            </div>
+                                            <div>
+                                                <strong>{{ aluno.nome }}</strong>
+                                                <br>
+                                                <small class="text-muted">{{ aluno.email }}</small>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <span class="badge bg-secondary">{{ aluno.matricula }}</span>
+                                    </td>
+                                    <td>{{ aluno.curso }}</td>
+                                    <td>
+                                        {% for auxilio in aluno.auxilios %}
+                                            <span class="badge bg-success me-1">{{ auxilio }}</span>
+                                        {% endfor %}
+                                    </td>
+                                    <td>
+                                        <strong class="text-success">R$ {{ "%.2f"|format(aluno.valor_mensal) }}</strong>
+                                    </td>
+                                    <td>
+                                        {% if aluno.situacao == 'Ativo' %}
+                                            <span class="badge bg-success">{{ aluno.situacao }}</span>
+                                        {% elif aluno.situacao == 'Suspenso' %}
+                                            <span class="badge bg-warning">{{ aluno.situacao }}</span>
+                                        {% else %}
+                                            <span class="badge bg-secondary">{{ aluno.situacao }}</span>
+                                        {% endif %}
+                                    </td>
+                                    <td>
+                                        <div class="btn-group" role="group">
+                                            <button type="button" class="btn btn-sm btn-outline-primary" 
+                                                    onclick="visualizarAluno({{ aluno.id_usuario }})"
+                                                    title="Ver detalhes de {{ aluno.nome }}">
+                                                <i class="bi bi-eye"></i>
+                                            </button>
+                                            <button type="button" class="btn btn-sm btn-outline-warning"
+                                                    onclick="editarAluno({{ aluno.id_usuario }})"
+                                                    title="Editar {{ aluno.nome }}">
+                                                <i class="bi bi-pencil"></i>
+                                            </button>
+                                            <button type="button" class="btn btn-sm btn-outline-info"
+                                                    onclick="historicoAluno({{ aluno.id_usuario }})"
+                                                    title="Histórico de {{ aluno.nome }}">
+                                                <i class="bi bi-clock-history"></i>
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            {% else %}
+                                <tr>
+                                    <td colspan="7" class="text-center py-5">
+                                        <i class="bi bi-people display-1 text-muted mb-3"></i>
+                                        <h5 class="text-muted">Nenhum aluno encontrado</h5>
+                                        <p class="text-muted">Não há alunos aprovados no sistema ainda.</p>
+                                    </td>
+                                </tr>
+                            {% endif %}
                         </tbody>
                     </table>
                 </div>
@@ -169,12 +288,27 @@
             <!-- Paginação -->
             <div class="card-footer">
                 <div class="d-flex justify-content-between align-items-center">
-                    <span class="text-muted" id="resultsCount">Mostrando 0 de 0 alunos</span>
+                    <span class="text-muted" id="resultsCount">
+                        Mostrando {{ alunos|length }} de {{ total_alunos }} alunos
+                    </span>
+                    {% if total_alunos > 10 %}
                     <nav aria-label="Paginação">
                         <ul class="pagination pagination-sm mb-0" id="pagination">
-                            <!-- Paginação será gerada via JavaScript -->
+                            <li class="page-item disabled">
+                                <a class="page-link" href="#" tabindex="-1">Anterior</a>
+                            </li>
+                            <li class="page-item active">
+                                <a class="page-link" href="#">1</a>
+                            </li>
+                            <li class="page-item">
+                                <a class="page-link" href="#">2</a>
+                            </li>
+                            <li class="page-item">
+                                <a class="page-link" href="#">Próximo</a>
+                            </li>
                         </ul>
                     </nav>
+                    {% endif %}
                 </div>
             </div>
         </div>
@@ -182,6 +316,120 @@
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
     <script src="/static/js/dashboard_assistente.js"></script>
-    <script src="/static/js/alunos.js"></script>
+    
+    <script>
+        // Dados dos alunos carregados do servidor
+        const alunosData = {{ alunos|tojson|safe }};
+        let filteredAlunos = [...alunosData];
+        
+        // Função para filtrar alunos
+        function filtrarAlunos() {
+            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+            const filterValue = document.getElementById('filterSelect').value;
+            
+            filteredAlunos = alunosData.filter(aluno => {
+                const matchesSearch = aluno.nome.toLowerCase().includes(searchTerm) ||
+                                    aluno.matricula.toLowerCase().includes(searchTerm) ||
+                                    aluno.curso.toLowerCase().includes(searchTerm);
+                
+                let matchesFilter = true;
+                switch(filterValue) {
+                    case 'ativos':
+                        matchesFilter = aluno.situacao === 'Ativo';
+                        break;
+                    case 'suspensos':
+                        matchesFilter = aluno.situacao === 'Suspenso';
+                        break;
+                    case 'transporte':
+                        matchesFilter = aluno.auxilios.includes('Transporte');
+                        break;
+                    case 'alimentacao':
+                        matchesFilter = aluno.auxilios.includes('Alimentação');
+                        break;
+                    case 'moradia':
+                        matchesFilter = aluno.auxilios.includes('Moradia');
+                        break;
+                    case 'material':
+                        matchesFilter = aluno.auxilios.includes('Material Didático');
+                        break;
+                }
+                
+                return matchesSearch && matchesFilter;
+            });
+            
+            // Esconder/mostrar linhas da tabela
+            const tbody = document.getElementById('alunosTableBody');
+            const rows = tbody.querySelectorAll('tr');
+            
+            rows.forEach(row => {
+                const alunoId = parseInt(row.dataset.alunoId);
+                const shouldShow = filteredAlunos.some(aluno => aluno.id_usuario === alunoId);
+                row.style.display = shouldShow ? '' : 'none';
+            });
+            
+            // Atualizar contador
+            document.getElementById('resultsCount').textContent = 
+                `Mostrando ${filteredAlunos.length} de {{ total_alunos }} alunos`;
+            
+            // Mostrar estado de "sem resultados" se necessário
+            const noResults = document.getElementById('noResultsState');
+            if (filteredAlunos.length === 0 && searchTerm) {
+                noResults.style.display = 'block';
+                tbody.style.display = 'none';
+            } else {
+                noResults.style.display = 'none';
+                tbody.style.display = '';
+            }
+        }
+        
+        // Event listeners para busca e filtros
+        document.getElementById('searchInput').addEventListener('input', filtrarAlunos);
+        document.getElementById('filterSelect').addEventListener('change', filtrarAlunos);
+        
+        // Função para limpar filtros
+        function clearFilters() {
+            document.getElementById('searchInput').value = '';
+            document.getElementById('filterSelect').value = 'todos';
+            filtrarAlunos();
+        }
+        
+        // Funções para ações dos botões
+        function visualizarAluno(id) {
+            alert(`Visualizar aluno ID: ${id}`);
+            // Implementar redirecionamento para página de detalhes
+        }
+        
+        function editarAluno(id) {
+            alert(`Editar aluno ID: ${id}`);
+            // Implementar redirecionamento para página de edição
+        }
+        
+        function historicoAluno(id) {
+            alert(`Histórico do aluno ID: ${id}`);
+            // Implementar modal ou redirecionamento para histórico
+        }
+        
+        // Função para exportar dados
+        function exportarDados() {
+            const csvContent = "data:text/csv;charset=utf-8," 
+                + "Nome,Matrícula,Curso,Auxílios,Valor Mensal,Situação\n"
+                + filteredAlunos.map(aluno => 
+                    `"${aluno.nome}","${aluno.matricula}","${aluno.curso}","${aluno.auxilios.join('; ')}","R$ ${aluno.valor_mensal.toFixed(2)}","${aluno.situacao}"`
+                ).join("\n");
+            
+            const encodedUri = encodeURI(csvContent);
+            const link = document.createElement("a");
+            link.setAttribute("href", encodedUri);
+            link.setAttribute("download", "alunos_auxilios.csv");
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        }
+        
+        // Inicializar filtros ao carregar a página
+        document.addEventListener('DOMContentLoaded', function() {
+            filtrarAlunos();
+        });
+    </script>
 </body>
 </html>

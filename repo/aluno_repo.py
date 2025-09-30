@@ -64,7 +64,6 @@ def obter_todos() -> list[Aluno]:
                 email=row["email"],
                 senha=row["senha"],
                 cpf=row["cpf"],
-                rg=row["rg"],
                 telefone=row["telefone"],
                 curso=row["curso"],
                 data_nascimento=row["data_nascimento"],
@@ -81,10 +80,48 @@ def obter_todos() -> list[Aluno]:
                 numero_conta_bancaria=row["numero_conta_bancaria"],
                 renda_familiar=row["renda_familiar"],
                 quantidade_pessoas=row["quantidade_pessoas"],
-                situacao_moradia=row["situacao_moradia"]
+                renda_per_capita=row["renda_per_capita"],
+                situacao_moradia=row["situacao_moradia"],
+                perfil="aluno",
+                foto=None,
+                token_redefinicao=None,
+                data_token=None,
+                data_cadastro=None
             )
             alunos.append(aluno)
         return alunos
+
+def obter_alunos_aprovados() -> list[dict]:
+    """Obtém apenas alunos que foram aprovados (não pendentes) com informações organizadas para a interface"""
+    try:
+        with get_connection() as conn:
+            cursor = conn.cursor()
+            cursor.execute(OBTER_ALUNOS_APROVADOS)
+            resultado = cursor.fetchall()
+            
+        alunos = []
+        
+        for row in resultado:
+            auxilios_str = row[6] if row[6] else ""
+            auxilios = auxilios_str.split(',') if auxilios_str else []
+            
+            aluno = {
+                'id_usuario': row[0],
+                'nome': row[1] or 'Nome não informado',
+                'matricula': row[2] or 'Matrícula não informada',
+                'email': row[3] or 'Email não informado',
+                'curso': row[4] or 'Curso não informado',
+                'situacao': row[5] or 'Inativo',
+                'auxilios': auxilios,
+                'valor_mensal': float(row[7]) if row[7] else 0.0
+            }
+            alunos.append(aluno)
+            
+        return alunos
+        
+    except Exception as e:
+        print(f"Erro ao obter alunos aprovados: {e}")
+        return []
     
 def obter_por_id(id: int) -> Optional[Aluno]:
     with get_connection() as conn:

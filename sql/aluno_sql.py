@@ -36,7 +36,38 @@ SELECT
 al.id_usuario, al.cpf, al.telefone, al.curso, al.data_nascimento, al.filiacao, al.cep, al.cidade, al.bairro, al.rua, al.numero, al.estado, al.complemento, al.nome_banco, al.agencia_bancaria, al.numero_conta_bancaria, al.renda_familiar, al.quantidade_pessoas, al.renda_per_capita, al.situacao_moradia, u.nome, u.matricula, u.email, u.senha
 FROM aluno al 
 INNER JOIN usuario u ON al.id_usuario = u.id_usuario    
-ORDER BY al.matricula
+ORDER BY u.nome
+""" 
+
+# Obter apenas alunos aprovados (não pendentes) com seus auxílios
+OBTER_ALUNOS_APROVADOS = """
+    SELECT 
+        u.id_usuario,
+        u.nome,
+        u.matricula,
+        u.email,
+        a.curso,
+        CASE 
+            WHEN i.status = 'aprovado' THEN 'Ativo'
+            WHEN i.status = 'suspenso' THEN 'Suspenso'
+            ELSE 'Inativo'
+        END as situacao,
+        GROUP_CONCAT(DISTINCT e.titulo) as auxilios,
+        COALESCE(SUM(DISTINCT 
+            CASE 
+                WHEN e.titulo LIKE '%Transporte%' THEN 150.00
+                WHEN e.titulo LIKE '%Alimentação%' OR e.titulo LIKE '%Alimentacao%' THEN 300.00  
+                WHEN e.titulo LIKE '%Moradia%' THEN 400.00
+                WHEN e.titulo LIKE '%Material%' THEN 200.00
+                ELSE 100.00
+            END), 0) as valor_mensal
+    FROM usuario u
+    INNER JOIN aluno a ON u.id_usuario = a.id_usuario  
+    LEFT JOIN inscricao i ON a.id_usuario = i.id_aluno AND i.status = 'aprovado'
+    LEFT JOIN edital e ON i.id_edital = e.id_edital
+    WHERE a.possivel_aluno = 0
+    GROUP BY u.id_usuario, u.nome, u.matricula, u.email, a.curso
+    ORDER BY u.nome
 """ 
 
 OBTER_POR_ID = """
