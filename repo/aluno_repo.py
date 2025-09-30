@@ -257,3 +257,67 @@ def obter_por_matricula(matricula: str) -> Optional[Aluno]:
                 situacao_moradia=row["situacao_moradia"]
             )
         return None
+
+def obter_possiveis_alunos() -> list[Usuario]:
+    """Obtém todos os usuários que se cadastraram mas ainda não foram aprovados"""
+    with get_connection() as conn:
+        cursor = conn.cursor()
+        cursor.execute(OBTER_POSSIVEIS_ALUNOS)
+        rows = cursor.fetchall()
+        usuarios = [
+            Usuario(
+                id_usuario=row["id_usuario"],
+                nome=row["nome"],
+                matricula=row["matricula"],
+                email=row["email"],
+                senha="",  # Não retorna senha por segurança
+                perfil="aluno",
+                foto=None,
+                token_redefinicao=None,
+                data_token=None,
+                data_cadastro=row["data_cadastro"])
+            for row in rows]
+        return usuarios
+
+def aprovar_aluno(id_usuario: int) -> bool:
+    """Aprova um aluno (define possivel_aluno como False)"""
+    with get_connection() as conn:
+        cursor = conn.cursor()
+        # Se o aluno ainda não tem registro na tabela aluno, cria um básico
+        cursor.execute("SELECT id_usuario FROM aluno WHERE id_usuario = ?", (id_usuario,))
+        if not cursor.fetchone():
+            # Cria registro básico na tabela aluno com possivel_aluno = False
+            cursor.execute("""
+                INSERT INTO aluno (id_usuario, cpf, telefone, curso, data_nascimento, filiacao, 
+                                 cep, cidade, bairro, rua, numero, estado, complemento, 
+                                 nome_banco, agencia_bancaria, numero_conta_bancaria, 
+                                 renda_familiar, quantidade_pessoas, renda_per_capita, 
+                                 situacao_moradia, possivel_aluno) 
+                VALUES (?, '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', 0, 0, 0, '', 0)
+            """, (id_usuario,))
+        else:
+            # Atualiza registro existente
+            cursor.execute(APROVAR_ALUNO, (id_usuario,))
+        return cursor.rowcount > 0
+
+def rejeitar_aluno(id_usuario: int) -> bool:
+    """Rejeita um aluno (exclui tanto da tabela usuario quanto aluno se existir)"""
+    with get_connection() as conn:
+        cursor = conn.cursor()
+        # Primeiro exclui da tabela aluno se existir
+        cursor.execute("DELETE FROM aluno WHERE id_usuario = ?", (id_usuario,))
+        # Depois exclui da tabela usuario
+        cursor.execute("DELETE FROM usuario WHERE id_usuario = ? AND perfil = 'aluno'", (id_usuario,))
+        return cursor.rowcount > 0
+
+def adicionar_coluna_possivel_aluno():
+    """Adiciona a coluna possivel_aluno se não existir"""
+    try:
+        with get_connection() as conn:
+            cursor = conn.cursor()
+            cursor.execute(ADICIONAR_COLUNA_POSSIVEL_ALUNO)
+            return True
+    except Exception as e:
+        # Coluna já existe ou outro erro
+        print(f"Info: {e}")
+        return False

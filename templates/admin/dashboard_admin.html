@@ -87,6 +87,22 @@
 
     <!-- Main Content -->
     <div class="main-content" id="mainContent">
+        
+        <!-- Alertas de sucesso/erro -->
+        {% if request.query_params.get('sucesso') %}
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            <i class="bi bi-check-circle-fill me-2"></i>{{ request.query_params.get('sucesso') }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+        {% endif %}
+
+        {% if request.query_params.get('erro') %}
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            <i class="bi bi-exclamation-triangle-fill me-2"></i>{{ request.query_params.get('erro') }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+        {% endif %}
+        
         <div class="welcome-banner mb-4 card-hover">
             <div class="row align-items-center">
                 <div class="col-md-8">
@@ -154,57 +170,74 @@
         <div class="row">
             <div class="col-md-6">
                 <div class="card">
-                    <div class="card-header">
-                        <i class="bi bi-person-plus me-2"></i>Solicitações de Cadastro
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                        <span><i class="bi bi-person-plus me-2"></i>Solicitações de Cadastro</span>
+                        {% if total_cadastros_pendentes > 0 %}
+                        <span class="badge bg-warning">{{ total_cadastros_pendentes }}</span>
+                        {% endif %}
                     </div>
                     <div class="card-body">
-                        <div class="solicitation-item border-bottom pb-3 mb-3">
-                            <div class="d-flex justify-content-between align-items-center">
-                                <div>
-                                    <h6 class="mb-1">João Silva Santos</h6>
-                                    <small class="text-muted">Matrícula: 2025001234</small><br>
-                                    <small class="text-muted">E-mail: joao.silva@aluno.ifes.edu.br</small><br>
-                                    <small class="text-success">Solicitado há 2 horas</small>
-                                </div>
-                                <div>
-                                    <button class="btn btn-sm btn-primary" onclick="visualizarCadastro('joao-silva')">
-                                        <i class="bi bi-eye"></i> Ver Detalhes
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <div class="solicitation-item border-bottom pb-3 mb-3">
-                            <div class="d-flex justify-content-between align-items-center">
-                                <div>
-                                    <h6 class="mb-1">Maria Fernanda Costa</h6>
-                                    <small class="text-muted">Matrícula: 2025001235</small><br>
-                                    <small class="text-muted">E-mail: maria.costa@aluno.ifes.edu.br</small><br>
-                                    <small class="text-success">Solicitado há 5 horas</small>
-                                </div>
-                                <div>
-                                    <button class="btn btn-sm btn-primary" onclick="visualizarCadastro('maria-costa')">
-                                        <i class="bi bi-eye"></i> Ver Detalhes
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <div class="solicitation-item">
-                            <div class="d-flex justify-content-between align-items-center">
-                                <div>
-                                    <h6 class="mb-1">Pedro Henrique Oliveira</h6>
-                                    <small class="text-muted">Matrícula: 2025001236</small><br>
-                                    <small class="text-muted">E-mail: pedro.oliveira@aluno.ifes.edu.br</small><br>
-                                    <small class="text-success">Solicitado há 1 dia</small>
-                                </div>
-                                <div>
-                                    <button class="btn btn-sm btn-primary" onclick="visualizarCadastro('pedro-oliveira')">
-                                        <i class="bi bi-eye"></i> Ver Detalhes
-                                    </button>
+                        {% if possiveis_alunos %}
+                            {% for usuario in possiveis_alunos %}
+                            <div class="solicitation-item {% if not loop.last %}border-bottom pb-3 mb-3{% endif %}">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <div>
+                                        <h6 class="mb-1">{{ usuario.nome }}</h6>
+                                        <small class="text-muted">Matrícula: {{ usuario.matricula }}</small><br>
+                                        <small class="text-muted">E-mail: {{ usuario.email }}</small><br>
+                                        <small class="text-success">
+                                            <i class="bi bi-clock me-1"></i>{{ usuario.tempo_relativo }}
+                                        </small>
+                                    </div>
+                                    <div>
+                                        <div class="btn-group-vertical" role="group">
+                                            <form method="post" action="/admin/aprovar-usuario/{{ usuario.id_usuario }}" style="display: inline;">
+                                                <button type="submit" class="btn btn-sm btn-success mb-1" 
+                                                        onclick="return confirm('Aprovar cadastro de {{ usuario.nome }}?')"
+                                                        title="Aprovar cadastro de {{ usuario.nome }}">
+                                                    <i class="bi bi-check-lg"></i> Aprovar
+                                                </button>
+                                            </form>
+                                            <form method="post" action="/admin/rejeitar-usuario/{{ usuario.id_usuario }}" style="display: inline;">
+                                                <button type="submit" class="btn btn-sm btn-danger" 
+                                                        onclick="return confirm('Rejeitar cadastro de {{ usuario.nome }}? Esta ação não pode ser desfeita.')"
+                                                        title="Rejeitar cadastro de {{ usuario.nome }}">
+                                                    <i class="bi bi-x-lg"></i> Rejeitar
+                                                </button>
+                                            </form>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
+                            {% endfor %}
+                            
+                            {% if total_cadastros_pendentes > 3 %}
+                            <div class="text-center mt-3">
+                                <p class="text-muted mb-2">
+                                    <i class="bi bi-info-circle me-1"></i>
+                                    Mostrando 3 de {{ total_cadastros_pendentes }} solicitações
+                                </p>
+                                <a href="/admin/analisar-cadastros" class="btn btn-outline-primary btn-sm">
+                                    <i class="bi bi-list-ul me-1"></i>Ver Todas as Solicitações
+                                </a>
+                            </div>
+                            {% else %}
+                            <div class="text-center mt-3">
+                                <a href="/admin/analisar-cadastros" class="btn btn-outline-primary btn-sm">
+                                    <i class="bi bi-list-ul me-1"></i>Gerenciar Cadastros
+                                </a>
+                            </div>
+                            {% endif %}
+                        {% else %}
+                            <div class="text-center py-4">
+                                <i class="bi bi-check-circle text-success" style="font-size: 3rem;"></i>
+                                <h5 class="mt-2 mb-1">Nenhuma solicitação pendente</h5>
+                                <p class="text-muted mb-3">Todos os cadastros foram analisados</p>
+                                <a href="/admin/analisar-cadastros" class="btn btn-outline-primary btn-sm">
+                                    <i class="bi bi-list-ul me-1"></i>Ver Histórico
+                                </a>
+                            </div>
+                        {% endif %}
                     </div>
                 </div>
             </div>
@@ -580,6 +613,57 @@
             });
         });
     </script>
+
+    <style>
+        /* Estilos para a seção de solicitações de cadastro */
+        .solicitation-item {
+            transition: all 0.3s ease;
+        }
+        
+        .solicitation-item:hover {
+            background-color: #f8f9fa;
+            border-radius: 8px;
+            padding: 10px;
+            margin: -10px;
+        }
+        
+        .btn-group-vertical .btn {
+            border-radius: 4px !important;
+            font-size: 11px;
+            padding: 4px 8px;
+            min-width: 70px;
+        }
+        
+        .solicitation-item .btn-group-vertical {
+            gap: 2px;
+        }
+        
+        /* Badge para contador de cadastros pendentes */
+        .card-header .badge {
+            font-size: 11px;
+        }
+        
+        /* Animação para alertas */
+        .alert {
+            animation: slideDown 0.3s ease;
+        }
+        
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        /* Melhor espaçamento para os alertas */
+        .main-content .alert {
+            margin-bottom: 20px;
+        }
+    </style>
 
     <footer class="footer bg-success text-white py-4">
         <div class="container">
