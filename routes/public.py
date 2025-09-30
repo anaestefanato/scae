@@ -115,6 +115,13 @@ async def post_cadastro(
                 {"request": request, "erro": "Senhas não coincidem"}
         )   
     
+    # Verificar se a senha é muito longa (limite do bcrypt: 72 bytes)
+    if len(senha.encode('utf-8')) > 72:
+        return templates.TemplateResponse(
+                "publicas/cadastro.html",
+                {"request": request, "erro": "Senha muito longa. Use no máximo 72 caracteres."}
+        )
+    
     aluno = Usuario(
         id_usuario=None,
         nome=nome,

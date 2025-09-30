@@ -3,11 +3,8 @@ Módulo de segurança para gerenciar senhas e tokens
 """
 import secrets
 import string
+import bcrypt
 from datetime import datetime, timedelta
-from passlib.context import CryptContext
-
-# Contexto para hash de senhas usando bcrypt
-pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
 
 def criar_hash_senha(senha: str) -> str:
@@ -20,7 +17,18 @@ def criar_hash_senha(senha: str) -> str:
     Returns:
         Hash da senha
     """
-    return pwd_context.hash(senha)
+    # bcrypt tem limite de 72 bytes. Truncar se necessário.
+    senha_bytes = senha.encode('utf-8')
+    if len(senha_bytes) > 72:
+        # Truncar para 72 bytes
+        senha_bytes = senha_bytes[:72]
+    
+    # Gerar salt e hash
+    salt = bcrypt.gensalt()
+    hash_result = bcrypt.hashpw(senha_bytes, salt)
+    
+    # Retornar como string
+    return hash_result.decode('utf-8')
 
 
 def verificar_senha(senha_plana: str, senha_hash: str) -> bool:
@@ -35,7 +43,19 @@ def verificar_senha(senha_plana: str, senha_hash: str) -> bool:
         True se a senha está correta, False caso contrário
     """
     try:
-        return pwd_context.verify(senha_plana, senha_hash)
+        # Aplicar a mesma truncagem que foi usada no hash
+        senha_bytes = senha_plana.encode('utf-8')
+        if len(senha_bytes) > 72:
+            # Truncar para 72 bytes
+            senha_bytes = senha_bytes[:72]
+        
+        # Converter hash de volta para bytes se necessário
+        if isinstance(senha_hash, str):
+            hash_bytes = senha_hash.encode('utf-8')
+        else:
+            hash_bytes = senha_hash
+            
+        return bcrypt.checkpw(senha_bytes, hash_bytes)
     except:
         return False
 
