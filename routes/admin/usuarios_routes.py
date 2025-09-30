@@ -25,3 +25,11 @@ async def get_usuario_assistente(request: Request, usuario_logado: dict = None):
     admin = usuario_repo.obter_usuario_por_matricula(usuario_logado['matricula'])
     response = templates.TemplateResponse("/admin/usuario_assist.html", {"request": request, "admin": admin})
     return response
+
+@router.get("/usuarios/administradores")
+@requer_autenticacao("admin")
+async def get_usuario_administrador(request: Request, usuario_logado: dict = None):
+
+    admin = usuario_repo.obter_usuario_por_matricula(usuario_logado['matricula'])
+    response = templates.TemplateResponse("/admin/usuario_admin.html", {"request": request, "admin": admin})
+    return response
