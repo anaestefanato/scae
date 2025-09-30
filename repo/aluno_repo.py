@@ -26,28 +26,43 @@ def inserir(usuario: Usuario) -> Optional[int]:
 def completar_cadastro(aluno: Aluno) -> Optional[bool]:
     with get_connection() as conn:
         cursor = conn.cursor()
-        cursor.execute(INSERIR, (
-            aluno.id_usuario,
-            aluno.cpf ,
-            aluno.telefone,
-            aluno.curso,
-            aluno.data_nascimento,
-            aluno.filiacao,
-            aluno.cep,
-            aluno.cidade,
-            aluno.bairro,
-            aluno.rua,
-            aluno.numero,
-            aluno.estado, 
-            aluno.complemento,
-            aluno.nome_banco,
-            aluno.agencia_bancaria,
-            aluno.numero_conta_bancaria,
-            aluno.renda_familiar,
-            aluno.quantidade_pessoas,
-            aluno.renda_per_capita,
-            aluno.situacao_moradia
-        ))
+        
+        # Verificar se já existe um registro para este usuário
+        cursor.execute("SELECT possivel_aluno FROM aluno WHERE id_usuario = ?", (aluno.id_usuario,))
+        registro_existente = cursor.fetchone()
+        
+        if registro_existente:
+            # Se já existe, fazer UPDATE preservando o status de aprovação
+            cursor.execute("""
+                UPDATE aluno SET 
+                    cpf = ?, telefone = ?, curso = ?, data_nascimento = ?, filiacao = ?, 
+                    cep = ?, cidade = ?, bairro = ?, rua = ?, numero = ?, estado = ?, 
+                    complemento = ?, nome_banco = ?, agencia_bancaria = ?, numero_conta_bancaria = ?, 
+                    renda_familiar = ?, quantidade_pessoas = ?, renda_per_capita = ?, situacao_moradia = ?
+                WHERE id_usuario = ?
+            """, (
+                aluno.cpf, aluno.telefone, aluno.curso, aluno.data_nascimento, aluno.filiacao,
+                aluno.cep, aluno.cidade, aluno.bairro, aluno.rua, aluno.numero, aluno.estado,
+                aluno.complemento, aluno.nome_banco, aluno.agencia_bancaria, aluno.numero_conta_bancaria,
+                aluno.renda_familiar, aluno.quantidade_pessoas, aluno.renda_per_capita, aluno.situacao_moradia,
+                aluno.id_usuario
+            ))
+        else:
+            # Se não existe, inserir como aprovado (possivel_aluno = 0)
+            cursor.execute("""
+                INSERT INTO aluno (id_usuario, cpf, telefone, curso, data_nascimento, filiacao, 
+                                 cep, cidade, bairro, rua, numero, estado, complemento, 
+                                 nome_banco, agencia_bancaria, numero_conta_bancaria, 
+                                 renda_familiar, quantidade_pessoas, renda_per_capita, 
+                                 situacao_moradia, possivel_aluno) 
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 0)
+            """, (
+                aluno.id_usuario, aluno.cpf, aluno.telefone, aluno.curso, aluno.data_nascimento, aluno.filiacao,
+                aluno.cep, aluno.cidade, aluno.bairro, aluno.rua, aluno.numero, aluno.estado,
+                aluno.complemento, aluno.nome_banco, aluno.agencia_bancaria, aluno.numero_conta_bancaria,
+                aluno.renda_familiar, aluno.quantidade_pessoas, aluno.renda_per_capita, aluno.situacao_moradia
+            ))
+        
         return cursor.rowcount > 0
     
 def obter_todos() -> list[Aluno]:
