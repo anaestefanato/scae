@@ -234,17 +234,17 @@
                                     <td>
                                         <div class="btn-group" role="group">
                                             <button type="button" class="btn btn-sm btn-outline-primary" 
-                                                    onclick="visualizarAluno({{ aluno.id_usuario }})"
+                                                    onclick="visualizarAluno('{{ aluno.id_usuario }}')"
                                                     title="Ver detalhes de {{ aluno.nome }}">
                                                 <i class="bi bi-eye"></i>
                                             </button>
                                             <button type="button" class="btn btn-sm btn-outline-warning"
-                                                    onclick="editarAluno({{ aluno.id_usuario }})"
+                                                    onclick="editarAluno('{{ aluno.id_usuario }}')"
                                                     title="Editar {{ aluno.nome }}">
                                                 <i class="bi bi-pencil"></i>
                                             </button>
                                             <button type="button" class="btn btn-sm btn-outline-info"
-                                                    onclick="historicoAluno({{ aluno.id_usuario }})"
+                                                    onclick="historicoAluno('{{ aluno.id_usuario }}')"
                                                     title="Histórico de {{ aluno.nome }}">
                                                 <i class="bi bi-clock-history"></i>
                                             </button>
@@ -317,9 +317,13 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
     <script src="/static/js/dashboard_assistente.js"></script>
     
+    <!-- Dados dos alunos -->
+    <script id="alunos-data" type="application/json">{{ alunos|tojson|safe }}</script>
+    
     <script>
-        // Dados dos alunos carregados do servidor
-        const alunosData = {{ alunos|tojson|safe }};
+        // Carregar dados dos alunos do elemento script
+        const alunosDataElement = document.getElementById('alunos-data');
+        const alunosData = JSON.parse(alunosDataElement.textContent);
         let filteredAlunos = [...alunosData];
         
         // Função para filtrar alunos
