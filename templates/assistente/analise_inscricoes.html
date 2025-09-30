@@ -1,251 +1,519 @@
-{% extends 'base_assistente.html' %}
-{% set active_page = 'analise-inscricoes' %}
-
-{% block title %}Análise de Inscrições - SCAE{% endblock %}
-
-{% block head %}
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SCAE - Análise de Inscrições</title>
+    <link rel="icon" type="image/png" href="/static/img/logo.png">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="/static/css/dashboard_assistente.css" />
+    <link rel="stylesheet" href="/static/css/analise_inscricoes.css" />
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="/static/css/dashboard_assistente.css">
-    <link rel="stylesheet" href="/static/css/analise_inscricoes.css">
-{% endblock %}
+</head>
+<body>
+    <!-- Menu Toggle Button (visible when sidebar is collapsed) -->
+    <button class="menu-toggle" id="menuToggle">
+        <i class="bi bi-list"></i>
+    </button>
 
-{% block content %}
-<div class="main-content" id="mainContent">
-    <div class="welcome-banner mb-4">
-        <div class="row align-items-center">
-            <div class="col">
-                <h4 class="mb-3">Análise de Inscrições</h4>
-                <p>Gerencie e analise as inscrições dos alunos nos programas de auxílio estudantil.</p>
+    <!-- Sidebar -->
+    <div class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <button class="close-sidebar" id="closeSidebar">
+                <i class="bi bi-x-lg"></i>
+            </button>
+            <img src="/static/img/logoifes.png" alt="Logo IFES" width="180">
+        </div>
+        <div class="d-flex flex-column p-3">
+            <div class="mb-4 text-center">
+                <h6 class="mb-0">Sistema de Controle de</h6>
+                <h6>Assistência Estudantil</h6>
+            </div>
+            <ul class="nav nav-pills flex-column mb-auto">
+                <li class="nav-item">
+                    <a href="/assistente/dashboard" class="nav-link">
+                        <i class="bi bi-speedometer2"></i> <span>Início</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="/assistente/analise-inscricoes" class="nav-link active bg-success">
+                        <i class="bi bi-clipboard-check"></i> <span>Análise de Inscrições</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="/assistente/analise-recursos" class="nav-link">
+                        <i class="bi bi-journal-text"></i> <span>Análise de Recursos</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="/assistente/alunos" class="nav-link">
+                        <i class="bi bi-people"></i> <span>Alunos</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="/assistente/entrevistas" class="nav-link">
+                        <i class="bi bi-file-earmark-text"></i> <span>Entrevistas Agendadas</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="/assistente/relatorios" class="nav-link">
+                        <i class="bi bi-file-earmark-bar-graph"></i> <span>Relatórios</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="/assistente/agenda" class="nav-link">
+                        <i class="bi bi-calendar-event"></i> <span>Agenda</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="/assistente/perfil" class="nav-link">
+                        <i class="bi bi-person-circle"></i> <span>Meu Perfil</span>
+                    </a>
+                </li>
+            </ul>
+            <hr>
+            <div class="text-center">
+                <a href="/logout" class="btn btn-outline-danger">
+                    <i class="bi bi-box-arrow-right"></i> <span>Sair</span>
+                </a>
             </div>
         </div>
     </div>
 
-    <div class="row mb-4">
-        <div class="col-md-3">
-            <div class="stats-card">
-                <div class="number">{{ estatisticas.pendentes }}</div>
-                <div class="label">Inscrições Pendentes</div>
-            </div>
-        </div>
-        <div class="col-md-3">
-            <div class="stats-card">
-                <div class="number">{{ estatisticas.em_analise }}</div>
-                <div class="label">Em Análise</div>
-            </div>
-        </div>
-        <div class="col-md-3">
-            <div class="stats-card">
-                <div class="number">{{ estatisticas.analisadas_hoje }}</div>
-                <div class="label">Analisadas Hoje</div>
-            </div>
-        </div>
-        <div class="col-md-3">
-            <div class="stats-card">
-                <div class="number">{{ estatisticas.total_analisadas }}</div>
-                <div class="label">Total Analisadas</div>
-            </div>
-        </div>
-    </div>
-
-    <div class="card">
-        <div class="card-header d-flex justify-content-between align-items-center">
-            <div>
-                <h5 class="mb-0">Lista de Inscrições</h5>
-                {% if total_inscricoes > 0 %}
-                <small class="text-muted">{{ total_inscricoes }} inscrição{{ 'ões' if total_inscricoes != 1 else '' }} encontrada{{ 's' if total_inscricoes != 1 else '' }}</small>
-                {% endif %}
-            </div>
-            <div class="d-flex gap-2">
-                <div class="input-group">
-                    <input type="text" class="form-control" placeholder="Buscar inscrição..." id="buscarInscricao">
-                    <button class="btn btn-outline-secondary" type="button">
-                        <i class="bi bi-search"></i>
+    <!-- Main Content -->
+    <div class="main-content" id="mainContent">
+        <!-- Page Header -->
+        <div class="page-header mb-4 card-hover">
+            <div class="row align-items-center">
+                <div class="col-md-9">
+                    <h4 class="mb-3">
+                        <i class="bi bi-clipboard-check text-success me-2"></i>
+                        Análise de Inscrições
+                    </h4>
+                    <p class="mb-0">Gerencie e analise as inscrições dos alunos para os auxílios estudantis.</p>
+                </div>
+                <div class="col-md-3 text-end">
+                    <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#filtrosModal">
+                        <i class="bi bi-funnel me-1"></i>Filtros Avançados
                     </button>
                 </div>
-                <button class="btn btn-success">
-                    <i class="bi bi-filter"></i> Filtrar
-                </button>
             </div>
         </div>
-        <div class="card-body">
-            {% if inscricoes %}
+
+        <!-- Filters Bar -->
+        <div class="filters-bar mb-4">
+            <div class="row">
+                <div class="col-md-3">
+                    <select class="form-select" id="filtroEdital">
+                        <option value="">Todos os Editais</option>
+                        <option value="1">Edital 001/2025 - Auxílio Alimentação</option>
+                        <option value="2">Edital 002/2025 - Auxílio Transporte</option>
+                        <option value="3">Edital 003/2025 - Auxílio Material Didático</option>
+                    </select>
+                </div>
+                <div class="col-md-2">
+                    <select class="form-select" id="filtroStatus">
+                        <option value="">Todos os Status</option>
+                        <option value="pendente">Pendentes</option>
+                        <option value="deferido">Deferidas</option>
+                        <option value="indeferido">Indeferidas</option>
+                        <option value="entrevista">Aguardando Entrevista</option>
+                    </select>
+                </div>
+                <div class="col-md-2">
+                    <select class="form-select" id="filtroPrioridade">
+                        <option value="">Todas as Prioridades</option>
+                        <option value="alta">Alta</option>
+                        <option value="media">Média</option>
+                        <option value="baixa">Baixa</option>
+                    </select>
+                </div>
+                <div class="col-md-3">
+                    <div class="input-group">
+                        <span class="input-group-text"><i class="bi bi-search"></i></span>
+                        <input type="text" class="form-control" id="buscarAluno" placeholder="Buscar por nome do aluno...">
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <button class="btn btn-outline-secondary w-100" id="limparFiltros">
+                        <i class="bi bi-arrow-clockwise me-1"></i>Limpar
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Inscriptions Table -->
+        <div class="inscricoes-table card">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <span><i class="bi bi-list-ul me-2"></i>Lista de Inscrições</span>
+                <div class="table-actions">
+                    <select class="form-select form-select-sm d-inline-block w-auto me-2" id="acaoLote">
+                        <option value="">Ações em lote</option>
+                        <option value="deferir">Deferir selecionadas</option>
+                        <option value="indeferir">Indeferir selecionadas</option>
+                        <option value="agendar">Agendar entrevistas</option>
+                    </select>
+                    <button class="btn btn-sm btn-outline-primary" id="executarAcaoLote">
+                        <i class="bi bi-gear me-1"></i>Executar
+                    </button>
+                </div>
+            </div>
             <div class="table-responsive">
                 <table class="table table-hover">
                     <thead>
                         <tr>
+                            <th width="40">
+                                <input type="checkbox" class="form-check-input" id="selecionarTodos">
+                            </th>
                             <th>Aluno</th>
-                            <th>Auxílio</th>
-                            <th>Data</th>
+                            <th>Edital</th>
+                            <th>Tipo de Auxílio</th>
+                            <th>Data da Inscrição</th>
                             <th>Status</th>
                             <th>Prioridade</th>
+                            <th>Renda Per Capita</th>
                             <th>Ações</th>
                         </tr>
                     </thead>
-                    <tbody>
-                        {% for inscricao in inscricoes %}
-                        <tr>
+                    <tbody id="tabelaInscricoes">
+                        <tr data-inscricao-id="1">
                             <td>
-                                <div>
-                                    <div class="fw-bold">{{ inscricao.aluno_nome }}</div>
-                                    <small class="text-muted">{{ inscricao.aluno_matricula }}</small>
+                                <input type="checkbox" class="form-check-input inscricao-checkbox" value="1">
+                            </td>
+                            <td>
+                                <div class="aluno-info">
+                                    <div class="aluno-nome">João Silva dos Santos</div>
+                                    <small class="text-muted">Matrícula: 20251234567</small>
                                 </div>
                             </td>
                             <td>
-                                <div>
-                                    <div class="fw-bold">{{ inscricao.edital_titulo }}</div>
-                                    <small class="text-muted">
-                                        {% if inscricao.tipo_auxilio == 'auxilio alimentacao' %}
-                                            <i class="bi bi-cup-hot me-1"></i>Auxílio Alimentação
-                                        {% elif inscricao.tipo_auxilio == 'auxilio transporte' %}
-                                            <i class="bi bi-bus-front me-1"></i>Auxílio Transporte
-                                        {% elif inscricao.tipo_auxilio == 'auxilio moradia' %}
-                                            <i class="bi bi-house me-1"></i>Auxílio Moradia
-                                        {% elif inscricao.tipo_auxilio == 'auxilio material' %}
-                                            <i class="bi bi-book me-1"></i>Auxílio Material
-                                        {% else %}
-                                            {{ inscricao.tipo_auxilio }}
-                                        {% endif %}
-                                        {% if inscricao.valor_mensal > 0 %}
-                                            - R$ {{ "%.2f"|format(inscricao.valor_mensal) }}
-                                        {% endif %}
-                                    </small>
-                                </div>
+                                <span class="edital-badge">001/2025</span>
                             </td>
+                            <td>Auxílio Transporte</td>
+                            <td>15/03/2025</td>
                             <td>
-                                <div>{{ inscricao.data_inscricao }}</div>
-                                <small class="text-muted">Prazo: {{ inscricao.data_encerramento }}</small>
+                                <span class="status-badge status-pendente">
+                                    <i class="bi bi-clock me-1"></i>Pendente
+                                </span>
                             </td>
-                            <td>
-                                {% if inscricao.status == 'pendente' %}
-                                    <span class="badge bg-warning text-dark">
-                                        <i class="bi bi-clock me-1"></i>Pendente
-                                    </span>
-                                {% elif inscricao.status == 'em_analise' %}
-                                    <span class="badge bg-info">
-                                        <i class="bi bi-search me-1"></i>Em Análise
-                                    </span>
-                                {% elif inscricao.status == 'deferido' %}
-                                    <span class="badge bg-success">
-                                        <i class="bi bi-check-lg me-1"></i>Deferido
-                                    </span>
-                                {% elif inscricao.status == 'indeferido' %}
-                                    <span class="badge bg-danger">
-                                        <i class="bi bi-x-lg me-1"></i>Indeferido
-                                    </span>
-                                {% else %}
-                                    <span class="badge bg-secondary">{{ inscricao.status|title }}</span>
-                                {% endif %}
-                            </td>
-                            <td>
-                                {% if inscricao.prioridade == 'Alta' %}
-                                    <span class="priority-high text-danger fw-bold">
-                                        <i class="bi bi-exclamation-triangle me-1"></i>Alta
-                                    </span>
-                                {% elif inscricao.prioridade == 'Média' %}
-                                    <span class="priority-medium text-warning fw-bold">
-                                        <i class="bi bi-dash-circle me-1"></i>Média
-                                    </span>
-                                {% else %}
-                                    <span class="priority-low text-success">
-                                        <i class="bi bi-check-circle me-1"></i>Baixa
-                                    </span>
-                                {% endif %}
-                            </td>
+                            <td><span class="priority-high">Alta</span></td>
+                            <td>R$ 256,80</td>
                             <td>
                                 <div class="action-buttons">
-                                    <button class="btn btn-sm btn-outline-primary" title="Ver Detalhes" 
-                                            onclick="verDetalhes('{{ inscricao.id_inscricao }}')">
+                                    <button class="btn btn-sm btn-outline-primary" title="Visualizar Detalhes" onclick="visualizarDetalhes(1)">
                                         <i class="bi bi-eye"></i>
                                     </button>
-                                    {% if inscricao.status in ['pendente', 'em_analise'] %}
-                                    <button class="btn btn-sm btn-outline-success" title="Aprovar" 
-                                            onclick="aprovarInscricao('{{ inscricao.id_inscricao }}')">
+                                    <button class="btn btn-sm btn-outline-success" title="Deferir" onclick="deferirInscricao(1)">
                                         <i class="bi bi-check-lg"></i>
                                     </button>
-                                    <button class="btn btn-sm btn-outline-danger" title="Reprovar" 
-                                            onclick="reprovarInscricao('{{ inscricao.id_inscricao }}')">
+                                    <button class="btn btn-sm btn-outline-danger" title="Indeferir" onclick="indeferirInscricao(1)">
                                         <i class="bi bi-x-lg"></i>
                                     </button>
-                                    {% endif %}
+                                    <button class="btn btn-sm btn-outline-info" title="Agendar Entrevista" onclick="agendarEntrevista(1)">
+                                        <i class="bi bi-calendar-plus"></i>
+                                    </button>
                                 </div>
                             </td>
                         </tr>
-                        {% endfor %}
+                        <tr data-inscricao-id="2">
+                            <td>
+                                <input type="checkbox" class="form-check-input inscricao-checkbox" value="2">
+                            </td>
+                            <td>
+                                <div class="aluno-info">
+                                    <div class="aluno-nome">Maria Santos Oliveira</div>
+                                    <small class="text-muted">Matrícula: 20251234568</small>
+                                </div>
+                            </td>
+                            <td>
+                                <span class="edital-badge">002/2025</span>
+                            </td>
+                            <td>Auxílio Material Didático</td>
+                            <td>20/03/2025</td>
+                            <td>
+                                <span class="status-badge status-entrevista">
+                                    <i class="bi bi-person-video2 me-1"></i>Aguardando Entrevista
+                                </span>
+                            </td>
+                            <td><span class="priority-medium">Média</span></td>
+                            <td>R$ 342,15</td>
+                            <td>
+                                <div class="action-buttons">
+                                    <button class="btn btn-sm btn-outline-primary" title="Visualizar Detalhes" onclick="visualizarDetalhes(2)">
+                                        <i class="bi bi-eye"></i>
+                                    </button>
+                                    <button class="btn btn-sm btn-outline-success" title="Deferir" onclick="deferirInscricao(2)">
+                                        <i class="bi bi-check-lg"></i>
+                                    </button>
+                                    <button class="btn btn-sm btn-outline-danger" title="Indeferir" onclick="indeferirInscricao(2)">
+                                        <i class="bi bi-x-lg"></i>
+                                    </button>
+                                    <button class="btn btn-sm btn-outline-warning" title="Reagendar Entrevista" onclick="reagendarEntrevista(2)">
+                                        <i class="bi bi-calendar-event"></i>
+                                    </button>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr data-inscricao-id="3">
+                            <td>
+                                <input type="checkbox" class="form-check-input inscricao-checkbox" value="3">
+                            </td>
+                            <td>
+                                <div class="aluno-info">
+                                    <div class="aluno-nome">Pedro Oliveira Costa</div>
+                                    <small class="text-muted">Matrícula: 20251234569</small>
+                                </div>
+                            </td>
+                            <td>
+                                <span class="edital-badge">001/2025</span>
+                            </td>
+                            <td>Auxílio Alimentação</td>
+                            <td>18/03/2025</td>
+                            <td>
+                                <span class="status-badge status-deferido">
+                                    <i class="bi bi-check-circle me-1"></i>Deferida
+                                </span>
+                            </td>
+                            <td><span class="priority-high">Alta</span></td>
+                            <td>R$ 189,45</td>
+                            <td>
+                                <div class="action-buttons">
+                                    <button class="btn btn-sm btn-outline-primary" title="Visualizar Detalhes" onclick="visualizarDetalhes(3)">
+                                        <i class="bi bi-eye"></i>
+                                    </button>
+                                    <button class="btn btn-sm btn-outline-secondary" disabled title="Já deferida">
+                                        <i class="bi bi-check-circle"></i>
+                                    </button>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr data-inscricao-id="4">
+                            <td>
+                                <input type="checkbox" class="form-check-input inscricao-checkbox" value="4">
+                            </td>
+                            <td>
+                                <div class="aluno-info">
+                                    <div class="aluno-nome">Ana Carolina Souza</div>
+                                    <small class="text-muted">Matrícula: 20251234570</small>
+                                </div>
+                            </td>
+                            <td>
+                                <span class="edital-badge">003/2025</span>
+                            </td>
+                            <td>Auxílio Transporte</td>
+                            <td>22/03/2025</td>
+                            <td>
+                                <span class="status-badge status-indeferido">
+                                    <i class="bi bi-x-circle me-1"></i>Indeferida
+                                </span>
+                            </td>
+                            <td><span class="priority-low">Baixa</span></td>
+                            <td>R$ 675,90</td>
+                            <td>
+                                <div class="action-buttons">
+                                    <button class="btn btn-sm btn-outline-primary" title="Visualizar Detalhes" onclick="visualizarDetalhes(4)">
+                                        <i class="bi bi-eye"></i>
+                                    </button>
+                                    <button class="btn btn-sm btn-outline-info" title="Ver Justificativa" onclick="verJustificativa(4)">
+                                        <i class="bi bi-file-text"></i>
+                                    </button>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr data-inscricao-id="5">
+                            <td>
+                                <input type="checkbox" class="form-check-input inscricao-checkbox" value="5">
+                            </td>
+                            <td>
+                                <div class="aluno-info">
+                                    <div class="aluno-nome">Carlos Henrique Lima</div>
+                                    <small class="text-muted">Matrícula: 20251234571</small>
+                                </div>
+                            </td>
+                            <td>
+                                <span class="edital-badge">002/2025</span>
+                            </td>
+                            <td>Auxílio Material Didático</td>
+                            <td>25/03/2025</td>
+                            <td>
+                                <span class="status-badge status-pendente">
+                                    <i class="bi bi-clock me-1"></i>Pendente
+                                </span>
+                            </td>
+                            <td><span class="priority-medium">Média</span></td>
+                            <td>R$ 298,75</td>
+                            <td>
+                                <div class="action-buttons">
+                                    <button class="btn btn-sm btn-outline-primary" title="Visualizar Detalhes" onclick="visualizarDetalhes(5)">
+                                        <i class="bi bi-eye"></i>
+                                    </button>
+                                    <button class="btn btn-sm btn-outline-success" title="Deferir" onclick="deferirInscricao(5)">
+                                        <i class="bi bi-check-lg"></i>
+                                    </button>
+                                    <button class="btn btn-sm btn-outline-danger" title="Indeferir" onclick="indeferirInscricao(5)">
+                                        <i class="bi bi-x-lg"></i>
+                                    </button>
+                                    <button class="btn btn-sm btn-outline-info" title="Agendar Entrevista" onclick="agendarEntrevista(5)">
+                                        <i class="bi bi-calendar-plus"></i>
+                                    </button>
+                                </div>
+                            </td>
+                        </tr>
                     </tbody>
                 </table>
             </div>
-            
-            {% if total_paginas > 1 %}
-            <nav aria-label="Navegação de páginas" class="mt-4">
-                <ul class="pagination justify-content-center">
-                    <li class="page-item {{ 'disabled' if not tem_anterior else '' }}">
-                        <a class="page-link" href="?pagina={{ pagina_atual - 1 if tem_anterior else 1 }}" 
-                           {{ 'tabindex="-1"' if not tem_anterior else '' }}>
-                            Anterior
-                        </a>
-                    </li>
-                    
-                    {% set start_page = [1, pagina_atual - 2]|max %}
-                    {% set end_page = [total_paginas, pagina_atual + 2]|min %}
-                    
-                    {% if start_page > 1 %}
-                        <li class="page-item"><a class="page-link" href="?pagina=1">1</a></li>
-                        {% if start_page > 2 %}
-                            <li class="page-item disabled"><span class="page-link">...</span></li>
-                        {% endif %}
-                    {% endif %}
-                    
-                    {% for p in range(start_page, end_page + 1) %}
-                        <li class="page-item {{ 'active' if p == pagina_atual else '' }}">
-                            <a class="page-link" href="?pagina={{ p }}">{{ p }}</a>
-                        </li>
-                    {% endfor %}
-                    
-                    {% if end_page < total_paginas %}
-                        {% if end_page < total_paginas - 1 %}
-                            <li class="page-item disabled"><span class="page-link">...</span></li>
-                        {% endif %}
-                        <li class="page-item"><a class="page-link" href="?pagina={{ total_paginas }}">{{ total_paginas }}</a></li>
-                    {% endif %}
-                    
-                    <li class="page-item {{ 'disabled' if not tem_proximo else '' }}">
-                        <a class="page-link" href="?pagina={{ pagina_atual + 1 if tem_proximo else total_paginas }}">
-                            Próximo
-                        </a>
-                    </li>
-                </ul>
-            </nav>
-            {% endif %}
-            
-            {% else %}
-            <div class="text-center py-5">
-                <i class="bi bi-inbox text-muted mb-3" style="font-size: 4rem;"></i>
-                <h5 class="text-muted mb-3">Nenhuma inscrição para análise</h5>
-                <p class="text-muted">Todas as inscrições foram analisadas ou não há inscrições pendentes no momento.</p>
+            <!-- Pagination -->
+            <div class="card-footer">
+                <div class="row align-items-center">
+                    <div class="col-md-6">
+                        <span class="text-muted">Mostrando 1 a 5 de 127 inscrições</span>
+                    </div>
+                    <div class="col-md-6">
+                        <nav aria-label="Navegação da tabela">
+                            <ul class="pagination pagination-sm justify-content-end mb-0">
+                                <li class="page-item disabled">
+                                    <a class="page-link" href="#" tabindex="-1">Anterior</a>
+                                </li>
+                                <li class="page-item active">
+                                    <a class="page-link" href="#">1</a>
+                                </li>
+                                <li class="page-item">
+                                    <a class="page-link" href="#">2</a>
+                                </li>
+                                <li class="page-item">
+                                    <a class="page-link" href="#">3</a>
+                                </li>
+                                <li class="page-item">
+                                    <span class="page-link">...</span>
+                                </li>
+                                <li class="page-item">
+                                    <a class="page-link" href="#">26</a>
+                                </li>
+                                <li class="page-item">
+                                    <a class="page-link" href="#">Próximo</a>
+                                </li>
+                            </ul>
+                        </nav>
+                    </div>
+                </div>
             </div>
-            {% endif %}
         </div>
     </div>
-</div>
 
-<script>
-function verDetalhes(idInscricao) {
-    // Implementar visualização de detalhes
-    window.location.href = `/assistente/analise-inscricoes/detalhes?id=${idInscricao}`;
-}
+    <!-- Modal Filtros Avançados -->
+    <div class="modal fade" id="filtrosModal" tabindex="-1" aria-labelledby="filtrosModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="filtrosModalLabel">
+                        <i class="bi bi-funnel me-2"></i>Filtros Avançados
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="filtrosAvancadosForm">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="periodoInicio" class="form-label">Data de Início</label>
+                                    <input type="date" class="form-control" id="periodoInicio">
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="periodoFim" class="form-label">Data de Fim</label>
+                                    <input type="date" class="form-control" id="periodoFim">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="rendaMinima" class="form-label">Renda Per Capita Mínima</label>
+                                    <input type="number" class="form-control" id="rendaMinima" step="0.01" placeholder="0.00">
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="rendaMaxima" class="form-label">Renda Per Capita Máxima</label>
+                                    <input type="number" class="form-control" id="rendaMaxima" step="0.01" placeholder="0.00">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Tipo de Auxílio</label>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" id="auxTransporte" checked>
+                                <label class="form-check-label" for="auxTransporte">Auxílio Transporte</label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" id="auxAlimentacao" checked>
+                                <label class="form-check-label" for="auxAlimentacao">Auxílio Alimentação</label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" id="auxMaterial" checked>
+                                <label class="form-check-label" for="auxMaterial">Auxílio Material Didático</label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" id="auxMoradia" checked>
+                                <label class="form-check-label" for="auxMoradia">Auxílio Moradia</label>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="button" class="btn btn-outline-warning" id="limparFiltrosAvancados">Limpar Filtros</button>
+                    <button type="button" class="btn btn-success" id="aplicarFiltrosAvancados">Aplicar Filtros</button>
+                </div>
+            </div>
+        </div>
+    </div>
 
-function aprovarInscricao(idInscricao) {
-    if (confirm('Tem certeza que deseja aprovar esta inscrição?')) {
-        // Implementar aprovação
-        console.log('Aprovar inscrição:', idInscricao);
-    }
-}
+    <!-- Modal Detalhes da Inscrição -->
+    <div class="modal fade" id="detalhesModal" tabindex="-1" aria-labelledby="detalhesModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-xl">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="detalhesModalLabel">
+                        <i class="bi bi-person-card me-2"></i>Detalhes da Inscrição
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body" id="detalhesConteudo">
+                    <!-- Conteúdo será carregado dinamicamente -->
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
+                    <button type="button" class="btn btn-outline-info" id="agendarEntrevistaDetalhes">
+                        <i class="bi bi-calendar-plus me-1"></i>Agendar Entrevista
+                    </button>
+                    <button type="button" class="btn btn-outline-danger" id="indeferirDetalhes">
+                        <i class="bi bi-x-lg me-1"></i>Indeferir
+                    </button>
+                    <button type="button" class="btn btn-success" id="deferirDetalhes">
+                        <i class="bi bi-check-lg me-1"></i>Deferir
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
 
-function reprovarInscricao(idInscricao) {
-    if (confirm('Tem certeza que deseja reprovar esta inscrição?')) {
-        // Implementar reprovação
-        console.log('Reprovar inscrição:', idInscricao);
-    }
-}
-</script>
-{% endblock %}
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="/static/js/dashboard_assistente.js"></script>
+    <script src="/static/js/analise_inscricoes.js"></script>
+
+    <footer class="footer bg-success text-white py-4">
+        <div class="container">
+            <div class="row">
+                <div class="col-12 text-center">
+                    <p class="text-white mb-0">
+                        &copy; 2025 Sistema de Controle de Assistência Estudantil. Todos os direitos reservados.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>
