@@ -25,3 +25,4 @@ class Aluno(Usuario):
     quantidade_pessoas: int
     renda_per_capita: float 
     situacao_moradia: str
+    possivel_aluno: bool = True  # Indica se está pendente de aprovação

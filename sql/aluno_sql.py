@@ -21,6 +21,7 @@ CREATE TABLE IF NOT EXISTS aluno (
     renda_per_capita REAL NOT NULL,
     situacao_moradia TEXT NOT NULL,
     cadastro_completo BOOLEAN DEFAULT 0,
+    possivel_aluno BOOLEAN DEFAULT 1,
     FOREIGN KEY (id_usuario) REFERENCES usuario(id_usuario) ON DELETE CASCADE
 )
 """
@@ -162,4 +163,29 @@ ALTER TABLE aluno ADD COLUMN estado TEXT NOT NULL
 """
 ADICIONAR_COLUNA_COMPLEMENTO = """
 ALTER TABLE aluno ADD COLUMN complemento TEXT NOT NULL
+"""
+
+# Queries para sistema de aprovação
+OBTER_POSSIVEIS_ALUNOS = """
+SELECT 
+    u.id_usuario, u.nome, u.matricula, u.email, u.data_cadastro
+FROM usuario u
+LEFT JOIN aluno al ON u.id_usuario = al.id_usuario
+WHERE u.perfil = 'aluno' AND (al.possivel_aluno = 1 OR al.id_usuario IS NULL)
+ORDER BY u.data_cadastro DESC
+"""
+
+APROVAR_ALUNO = """
+UPDATE aluno
+SET possivel_aluno = 0
+WHERE id_usuario = ?
+"""
+
+REJEITAR_ALUNO = """
+DELETE FROM aluno
+WHERE id_usuario = ? AND possivel_aluno = 1
+"""
+
+ADICIONAR_COLUNA_POSSIVEL_ALUNO = """
+ALTER TABLE aluno ADD COLUMN possivel_aluno BOOLEAN DEFAULT 1
 """

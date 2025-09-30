@@ -40,6 +40,16 @@ async def post_login(
             {"request": request, "erro": "Matrícula ou senha inválidos"}
         )
     
+    # Verificar se o usuário é aluno e se está na lista de possíveis alunos (não aprovados)
+    if usuario.perfil == "aluno":
+        possiveis_alunos = aluno_repo.obter_possiveis_alunos()
+        ids_nao_aprovados = [u.id_usuario for u in possiveis_alunos]
+        if usuario.id_usuario in ids_nao_aprovados:
+            return templates.TemplateResponse(
+                "publicas/login.html",
+                {"request": request, "erro": "Seu cadastro ainda está pendente de aprovação pelo administrador."}
+            )
+    
     # Criar sessão
     usuario_dict = {
         "id": usuario.id_usuario,
@@ -125,8 +135,11 @@ async def post_cadastro(
             {"request": request, "erro": "Erro ao criar cadastro. Tente novamente."}
         )
         
-    # Redirecionar para login com matrícula preenchida
-    return RedirectResponse(f"/login?matricula={matricula}", status.HTTP_303_SEE_OTHER)
+    # Redirecionar para login com mensagem de cadastro pendente
+    return templates.TemplateResponse(
+        "publicas/cadastro.html",
+        {"request": request, "sucesso": "Cadastro realizado com sucesso! Aguarde aprovação do administrador para fazer login."}
+    )
 
 @router.get("/sobre")
 async def get_sobre(request: Request):

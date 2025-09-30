@@ -12,6 +12,7 @@ from util import seed_db
 
 usuario_repo.criar_tabela()
 aluno_repo.criar_tabela()
+aluno_repo.adicionar_coluna_possivel_aluno()  # Adiciona coluna se não existir
 administrador_repo.criar_tabela()
 assistente_social_repo.criar_tabela()
 auxilio_repo.criar_tabela()
