@@ -164,6 +164,23 @@
             </div>
         </div>
 
+        <!-- Alertas de sucesso e erro -->
+        {% if sucesso %}
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            <i class="bi bi-check-circle me-2"></i>
+            {{ sucesso }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+        {% endif %}
+
+        {% if erro %}
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            <i class="bi bi-exclamation-triangle me-2"></i>
+            {{ erro }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+        {% endif %}
+
         <!-- Header -->
         <div class="support-header">
             <div class="d-flex justify-content-between align-items-start">
@@ -304,11 +321,11 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                 </div>
                 <div class="modal-body">
-                    <form id="newTicketForm">
+                    <form id="newTicketForm" method="POST" action="/aluno/suporte/novo">
                         <div class="mb-3">
                             <label for="ticketCategory" class="form-label">Categoria</label>
-                            <select class="form-select" id="ticketCategory" required>
-                                <option value="">Selecione uma categoria</option>
+                            <select class="form-select" id="ticketCategory" name="categoria" required>
+                                <option value="" disabled selected>Selecione uma categoria</option>
                                 <option value="erro">Erro Técnico</option>
                                 <option value="duvida">Dúvida</option>
                                 <option value="sugestao">Sugestão</option>
@@ -317,23 +334,23 @@
                         </div>
                         <div class="mb-3">
                             <label for="ticketTitle" class="form-label">Título</label>
-                            <input type="text" class="form-control" id="ticketTitle" required>
+                            <input type="text" class="form-control" id="ticketTitle" name="titulo" required>
                         </div>
                         <div class="mb-3">
                             <label for="ticketDescription" class="form-label">Descrição</label>
-                            <textarea class="form-control" id="ticketDescription" rows="4" required></textarea>
+                            <textarea class="form-control" id="ticketDescription" name="descricao" rows="4" required></textarea>
                             <div class="form-text">Descreva seu problema ou dúvida com detalhes para que possamos ajudar melhor.</div>
                         </div>
                         <div class="mb-3">
                             <label for="ticketAttachment" class="form-label">Anexos (opcional)</label>
-                            <input type="file" class="form-control" id="ticketAttachment" multiple>
+                            <input type="file" class="form-control" id="ticketAttachment" name="anexo" multiple>
                             <div class="form-text">Você pode anexar screenshots ou documentos relevantes (máx. 5MB por arquivo)</div>
                         </div>
                     </form>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                    <button type="button" class="btn btn-success" onclick="submitTicket()">Enviar Chamado</button>
+                    <button type="submit" class="btn btn-success" form="newTicketForm">Enviar Chamado</button>
                 </div>
             </div>
         </div>
@@ -449,6 +466,8 @@
             });
         });
 
+        // Função submitTicket() não é mais necessária - o formulário agora usa POST diretamente
+        /*
         function submitTicket() {
             const form = document.getElementById('newTicketForm');
             const category = document.getElementById('ticketCategory').value;
@@ -471,6 +490,7 @@
             // Limpa o formulário
             form.reset();
         }
+        */
 
         function showGuide(type) {
             const modal = new bootstrap.Modal(document.getElementById('guideModal'));
@@ -593,4 +613,16 @@
             alert('Lista de chamados atualizada!');
         }
     </script>
+
+    <!-- Script para fechar modal automaticamente se houver sucesso -->
+    {% if sucesso %}
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const modal = document.getElementById('newTicketModal');
+            if (modal && bootstrap.Modal.getInstance(modal)) {
+                bootstrap.Modal.getInstance(modal).hide();
+            }
+        });
+    </script>
+    {% endif %}
 {% endblock %}
