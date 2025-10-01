@@ -21,6 +21,22 @@ body, .main-content, .container, .card, .table, h2, h3, h4, h5, h6, .btn, .form-
     font-family: 'Poppins', sans-serif !important;
 }
 
+/* ===== MAIN CONTENT - IGUAL AO HISTÓRICO DE RECEBIMENTOS ===== */
+.main-content {
+    padding: 30px;
+    padding-left: 80px;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    z-index: 1;
+    margin-left: 0;
+}
+
+/* Efeito de deslocamento quando sidebar aberta */
+.main-content.shifted {
+    margin-left: 250px;
+    padding-left: 30px;
+}
+
 /* ===== WELCOME BANNER - IGUAL AO HISTÓRICO DE RECEBIMENTOS ===== */
 .welcome-banner {
     background: white;
