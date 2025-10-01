@@ -283,3 +283,21 @@ body {
         height: 300px;
     }
 }
+
+/* Espaçamento entre botões de Login e Cadastre-se no menu mobile */
+@media (max-width: 991.98px) {
+    .offcanvas-body .navbar-nav .nav-item:last-child {
+        margin-top: 0.5rem;
+    }
+    
+    .offcanvas-body .navbar-nav .nav-item .btn {
+        margin-bottom: 0.25rem;
+        width: 100%;
+        text-align: center;
+    }
+    
+    /* Espaçamento específico entre os botões de Login e Cadastre-se */
+    .offcanvas-body .navbar-nav .nav-item:nth-last-child(2) {
+        margin-bottom: 0.5rem;
+    }
+}

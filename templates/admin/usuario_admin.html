@@ -90,6 +90,23 @@
     <div class="main-content" id="mainContent">
         <!-- Header com Breadcrumb -->
         <div class="page-header mb-4">
+            <!-- Mensagens de Sucesso/Erro -->
+            {% if sucesso %}
+            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                <i class="bi bi-check-circle me-2"></i>
+                {{ sucesso }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+            {% endif %}
+            
+            {% if erro %}
+            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                <i class="bi bi-exclamation-triangle me-2"></i>
+                {{ erro }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+            {% endif %}
+            
             <nav aria-label="breadcrumb">
                 <ol class="breadcrumb">
                     <li class="breadcrumb-item"><a href="/admin/inicio">Início</a></li>

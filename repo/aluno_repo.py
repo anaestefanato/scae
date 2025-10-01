@@ -367,9 +367,20 @@ def adicionar_coluna_possivel_aluno():
     try:
         with get_connection() as conn:
             cursor = conn.cursor()
-            cursor.execute(ADICIONAR_COLUNA_POSSIVEL_ALUNO)
-            return True
+            
+            # Verificar se a coluna já existe
+            cursor.execute("PRAGMA table_info(aluno)")
+            colunas = cursor.fetchall()
+            colunas_existentes = [coluna[1] for coluna in colunas]
+            
+            if 'possivel_aluno' not in colunas_existentes:
+                cursor.execute(ADICIONAR_COLUNA_POSSIVEL_ALUNO)
+                print("Info: Coluna possivel_aluno adicionada com sucesso")
+                return True
+            else:
+                # Coluna já existe, não precisa fazer nada
+                return True
+                
     except Exception as e:
-        # Coluna já existe ou outro erro
-        print(f"Info: {e}")
+        print(f"Erro ao verificar/adicionar coluna possivel_aluno: {e}")
         return False
