@@ -35,6 +35,20 @@
     transform: translateY(-2px);
 }
 
+/* ===== ÍCONES DOS GUIAS RÁPIDOS - COR BRANCA ===== */
+.card-header .bi {
+    color: white !important;
+}
+
+/* Remove classes de cor específicas dos ícones nos headers */
+.card-header .text-success,
+.card-header .text-primary,
+.card-header .text-warning,
+.card-header .text-info,
+.card-header .text-danger {
+    color: white !important;
+}
+
 /* ===== NAVEGAÇÃO DOS FILTROS ===== */
 .nav-pills .nav-link {
     border-radius: 10px;
