@@ -2,6 +2,7 @@ from typing import Optional, List
 from model.chamado_model import Chamado
 from sql.chamado_sql import *
 from util.db_util import get_connection
+from datetime import datetime
 
 def criar_tabela() -> bool:
     try:
@@ -14,6 +15,11 @@ def criar_tabela() -> bool:
         return False
     
 def inserir(chamado: Chamado) -> Optional[int]:
+    # Se a data de criação estiver vazia ou None, definir a data atual
+    data_criacao = chamado.data_criacao
+    if not data_criacao or data_criacao.strip() == "":
+        data_criacao = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+    
     with get_connection() as conn:
         cursor = conn.cursor()
         cursor.execute(INSERIR, (
@@ -22,7 +28,7 @@ def inserir(chamado: Chamado) -> Optional[int]:
             chamado.titulo,
             chamado.descricao,
             chamado.categoria,
-            chamado.data_criacao,
+            data_criacao,
             chamado.data_ultima_atualizacao,
             chamado.status
         ))

@@ -174,7 +174,7 @@ def limpar_token(id: int) -> bool:
 def atualizar(usuario: Usuario) -> bool:
     with get_connection() as conn:
         cursor = conn.cursor()
-        cursor.execute(ATUALIZAR, (usuario.nome, usuario.email, usuario.id_usuario))
+        cursor.execute(ATUALIZAR, (usuario.nome, usuario.email, usuario.matricula, usuario.id_usuario))
         return cursor.rowcount > 0
 
 def atualizar_senha(id: int, senha: str) -> bool:
