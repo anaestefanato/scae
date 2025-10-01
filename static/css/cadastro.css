@@ -75,3 +75,78 @@ body {
     max-width: 160px;
     margin-top: 2rem;
 }
+
+/* Responsividade para mobile */
+@media (max-width: 768px) {
+    .cadastro-container {
+        max-width: 450px;
+        width: 85%;
+        padding: 3.5rem 1.5rem 2rem;
+        margin: 1rem;
+    }
+    
+    .cadastro-title {
+        font-size: 4rem;
+    }
+    
+    .subtitle {
+        font-size: 1rem;
+        margin-bottom: 1.5rem;
+    }
+    
+    .cadastro-input {
+        font-size: 1rem;
+        padding: 0.65rem 1.2rem;
+        width: 100%;
+    }
+    
+    .btn-success {
+        font-size: 1rem;
+        padding: 0.6rem 3rem;
+        width: 50%;
+    }
+    
+    .btn-danger {
+        font-size: 1rem;
+        width: 40%;
+    }
+}
+
+@media (max-width: 480px) {
+    .cadastro-container {
+        max-width: 350px;
+        width: 80%;
+        padding: 3rem 1rem 1.5rem;
+    }
+    
+    .cadastro-title {
+        font-size: 3.2rem;
+    }
+    
+    .subtitle {
+        font-size: 0.95rem;
+        margin-bottom: 1.2rem;
+    }
+    
+    .cadastro-input {
+        font-size: 0.95rem;
+        padding: 0.6rem 1rem;
+    }
+    
+    .btn-success {
+        font-size: 0.95rem;
+        padding: 0.55rem 2rem;
+        width: 60%;
+    }
+    
+    .btn-danger {
+        font-size: 0.95rem;
+        width: 35%;
+        padding: 0.55rem 1rem;
+    }
+    
+    .ifes-logo {
+        max-width: 130px;
+        margin-top: 1.5rem;
+    }
+}

@@ -56,3 +56,49 @@ body {
     padding: 0 15px;
     z-index: 10;
 }
+
+/* Responsividade para mobile */
+@media (max-width: 768px) {
+    .login-container {
+        max-width: 400px;
+        width: 85%;
+        padding: 2rem 1.5rem;
+        margin: 1rem;
+    }
+    
+    .login-input {
+        font-size: 1rem;
+        padding: 0.65rem 0.9rem;
+        width: 100%;
+    }
+    
+    .login-button {
+        font-size: 1rem;
+        padding: 0.6rem 3rem;
+        width: 60%;
+    }
+}
+
+@media (max-width: 480px) {
+    .login-container {
+        max-width: 320px;
+        width: 80%;
+        padding: 1.5rem 1rem;
+    }
+    
+    .login-input {
+        font-size: 0.95rem;
+        padding: 0.6rem 0.8rem;
+    }
+    
+    .login-button {
+        font-size: 0.95rem;
+        padding: 0.55rem 2.5rem;
+        width: 70%;
+    }
+    
+    .ifes-logo {
+        max-width: 120px;
+        margin-top: 1.5rem;
+    }
+}
