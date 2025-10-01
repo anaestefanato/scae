@@ -11,6 +11,16 @@
     --ifes-hover-bg: #e8f5e8;
 }
 
+/* ===== BODY E FONT ===== */
+html, body, .body-cadastro-login {
+    font-family: 'Poppins', Arial, Helvetica, sans-serif !important;
+    background-color: #f0f7f0 !important;
+}
+
+body, .main-content, .container, .card, .table, h2, h3, h4, h5, h6, .btn, .form-select, .modal-content {
+    font-family: 'Poppins', sans-serif !important;
+}
+
 /* ===== GARANTIR VISIBILIDADE DO MENU TOGGLE ===== */
 .menu-toggle {
     display: none !important;
