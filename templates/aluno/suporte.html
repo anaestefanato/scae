@@ -5,293 +5,184 @@
 
 {% block head %}
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;700&display=swap" rel="stylesheet">
-    <style>
-        body, .main-content, .container, .card, .table, h2, h3, h4, h5, h6, .btn, .form-select, .modal-content {
-            font-family: 'Poppins', sans-serif !important;
-        }
-        .support-card {
-            border: none;
-            border-radius: 12px;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
-            margin-bottom: 20px;
-            transition: all 0.3s ease;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .support-card:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.12);
-        }
-
-        .support-header {
-            background: linear-gradient(180deg, #1b5e20 0%, var(--ifes-green) 50%, var(--ifes-light-green) 100%);
-            color: white;
-            padding: 30px;
-            border-radius: 15px;
-            margin-bottom: 30px;
-            box-shadow: 0 8px 25px rgba(46, 125, 50, 0.2);
-        }
-
-        .filter-tabs {
-            background: white;
-            border-radius: 12px;
-            padding: 8px;
-            margin-bottom: 25px;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
-        }
-
-        .filter-tabs .nav-link {
-            border: none;
-            border-radius: 8px;
-            color: #666;
-            font-weight: 500;
-            padding: 12px 20px;
-            transition: all 0.3s ease;
-        }
-
-        .filter-tabs .nav-link.active {
-            background: var(--ifes-green);
-            color: white;
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(46, 125, 50, 0.3);
-        }
-
-        .ticket-card {
-            border: none;
-            border-radius: 12px;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
-            margin-bottom: 20px;
-            transition: all 0.3s ease;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .ticket-card:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.12);
-        }
-
-        .ticket-status {
-            position: absolute;
-            top: 15px;
-            right: 15px;
-            width: 12px;
-            height: 12px;
-            border-radius: 50%;
-        }
-
-        .status-aberto {
-            background: var(--ifes-green);
-            box-shadow: 0 0 10px rgba(46, 125, 50, 0.5);
-        }
-
-        .status-em-andamento {
-            background: #FF9800;
-            box-shadow: 0 0 10px rgba(255, 152, 0, 0.5);
-        }
-
-        .status-resolvido {
-            background: #757575;
-            box-shadow: 0 0 10px rgba(117, 117, 117, 0.5);
-        }
-
-        .ticket-meta {
-            font-size: 0.9rem;
-            color: #666;
-            margin-top: 10px;
-        }
-
-        .guide-card {
-            border: none;
-            border-radius: 12px;
-            background: white;
-            padding: 20px;
-            margin-bottom: 20px;
-            transition: all 0.3s ease;
-            text-decoration: none;
-            color: inherit;
-            display: block;
-        }
-
-        .guide-card:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.12);
-        }
-
-        .guide-icon {
-            width: 48px;
-            height: 48px;
-            background: var(--ifes-light-green);
-            border-radius: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-bottom: 15px;
-        }
-
-        .guide-icon i {
-            font-size: 24px;
-            color: var(--ifes-green);
-        }
-
-        @media (max-width: 992px) {
-            .filter-tabs .nav {
-                flex-wrap: wrap;
-            }
-            
-            .filter-tabs .nav-link {
-                padding: 8px 12px;
-                font-size: 0.9rem;
-            }
-        }
-    </style>
+    <link rel="stylesheet" href="/static/css/suporte.css">
 {% endblock %}
 
 {% block content %}
-
-    <div class="main-content" id="mainContent">
-        <div class="d-flex justify-content-between align-items-center mb-4">
-            <div class="d-flex align-items-center">
-                <h2 class="mb-0">Central de Suporte</h2>
-            </div>
-            <div class="user-profile">
-                <img src="/static/img/perfil.png" alt="Perfil">
-                <div>
-                    <small class="text-muted">Aluno</small>
-                    <div class="fw-bold">{{ aluno.nome }}</div>
+<div class="main-content" id="mainContent">
+    <!-- Header da página -->
+    <div class="welcome-banner mb-4">
+        <div class="row align-items-center">
+            <div class="col-md-8">
+                <div class="d-flex align-items-center mb-3">
+                    <i class="bi bi-headset me-3 text-success" style="font-size: 2rem;"></i>
+                    <h4 class="mb-0">Central de Suporte</h4>
                 </div>
+                <p>Aqui você encontra guias, tutoriais e pode abrir chamados para suporte técnico</p>
             </div>
-        </div>
-
-        <!-- Header -->
-        <div class="support-header">
-            <div class="d-flex justify-content-between align-items-start">
-                <div>
-                    <h3 class="mb-2">Como podemos ajudar?</h3>
-                    <p class="mb-0">Aqui você encontra guias, tutoriais e pode abrir chamados para suporte técnico</p>
-                </div>
-                <button class="btn btn-light" data-bs-toggle="modal" data-bs-target="#newTicketModal">
-                    <i class="bi bi-plus-lg"></i> Novo Chamado
+            <div class="col-md-4 text-end">
+                <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#newTicketModal">
+                    <i class="bi bi-plus-circle me-2"></i>Novo Chamado
                 </button>
             </div>
         </div>
+    </div>
 
-        <!-- Guias Rápidos -->
-        <h4 class="mb-4">Guias Rápidos</h4>
-        <div class="row mb-5">
-            <div class="col-md-4">
-                <a href="#" class="guide-card shadow-sm" onclick="showGuide('inscricao')">
-                    <div class="guide-icon">
-                        <i class="bi bi-pencil-square"></i>
-                    </div>
-                    <h5>Como se Inscrever</h5>
-                    <p class="text-muted mb-0">Aprenda a se inscrever nos editais de auxílio passo a passo</p>
-                </a>
-            </div>
-            <div class="col-md-4">
-                <a href="#" class="guide-card shadow-sm" onclick="showGuide('documentos')">
-                    <div class="guide-icon">
-                        <i class="bi bi-file-earmark-text"></i>
-                    </div>
-                    <h5>Documentos Necessários</h5>
-                    <p class="text-muted mb-0">Lista completa de documentos para cada tipo de auxílio</p>
-                </a>
-            </div>
-            <div class="col-md-4">
-                <a href="#" class="guide-card shadow-sm" onclick="showGuide('recebimento')">
-                    <div class="guide-icon">
-                        <i class="bi bi-cash-coin"></i>
-                    </div>
-                    <h5>Confirmar Recebimento</h5>
-                    <p class="text-muted mb-0">Saiba como confirmar o recebimento dos seus auxílios</p>
-                </a>
-            </div>
+    <!-- Guias Rápidos -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <h5 class="mb-3">Guias Rápidos</h5>
         </div>
-
-        <!-- Meus Chamados -->
-        <div class="d-flex justify-content-between align-items-center mb-4">
-            <h4>Meus Chamados</h4>
-            <div class="d-flex gap-2">
-                <button class="btn btn-outline-success" onclick="refreshTickets()">
-                    <i class="bi bi-arrow-clockwise"></i> Atualizar
-                </button>
-            </div>
-        </div>
-
-        <!-- Filtros -->
-        <div class="filter-tabs">
-            <ul class="nav nav-pills" id="ticketTabs">
-                <li class="nav-item">
-                    <button class="nav-link active" data-status="todos">Todos ({{ estatisticas.total or '0'}})</button>
-                </li>
-                <li class="nav-item">
-                    <button class="nav-link" data-status="aberto">Abertos ({{ estatisticas.abertos or '0'}})</button>
-                </li>
-                <li class="nav-item">
-                    <button class="nav-link" data-status="em-andamento">Em Andamento ({{ estatisticas.em_andamento or '0'}})</button>
-                </li>
-                <li class="nav-item">
-                    <button class="nav-link" data-status="resolvido">Resolvidos ({{ estatisticas.resolvidos or '0'}})</button>
-                </li>
-            </ul>
-        </div>
-
-        <!-- Lista de Chamados -->
-        <div id="ticketsList">
-            {% for chamado in chamados %}
-            <div class="ticket-card" data-status="{{ chamado.status }}">
-                <div class="ticket-status {% if chamado.status == 'aberto' %}status-aberto{% elif chamado.status == 'em-andamento' %}status-em-andamento{% else %}status-resolvido{% endif %}"></div>
+        <div class="col-md-4">
+            <div class="card mb-3 shadow-sm" onclick="showGuide('inscricao')" style="cursor: pointer;">
+                <div class="card-header bg-light">
+                    <div class="d-flex align-items-center">
+                        <i class="bi bi-pencil-square me-2 text-success" style="font-size: 1.5rem;"></i>
+                        <h6 class="mb-0">Como se Inscrever</h6>
+                    </div>
+                </div>
                 <div class="card-body">
-                    <div class="d-flex justify-content-between align-items-start">
-                        <div>
-                            <h5 class="mb-2">{{ chamado.titulo }}</h5>
-                            <p class="mb-3">
-                                {% if chamado.status == 'resolvido' %}
-                                    {% if chamado.categoria == 'erro' %}
-                                        Resolvido: O problema foi solucionado pela equipe de suporte.
-                                    {% else %}
-                                        Resolvido: {{ chamado.descricao[:100] }}...
-                                    {% endif %}
-                                {% else %}
-                                    {{ chamado.descricao }}
-                                {% endif %}
-                            </p>
-                            <div class="ticket-meta">
-                                <span class="me-3">
-                                    <i class="bi bi-clock me-1"></i>
+                    <p class="text-muted mb-0">Aprenda a se inscrever nos editais de auxílio passo a passo</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card mb-3 shadow-sm" onclick="showGuide('documentos')" style="cursor: pointer;">
+                <div class="card-header bg-light">
+                    <div class="d-flex align-items-center">
+                        <i class="bi bi-file-earmark-text me-2 text-primary" style="font-size: 1.5rem;"></i>
+                        <h6 class="mb-0">Documentos Necessários</h6>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <p class="text-muted mb-0">Lista completa de documentos para cada tipo de auxílio</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card mb-3 shadow-sm" onclick="showGuide('recebimento')" style="cursor: pointer;">
+                <div class="card-header bg-light">
+                    <div class="d-flex align-items-center">
+                        <i class="bi bi-cash-coin me-2 text-warning" style="font-size: 1.5rem;"></i>
+                        <h6 class="mb-0">Confirmar Recebimento</h6>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <p class="text-muted mb-0">Saiba como confirmar o recebimento dos seus auxílios</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Meus Chamados -->
+    <div class="row">
+        <div class="col-12">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h5>Meus Chamados</h5>
+                <button class="btn btn-outline-success btn-sm" onclick="refreshTickets()">
+                    <i class="bi bi-arrow-clockwise me-1"></i> Atualizar
+                </button>
+            </div>
+            
+            <!-- Filtros -->
+            <div class="card mb-4">
+                <div class="card-body">
+                    <ul class="nav nav-pills" id="ticketTabs">
+                        <li class="nav-item">
+                            <button class="nav-link active" data-status="todos">Todos ({{ estatisticas.total or '0'}})</button>
+                        </li>
+                        <li class="nav-item">
+                            <button class="nav-link" data-status="aberto">Abertos ({{ estatisticas.abertos or '0'}})</button>
+                        </li>
+                        <li class="nav-item">
+                            <button class="nav-link" data-status="em-andamento">Em Andamento ({{ estatisticas.em_andamento or '0'}})</button>
+                        </li>
+                        <li class="nav-item">
+                            <button class="nav-link" data-status="resolvido">Resolvidos ({{ estatisticas.resolvidos or '0'}})</button>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Lista de Chamados -->
+            <div id="ticketsList">
+                {% if chamados %}
+                    {% for chamado in chamados %}
+                    <div class="card mb-4 shadow-sm" data-status="{{ chamado.status }}">
+                        <div class="card-header">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <h5 class="mb-0">
+                                    <i class="bi bi-headset me-2"></i>
+                                    {{ chamado.titulo }}
+                                </h5>
+                                <span class="status-badge status-{{ chamado.status }}">
                                     {% if chamado.status == 'aberto' %}
-                                        Aberto em {{ chamado.data_criacao[:16].replace('T', ' às ') if 'T' in chamado.data_criacao else chamado.data_criacao[:16] }}
+                                        <i class="bi bi-clock me-1"></i>Aberto
                                     {% elif chamado.status == 'em-andamento' %}
-                                        Em andamento - Última atualização: {{ chamado.data_ultima_atualizacao[:16].replace('T', ' às ') if chamado.data_ultima_atualizacao and 'T' in chamado.data_ultima_atualizacao else chamado.data_ultima_atualizacao[:16] if chamado.data_ultima_atualizacao else 'N/A' }}
+                                        <i class="bi bi-gear me-1"></i>Em Andamento
                                     {% else %}
-                                        Resolvido em {{ chamado.data_ultima_atualizacao[:16].replace('T', ' às ') if chamado.data_ultima_atualizacao and 'T' in chamado.data_ultima_atualizacao else chamado.data_ultima_atualizacao[:16] if chamado.data_ultima_atualizacao else 'N/A' }}
+                                        <i class="bi bi-check-circle me-1"></i>Resolvido
                                     {% endif %}
                                 </span>
-                                <span class="me-3">
-                                    <i class="bi bi-tag me-1"></i>
-                                    {% if chamado.categoria == 'erro' %}Erro Técnico
-                                    {% elif chamado.categoria == 'duvida' %}Dúvida
-                                    {% elif chamado.categoria == 'sugestao' %}Sugestão
-                                    {% else %}Outros{% endif %}
-                                </span>
-                                <span><i class="bi bi-hash me-1"></i>Ticket #{{ 2025000 + chamado.id_chamado }}</span>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div class="row mb-3">
+                                <div class="col-md-8">
+                                    <h6 class="text-muted mb-3">Descrição</h6>
+                                    <p>
+                                        {% if chamado.status == 'resolvido' %}
+                                            {% if chamado.categoria == 'erro' %}
+                                                Resolvido: O problema foi solucionado pela equipe de suporte.
+                                            {% else %}
+                                                Resolvido: {{ chamado.descricao[:100] }}...
+                                            {% endif %}
+                                        {% else %}
+                                            {{ chamado.descricao }}
+                                        {% endif %}
+                                    </p>
+                                </div>
+                                <div class="col-md-4">
+                                    <h6 class="text-muted mb-3">Informações</h6>
+                                    <p><strong>Categoria:</strong> 
+                                        {% if chamado.categoria == 'erro' %}
+                                            <i class="bi bi-exclamation-triangle me-1 text-danger"></i>Erro Técnico
+                                        {% elif chamado.categoria == 'duvida' %}
+                                            <i class="bi bi-question-circle me-1 text-info"></i>Dúvida
+                                        {% elif chamado.categoria == 'sugestao' %}
+                                            <i class="bi bi-lightbulb me-1 text-warning"></i>Sugestão
+                                        {% else %}
+                                            <i class="bi bi-tag me-1"></i>Outros
+                                        {% endif %}
+                                    </p>
+                                    <p><strong>Ticket:</strong> <span class="text-muted">#{{ 2025000 + chamado.id_chamado }}</span></p>
+                                    <p><strong>Data:</strong> 
+                                        <span class="text-muted">
+                                            {% if chamado.status == 'aberto' %}
+                                                {{ chamado.data_criacao[:16].replace('T', ' às ') if 'T' in chamado.data_criacao else chamado.data_criacao[:16] }}
+                                            {% else %}
+                                                {{ chamado.data_ultima_atualizacao[:16].replace('T', ' às ') if chamado.data_ultima_atualizacao and 'T' in chamado.data_ultima_atualizacao else chamado.data_ultima_atualizacao[:16] if chamado.data_ultima_atualizacao else 'N/A' }}
+                                            {% endif %}
+                                        </span>
+                                    </p>
+                                </div>
                             </div>
                         </div>
                     </div>
+                    {% endfor %}
+                {% else %}
+                <div class="card border-0 shadow-sm">
+                    <div class="card-body text-center py-5">
+                        <i class="bi bi-headset text-muted mb-3" style="font-size: 4rem;"></i>
+                        <h5 class="text-muted mb-3">Nenhum chamado encontrado</h5>
+                        <p class="text-muted mb-4">Você ainda não abriu nenhum chamado de suporte.</p>
+                        <button class="btn btn-success btn-lg" data-bs-toggle="modal" data-bs-target="#newTicketModal">
+                            <i class="bi bi-plus-circle me-2"></i>Abrir Primeiro Chamado
+                        </button>
+                    </div>
                 </div>
+                {% endif %}
             </div>
-            {% else %}
-            <!-- Mensagem quando não há chamados -->
-            <div class="text-center py-5">
-                <i class="bi bi-headset" style="font-size: 4rem; opacity: 0.5; margin-bottom: 20px;"></i>
-                <h4>Nenhum chamado encontrado</h4>
-                <p>Você ainda não abriu nenhum chamado de suporte.</p>
-                <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#newTicketModal">
-                    <i class="bi bi-plus-lg me-1"></i>Abrir Primeiro Chamado
-                </button>
-            </div>
-            {% endfor %}
         </div>
     </div>
 
