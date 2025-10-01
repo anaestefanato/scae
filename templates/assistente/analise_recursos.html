@@ -10,6 +10,19 @@
     <link rel="stylesheet" href="/static/css/dashboard_assistente.css">
     <link rel="stylesheet" href="/static/css/analise_recursos.css">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        .main-content {
+            flex: 1;
+        }
+        .footer {
+            margin-top: auto;
+        }
+    </style>
 </head>
 <body>
     <!-- Menu Toggle Button -->
@@ -92,33 +105,6 @@
             </div>
         </div>
 
-        <div class="row mb-4">
-            <div class="col-md-3">
-                <div class="stats-card">
-                    <div class="number">23</div>
-                    <div class="label">Recursos Pendentes</div>
-                </div>
-            </div>
-            <div class="col-md-3">
-                <div class="stats-card">
-                    <div class="number">8</div>
-                    <div class="label">Em Análise</div>
-                </div>
-            </div>
-            <div class="col-md-3">
-                <div class="stats-card">
-                    <div class="number">15</div>
-                    <div class="label">Analisados Hoje</div>
-                </div>
-            </div>
-            <div class="col-md-3">
-                <div class="stats-card">
-                    <div class="number">156</div>
-                    <div class="label">Total Analisados</div>
-                </div>
-            </div>
-        </div>
-
         <div class="card">
             <div class="card-header d-flex justify-content-between align-items-center">
                 <div>
@@ -134,7 +120,6 @@
                     <select class="form-select" style="width: auto;" id="filtroStatus">
                         <option value="">Todos os Status</option>
                         <option value="pendente">Pendentes</option>
-                        <option value="em-analise">Em Análise</option>
                         <option value="deferido">Deferidos</option>
                         <option value="indeferido">Indeferidos</option>
                     </select>
@@ -153,8 +138,6 @@
                                 <th>Decisão Original</th>
                                 <th>Data do Recurso</th>
                                 <th>Status</th>
-                                <th>Prioridade</th>
-                                <th>Prazo</th>
                                 <th>Ações</th>
                             </tr>
                         </thead>
@@ -165,12 +148,10 @@
                                 <td><span class="badge bg-danger">Indeferido</span></td>
                                 <td>15/09/2025</td>
                                 <td><span class="badge bg-warning text-dark">Pendente</span></td>
-                                <td><span class="priority-high">Alta</span></td>
-                                <td><span class="prazo-urgente">2 dias</span></td>
                                 <td>
                                     <div class="action-buttons">
                                         <button class="btn btn-sm btn-outline-primary" title="Ver Detalhes" data-bs-toggle="modal" data-bs-target="#detalhesRecursoModal" onclick="abrirDetalhesRecurso(this)">
-                                            <i class="bi bi-eye"></i>
+                                            <i class="bi bi-eye"></i> Ver Detalhes
                                         </button>
                                     </div>
                                 </td>
@@ -180,13 +161,11 @@
                                 <td>Auxílio Alimentação</td>
                                 <td><span class="badge bg-danger">Indeferido</span></td>
                                 <td>12/09/2025</td>
-                                <td><span class="badge bg-info">Em Análise</span></td>
-                                <td><span class="priority-medium">Média</span></td>
-                                <td><span class="prazo-normal">5 dias</span></td>
+                                <td><span class="badge bg-warning text-dark">Pendente</span></td>
                                 <td>
                                     <div class="action-buttons">
                                         <button class="btn btn-sm btn-outline-primary" title="Ver Detalhes" data-bs-toggle="modal" data-bs-target="#detalhesRecursoModal" onclick="abrirDetalhesRecurso(this)">
-                                            <i class="bi bi-eye"></i>
+                                            <i class="bi bi-eye"></i> Ver Detalhes
                                         </button>
                                     </div>
                                 </td>
@@ -197,12 +176,10 @@
                                 <td><span class="badge bg-danger">Indeferido</span></td>
                                 <td>10/09/2025</td>
                                 <td><span class="badge bg-warning text-dark">Pendente</span></td>
-                                <td><span class="priority-low">Baixa</span></td>
-                                <td><span class="prazo-normal">7 dias</span></td>
                                 <td>
                                     <div class="action-buttons">
                                         <button class="btn btn-sm btn-outline-primary" title="Ver Detalhes" data-bs-toggle="modal" data-bs-target="#detalhesRecursoModal" onclick="abrirDetalhesRecurso(this)">
-                                            <i class="bi bi-eye"></i>
+                                            <i class="bi bi-eye"></i> Ver Detalhes
                                         </button>
                                     </div>
                                 </td>
@@ -213,12 +190,10 @@
                                 <td><span class="badge bg-warning text-dark">Parcialmente Deferido</span></td>
                                 <td>08/09/2025</td>
                                 <td><span class="badge bg-warning text-dark">Pendente</span></td>
-                                <td><span class="priority-medium">Média</span></td>
-                                <td><span class="prazo-atrasado">Vencido</span></td>
                                 <td>
                                     <div class="action-buttons">
                                         <button class="btn btn-sm btn-outline-primary" title="Ver Detalhes" data-bs-toggle="modal" data-bs-target="#detalhesRecursoModal" onclick="abrirDetalhesRecurso(this)">
-                                            <i class="bi bi-eye"></i>
+                                            <i class="bi bi-eye"></i> Ver Detalhes
                                         </button>
                                     </div>
                                 </td>
@@ -275,5 +250,17 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
     <script src="/static/js/dashboard_assistente.js"></script>
     <script src="/static/js/analise_recursos.js"></script>
+
+    <footer class="footer bg-success text-white py-4 mt-auto">
+        <div class="container">
+            <div class="row">
+                <div class="col-12 text-center">
+                    <p class="text-white mb-0">
+                        &copy; 2025 Sistema de Controle de Assistência Estudantil. Todos os direitos reservados.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </footer>
 </body>
 </html>

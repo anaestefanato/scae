@@ -86,17 +86,11 @@
         <!-- Page Header -->
         <div class="page-header mb-4 card-hover">
             <div class="row align-items-center">
-                <div class="col-md-9">
+                <div class="col-md-12">
                     <h4 class="mb-3">
-                        <i class="bi bi-clipboard-check text-success me-2"></i>
                         Análise de Inscrições
                     </h4>
                     <p class="mb-0">Gerencie e analise as inscrições dos alunos para os auxílios estudantis.</p>
-                </div>
-                <div class="col-md-3 text-end">
-                    <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#filtrosModal">
-                        <i class="bi bi-funnel me-1"></i>Filtros Avançados
-                    </button>
                 </div>
             </div>
         </div>
@@ -107,9 +101,9 @@
                 <div class="col-md-3">
                     <select class="form-select" id="filtroEdital">
                         <option value="">Todos os Editais</option>
-                        <option value="1">Edital 001/2025 - Auxílio Alimentação</option>
-                        <option value="2">Edital 002/2025 - Auxílio Transporte</option>
-                        <option value="3">Edital 003/2025 - Auxílio Material Didático</option>
+                        <option value="1">Edital 001/2025 - Auxílio Transporte</option>
+                        <option value="2">Edital 002/2025 - Auxílio Material Didático</option>
+                        <option value="3">Edital 003/2025 - Auxílio Transporte</option>
                     </select>
                 </div>
                 <div class="col-md-2">
@@ -122,11 +116,9 @@
                     </select>
                 </div>
                 <div class="col-md-2">
-                    <select class="form-select" id="filtroPrioridade">
-                        <option value="">Todas as Prioridades</option>
-                        <option value="alta">Alta</option>
-                        <option value="media">Média</option>
-                        <option value="baixa">Baixa</option>
+                    <select class="form-select" id="filtroOrdenacao">
+                        <option value="mais-recentes">Mais Recentes</option>
+                        <option value="mais-antigas">Mais Antigas</option>
                     </select>
                 </div>
                 <div class="col-md-3">
@@ -148,14 +140,8 @@
             <div class="card-header d-flex justify-content-between align-items-center">
                 <span><i class="bi bi-list-ul me-2"></i>Lista de Inscrições</span>
                 <div class="table-actions">
-                    <select class="form-select form-select-sm d-inline-block w-auto me-2" id="acaoLote">
-                        <option value="">Ações em lote</option>
-                        <option value="deferir">Deferir selecionadas</option>
-                        <option value="indeferir">Indeferir selecionadas</option>
-                        <option value="agendar">Agendar entrevistas</option>
-                    </select>
-                    <button class="btn btn-sm btn-outline-primary" id="executarAcaoLote">
-                        <i class="bi bi-gear me-1"></i>Executar
+                    <button class="btn btn-sm btn-success" data-bs-toggle="modal" data-bs-target="#filtrosModal">
+                        <i class="bi bi-funnel me-1"></i>Filtros Avançados
                     </button>
                 </div>
             </div>
@@ -163,24 +149,17 @@
                 <table class="table table-hover">
                     <thead>
                         <tr>
-                            <th width="40">
-                                <input type="checkbox" class="form-check-input" id="selecionarTodos">
-                            </th>
                             <th>Aluno</th>
                             <th>Edital</th>
                             <th>Tipo de Auxílio</th>
                             <th>Data da Inscrição</th>
                             <th>Status</th>
-                            <th>Prioridade</th>
                             <th>Renda Per Capita</th>
                             <th>Ações</th>
                         </tr>
                     </thead>
                     <tbody id="tabelaInscricoes">
                         <tr data-inscricao-id="1">
-                            <td>
-                                <input type="checkbox" class="form-check-input inscricao-checkbox" value="1">
-                            </td>
                             <td>
                                 <div class="aluno-info">
                                     <div class="aluno-nome">João Silva dos Santos</div>
@@ -197,29 +176,16 @@
                                     <i class="bi bi-clock me-1"></i>Pendente
                                 </span>
                             </td>
-                            <td><span class="priority-high">Alta</span></td>
                             <td>R$ 256,80</td>
                             <td>
                                 <div class="action-buttons">
-                                    <button class="btn btn-sm btn-outline-primary" title="Visualizar Detalhes" onclick="visualizarDetalhes(1)">
-                                        <i class="bi bi-eye"></i>
-                                    </button>
-                                    <button class="btn btn-sm btn-outline-success" title="Deferir" onclick="deferirInscricao(1)">
-                                        <i class="bi bi-check-lg"></i>
-                                    </button>
-                                    <button class="btn btn-sm btn-outline-danger" title="Indeferir" onclick="indeferirInscricao(1)">
-                                        <i class="bi bi-x-lg"></i>
-                                    </button>
-                                    <button class="btn btn-sm btn-outline-info" title="Agendar Entrevista" onclick="agendarEntrevista(1)">
-                                        <i class="bi bi-calendar-plus"></i>
+                                    <button class="btn btn-sm btn-outline-primary" title="Ver Detalhes" onclick="visualizarDetalhes(1)">
+                                        <i class="bi bi-eye"></i> Ver Detalhes
                                     </button>
                                 </div>
                             </td>
                         </tr>
                         <tr data-inscricao-id="2">
-                            <td>
-                                <input type="checkbox" class="form-check-input inscricao-checkbox" value="2">
-                            </td>
                             <td>
                                 <div class="aluno-info">
                                     <div class="aluno-nome">Maria Santos Oliveira</div>
@@ -232,33 +198,20 @@
                             <td>Auxílio Material Didático</td>
                             <td>20/03/2025</td>
                             <td>
-                                <span class="status-badge status-entrevista">
-                                    <i class="bi bi-person-video2 me-1"></i>Aguardando Entrevista
+                                <span class="status-badge status-pendente">
+                                    <i class="bi bi-clock me-1"></i>Pendente
                                 </span>
                             </td>
-                            <td><span class="priority-medium">Média</span></td>
                             <td>R$ 342,15</td>
                             <td>
                                 <div class="action-buttons">
-                                    <button class="btn btn-sm btn-outline-primary" title="Visualizar Detalhes" onclick="visualizarDetalhes(2)">
-                                        <i class="bi bi-eye"></i>
-                                    </button>
-                                    <button class="btn btn-sm btn-outline-success" title="Deferir" onclick="deferirInscricao(2)">
-                                        <i class="bi bi-check-lg"></i>
-                                    </button>
-                                    <button class="btn btn-sm btn-outline-danger" title="Indeferir" onclick="indeferirInscricao(2)">
-                                        <i class="bi bi-x-lg"></i>
-                                    </button>
-                                    <button class="btn btn-sm btn-outline-warning" title="Reagendar Entrevista" onclick="reagendarEntrevista(2)">
-                                        <i class="bi bi-calendar-event"></i>
+                                    <button class="btn btn-sm btn-outline-primary" title="Ver Detalhes" onclick="visualizarDetalhes(2)">
+                                        <i class="bi bi-eye"></i> Ver Detalhes
                                     </button>
                                 </div>
                             </td>
                         </tr>
                         <tr data-inscricao-id="3">
-                            <td>
-                                <input type="checkbox" class="form-check-input inscricao-checkbox" value="3">
-                            </td>
                             <td>
                                 <div class="aluno-info">
                                     <div class="aluno-nome">Pedro Oliveira Costa</div>
@@ -271,27 +224,20 @@
                             <td>Auxílio Alimentação</td>
                             <td>18/03/2025</td>
                             <td>
-                                <span class="status-badge status-deferido">
-                                    <i class="bi bi-check-circle me-1"></i>Deferida
+                                <span class="status-badge status-pendente">
+                                    <i class="bi bi-clock me-1"></i>Pendente
                                 </span>
                             </td>
-                            <td><span class="priority-high">Alta</span></td>
                             <td>R$ 189,45</td>
                             <td>
                                 <div class="action-buttons">
-                                    <button class="btn btn-sm btn-outline-primary" title="Visualizar Detalhes" onclick="visualizarDetalhes(3)">
-                                        <i class="bi bi-eye"></i>
-                                    </button>
-                                    <button class="btn btn-sm btn-outline-secondary" disabled title="Já deferida">
-                                        <i class="bi bi-check-circle"></i>
+                                    <button class="btn btn-sm btn-outline-primary" title="Ver Detalhes" onclick="visualizarDetalhes(3)">
+                                        <i class="bi bi-eye"></i> Ver Detalhes
                                     </button>
                                 </div>
                             </td>
                         </tr>
                         <tr data-inscricao-id="4">
-                            <td>
-                                <input type="checkbox" class="form-check-input inscricao-checkbox" value="4">
-                            </td>
                             <td>
                                 <div class="aluno-info">
                                     <div class="aluno-nome">Ana Carolina Souza</div>
@@ -304,27 +250,20 @@
                             <td>Auxílio Transporte</td>
                             <td>22/03/2025</td>
                             <td>
-                                <span class="status-badge status-indeferido">
-                                    <i class="bi bi-x-circle me-1"></i>Indeferida
+                                <span class="status-badge status-pendente">
+                                    <i class="bi bi-clock me-1"></i>Pendente
                                 </span>
                             </td>
-                            <td><span class="priority-low">Baixa</span></td>
                             <td>R$ 675,90</td>
                             <td>
                                 <div class="action-buttons">
-                                    <button class="btn btn-sm btn-outline-primary" title="Visualizar Detalhes" onclick="visualizarDetalhes(4)">
-                                        <i class="bi bi-eye"></i>
-                                    </button>
-                                    <button class="btn btn-sm btn-outline-info" title="Ver Justificativa" onclick="verJustificativa(4)">
-                                        <i class="bi bi-file-text"></i>
+                                    <button class="btn btn-sm btn-outline-primary" title="Ver Detalhes" onclick="visualizarDetalhes(4)">
+                                        <i class="bi bi-eye"></i> Ver Detalhes
                                     </button>
                                 </div>
                             </td>
                         </tr>
                         <tr data-inscricao-id="5">
-                            <td>
-                                <input type="checkbox" class="form-check-input inscricao-checkbox" value="5">
-                            </td>
                             <td>
                                 <div class="aluno-info">
                                     <div class="aluno-nome">Carlos Henrique Lima</div>
@@ -341,21 +280,11 @@
                                     <i class="bi bi-clock me-1"></i>Pendente
                                 </span>
                             </td>
-                            <td><span class="priority-medium">Média</span></td>
                             <td>R$ 298,75</td>
                             <td>
                                 <div class="action-buttons">
-                                    <button class="btn btn-sm btn-outline-primary" title="Visualizar Detalhes" onclick="visualizarDetalhes(5)">
-                                        <i class="bi bi-eye"></i>
-                                    </button>
-                                    <button class="btn btn-sm btn-outline-success" title="Deferir" onclick="deferirInscricao(5)">
-                                        <i class="bi bi-check-lg"></i>
-                                    </button>
-                                    <button class="btn btn-sm btn-outline-danger" title="Indeferir" onclick="indeferirInscricao(5)">
-                                        <i class="bi bi-x-lg"></i>
-                                    </button>
-                                    <button class="btn btn-sm btn-outline-info" title="Agendar Entrevista" onclick="agendarEntrevista(5)">
-                                        <i class="bi bi-calendar-plus"></i>
+                                    <button class="btn btn-sm btn-outline-primary" title="Ver Detalhes" onclick="visualizarDetalhes(5)">
+                                        <i class="bi bi-eye"></i> Ver Detalhes
                                     </button>
                                 </div>
                             </td>
@@ -483,18 +412,158 @@
                 </div>
                 <div class="modal-body" id="detalhesConteudo">
                     <!-- Conteúdo será carregado dinamicamente -->
+                    <div class="row">
+                        <div class="col-md-6">
+                            <h6 class="mb-3">Dados do Aluno</h6>
+                            <div class="mb-2">
+                                <strong>Nome:</strong> <span id="alunoNome">João Silva dos Santos</span>
+                            </div>
+                            <div class="mb-2">
+                                <strong>Matrícula:</strong> <span id="alunoMatricula">20251234567</span>
+                            </div>
+                            <div class="mb-2">
+                                <strong>Curso:</strong> <span id="alunoCurso">Técnico em Informática</span>
+                            </div>
+                            <div class="mb-2">
+                                <strong>Período:</strong> <span id="alunoPeriodo">3º Período</span>
+                            </div>
+                            <div class="mb-2">
+                                <strong>E-mail:</strong> <span id="alunoEmail">joao.silva@estudante.ifes.edu.br</span>
+                            </div>
+                            <div class="mb-2">
+                                <strong>Telefone:</strong> <span id="alunoTelefone">(27) 99999-9999</span>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <h6 class="mb-3">Dados da Inscrição</h6>
+                            <div class="mb-2">
+                                <strong>Edital:</strong> <span id="inscricaoEdital">001/2025 - Auxílio Transporte</span>
+                            </div>
+                            <div class="mb-2">
+                                <strong>Data de Inscrição:</strong> <span id="inscricaoData">15/03/2025</span>
+                            </div>
+                            <div class="mb-2">
+                                <strong>Status Atual:</strong> <span id="inscricaoStatus" class="badge bg-warning">Pendente</span>
+                            </div>
+                            <div class="mb-2">
+                                <strong>Renda Per Capita:</strong> <span id="inscricaoRenda">R$ 256,80</span>
+                            </div>
+                            <div class="mb-2">
+                                <strong>Composição Familiar:</strong> <span id="inscricaoFamilia">4 pessoas</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <hr class="my-4">
+                    
+                    <div class="row">
+                        <div class="col-12">
+                            <h6 class="mb-3">Documentos Enviados</h6>
+                            <div class="list-group">
+                                <div class="list-group-item d-flex justify-content-between align-items-center">
+                                    <span><i class="bi bi-file-earmark-pdf text-danger me-2"></i>Comprovante de Renda</span>
+                                    <button class="btn btn-sm btn-outline-primary">
+                                        <i class="bi bi-eye"></i> Visualizar
+                                    </button>
+                                </div>
+                                <div class="list-group-item d-flex justify-content-between align-items-center">
+                                    <span><i class="bi bi-file-earmark-pdf text-danger me-2"></i>Declaração de Composição Familiar</span>
+                                    <button class="btn btn-sm btn-outline-primary">
+                                        <i class="bi bi-eye"></i> Visualizar
+                                    </button>
+                                </div>
+                                <div class="list-group-item d-flex justify-content-between align-items-center">
+                                    <span><i class="bi bi-file-earmark-pdf text-danger me-2"></i>Comprovante de Matrícula</span>
+                                    <button class="btn btn-sm btn-outline-primary">
+                                        <i class="bi bi-eye"></i> Visualizar
+                                    </button>
+                                </div>
+                                <div class="list-group-item d-flex justify-content-between align-items-center">
+                                    <span><i class="bi bi-file-earmark-pdf text-danger me-2"></i>Declaração de Transporte</span>
+                                    <button class="btn btn-sm btn-outline-primary">
+                                        <i class="bi bi-eye"></i> Visualizar
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <hr class="my-4">
+                    
+                    <div class="row">
+                        <div class="col-12">
+                            <h6 class="mb-3">Observações do Aluno</h6>
+                            <div class="bg-light p-3 rounded">
+                                <p class="mb-0">Preciso do auxílio transporte para conseguir frequentar as aulas, pois moro em uma cidade vizinha e dependo de transporte público. Minha família possui renda baixa e este auxílio seria fundamental para minha permanência no curso.</p>
+                            </div>
+                        </div>
+                    </div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
-                    <button type="button" class="btn btn-outline-info" id="agendarEntrevistaDetalhes">
-                        <i class="bi bi-calendar-plus me-1"></i>Agendar Entrevista
-                    </button>
-                    <button type="button" class="btn btn-outline-danger" id="indeferirDetalhes">
-                        <i class="bi bi-x-lg me-1"></i>Indeferir
-                    </button>
-                    <button type="button" class="btn btn-success" id="deferirDetalhes">
-                        <i class="bi bi-check-lg me-1"></i>Deferir
-                    </button>
+                    
+                    <!-- Seção de Indeferimento (inicialmente oculta) -->
+                    <div id="secaoIndeferimento" style="display: none;" class="w-100 mt-3 mb-3">
+                        <div class="border p-3 rounded bg-light">
+                            <h6 class="text-danger mb-3">
+                                <i class="bi bi-exclamation-triangle me-2"></i>Indeferir Inscrição
+                            </h6>
+                            <div class="mb-3">
+                                <label for="motivoIndeferimento" class="form-label">Motivo do Indeferimento <span class="text-danger">*</span></label>
+                                <textarea class="form-control" id="motivoIndeferimento" rows="3" 
+                                    placeholder="Digite o motivo detalhado do indeferimento da inscrição..."></textarea>
+                            </div>
+                            <div class="alert alert-info">
+                                <i class="bi bi-info-circle me-2"></i>
+                                <strong>Importante:</strong> O aluno poderá entrar com recurso contra esta decisão até <strong>7 dias</strong> após a notificação.
+                            </div>
+                            <div class="d-flex gap-2 justify-content-end">
+                                <button type="button" class="btn btn-outline-secondary" id="cancelarIndeferimento">
+                                    <i class="bi bi-x me-1"></i>Cancelar
+                                </button>
+                                <button type="button" class="btn btn-danger" id="confirmarIndeferimento">
+                                    <i class="bi bi-check-lg me-1"></i>Confirmar Indeferimento
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Seção de Deferimento (inicialmente oculta) -->
+                    <div id="secaoDeferimento" style="display: none;" class="w-100 mt-3 mb-3">
+                        <div class="border p-3 rounded bg-light">
+                            <h6 class="text-success mb-3">
+                                <i class="bi bi-check-circle me-2"></i>Deferir Inscrição
+                            </h6>
+                            <div class="alert alert-success">
+                                <i class="bi bi-info-circle me-2"></i>
+                                <strong>Confirmação:</strong> Tem certeza que deseja <strong>deferir</strong> esta inscrição? 
+                                O aluno será notificado sobre a aprovação e o auxílio será processado.
+                            </div>
+                            <div class="mb-3">
+                                <label for="observacoesDeferimento" class="form-label">Observações (opcional)</label>
+                                <textarea class="form-control" id="observacoesDeferimento" rows="2" 
+                                    placeholder="Adicione observações sobre o deferimento, se necessário..."></textarea>
+                            </div>
+                            <div class="d-flex gap-2 justify-content-end">
+                                <button type="button" class="btn btn-outline-secondary" id="cancelarDeferimento">
+                                    <i class="bi bi-x me-1"></i>Cancelar
+                                </button>
+                                <button type="button" class="btn btn-success" id="confirmarDeferimento">
+                                    <i class="bi bi-check-lg me-1"></i>Confirmar Deferimento
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Botões principais -->
+                    <div id="botoesIniciais">
+                        <button type="button" class="btn btn-danger" id="indeferirInscricao">
+                            <i class="bi bi-x-lg me-1"></i>Indeferir
+                        </button>
+                        <button type="button" class="btn btn-success" id="deferirInscricao">
+                            <i class="bi bi-check-lg me-1"></i>Deferir
+                        </button>
+                    </div>
                 </div>
             </div>
         </div>
@@ -503,6 +572,303 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
     <script src="/static/js/dashboard_assistente.js"></script>
     <script src="/static/js/analise_inscricoes.js"></script>
+
+    <script>
+        // Variável global para armazenar o ID da inscrição atual
+        let currentInscricaoId = null;
+
+        // Controlar funcionalidades do modal de decisão
+        document.addEventListener('DOMContentLoaded', function() {
+            const btnDeferir = document.getElementById('deferirInscricao');
+            const btnIndeferir = document.getElementById('indeferirInscricao');
+            const secaoDeferimento = document.getElementById('secaoDeferimento');
+            const secaoIndeferimento = document.getElementById('secaoIndeferimento');
+            const botoesIniciais = document.getElementById('botoesIniciais');
+            
+            // Botões de cancelar
+            const btnCancelarDeferimento = document.getElementById('cancelarDeferimento');
+            const btnCancelarIndeferimento = document.getElementById('cancelarIndeferimento');
+            
+            // Botões de confirmar
+            const btnConfirmarDeferimento = document.getElementById('confirmarDeferimento');
+            const btnConfirmarIndeferimento = document.getElementById('confirmarIndeferimento');
+
+            // Elementos dos filtros
+            const filtroEdital = document.getElementById('filtroEdital');
+            const filtroStatus = document.getElementById('filtroStatus');
+            const filtroOrdenacao = document.getElementById('filtroOrdenacao');
+            const buscarAluno = document.getElementById('buscarAluno');
+            const btnLimparFiltros = document.getElementById('limparFiltros');
+
+            // Função para aplicar filtros
+            function aplicarFiltros() {
+                const editalSelecionado = filtroEdital.value;
+                const statusSelecionado = filtroStatus.value;
+                const ordenacaoSelecionada = filtroOrdenacao.value;
+                const termoBusca = buscarAluno.value.toLowerCase().trim();
+
+                const todasLinhas = document.querySelectorAll('#tabelaInscricoes tr[data-inscricao-id]');
+                let linhasVisiveis = [];
+
+                todasLinhas.forEach(linha => {
+                    let mostrarLinha = true;
+
+                    // Filtro por edital
+                    if (editalSelecionado) {
+                        const editalLinha = linha.querySelector('.edital-badge').textContent.trim();
+                        const editalMap = {
+                            '1': '001/2025',
+                            '2': '002/2025', 
+                            '3': '003/2025'
+                        };
+                        if (!editalLinha.includes(editalMap[editalSelecionado])) {
+                            mostrarLinha = false;
+                        }
+                    }
+
+                    // Filtro por status
+                    if (statusSelecionado && mostrarLinha) {
+                        const statusLinha = linha.querySelector('.status-badge');
+                        const statusMap = {
+                            'pendente': 'status-pendente',
+                            'deferido': 'status-deferido',
+                            'indeferido': 'status-indeferido',
+                            'entrevista': 'status-entrevista'
+                        };
+                        if (!statusLinha.classList.contains(statusMap[statusSelecionado])) {
+                            mostrarLinha = false;
+                        }
+                    }
+
+                    // Filtro por busca de nome
+                    if (termoBusca && mostrarLinha) {
+                        const nomeAluno = linha.querySelector('.aluno-nome').textContent.toLowerCase();
+                        const matricula = linha.querySelector('.text-muted').textContent.toLowerCase();
+                        if (!nomeAluno.includes(termoBusca) && !matricula.includes(termoBusca)) {
+                            mostrarLinha = false;
+                        }
+                    }
+
+                    // Mostrar ou ocultar linha
+                    if (mostrarLinha) {
+                        linha.style.display = '';
+                        linhasVisiveis.push({
+                            elemento: linha,
+                            data: linha.querySelector('td:nth-child(4)').textContent.trim() // Data da inscrição
+                        });
+                    } else {
+                        linha.style.display = 'none';
+                    }
+                });
+
+                // Aplicar ordenação
+                if (ordenacaoSelecionada && linhasVisiveis.length > 0) {
+                    const tbody = document.getElementById('tabelaInscricoes');
+                    
+                    linhasVisiveis.sort((a, b) => {
+                        const dataA = new Date(a.data.split('/').reverse().join('-'));
+                        const dataB = new Date(b.data.split('/').reverse().join('-'));
+                        
+                        if (ordenacaoSelecionada === 'mais-recentes') {
+                            return dataB - dataA; // Mais recentes primeiro
+                        } else {
+                            return dataA - dataB; // Mais antigas primeiro
+                        }
+                    });
+
+                    // Reordenar elementos no DOM
+                    linhasVisiveis.forEach(item => {
+                        tbody.appendChild(item.elemento);
+                    });
+                }
+
+                // Atualizar contador
+                atualizarContador(linhasVisiveis.length);
+            }
+
+            // Função para atualizar contador de resultados
+            function atualizarContador(total) {
+                const contador = document.querySelector('.text-muted');
+                if (contador) {
+                    contador.textContent = `Mostrando ${total} de ${total} inscrições`;
+                }
+            }
+
+            // Função para limpar filtros
+            function limparFiltros() {
+                filtroEdital.value = '';
+                filtroStatus.value = '';
+                filtroOrdenacao.value = 'mais-recentes';
+                buscarAluno.value = '';
+                aplicarFiltros();
+            }
+
+            // Event listeners para filtros
+            if (filtroEdital) {
+                filtroEdital.addEventListener('change', aplicarFiltros);
+            }
+            if (filtroStatus) {
+                filtroStatus.addEventListener('change', aplicarFiltros);
+            }
+            if (filtroOrdenacao) {
+                filtroOrdenacao.addEventListener('change', aplicarFiltros);
+            }
+            if (buscarAluno) {
+                buscarAluno.addEventListener('input', aplicarFiltros);
+            }
+            if (btnLimparFiltros) {
+                btnLimparFiltros.addEventListener('click', limparFiltros);
+            }
+
+            // Função para mostrar indicador de filtros ativos
+            function mostrarIndicadorFiltros() {
+                const filtrosAtivos = (filtroEdital.value || filtroStatus.value || buscarAluno.value.trim());
+                const btnLimpar = document.getElementById('limparFiltros');
+                
+                if (filtrosAtivos) {
+                    btnLimpar.classList.remove('btn-outline-secondary');
+                    btnLimpar.classList.add('btn-warning');
+                    btnLimpar.innerHTML = '<i class="bi bi-funnel-fill me-1"></i>Limpar Filtros';
+                } else {
+                    btnLimpar.classList.remove('btn-warning');
+                    btnLimpar.classList.add('btn-outline-secondary');
+                    btnLimpar.innerHTML = '<i class="bi bi-arrow-clockwise me-1"></i>Limpar';
+                }
+            }
+
+            // Atualizar indicador em cada mudança de filtro
+            [filtroEdital, filtroStatus, buscarAluno].forEach(elemento => {
+                if (elemento) {
+                    elemento.addEventListener('change', mostrarIndicadorFiltros);
+                    elemento.addEventListener('input', mostrarIndicadorFiltros);
+                }
+            });
+
+            // Aplicar filtros iniciais
+            aplicarFiltros();
+
+            // Função para resetar o modal
+            function resetarModal() {
+                secaoDeferimento.style.display = 'none';
+                secaoIndeferimento.style.display = 'none';
+                botoesIniciais.style.display = 'block';
+                document.getElementById('motivoIndeferimento').value = '';
+                document.getElementById('observacoesDeferimento').value = '';
+            }
+
+            // Botão Deferir - Mostrar seção de confirmação
+            if (btnDeferir) {
+                btnDeferir.addEventListener('click', function() {
+                    botoesIniciais.style.display = 'none';
+                    secaoDeferimento.style.display = 'block';
+                    secaoIndeferimento.style.display = 'none';
+                });
+            }
+
+            // Botão Indeferir - Mostrar seção de motivo
+            if (btnIndeferir) {
+                btnIndeferir.addEventListener('click', function() {
+                    botoesIniciais.style.display = 'none';
+                    secaoIndeferimento.style.display = 'block';
+                    secaoDeferimento.style.display = 'none';
+                    // Focar no campo de motivo
+                    setTimeout(() => {
+                        document.getElementById('motivoIndeferimento').focus();
+                    }, 100);
+                });
+            }
+
+            // Cancelar Deferimento
+            if (btnCancelarDeferimento) {
+                btnCancelarDeferimento.addEventListener('click', function() {
+                    resetarModal();
+                });
+            }
+
+            // Cancelar Indeferimento
+            if (btnCancelarIndeferimento) {
+                btnCancelarIndeferimento.addEventListener('click', function() {
+                    resetarModal();
+                });
+            }
+
+            // Confirmar Deferimento
+            if (btnConfirmarDeferimento) {
+                btnConfirmarDeferimento.addEventListener('click', function() {
+                    const observacoes = document.getElementById('observacoesDeferimento').value;
+                    
+                    // Atualizar status na tabela
+                    atualizarStatusNaTabela(currentInscricaoId, 'deferir');
+                    
+                    console.log('Inscrição deferida - ID:', currentInscricaoId);
+                    console.log('Observações:', observacoes);
+                    
+                    alert('Inscrição deferida com sucesso!');
+                    bootstrap.Modal.getInstance(document.getElementById('detalhesModal')).hide();
+                    resetarModal();
+                });
+            }
+
+            // Confirmar Indeferimento
+            if (btnConfirmarIndeferimento) {
+                btnConfirmarIndeferimento.addEventListener('click', function() {
+                    const motivo = document.getElementById('motivoIndeferimento').value.trim();
+                    
+                    if (!motivo) {
+                        alert('Por favor, digite o motivo do indeferimento.');
+                        document.getElementById('motivoIndeferimento').focus();
+                        return;
+                    }
+                    
+                    // Atualizar status na tabela
+                    atualizarStatusNaTabela(currentInscricaoId, 'indeferir');
+                    
+                    console.log('Inscrição indeferida - ID:', currentInscricaoId);
+                    console.log('Motivo:', motivo);
+                    
+                    alert('Inscrição indeferida com sucesso!');
+                    bootstrap.Modal.getInstance(document.getElementById('detalhesModal')).hide();
+                    resetarModal();
+                });
+            }
+
+            // Reset modal ao fechar
+            document.getElementById('detalhesModal').addEventListener('hidden.bs.modal', function() {
+                resetarModal();
+            });
+        });
+
+        // Função para atualizar o status na tabela
+        function atualizarStatusNaTabela(inscricaoId, decisao) {
+            const row = document.querySelector(`tr[data-inscricao-id="${inscricaoId}"]`);
+            if (row) {
+                const statusCell = row.querySelector('.status-badge');
+                if (statusCell) {
+                    let newStatus = '';
+                    switch(decisao) {
+                        case 'deferir':
+                            newStatus = '<i class="bi bi-check-circle me-1"></i>Deferida';
+                            statusCell.className = 'status-badge status-deferido';
+                            break;
+                        case 'indeferir':
+                            newStatus = '<i class="bi bi-x-circle me-1"></i>Indeferida';
+                            statusCell.className = 'status-badge status-indeferido';
+                            break;
+                    }
+                    statusCell.innerHTML = newStatus;
+                }
+            }
+        }
+
+        // Função para visualizar detalhes (deve ser chamada pelos botões da tabela)
+        function visualizarDetalhes(inscricaoId) {
+            currentInscricaoId = inscricaoId;
+            // Aqui você pode carregar os detalhes da inscrição específica
+            // Por enquanto, apenas abre o modal
+            const modal = new bootstrap.Modal(document.getElementById('detalhesModal'));
+            modal.show();
+        }
+    </script>
 
     <footer class="footer bg-success text-white py-4">
         <div class="container">
