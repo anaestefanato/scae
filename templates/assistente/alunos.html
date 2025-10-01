@@ -133,19 +133,12 @@
 
     <!-- Main Content -->
     <div class="main-content" id="mainContent">
-        <!-- Header -->
-        <div class="d-flex justify-content-between align-items-center mb-4">
-            <div>
-                <h4 class="mb-0">Alunos com Auxílios</h4>
-                <small class="text-muted">
-                    Total: {{ total_alunos }} alunos | Ativos: {{ alunos_ativos }}
-                </small>
-            </div>
-            <div class="d-flex gap-2">
-                <button class="btn btn-outline-primary" onclick="exportarDados()">
-                    <i class="bi bi-download me-2"></i>
-                    Exportar
-                </button>
+        <div class="welcome-banner mb-4 card-hover">
+            <div class="row align-items-center">
+                <div class="col-md-8">
+                    <h4 class="mb-3">Alunos com Auxílios</h4>
+                    <p>Gerencie e acompanhe os alunos beneficiados pela assistência estudantil. Total: {{ total_alunos }} alunos | Ativos: {{ alunos_ativos }}</p>
+                </div>
             </div>
         </div>
 
