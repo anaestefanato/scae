@@ -9,6 +9,382 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
     <link rel="stylesheet" href="/static/css/dashboard_assistente.css">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        /* Melhorias na rolagem */
+        .main-content {
+            max-height: calc(100vh - 100px);
+            overflow-y: auto;
+            scroll-behavior: smooth;
+        }
+        
+        .main-content::-webkit-scrollbar {
+            width: 8px;
+        }
+        
+        .main-content::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 10px;
+        }
+        
+        .main-content::-webkit-scrollbar-thumb {
+            background: #28a745;
+            border-radius: 10px;
+        }
+        
+        .main-content::-webkit-scrollbar-thumb:hover {
+            background: #20c997;
+        }
+        
+        .card-body {
+            max-height: 400px;
+            overflow-y: auto;
+            scroll-behavior: smooth;
+        }
+        
+        .card-body::-webkit-scrollbar {
+            width: 6px;
+        }
+        
+        .card-body::-webkit-scrollbar-track {
+            background: #f8f9fa;
+            border-radius: 6px;
+        }
+        
+        .card-body::-webkit-scrollbar-thumb {
+            background: #dee2e6;
+            border-radius: 6px;
+        }
+        
+        .card-body::-webkit-scrollbar-thumb:hover {
+            background: #28a745;
+        }
+        
+        .table-responsive {
+            max-height: 350px;
+            overflow-y: auto;
+            scroll-behavior: smooth;
+        }
+        
+        .table-responsive::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        
+        .table-responsive::-webkit-scrollbar-track {
+            background: #f8f9fa;
+            border-radius: 6px;
+        }
+        
+        .table-responsive::-webkit-scrollbar-thumb {
+            background: #dee2e6;
+            border-radius: 6px;
+        }
+        
+        .table-responsive::-webkit-scrollbar-thumb:hover {
+            background: #28a745;
+        }
+        
+        /* Melhorias na legibilidade - cores de fundo */
+        .report-item {
+            padding: 18px;
+            border: 1px solid #dee2e6;
+            border-radius: 12px;
+            transition: all 0.3s ease;
+            background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
+            box-shadow: 0 2px 4px rgba(0,0,0,0.08);
+        }
+        
+        .report-item:hover {
+            border-color: #28a745;
+            background: linear-gradient(135deg, #f8fff9 0%, #e8f5e8 100%);
+            transform: translateY(-3px);
+            box-shadow: 0 6px 12px rgba(40, 167, 69, 0.15);
+        }
+        
+        .report-item h6 {
+            color: #2c3e50;
+            font-weight: 600;
+            margin-bottom: 6px;
+        }
+        
+        .report-item .text-muted {
+            color: #6c757d !important;
+            font-size: 0.9em;
+        }
+        
+        .stats-card {
+            text-align: center;
+            padding: 25px;
+            border-radius: 15px;
+            border: none;
+            background: linear-gradient(135deg, #ffffff 0%, #f1f3f4 100%);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+        }
+        
+        .stats-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 8px 20px rgba(40, 167, 69, 0.2);
+            background: linear-gradient(135deg, #f8fff9 0%, #e8f5e8 100%);
+        }
+        
+        .stats-card .number {
+            font-size: 2.2rem;
+            font-weight: bold;
+            color: #28a745;
+            margin-bottom: 8px;
+            text-shadow: 0 1px 2px rgba(0,0,0,0.1);
+        }
+        
+        .stats-card .label {
+            font-weight: 600;
+            color: #2c3e50;
+            margin-bottom: 5px;
+            font-size: 1em;
+        }
+        
+        .stats-card small {
+            color: #6c757d;
+            font-size: 0.85em;
+        }
+        
+        .page-header {
+            background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+            color: white;
+            padding: 35px;
+            border-radius: 15px;
+            margin-bottom: 35px;
+            box-shadow: 0 4px 15px rgba(40, 167, 69, 0.3);
+        }
+        
+        .page-header h4 {
+            color: white;
+            margin-bottom: 12px;
+            font-weight: 600;
+            text-shadow: 0 1px 3px rgba(0,0,0,0.2);
+        }
+        
+        .page-header p {
+            color: rgba(255,255,255,0.95);
+            font-size: 1.05em;
+        }
+        
+        .card {
+            border: none;
+            border-radius: 12px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.08);
+            background: #ffffff;
+            margin-bottom: 20px;
+        }
+        
+        .card:hover {
+            box-shadow: 0 5px 15px rgba(0,0,0,0.12);
+            transform: translateY(-2px);
+            transition: all 0.3s ease;
+        }
+        
+        .card-header {
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            border-bottom: 2px solid #dee2e6;
+            font-weight: 600;
+            color: #2c3e50;
+            border-radius: 12px 12px 0 0 !important;
+            padding: 18px 20px;
+        }
+        
+        .card-body {
+            padding: 25px;
+            background: #ffffff;
+        }
+        
+        /* Melhorias nos botões */
+        .btn-outline-primary {
+            border-color: #007bff;
+            color: #007bff;
+            background: #ffffff;
+        }
+        
+        .btn-outline-primary:hover {
+            background: #007bff;
+            border-color: #007bff;
+            color: #ffffff;
+            transform: translateY(-1px);
+            box-shadow: 0 3px 8px rgba(0, 123, 255, 0.3);
+        }
+        
+        .btn-outline-success {
+            border-color: #28a745;
+            color: #28a745;
+            background: #ffffff;
+        }
+        
+        .btn-outline-success:hover {
+            background: #28a745;
+            border-color: #28a745;
+            color: #ffffff;
+            transform: translateY(-1px);
+            box-shadow: 0 3px 8px rgba(40, 167, 69, 0.3);
+        }
+        
+        .btn-outline-warning {
+            border-color: #ffc107;
+            color: #856404;
+            background: #ffffff;
+        }
+        
+        .btn-outline-warning:hover {
+            background: #ffc107;
+            border-color: #ffc107;
+            color: #212529;
+            transform: translateY(-1px);
+            box-shadow: 0 3px 8px rgba(255, 193, 7, 0.3);
+        }
+        
+        .btn-outline-info {
+            border-color: #17a2b8;
+            color: #17a2b8;
+            background: #ffffff;
+        }
+        
+        .btn-outline-info:hover {
+            background: #17a2b8;
+            border-color: #17a2b8;
+            color: #ffffff;
+            transform: translateY(-1px);
+            box-shadow: 0 3px 8px rgba(23, 162, 184, 0.3);
+        }
+        
+        .btn-light {
+            background: rgba(255,255,255,0.95);
+            border: 2px solid rgba(255,255,255,0.8);
+            color: #28a745;
+            font-weight: 600;
+        }
+        
+        .btn-light:hover {
+            background: #ffffff;
+            border-color: #ffffff;
+            color: #28a745;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        }
+        
+        /* Melhorias nos badges */
+        .badge {
+            font-size: 0.8em;
+            padding: 0.6em 0.9em;
+            border-radius: 8px;
+            font-weight: 500;
+        }
+        
+        .badge.bg-primary {
+            background: linear-gradient(135deg, #007bff 0%, #0056b3 100%) !important;
+        }
+        
+        .badge.bg-success {
+            background: linear-gradient(135deg, #28a745 0%, #1e7e34 100%) !important;
+        }
+        
+        .badge.bg-warning {
+            background: linear-gradient(135deg, #ffc107 0%, #e0a800 100%) !important;
+            color: #212529 !important;
+        }
+        
+        .badge.bg-info {
+            background: linear-gradient(135deg, #17a2b8 0%, #117a8b 100%) !important;
+        }
+        
+        .badge.bg-danger {
+            background: linear-gradient(135deg, #dc3545 0%, #bd2130 100%) !important;
+        }
+        
+        /* Melhorias na tabela */
+        .table {
+            background: #ffffff;
+        }
+        
+        .table th {
+            font-weight: 600;
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            border-top: none;
+            color: #2c3e50;
+            font-size: 0.9em;
+            padding: 15px 12px;
+        }
+        
+        .table td {
+            padding: 12px;
+            vertical-align: middle;
+            color: #495057;
+            border-top: 1px solid #dee2e6;
+        }
+        
+        .table-hover tbody tr:hover {
+            background-color: rgba(40, 167, 69, 0.05);
+        }
+        
+        /* Melhorias nos formulários */
+        .form-control, .form-select {
+            border: 1px solid #ced4da;
+            border-radius: 8px;
+            padding: 12px 15px;
+            background: #ffffff;
+            transition: all 0.3s ease;
+        }
+        
+        .form-control:focus, .form-select:focus {
+            border-color: #28a745;
+            box-shadow: 0 0 0 0.2rem rgba(40, 167, 69, 0.15);
+            background: #f8fff9;
+        }
+        
+        .form-label {
+            font-weight: 600;
+            color: #2c3e50;
+            margin-bottom: 8px;
+        }
+        
+        .form-check-input:checked {
+            background-color: #28a745;
+            border-color: #28a745;
+        }
+        
+        .form-check-label {
+            color: #495057;
+            font-weight: 500;
+        }
+        
+        /* Footer */
+        .footer {
+            margin-top: 60px;
+            background: linear-gradient(135deg, #28a745 0%, #20c997 100%) !important;
+            box-shadow: 0 -2px 10px rgba(0,0,0,0.1);
+        }
+        
+        /* Responsividade */
+        @media (max-width: 768px) {
+            .main-content {
+                padding: 15px;
+            }
+            
+            .page-header {
+                padding: 25px 20px;
+            }
+            
+            .stats-card {
+                margin-bottom: 20px;
+            }
+            
+            .card-body {
+                padding: 20px 15px;
+                max-height: 300px;
+            }
+            
+            .table-responsive {
+                max-height: 250px;
+            }
+        }
+    </style>
 </head>
 <body>
     <!-- Menu Toggle Button -->
@@ -82,13 +458,390 @@
 
     <!-- Main Content -->
     <div class="main-content" id="mainContent">
-        <div class="d-flex justify-content-between align-items-center mb-4">
-            <h4 class="mb-0">Relatórios</h4>
+        <!-- Page Header -->
+        <div class="page-header mb-4 card-hover">
+            <div class="row align-items-center">
+                <div class="col-md-9">
+                    <h4 class="mb-3">
+                        <i class="bi bi-file-earmark-bar-graph me-2"></i>Relatórios da Assistência Social
+                    </h4>
+                    <p class="mb-0">Gerencie e gere relatórios analíticos sobre os auxílios estudantis e atendimentos realizados.</p>
+                </div>
+                <div class="col-md-3 text-end">
+                    <button class="btn btn-light btn-lg" onclick="exportarPaginaPDF()" title="Exportar página atual para PDF">
+                        <i class="bi bi-file-earmark-pdf me-2"></i>Exportar PDF
+                    </button>
+                </div>
+            </div>
         </div>
-        
-        <div class="card">
-            <div class="card-body">
-                <p>Seção de relatórios em desenvolvimento.</p>
+        <!-- Report Categories -->
+        <div class="row">
+            <div class="col-md-6">
+                <div class="card h-100">
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                        <span><i class="bi bi-people me-2"></i>Relatórios de Beneficiários</span>
+                        <span class="badge bg-primary">4 tipos</span>
+                    </div>
+                    <div class="card-body">
+                        <div class="report-item mb-3">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div>
+                                    <h6 class="mb-1">Beneficiários por Auxílio</h6>
+                                    <small class="text-muted">Lista detalhada de alunos por tipo de auxílio</small>
+                                </div>
+                                <button class="btn btn-sm btn-outline-primary" onclick="gerarRelatorio('beneficiarios-auxilio')">
+                                    <i class="bi bi-file-earmark-pdf"></i> Gerar
+                                </button>
+                            </div>
+                        </div>
+                        <div class="report-item mb-3">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div>
+                                    <h6 class="mb-1">Perfil Socioeconômico</h6>
+                                    <small class="text-muted">Análise da situação socioeconômica dos beneficiários</small>
+                                </div>
+                                <button class="btn btn-sm btn-outline-primary" onclick="gerarRelatorio('perfil-socioeconomico')">
+                                    <i class="bi bi-file-earmark-excel"></i> Gerar
+                                </button>
+                            </div>
+                        </div>
+                        <div class="report-item mb-3">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div>
+                                    <h6 class="mb-1">Evolução de Beneficiários</h6>
+                                    <small class="text-muted">Histórico mensal de beneficiários</small>
+                                </div>
+                                <button class="btn btn-sm btn-outline-primary" onclick="gerarRelatorio('evolucao-beneficiarios')">
+                                    <i class="bi bi-file-earmark-pdf"></i> Gerar
+                                </button>
+                            </div>
+                        </div>
+                        <div class="report-item">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div>
+                                    <h6 class="mb-1">Beneficiários por Curso</h6>
+                                    <small class="text-muted">Distribuição de auxílios por curso/modalidade</small>
+                                </div>
+                                <button class="btn btn-sm btn-outline-primary" onclick="gerarRelatorio('beneficiarios-curso')">
+                                    <i class="bi bi-file-earmark-excel"></i> Gerar
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-6">
+                <div class="card h-100">
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                        <span><i class="bi bi-cash-stack me-2"></i>Relatórios Financeiros</span>
+                        <span class="badge bg-success">3 tipos</span>
+                    </div>
+                    <div class="card-body">
+                        <div class="report-item mb-3">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div>
+                                    <h6 class="mb-1">Execução Orçamentária</h6>
+                                    <small class="text-muted">Valores executados vs orçamento planejado</small>
+                                </div>
+                                <button class="btn btn-sm btn-outline-success" onclick="gerarRelatorio('execucao-orcamentaria')">
+                                    <i class="bi bi-file-earmark-pdf"></i> Gerar
+                                </button>
+                            </div>
+                        </div>
+                        <div class="report-item mb-3">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div>
+                                    <h6 class="mb-1">Gastos por Auxílio</h6>
+                                    <small class="text-muted">Distribuição de gastos por tipo de auxílio</small>
+                                </div>
+                                <button class="btn btn-sm btn-outline-success" onclick="gerarRelatorio('gastos-auxilio')">
+                                    <i class="bi bi-file-earmark-excel"></i> Gerar
+                                </button>
+                            </div>
+                        </div>
+                        <div class="report-item">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div>
+                                    <h6 class="mb-1">Previsão de Gastos</h6>
+                                    <small class="text-muted">Projeção de gastos para próximos meses</small>
+                                </div>
+                                <button class="btn btn-sm btn-outline-success" onclick="gerarRelatorio('previsao-gastos')">
+                                    <i class="bi bi-file-earmark-pdf"></i> Gerar
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row mt-4">
+            <div class="col-md-6">
+                <div class="card h-100">
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                        <span><i class="bi bi-clipboard-data me-2"></i>Relatórios de Atendimento</span>
+                        <span class="badge bg-warning">4 tipos</span>
+                    </div>
+                    <div class="card-body">
+                        <div class="report-item mb-3">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div>
+                                    <h6 class="mb-1">Entrevistas Realizadas</h6>
+                                    <small class="text-muted">Relatório de entrevistas por período</small>
+                                </div>
+                                <button class="btn btn-sm btn-outline-warning" onclick="gerarRelatorio('entrevistas-realizadas')">
+                                    <i class="bi bi-file-earmark-pdf"></i> Gerar
+                                </button>
+                            </div>
+                        </div>
+                        <div class="report-item mb-3">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div>
+                                    <h6 class="mb-1">Análise de Inscrições</h6>
+                                    <small class="text-muted">Status das análises de inscrições</small>
+                                </div>
+                                <button class="btn btn-sm btn-outline-warning" onclick="gerarRelatorio('analise-inscricoes')">
+                                    <i class="bi bi-file-earmark-excel"></i> Gerar
+                                </button>
+                            </div>
+                        </div>
+                        <div class="report-item mb-3">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div>
+                                    <h6 class="mb-1">Recursos Analisados</h6>
+                                    <small class="text-muted">Relatório de recursos e resultados</small>
+                                </div>
+                                <button class="btn btn-sm btn-outline-warning" onclick="gerarRelatorio('recursos-analisados')">
+                                    <i class="bi bi-file-earmark-pdf"></i> Gerar
+                                </button>
+                            </div>
+                        </div>
+                        <div class="report-item">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div>
+                                    <h6 class="mb-1">Tempo de Atendimento</h6>
+                                    <small class="text-muted">Análise de tempo médio de processos</small>
+                                </div>
+                                <button class="btn btn-sm btn-outline-warning" onclick="gerarRelatorio('tempo-atendimento')">
+                                    <i class="bi bi-file-earmark-excel"></i> Gerar
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-6">
+                <div class="card h-100">
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                        <span><i class="bi bi-graph-up me-2"></i>Relatórios Estatísticos</span>
+                        <span class="badge bg-info">3 tipos</span>
+                    </div>
+                    <div class="card-body">
+                        <div class="report-item mb-3">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div>
+                                    <h6 class="mb-1">Dashboard Executivo</h6>
+                                    <small class="text-muted">Indicadores gerais da assistência estudantil</small>
+                                </div>
+                                <button class="btn btn-sm btn-outline-info" onclick="gerarRelatorio('dashboard-executivo')">
+                                    <i class="bi bi-file-earmark-pdf"></i> Gerar
+                                </button>
+                            </div>
+                        </div>
+                        <div class="report-item mb-3">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div>
+                                    <h6 class="mb-1">Indicadores de Eficiência</h6>
+                                    <small class="text-muted">KPIs de produtividade e eficiência</small>
+                                </div>
+                                <button class="btn btn-sm btn-outline-info" onclick="gerarRelatorio('indicadores-eficiencia')">
+                                    <i class="bi bi-file-earmark-excel"></i> Gerar
+                                </button>
+                            </div>
+                        </div>
+                        <div class="report-item">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div>
+                                    <h6 class="mb-1">Comparativo Semestral</h6>
+                                    <small class="text-muted">Análise comparativa entre semestres</small>
+                                </div>
+                                <button class="btn btn-sm btn-outline-info" onclick="gerarRelatorio('comparativo-semestral')">
+                                    <i class="bi bi-file-earmark-pdf"></i> Gerar
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Custom Report Section -->
+        <div class="row mt-4">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="mb-0"><i class="bi bi-gear me-2"></i>Relatório Personalizado</h5>
+                    </div>
+                    <div class="card-body">
+                        <form id="relatorioPersonalizadoForm">
+                            <div class="row">
+                                <div class="col-md-3">
+                                    <div class="mb-3">
+                                        <label for="tipoRelatorio" class="form-label">Tipo de Relatório</label>
+                                        <select class="form-select" id="tipoRelatorio" required>
+                                            <option value="">Selecione...</option>
+                                            <option value="beneficiarios">Beneficiários</option>
+                                            <option value="financeiro">Financeiro</option>
+                                            <option value="atendimento">Atendimento</option>
+                                            <option value="estatistico">Estatístico</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="mb-3">
+                                        <label for="dataInicio" class="form-label">Data Início</label>
+                                        <input type="date" class="form-control" id="dataInicio" required>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="mb-3">
+                                        <label for="dataFim" class="form-label">Data Fim</label>
+                                        <input type="date" class="form-control" id="dataFim" required>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="mb-3">
+                                        <label for="formato" class="form-label">Formato</label>
+                                        <select class="form-select" id="formato" required>
+                                            <option value="pdf">PDF</option>
+                                            <option value="excel">Excel</option>
+                                            <option value="csv">CSV</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <label class="form-label">Filtros Adicionais</label>
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" id="filtroAuxilioTransporte">
+                                            <label class="form-check-label" for="filtroAuxilioTransporte">
+                                                Auxílio Transporte
+                                            </label>
+                                        </div>
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" id="filtroAuxilioAlimentacao">
+                                            <label class="form-check-label" for="filtroAuxilioAlimentacao">
+                                                Auxílio Alimentação
+                                            </label>
+                                        </div>
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" id="filtroAuxilioMaterial">
+                                            <label class="form-check-label" for="filtroAuxilioMaterial">
+                                                Auxílio Material Didático
+                                            </label>
+                                        </div>
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" id="filtroAuxilioMoradia">
+                                            <label class="form-check-label" for="filtroAuxilioMoradia">
+                                                Auxílio Moradia
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <label for="observacoes" class="form-label">Observações</label>
+                                        <textarea class="form-control" id="observacoes" rows="4" placeholder="Observações adicionais para o relatório..."></textarea>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="d-flex justify-content-end">
+                                <button type="button" class="btn btn-outline-secondary me-2" onclick="limparFormulario()">
+                                    <i class="bi bi-arrow-clockwise me-1"></i>Limpar
+                                </button>
+                                <button type="submit" class="btn btn-success">
+                                    <i class="bi bi-file-earmark-arrow-down me-1"></i>Gerar Relatório
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Recent Reports -->
+        <div class="row mt-4">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                        <span><i class="bi bi-clock-history me-2"></i>Relatórios Recentes</span>
+                        <button class="btn btn-sm btn-outline-secondary" onclick="limparHistorico()">
+                            <i class="bi bi-trash me-1"></i>Limpar Histórico
+                        </button>
+                    </div>
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th>Relatório</th>
+                                    <th>Data de Geração</th>
+                                    <th>Período</th>
+                                    <th>Formato</th>
+                                    <th>Status</th>
+                                    <th>Ações</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>Beneficiários por Auxílio</td>
+                                    <td>28/09/2025 14:30</td>
+                                    <td>Set/2025</td>
+                                    <td><span class="badge bg-danger">PDF</span></td>
+                                    <td><span class="badge bg-success">Concluído</span></td>
+                                    <td>
+                                        <button class="btn btn-sm btn-outline-primary me-1" title="Download">
+                                            <i class="bi bi-download"></i>
+                                        </button>
+                                        <button class="btn btn-sm btn-outline-info" title="Visualizar">
+                                            <i class="bi bi-eye"></i>
+                                        </button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>Execução Orçamentária</td>
+                                    <td>27/09/2025 09:15</td>
+                                    <td>3º Trim/2025</td>
+                                    <td><span class="badge bg-success">Excel</span></td>
+                                    <td><span class="badge bg-success">Concluído</span></td>
+                                    <td>
+                                        <button class="btn btn-sm btn-outline-primary me-1" title="Download">
+                                            <i class="bi bi-download"></i>
+                                        </button>
+                                        <button class="btn btn-sm btn-outline-info" title="Visualizar">
+                                            <i class="bi bi-eye"></i>
+                                        </button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>Dashboard Executivo</td>
+                                    <td>25/09/2025 16:45</td>
+                                    <td>Ago-Set/2025</td>
+                                    <td><span class="badge bg-danger">PDF</span></td>
+                                    <td><span class="badge bg-warning">Processando</span></td>
+                                    <td>
+                                        <button class="btn btn-sm btn-outline-secondary" disabled title="Aguarde...">
+                                            <i class="bi bi-clock"></i>
+                                        </button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -96,5 +849,505 @@
     <!-- Scripts -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
     <script src="/static/js/sidebar.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <script>
+        // Função para gerar relatórios predefinidos
+        function gerarRelatorio(tipo) {
+            console.log('Gerando relatório:', tipo);
+            
+            // Simular processo de geração
+            const btn = event.target;
+            const originalContent = btn.innerHTML;
+            
+            btn.disabled = true;
+            btn.innerHTML = '<i class="bi bi-hourglass-split"></i> Gerando...';
+            
+            setTimeout(() => {
+                btn.disabled = false;
+                btn.innerHTML = originalContent;
+                
+                // Gerar PDF específico baseado no tipo
+                gerarPDFEspecifico(tipo);
+                
+            }, 2000);
+        }
+
+        // Função para gerar PDF específico por tipo de relatório
+        function gerarPDFEspecifico(tipo) {
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF();
+            
+            // Configurações básicas
+            const pageWidth = doc.internal.pageSize.width;
+            const margin = 20;
+            let currentY = margin;
+            
+            // Cabeçalho do relatório
+            doc.setFontSize(20);
+            doc.setTextColor(40, 167, 69); // Verde
+            doc.text('SCAE - Sistema de Controle de Assistência Estudantil', margin, currentY);
+            currentY += 15;
+            
+            doc.setFontSize(12);
+            doc.setTextColor(100, 100, 100);
+            doc.text('Instituto Federal do Espírito Santo - Campus Vitória', margin, currentY);
+            currentY += 10;
+            
+            const dataAtual = new Date().toLocaleDateString('pt-BR');
+            doc.text(`Gerado em: ${dataAtual}`, margin, currentY);
+            currentY += 20;
+            
+            // Título específico do relatório
+            doc.setFontSize(16);
+            doc.setTextColor(0, 0, 0);
+            
+            switch(tipo) {
+                case 'beneficiarios-auxilio':
+                    doc.text('Relatório: Beneficiários por Auxílio', margin, currentY);
+                    currentY += 15;
+                    gerarRelatorioBeneficiarios(doc, margin, currentY);
+                    break;
+                    
+                case 'perfil-socioeconomico':
+                    doc.text('Relatório: Perfil Socioeconômico', margin, currentY);
+                    currentY += 15;
+                    gerarRelatorioPerfilSocioeconomico(doc, margin, currentY);
+                    break;
+                    
+                case 'execucao-orcamentaria':
+                    doc.text('Relatório: Execução Orçamentária', margin, currentY);
+                    currentY += 15;
+                    gerarRelatorioExecucaoOrcamentaria(doc, margin, currentY);
+                    break;
+                    
+                case 'entrevistas-realizadas':
+                    doc.text('Relatório: Entrevistas Realizadas', margin, currentY);
+                    currentY += 15;
+                    gerarRelatorioEntrevistas(doc, margin, currentY);
+                    break;
+                    
+                case 'dashboard-executivo':
+                    doc.text('Relatório: Dashboard Executivo', margin, currentY);
+                    currentY += 15;
+                    gerarRelatorioDashboard(doc, margin, currentY);
+                    break;
+                    
+                default:
+                    doc.text(`Relatório: ${tipo.replace('-', ' ').toUpperCase()}`, margin, currentY);
+                    currentY += 15;
+                    gerarRelatorioGenerico(doc, margin, currentY, tipo);
+            }
+            
+            // Salvar o PDF
+            const nomeArquivo = `relatorio_${tipo}_${new Date().toISOString().split('T')[0]}.pdf`;
+            doc.save(nomeArquivo);
+            
+            alert('Relatório PDF gerado com sucesso!');
+        }
+
+        // Relatório de Beneficiários por Auxílio
+        function gerarRelatorioBeneficiarios(doc, margin, startY) {
+            let currentY = startY;
+            
+            doc.setFontSize(12);
+            doc.text('Resumo de Beneficiários por Tipo de Auxílio', margin, currentY);
+            currentY += 15;
+            
+            const dados = [
+                ['Tipo de Auxílio', 'Quantidade', 'Valor Médio', 'Total Mensal'],
+                ['Auxílio Transporte', '156', 'R$ 180,00', 'R$ 28.080,00'],
+                ['Auxílio Alimentação', '98', 'R$ 250,00', 'R$ 24.500,00'],
+                ['Auxílio Material Didático', '73', 'R$ 300,00', 'R$ 21.900,00'],
+                ['Auxílio Moradia', '15', 'R$ 400,00', 'R$ 6.000,00'],
+                ['TOTAL', '342', '-', 'R$ 80.480,00']
+            ];
+            
+            gerarTabela(doc, dados, margin, currentY);
+            currentY += dados.length * 10 + 20;
+            
+            // Adicionar gráfico textual
+            doc.setFontSize(12);
+            doc.text('Distribuição Percentual:', margin, currentY);
+            currentY += 10;
+            
+            doc.setFontSize(10);
+            doc.text('• Auxílio Transporte: 45.6% (156 beneficiários)', margin + 10, currentY);
+            currentY += 8;
+            doc.text('• Auxílio Alimentação: 28.7% (98 beneficiários)', margin + 10, currentY);
+            currentY += 8;
+            doc.text('• Auxílio Material Didático: 21.3% (73 beneficiários)', margin + 10, currentY);
+            currentY += 8;
+            doc.text('• Auxílio Moradia: 4.4% (15 beneficiários)', margin + 10, currentY);
+        }
+
+        // Relatório de Perfil Socioeconômico
+        function gerarRelatorioPerfilSocioeconomico(doc, margin, startY) {
+            let currentY = startY;
+            
+            doc.setFontSize(12);
+            doc.text('Análise do Perfil Socioeconômico dos Beneficiários', margin, currentY);
+            currentY += 15;
+            
+            const dados = [
+                ['Faixa de Renda Per Capita', 'Quantidade', 'Percentual'],
+                ['Até R$ 250,00', '198', '57.9%'],
+                ['R$ 250,01 - R$ 500,00', '89', '26.0%'],
+                ['R$ 500,01 - R$ 750,00', '38', '11.1%'],
+                ['R$ 750,01 - R$ 1.000,00', '17', '5.0%'],
+                ['TOTAL', '342', '100%']
+            ];
+            
+            gerarTabela(doc, dados, margin, currentY);
+            currentY += dados.length * 10 + 20;
+            
+            doc.text('Composição Familiar Média:', margin, currentY);
+            currentY += 10;
+            doc.setFontSize(10);
+            doc.text('• 3,2 pessoas por família', margin + 10, currentY);
+            currentY += 8;
+            doc.text('• 89% são arrimo de família ou dependentes únicos', margin + 10, currentY);
+            currentY += 8;
+            doc.text('• 76% residem em bairros periféricos', margin + 10, currentY);
+        }
+
+        // Relatório de Execução Orçamentária
+        function gerarRelatorioExecucaoOrcamentaria(doc, margin, startY) {
+            let currentY = startY;
+            
+            doc.setFontSize(12);
+            doc.text('Execução Orçamentária - Setembro 2025', margin, currentY);
+            currentY += 15;
+            
+            const dados = [
+                ['Item', 'Orçado', 'Executado', '% Execução'],
+                ['Auxílio Transporte', 'R$ 30.000,00', 'R$ 28.080,00', '93.6%'],
+                ['Auxílio Alimentação', 'R$ 25.000,00', 'R$ 24.500,00', '98.0%'],
+                ['Auxílio Material', 'R$ 22.000,00', 'R$ 21.900,00', '99.5%'],
+                ['Auxílio Moradia', 'R$ 8.000,00', 'R$ 6.000,00', '75.0%'],
+                ['TOTAL', 'R$ 85.000,00', 'R$ 80.480,00', '94.7%']
+            ];
+            
+            gerarTabela(doc, dados, margin, currentY);
+            currentY += dados.length * 10 + 20;
+            
+            doc.text('Observações:', margin, currentY);
+            currentY += 10;
+            doc.setFontSize(10);
+            doc.text('• Execução dentro da meta estabelecida (>90%)', margin + 10, currentY);
+            currentY += 8;
+            doc.text('• Auxílio Moradia com menor execução devido a menor demanda', margin + 10, currentY);
+            currentY += 8;
+            doc.text('• Previsão de 100% de execução até final do mês', margin + 10, currentY);
+        }
+
+        // Relatório de Entrevistas
+        function gerarRelatorioEntrevistas(doc, margin, startY) {
+            let currentY = startY;
+            
+            doc.setFontSize(12);
+            doc.text('Entrevistas Realizadas - Últimos 30 dias', margin, currentY);
+            currentY += 15;
+            
+            const dados = [
+                ['Tipo de Entrevista', 'Quantidade', 'Tempo Médio'],
+                ['Entrevista Inicial', '67', '45 min'],
+                ['Reavaliação', '34', '30 min'],
+                ['Acompanhamento', '19', '25 min'],
+                ['Renovação de Auxílio', '7', '20 min'],
+                ['TOTAL', '127', '35 min']
+            ];
+            
+            gerarTabela(doc, dados, margin, currentY);
+            currentY += dados.length * 10 + 20;
+            
+            doc.text('Resultados das Entrevistas:', margin, currentY);
+            currentY += 10;
+            doc.setFontSize(10);
+            doc.text('• 89% resultaram em aprovação de auxílio', margin + 10, currentY);
+            currentY += 8;
+            doc.text('• 8% necessitaram documentação complementar', margin + 10, currentY);
+            currentY += 8;
+            doc.text('• 3% foram indeferidas', margin + 10, currentY);
+        }
+
+        // Relatório Dashboard Executivo
+        function gerarRelatorioDashboard(doc, margin, startY) {
+            let currentY = startY;
+            
+            doc.setFontSize(12);
+            doc.text('Indicadores Executivos - Setembro 2025', margin, currentY);
+            currentY += 15;
+            
+            // KPIs principais
+            doc.text('Principais Indicadores:', margin, currentY);
+            currentY += 10;
+            
+            doc.setFontSize(10);
+            doc.text('• Total de Beneficiários Ativos: 342 alunos', margin + 10, currentY);
+            currentY += 8;
+            doc.text('• Investimento Mensal: R$ 80.480,00', margin + 10, currentY);
+            currentY += 8;
+            doc.text('• Taxa de Permanência: 94.5%', margin + 10, currentY);
+            currentY += 8;
+            doc.text('• Tempo Médio de Análise: 5.2 dias', margin + 10, currentY);
+            currentY += 8;
+            doc.text('• Satisfação dos Beneficiários: 4.7/5.0', margin + 10, currentY);
+            currentY += 15;
+            
+            // Metas vs Realizado
+            const dados = [
+                ['Indicador', 'Meta', 'Realizado', 'Status'],
+                ['Beneficiários', '350', '342', '97.7%'],
+                ['Execução Orçamentária', '90%', '94.7%', '✓'],
+                ['Tempo de Análise', '7 dias', '5.2 dias', '✓'],
+                ['Taxa de Renovação', '85%', '89%', '✓']
+            ];
+            
+            gerarTabela(doc, dados, margin, currentY);
+        }
+
+        // Relatório Genérico
+        function gerarRelatorioGenerico(doc, margin, startY, tipo) {
+            let currentY = startY;
+            
+            doc.setFontSize(12);
+            doc.text(`Dados do relatório ${tipo.replace('-', ' ')}:`, margin, currentY);
+            currentY += 15;
+            
+            doc.setFontSize(10);
+            doc.text('• Este relatório contém informações detalhadas sobre o tema solicitado', margin + 10, currentY);
+            currentY += 8;
+            doc.text('• Os dados foram coletados do sistema SCAE', margin + 10, currentY);
+            currentY += 8;
+            doc.text('• Período de referência: Setembro 2025', margin + 10, currentY);
+            currentY += 8;
+            doc.text('• Relatório gerado automaticamente', margin + 10, currentY);
+        }
+
+        // Função para gerar tabelas no PDF
+        function gerarTabela(doc, dados, x, y) {
+            const cellHeight = 8;
+            const cellWidth = 35;
+            
+            dados.forEach((row, rowIndex) => {
+                row.forEach((cell, cellIndex) => {
+                    const cellX = x + (cellIndex * cellWidth);
+                    const cellY = y + (rowIndex * cellHeight);
+                    
+                    // Cabeçalho com fundo cinza
+                    if (rowIndex === 0) {
+                        doc.setFillColor(240, 240, 240);
+                        doc.rect(cellX, cellY - 6, cellWidth, cellHeight, 'F');
+                        doc.setFontSize(9);
+                        doc.setFont(undefined, 'bold');
+                    } else {
+                        doc.setFontSize(8);
+                        doc.setFont(undefined, 'normal');
+                    }
+                    
+                    // Bordas
+                    doc.rect(cellX, cellY - 6, cellWidth, cellHeight);
+                    
+                    // Texto
+                    doc.text(cell, cellX + 2, cellY - 1);
+                });
+            });
+        }
+
+        // Função para exportar a página atual como PDF
+        function exportarPaginaPDF() {
+            const btn = event.target;
+            const originalContent = btn.innerHTML;
+            
+            btn.disabled = true;
+            btn.innerHTML = '<i class="bi bi-hourglass-split"></i> Gerando...';
+            
+            // Usar html2canvas para capturar a página
+            html2canvas(document.querySelector('.main-content'), {
+                scale: 2,
+                useCORS: true,
+                allowTaint: true
+            }).then(canvas => {
+                const { jsPDF } = window.jspdf;
+                const doc = new jsPDF('p', 'mm', 'a4');
+                
+                const imgWidth = 210;
+                const pageHeight = 295;
+                const imgHeight = (canvas.height * imgWidth) / canvas.width;
+                let heightLeft = imgHeight;
+                
+                let position = 0;
+                
+                // Adicionar cabeçalho personalizado
+                doc.setFontSize(16);
+                doc.setTextColor(40, 167, 69);
+                doc.text('SCAE - Relatórios da Assistência Social', 20, 20);
+                
+                doc.setFontSize(10);
+                doc.setTextColor(100, 100, 100);
+                doc.text(`Gerado em: ${new Date().toLocaleDateString('pt-BR')} às ${new Date().toLocaleTimeString('pt-BR')}`, 20, 30);
+                
+                position = 40;
+                
+                // Adicionar a imagem da página
+                const imgData = canvas.toDataURL('image/png');
+                doc.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
+                heightLeft -= pageHeight;
+                
+                // Adicionar páginas extras se necessário
+                while (heightLeft >= 0) {
+                    position = heightLeft - imgHeight;
+                    doc.addPage();
+                    doc.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
+                    heightLeft -= pageHeight;
+                }
+                
+                // Salvar
+                const dataAtual = new Date().toISOString().split('T')[0];
+                doc.save(`relatorios_assistencia_social_${dataAtual}.pdf`);
+                
+                btn.disabled = false;
+                btn.innerHTML = originalContent;
+                
+                alert('Página exportada para PDF com sucesso!');
+            }).catch(error => {
+                console.error('Erro ao gerar PDF:', error);
+                btn.disabled = false;
+                btn.innerHTML = originalContent;
+                alert('Erro ao gerar PDF. Tente novamente.');
+            });
+        }
+
+        // Função para limpar formulário personalizado
+        function limparFormulario() {
+            document.getElementById('relatorioPersonalizadoForm').reset();
+        }
+
+        // Função para limpar histórico
+        function limparHistorico() {
+            if (confirm('Tem certeza que deseja limpar o histórico de relatórios?')) {
+                console.log('Histórico limpo');
+                alert('Histórico limpo com sucesso!');
+            }
+        }
+
+        // Manipular formulário de relatório personalizado
+        document.getElementById('relatorioPersonalizadoForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const formData = new FormData(this);
+            const dados = Object.fromEntries(formData);
+            
+            console.log('Dados do relatório personalizado:', dados);
+            
+            // Gerar PDF personalizado
+            gerarPDFPersonalizado(dados);
+        });
+
+        // Gerar PDF personalizado baseado no formulário
+        function gerarPDFPersonalizado(dados) {
+            const submitBtn = document.querySelector('#relatorioPersonalizadoForm button[type="submit"]');
+            const originalContent = submitBtn.innerHTML;
+            
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = '<i class="bi bi-hourglass-split"></i> Gerando...';
+            
+            setTimeout(() => {
+                const { jsPDF } = window.jspdf;
+                const doc = new jsPDF();
+                
+                // Cabeçalho
+                doc.setFontSize(20);
+                doc.setTextColor(40, 167, 69);
+                doc.text('SCAE - Relatório Personalizado', 20, 30);
+                
+                doc.setFontSize(12);
+                doc.setTextColor(100, 100, 100);
+                doc.text('Instituto Federal do Espírito Santo - Campus Vitória', 20, 45);
+                doc.text(`Gerado em: ${new Date().toLocaleDateString('pt-BR')}`, 20, 55);
+                
+                // Parâmetros do relatório
+                let currentY = 75;
+                doc.setFontSize(14);
+                doc.setTextColor(0, 0, 0);
+                doc.text('Parâmetros do Relatório:', 20, currentY);
+                currentY += 15;
+                
+                doc.setFontSize(10);
+                doc.text(`Tipo: ${dados.tipoRelatorio || 'Não especificado'}`, 30, currentY);
+                currentY += 8;
+                doc.text(`Período: ${dados.dataInicio || 'N/A'} até ${dados.dataFim || 'N/A'}`, 30, currentY);
+                currentY += 8;
+                doc.text(`Formato: ${dados.formato || 'PDF'}`, 30, currentY);
+                currentY += 15;
+                
+                // Filtros selecionados
+                doc.setFontSize(12);
+                doc.text('Filtros Aplicados:', 20, currentY);
+                currentY += 10;
+                
+                doc.setFontSize(10);
+                const filtros = [];
+                if (document.getElementById('filtroAuxilioTransporte').checked) filtros.push('Auxílio Transporte');
+                if (document.getElementById('filtroAuxilioAlimentacao').checked) filtros.push('Auxílio Alimentação');
+                if (document.getElementById('filtroAuxilioMaterial').checked) filtros.push('Auxílio Material Didático');
+                if (document.getElementById('filtroAuxilioMoradia').checked) filtros.push('Auxílio Moradia');
+                
+                if (filtros.length > 0) {
+                    filtros.forEach(filtro => {
+                        doc.text(`• ${filtro}`, 30, currentY);
+                        currentY += 8;
+                    });
+                } else {
+                    doc.text('• Todos os auxílios incluídos', 30, currentY);
+                    currentY += 8;
+                }
+                
+                // Observações
+                if (dados.observacoes) {
+                    currentY += 10;
+                    doc.setFontSize(12);
+                    doc.text('Observações:', 20, currentY);
+                    currentY += 10;
+                    
+                    doc.setFontSize(10);
+                    const linhasObservacoes = doc.splitTextToSize(dados.observacoes, 170);
+                    doc.text(linhasObservacoes, 30, currentY);
+                }
+                
+                // Salvar
+                const dataAtual = new Date().toISOString().split('T')[0];
+                doc.save(`relatorio_personalizado_${dataAtual}.pdf`);
+                
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = originalContent;
+                
+                alert('Relatório personalizado gerado com sucesso!');
+            }, 2000);
+        }
+
+        // Definir data padrão (último mês)
+        document.addEventListener('DOMContentLoaded', function() {
+            const hoje = new Date();
+            const umMesAtras = new Date(hoje);
+            umMesAtras.setMonth(hoje.getMonth() - 1);
+            
+            document.getElementById('dataInicio').value = umMesAtras.toISOString().split('T')[0];
+            document.getElementById('dataFim').value = hoje.toISOString().split('T')[0];
+        });
+    </script>
+
+    <footer class="footer bg-success text-white py-4">
+        <div class="container">
+            <div class="row">
+                <div class="col-12 text-center">
+                    <p class="text-white mb-0">
+                        &copy; 2025 Sistema de Controle de Assistência Estudantil. Todos os direitos reservados.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </footer>
 </body>
 </html>
