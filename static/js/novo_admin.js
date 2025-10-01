@@ -21,53 +21,23 @@ document.addEventListener('DOMContentLoaded', function() {
     // ===== ELEMENTOS DO DOM =====
     const elements = {
         // Formulário principal
-        form: document.getElementById('formNovoAdmin'),
+        form: document.getElementById('adminForm'),
         
         // Campos de dados pessoais
         nome: document.getElementById('nome'),
-        cpf: document.getElementById('cpf'),
-        dataNascimento: document.getElementById('data_nascimento'),
+        matricula: document.getElementById('matricula'),
         email: document.getElementById('email'),
-        telefone: document.getElementById('telefone'),
-        
-        // Endereço
-        cep: document.getElementById('cep'),
-        logradouro: document.getElementById('logradouro'),
-        numero: document.getElementById('numero'),
-        complemento: document.getElementById('complemento'),
-        bairro: document.getElementById('bairro'),
-        cidade: document.getElementById('cidade'),
-        estado: document.getElementById('estado'),
+        tipoAdmin: document.getElementById('tipo_admin'),
         
         // Credenciais de acesso
-        usuario: document.getElementById('usuario'),
         senha: document.getElementById('senha'),
         confirmarSenha: document.getElementById('confirmar_senha'),
         
-        // Configurações específicas
-        nivel: document.getElementById('nivel_acesso'),
-        departamento: document.getElementById('departamento'),
-        cargo: document.getElementById('cargo'),
-        dataInicio: document.getElementById('data_inicio'),
-        
         // Botões
-        btnBuscarCep: document.getElementById('btnBuscarCep'),
-        btnGerarUsuario: document.getElementById('btnGerarUsuario'),
-        btnVerificarDisponibilidade: document.getElementById('btnVerificarDisponibilidade'),
-        btnSalvar: document.getElementById('btnSalvar'),
-        btnVisualizar: document.getElementById('btnVisualizar'),
-        btnLimpar: document.getElementById('btnLimpar'),
+        btnSalvar: document.querySelector('button[type="submit"]'),
         
         // Modals
-        modalPreview: new bootstrap.Modal(document.getElementById('modalPreview')),
-        modalLimpar: new bootstrap.Modal(document.getElementById('modalLimpar')),
-        
-        // Containers de preview
-        previewPessoais: document.getElementById('previewDadosPessoais'),
-        previewEndereco: document.getElementById('previewEndereco'),
-        previewCredenciais: document.getElementById('previewCredenciais'),
-        previewConfiguracoes: document.getElementById('previewConfiguracoes'),
-        previewPermissoes: document.getElementById('previewPermissoes'),
+        modalConfirm: new bootstrap.Modal(document.getElementById('confirmModal')),
         
         // Senha
         passwordStrength: document.getElementById('passwordStrength'),
