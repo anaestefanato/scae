@@ -176,16 +176,6 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col-md-6">
-                                    <div class="mb-3">
-                                        <label for="confirmar_senha" class="form-label">Confirmar Senha *</label>
-                                        <input type="password" class="form-control" id="confirmar_senha" name="confirmar_senha" required>
-                                        <div class="form-text">Confirme a senha digitada acima.</div>
-                                        <div class="invalid-feedback">
-                                            As senhas não coincidem.
-                                        </div>
-                                    </div>
-                                </div>
                             </div>
                         </div>
 
@@ -201,6 +191,33 @@
                             </div>
                         </div>
                     </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de Confirmação -->
+    <div class="modal fade" id="confirmModal" tabindex="-1" aria-labelledby="confirmModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="confirmModalLabel">
+                        <i class="bi bi-check-circle me-2"></i>Confirmar Cadastro
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <p>Deseja confirmar o cadastro do administrador?</p>
+                    <div class="alert alert-warning">
+                        <i class="bi bi-exclamation-triangle me-2"></i>
+                        <strong>Atenção:</strong> O administrador terá acesso ao sistema imediatamente após a criação.
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="button" class="btn btn-success" onclick="confirmCadastro()">
+                        <i class="bi bi-check-circle me-1"></i>Confirmar Cadastro
+                    </button>
                 </div>
             </div>
         </div>

@@ -12,7 +12,6 @@ document.addEventListener('DOMContentLoaded', function() {
     const email = document.getElementById('email');
     const tipoAdmin = document.getElementById('tipo_admin');
     const senha = document.getElementById('senha');
-    const confirmarSenha = document.getElementById('confirmar_senha');
     const btnSubmit = document.querySelector('button[type="submit"]');
     
     // ===== VALIDAÇÃO DE EMAIL =====
@@ -24,21 +23,6 @@ document.addEventListener('DOMContentLoaded', function() {
     // ===== VALIDAÇÃO DE SENHA =====
     function validatePassword(password) {
         return password.length >= 8;
-    }
-    
-    // ===== VALIDAÇÃO DE CONFIRMAÇÃO DE SENHA =====
-    function validatePasswordMatch() {
-        if (!senha || !confirmarSenha) return;
-        
-        const match = senha.value === confirmarSenha.value;
-        
-        confirmarSenha.classList.remove('is-valid', 'is-invalid');
-        
-        if (match && senha.value.length > 0) {
-            confirmarSenha.classList.add('is-valid');
-        } else if (confirmarSenha.value.length > 0) {
-            confirmarSenha.classList.add('is-invalid');
-        }
     }
     
     // ===== EVENTOS DE VALIDAÇÃO =====
@@ -65,26 +49,18 @@ document.addEventListener('DOMContentLoaded', function() {
             } else if (this.value) {
                 this.classList.add('is-invalid');
             }
-            
-            // Validar confirmação se já foi preenchida
-            if (confirmarSenha && confirmarSenha.value) {
-                validatePasswordMatch();
-            }
         });
-    }
-    
-    if (confirmarSenha) {
-        confirmarSenha.addEventListener('input', validatePasswordMatch);
     }
     
     // ===== MÁSCARA PARA MATRÍCULA =====
-    if (matricula) {
-        matricula.addEventListener('input', function(e) {
-            // Apenas números
-            let value = e.target.value.replace(/\D/g, '');
-            e.target.value = value;
-        });
-    }
+    // Removido: permitir letras e números na matrícula
+    // if (matricula) {
+    //     matricula.addEventListener('input', function(e) {
+    //         // Apenas números
+    //         let value = e.target.value.replace(/\D/g, '');
+    //         e.target.value = value;
+    //     });
+    // }
     
     // ===== VALIDAÇÃO DO FORMULÁRIO =====
     function validateForm() {
@@ -122,11 +98,6 @@ document.addEventListener('DOMContentLoaded', function() {
             isValid = false;
         }
         
-        if (!confirmarSenha.value || senha.value !== confirmarSenha.value) {
-            confirmarSenha.classList.add('is-invalid');
-            isValid = false;
-        }
-        
         return isValid;
     }
     
@@ -134,20 +105,95 @@ document.addEventListener('DOMContentLoaded', function() {
     if (form) {
         form.addEventListener('submit', function(e) {
             e.preventDefault();
+            e.stopPropagation();
             
             if (validateForm()) {
-                // Mostrar loading no botão
-                if (btnSubmit) {
-                    btnSubmit.disabled = true;
-                    btnSubmit.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>Cadastrando...';
-                }
-                
-                // Submeter formulário
-                this.submit();
+                // Mostrar modal de confirmação ao invés de submeter diretamente
+                showConfirmModal();
             } else {
                 showAlert('Por favor, corrija os campos destacados em vermelho.', 'danger');
             }
         });
+    }
+    
+    // ===== MOSTRAR MODAL DE CONFIRMAÇÃO =====
+    window.showConfirmModal = function() {
+        const modal = new bootstrap.Modal(document.getElementById('confirmModal'));
+        modal.show();
+    }
+    
+    // ===== CONFIRMAR CADASTRO =====
+    window.confirmCadastro = function() {
+        const modal = bootstrap.Modal.getInstance(document.getElementById('confirmModal'));
+        modal.hide();
+        
+        // Enviar dados para o servidor
+        submitAdminForm();
+    }
+    
+    // ===== ENVIAR FORMULÁRIO =====
+    async function submitAdminForm() {
+        showLoadingState();
+        
+        try {
+            const formData = new FormData(form);
+            
+            const response = await fetch('/admin/usuarios/admin/novo', {
+                method: 'POST',
+                body: formData,
+                redirect: 'manual' // Não seguir redirecionamentos automaticamente
+            });
+            
+            // Se retornou 303 (redirect), significa sucesso
+            if (response.status === 303 || response.type === 'opaqueredirect') {
+                hideLoadingState();
+                showSuccessMessage();
+            } else if (response.ok) {
+                // Verificar se o HTML retornado contém erro
+                const html = await response.text();
+                if (html.includes('alert-danger') || html.includes('erro')) {
+                    hideLoadingState();
+                    showAlert('Erro ao cadastrar administrador. Verifique os dados informados.', 'danger');
+                } else {
+                    hideLoadingState();
+                    showSuccessMessage();
+                }
+            } else {
+                hideLoadingState();
+                showAlert('Erro ao cadastrar administrador. Tente novamente.', 'danger');
+            }
+            
+        } catch (error) {
+            hideLoadingState();
+            console.error('Erro ao enviar formulário:', error);
+            showAlert('Erro de conexão. Tente novamente.', 'danger');
+        }
+    }
+    
+    // ===== ESTADOS DE CARREGAMENTO =====
+    function showLoadingState() {
+        if (btnSubmit) {
+            btnSubmit.disabled = true;
+            btnSubmit.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>Cadastrando...';
+        }
+        showAlert('Cadastrando administrador...', 'info');
+    }
+    
+    function hideLoadingState() {
+        if (btnSubmit) {
+            btnSubmit.disabled = false;
+            btnSubmit.innerHTML = '<i class="bi bi-check-circle me-2"></i>Cadastrar Administrador';
+        }
+    }
+    
+    // ===== MENSAGEM DE SUCESSO =====
+    function showSuccessMessage() {
+        showAlert('Administrador cadastrado com sucesso!', 'success');
+        
+        setTimeout(() => {
+            // Redirecionar para a lista de administradores
+            window.location.href = '/admin/usuarios/admin';
+        }, 2000);
     }
     
     // ===== FUNÇÃO PARA EXIBIR ALERTAS =====
