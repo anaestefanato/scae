@@ -1,6 +1,7 @@
 from fastapi import APIRouter, Form, Request
 from fastapi.responses import RedirectResponse
 from fastapi.templating import Jinja2Templates
+from datetime import datetime
 
 from model.chamado_model import Chamado
 from repo import usuario_repo, chamado_repo
@@ -55,6 +56,9 @@ async def post_novo_chamado(
 ):
     usuario = usuario_repo.obter_usuario_por_matricula(usuario_logado['matricula'])
     
+    # Gerar a data/hora atual no formato SQLite
+    data_atual = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+    
     chamado = Chamado(
         id_chamado=None,   
         id_usuario_criador=usuario.id_usuario,
@@ -62,7 +66,7 @@ async def post_novo_chamado(
         titulo=titulo,
         descricao=descricao,
         categoria=categoria,
-        data_criacao="",
+        data_criacao=data_atual,
         data_ultima_atualizacao=None,
         status="aberto")
 
