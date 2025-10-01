@@ -3,9 +3,433 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Nova Entrevista</title>
+    <title>SCAE - Nova Entrevista</title>
+    <link rel="icon" type="image/png" href="/static/img/logo.png">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="/static/css/nova_entrevista.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;700&display=swap" rel="stylesheet">
 </head>
 <body>
-    <H1>Nova Entrevista</H1>
+    <!-- Menu Toggle Button (visible when sidebar is collapsed) -->
+    <button class="menu-toggle" id="menuToggle">
+        <i class="bi bi-list"></i>
+    </button>
+
+    <!-- Sidebar -->
+    <div class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <button class="close-sidebar" id="closeSidebar">
+                <i class="bi bi-x-lg"></i>
+            </button>
+            <img src="/static/img/logoifes.png" alt="Logo IFES" width="180">
+        </div>
+        <div class="d-flex flex-column p-3">
+            <div class="mb-4 text-center">
+                <h6 class="mb-0">Sistema de Controle de</h6>
+                <h6>Assistência Estudantil</h6>
+            </div>
+            <ul class="nav nav-pills flex-column mb-auto">
+                <li class="nav-item">
+                    <a href="/assistente/dashboard" class="nav-link">
+                        <i class="bi bi-speedometer2"></i> <span>Início</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="/assistente/analise-inscricoes" class="nav-link">
+                        <i class="bi bi-clipboard-check"></i> <span>Análise de Inscrições</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="/assistente/analise-recursos" class="nav-link">
+                        <i class="bi bi-journal-text"></i> <span>Análise de Recursos</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="/assistente/alunos" class="nav-link">
+                        <i class="bi bi-people"></i> <span>Alunos</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="/assistente/entrevistas" class="nav-link active bg-success">
+                        <i class="bi bi-file-earmark-text"></i> <span>Entrevistas Agendadas</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="/assistente/relatorios" class="nav-link">
+                        <i class="bi bi-file-earmark-bar-graph"></i> <span>Relatórios</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="/assistente/agenda" class="nav-link">
+                        <i class="bi bi-calendar-event"></i> <span>Agenda</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="/assistente/perfil" class="nav-link">
+                        <i class="bi bi-person-circle"></i> <span>Meu Perfil</span>
+                    </a>
+                </li>
+            </ul>
+            <hr>
+            <div class="text-center">
+                <a href="/logout" class="btn btn-outline-danger">
+                    <i class="bi bi-box-arrow-right"></i> <span>Sair</span>
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content" id="mainContent">
+        <!-- Page Header -->
+        <div class="page-header mb-4">
+            <div class="row align-items-center">
+                <div class="col-md-8">
+                    <h2 class="page-title">
+                        <i class="bi bi-calendar-plus me-2"></i>Agendar Nova Entrevista
+                    </h2>
+                    <p class="page-subtitle">Preencha as informações abaixo para agendar uma nova entrevista com o aluno</p>
+                </div>
+                <div class="col-md-4 text-end">
+                    <a href="/assistente/entrevistas" class="btn btn-outline-secondary">
+                        <i class="bi bi-arrow-left me-2"></i>Voltar às Entrevistas
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Form Card -->
+        <div class="form-card card">
+            <div class="card-header">
+                <i class="bi bi-person-plus me-2"></i>Dados da Entrevista
+            </div>
+            <div class="card-body">
+                <form id="novaEntrevistaForm" novalidate>
+                    <!-- Informações do Aluno -->
+                    <div class="form-section">
+                        <h5 class="section-title">
+                            <i class="bi bi-person-circle me-2"></i>Informações do Aluno
+                        </h5>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="alunoNome" class="form-label required">
+                                        <i class="bi bi-person me-1"></i>Nome do Aluno
+                                    </label>
+                                    <input type="text" class="form-control" id="alunoNome" 
+                                           placeholder="Digite o nome completo do aluno..." required>
+                                    <div class="invalid-feedback">
+                                        Por favor, informe o nome do aluno.
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="alunoMatricula" class="form-label">
+                                        <i class="bi bi-card-text me-1"></i>Matrícula
+                                    </label>
+                                    <input type="text" class="form-control" id="alunoMatricula" 
+                                           placeholder="Ex: 20221IMI003">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="alunoEmail" class="form-label">
+                                        <i class="bi bi-envelope me-1"></i>E-mail
+                                    </label>
+                                    <input type="email" class="form-control" id="alunoEmail" 
+                                           placeholder="email@aluno.ifes.edu.br">
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="alunoTelefone" class="form-label">
+                                        <i class="bi bi-telephone me-1"></i>Telefone
+                                    </label>
+                                    <input type="tel" class="form-control" id="alunoTelefone" 
+                                           placeholder="(27) 99999-9999">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Dados da Entrevista -->
+                    <div class="form-section">
+                        <h5 class="section-title">
+                            <i class="bi bi-calendar-check me-2"></i>Dados da Entrevista
+                        </h5>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="tipoEntrevista" class="form-label required">
+                                        <i class="bi bi-clipboard me-1"></i>Tipo de Entrevista
+                                    </label>
+                                    <select class="form-select" id="tipoEntrevista" required>
+                                        <option value="">Selecione o tipo...</option>
+                                        <option value="inicial">Entrevista Inicial</option>
+                                        <option value="reavaliacao">Reavaliação</option>
+                                        <option value="acompanhamento">Acompanhamento</option>
+                                        <option value="renovacao">Renovação de Auxílio</option>
+                                    </select>
+                                    <div class="invalid-feedback">
+                                        Por favor, selecione o tipo de entrevista.
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="auxilioTipo" class="form-label">
+                                        <i class="bi bi-cash-stack me-1"></i>Tipo de Auxílio
+                                    </label>
+                                    <select class="form-select" id="auxilioTipo">
+                                        <option value="">Selecione o auxílio...</option>
+                                        <option value="transporte">Auxílio Transporte</option>
+                                        <option value="alimentacao">Auxílio Alimentação</option>
+                                        <option value="moradia">Auxílio Moradia</option>
+                                        <option value="material_didatico">Auxílio Material Didático</option>
+                                        <option value="permanencia">Auxílio Permanência</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col-md-4">
+                                <div class="mb-3">
+                                    <label for="dataEntrevista" class="form-label required">
+                                        <i class="bi bi-calendar me-1"></i>Data
+                                    </label>
+                                    <input type="date" class="form-control" id="dataEntrevista" required>
+                                    <div class="invalid-feedback">
+                                        Por favor, selecione uma data.
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="mb-3">
+                                    <label for="horaEntrevista" class="form-label required">
+                                        <i class="bi bi-clock me-1"></i>Horário
+                                    </label>
+                                    <input type="time" class="form-control" id="horaEntrevista" required>
+                                    <div class="invalid-feedback">
+                                        Por favor, selecione um horário.
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="mb-3">
+                                    <label for="duracao" class="form-label required">
+                                        <i class="bi bi-stopwatch me-1"></i>Duração
+                                    </label>
+                                    <select class="form-select" id="duracao" required>
+                                        <option value="">Selecione a duração...</option>
+                                        <option value="30">30 minutos</option>
+                                        <option value="45">45 minutos</option>
+                                        <option value="60" selected>60 minutos</option>
+                                        <option value="90">90 minutos</option>
+                                    </select>
+                                    <div class="invalid-feedback">
+                                        Por favor, selecione a duração.
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Local e Modalidade -->
+                    <div class="form-section">
+                        <h5 class="section-title">
+                            <i class="bi bi-geo-alt me-2"></i>Local e Modalidade
+                        </h5>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="modalidade" class="form-label required">
+                                        <i class="bi bi-camera-video me-1"></i>Modalidade
+                                    </label>
+                                    <select class="form-select" id="modalidade" required>
+                                        <option value="">Selecione a modalidade...</option>
+                                        <option value="presencial" selected>Presencial</option>
+                                        <option value="online">Online</option>
+                                        <option value="hibrido">Híbrido</option>
+                                    </select>
+                                    <div class="invalid-feedback">
+                                        Por favor, selecione a modalidade.
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="local" class="form-label" id="localLabel">
+                                        <i class="bi bi-building me-1"></i>Local/Sala
+                                    </label>
+                                    <input type="text" class="form-control" id="local" 
+                                           placeholder="Ex: Sala 201 - Bloco A">
+                                    <small class="form-text text-muted" id="localHelp">
+                                        Para entrevistas presenciais, informe a sala. Para online, informe o link.
+                                    </small>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="row" id="linkOnlineRow" style="display: none;">
+                            <div class="col-md-12">
+                                <div class="mb-3">
+                                    <label for="linkOnline" class="form-label">
+                                        <i class="bi bi-link-45deg me-1"></i>Link da Reunião Online
+                                    </label>
+                                    <input type="url" class="form-control" id="linkOnline" 
+                                           placeholder="https://meet.google.com/abc-defg-hij">
+                                    <small class="form-text text-muted">
+                                        Informe o link do Google Meet, Zoom, Teams ou outra plataforma.
+                                    </small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Configurações Adicionais -->
+                    <div class="form-section">
+                        <h5 class="section-title">
+                            <i class="bi bi-gear me-2"></i>Configurações Adicionais
+                        </h5>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="prioridade" class="form-label required">
+                                        <i class="bi bi-exclamation-triangle me-1"></i>Prioridade
+                                    </label>
+                                    <select class="form-select" id="prioridade" required>
+                                        <option value="">Selecione a prioridade...</option>
+                                        <option value="baixa">Baixa</option>
+                                        <option value="media" selected>Média</option>
+                                        <option value="alta">Alta</option>
+                                        <option value="urgente">Urgente</option>
+                                    </select>
+                                    <div class="invalid-feedback">
+                                        Por favor, selecione a prioridade.
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="status" class="form-label">
+                                        <i class="bi bi-check-circle me-1"></i>Status Inicial
+                                    </label>
+                                    <select class="form-select" id="status">
+                                        <option value="agendada" selected>Agendada</option>
+                                        <option value="confirmada">Confirmada</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="observacoes" class="form-label">
+                                <i class="bi bi-chat-text me-1"></i>Observações
+                            </label>
+                            <textarea class="form-control" id="observacoes" rows="4" 
+                                      placeholder="Observações adicionais sobre a entrevista, documentos necessários, etc..."></textarea>
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-check mb-3">
+                                    <input class="form-check-input" type="checkbox" id="notificarAluno" checked>
+                                    <label class="form-check-label" for="notificarAluno">
+                                        <i class="bi bi-bell me-1"></i>Notificar aluno por email
+                                    </label>
+                                </div>
+                                <div class="form-check mb-3">
+                                    <input class="form-check-input" type="checkbox" id="lembrete" checked>
+                                    <label class="form-check-label" for="lembrete">
+                                        <i class="bi bi-alarm me-1"></i>Criar lembrete 1 dia antes
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-check mb-3">
+                                    <input class="form-check-input" type="checkbox" id="confirmarPresenca">
+                                    <label class="form-check-label" for="confirmarPresenca">
+                                        <i class="bi bi-check-square me-1"></i>Solicitar confirmação de presença
+                                    </label>
+                                </div>
+                                <div class="form-check mb-3">
+                                    <input class="form-check-input" type="checkbox" id="anexarDocumentos">
+                                    <label class="form-check-label" for="anexarDocumentos">
+                                        <i class="bi bi-paperclip me-1"></i>Solicitar documentos atualizados
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Action Buttons -->
+                    <div class="action-buttons">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <button type="button" class="btn btn-outline-secondary btn-lg w-100" id="btnCancelar">
+                                    <i class="bi bi-x-circle me-2"></i>Cancelar
+                                </button>
+                            </div>
+                            <div class="col-md-6">
+                                <button type="submit" class="btn btn-success btn-lg w-100" id="btnAgendar">
+                                    <i class="bi bi-calendar-plus me-2"></i>Agendar Entrevista
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Success Modal -->
+    <div class="modal fade" id="successModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header bg-success text-white">
+                    <h5 class="modal-title">
+                        <i class="bi bi-check-circle me-2"></i>Entrevista Agendada com Sucesso!
+                    </h5>
+                </div>
+                <div class="modal-body text-center">
+                    <div class="success-icon mb-3">
+                        <i class="bi bi-calendar-check"></i>
+                    </div>
+                    <h6 id="successMessage">A entrevista foi agendada com sucesso!</h6>
+                    <p class="text-muted" id="successDetails">
+                        O aluno será notificado por email com todos os detalhes da entrevista.
+                    </p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
+                        Agendar Outra
+                    </button>
+                    <a href="/assistente/entrevistas" class="btn btn-success">
+                        Ver Entrevistas
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="/static/js/nova_entrevista.js"></script>
+
+    <footer class="footer bg-success text-white py-4">
+        <div class="container">
+            <div class="row">
+                <div class="col-12 text-center">
+                    <p class="text-white mb-0">
+                        &copy; 2025 Sistema de Controle de Assistência Estudantil. Todos os direitos reservados.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </footer>
 </body>
 </html>

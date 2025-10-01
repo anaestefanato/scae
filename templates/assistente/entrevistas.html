@@ -3,15 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SCAE - Entrevistas</title>
+    <title>SCAE - Entrevistas Agendadas</title>
     <link rel="icon" type="image/png" href="/static/img/logo.png">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
-    <link rel="stylesheet" href="/static/css/dashboard_assistente.css">
+    <link rel="stylesheet" href="/static/css/entrevistas.css" />
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;700&display=swap" rel="stylesheet">
 </head>
 <body>
-    <!-- Menu Toggle Button -->
+    <!-- Menu Toggle Button (visible when sidebar is collapsed) -->
     <button class="menu-toggle" id="menuToggle">
         <i class="bi bi-list"></i>
     </button>
@@ -22,7 +22,7 @@
             <button class="close-sidebar" id="closeSidebar">
                 <i class="bi bi-x-lg"></i>
             </button>
-            <img src="/static/img/logoifes.png" alt="Logo SCAE" width="180">
+            <img src="/static/img/logoifes.png" alt="Logo IFES" width="180">
         </div>
         <div class="d-flex flex-column p-3">
             <div class="mb-4 text-center">
@@ -31,7 +31,7 @@
             </div>
             <ul class="nav nav-pills flex-column mb-auto">
                 <li class="nav-item">
-                    <a href="/assistente/inicio" class="nav-link">
+                    <a href="/assistente/dashboard" class="nav-link">
                         <i class="bi bi-speedometer2"></i> <span>Início</span>
                     </a>
                 </li>
@@ -82,22 +82,404 @@
 
     <!-- Main Content -->
     <div class="main-content" id="mainContent">
-        <div class="d-flex justify-content-between align-items-center mb-4">
-            <h4 class="mb-0">Entrevistas Agendadas</h4>
-            <a class="btn btn-primary" href="/assistente/entrevista/nova" role="button">
-                <i class="bi bi-plus-circle me-2"></i>Nova Entrevista
-            </a>
-        </div>
-        
-        <div class="card">
-            <div class="card-body">
-                <p>Lista de entrevistas agendadas em desenvolvimento.</p>
+        <!-- Page Header -->
+        <div class="welcome-banner mb-4 card-hover">
+            <div class="row align-items-center">
+                <div class="col-md-8">
+                    <h4 class="mb-3">Entrevistas Agendadas</h4>
+                    <p>Gerencie e acompanhe todas as entrevistas agendadas com os alunos</p>
+                </div>
+                <div class="col-md-4 text-end">
+                    <a href="/assistente/nova-entrevista" class="btn btn-success btn-lg">
+                        <i class="bi bi-calendar-plus me-2"></i>Nova Entrevista
+                    </a>
+                </div>
             </div>
         </div>
+
+        <!-- Filtros -->
+        <div class="filters-card card mb-4">
+            <div class="card-header">
+                <i class="bi bi-funnel me-2"></i>Filtros de Busca
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-3">
+                        <label for="filtroData" class="form-label">Data</label>
+                        <input type="date" class="form-control" id="filtroData">
+                    </div>
+                    <div class="col-md-3">
+                        <label for="filtroTipo" class="form-label">Tipo de Entrevista</label>
+                        <select class="form-select" id="filtroTipo">
+                            <option value="">Todos os tipos</option>
+                            <option value="inicial">Entrevista Inicial</option>
+                            <option value="reavaliacao">Reavaliação</option>
+                            <option value="acompanhamento">Acompanhamento</option>
+                            <option value="renovacao">Renovação de Auxílio</option>
+                        </select>
+                    </div>
+                    <div class="col-md-3">
+                        <label for="filtroPrioridade" class="form-label">Prioridade</label>
+                        <select class="form-select" id="filtroPrioridade">
+                            <option value="">Todas as prioridades</option>
+                            <option value="urgente">Urgente</option>
+                            <option value="alta">Alta</option>
+                            <option value="media">Média</option>
+                            <option value="baixa">Baixa</option>
+                        </select>
+                    </div>
+                    <div class="col-md-3">
+                        <label for="filtroAluno" class="form-label">Buscar Aluno</label>
+                        <input type="text" class="form-control" id="filtroAluno" placeholder="Nome do aluno...">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Estatísticas -->
+        <div class="row mb-4">
+            <div class="col-md-3">
+                <div class="stats-card card">
+                    <div class="card-body text-center">
+                        <i class="bi bi-calendar-check stats-icon text-success"></i>
+                        <div class="stats-number">8</div>
+                        <div class="stats-label">Entrevistas Hoje</div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="stats-card card">
+                    <div class="card-body text-center">
+                        <i class="bi bi-clock-history stats-icon text-warning"></i>
+                        <div class="stats-number">15</div>
+                        <div class="stats-label">Próximos 7 Dias</div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="stats-card card">
+                    <div class="card-body text-center">
+                        <i class="bi bi-exclamation-triangle stats-icon text-danger"></i>
+                        <div class="stats-number">3</div>
+                        <div class="stats-label">Prioridade Alta</div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="stats-card card">
+                    <div class="card-body text-center">
+                        <i class="bi bi-check-circle stats-icon text-info"></i>
+                        <div class="stats-number">42</div>
+                        <div class="stats-label">Realizadas Este Mês</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Lista de Entrevistas -->
+        <div class="entrevistas-list">
+            <!-- Entrevistas de Hoje -->
+            <div class="section-header mb-3">
+                <h4><i class="bi bi-calendar-day me-2"></i>Hoje - 01 de Outubro de 2025</h4>
+            </div>
+
+            <div class="entrevista-card card mb-3">
+                <div class="card-body">
+                    <div class="row align-items-center">
+                        <div class="col-md-6">
+                            <div class="entrevista-info">
+                                <h5 class="entrevista-aluno">João Silva</h5>
+                                <p class="entrevista-tipo">Entrevista Inicial - Auxílio Transporte</p>
+                                <div class="entrevista-details">
+                                    <span class="me-3">
+                                        <i class="bi bi-clock me-1"></i>14:00 - 15:00
+                                    </span>
+                                    <span class="me-3">
+                                        <i class="bi bi-geo-alt me-1"></i>Presencial - Sala 201, Bloco A
+                                    </span>
+                                    <span class="priority-badge priority-alta">Alta Prioridade</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="entrevista-status">
+                                <span class="status-badge status-agendada">Agendada</span>
+                                <div class="mt-2">
+                                    <small class="text-muted">Agendada em: 25/09/2025</small>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="entrevista-actions text-end">
+                                <button class="btn btn-success btn-sm me-2">
+                                    <i class="bi bi-play-circle me-1"></i>Iniciar
+                                </button>
+                                <div class="btn-group">
+                                    <button class="btn btn-outline-secondary btn-sm dropdown-toggle" data-bs-toggle="dropdown">
+                                        <i class="bi bi-three-dots-vertical"></i>
+                                    </button>
+                                    <ul class="dropdown-menu">
+                                        <li><a class="dropdown-item" href="#"><i class="bi bi-eye me-2"></i>Visualizar</a></li>
+                                        <li><a class="dropdown-item" href="#"><i class="bi bi-pencil me-2"></i>Editar</a></li>
+                                        <li><a class="dropdown-item" href="#"><i class="bi bi-calendar-x me-2"></i>Reagendar</a></li>
+                                        <li><hr class="dropdown-divider"></li>
+                                        <li><a class="dropdown-item text-danger" href="#"><i class="bi bi-trash me-2"></i>Cancelar</a></li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="entrevista-card card mb-3">
+                <div class="card-body">
+                    <div class="row align-items-center">
+                        <div class="col-md-6">
+                            <div class="entrevista-info">
+                                <h5 class="entrevista-aluno">Alice Souza</h5>
+                                <p class="entrevista-tipo">Reavaliação - Auxílio Alimentação</p>
+                                <div class="entrevista-details">
+                                    <span class="me-3">
+                                        <i class="bi bi-clock me-1"></i>16:00 - 17:00
+                                    </span>
+                                    <span class="me-3">
+                                        <i class="bi bi-camera-video me-1"></i>Online - Google Meet
+                                    </span>
+                                    <span class="priority-badge priority-media">Média Prioridade</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="entrevista-status">
+                                <span class="status-badge status-agendada">Agendada</span>
+                                <div class="mt-2">
+                                    <small class="text-muted">Agendada em: 28/09/2025</small>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="entrevista-actions text-end">
+                                <button class="btn btn-success btn-sm me-2">
+                                    <i class="bi bi-play-circle me-1"></i>Iniciar
+                                </button>
+                                <div class="btn-group">
+                                    <button class="btn btn-outline-secondary btn-sm dropdown-toggle" data-bs-toggle="dropdown">
+                                        <i class="bi bi-three-dots-vertical"></i>
+                                    </button>
+                                    <ul class="dropdown-menu">
+                                        <li><a class="dropdown-item" href="#"><i class="bi bi-eye me-2"></i>Visualizar</a></li>
+                                        <li><a class="dropdown-item" href="#"><i class="bi bi-pencil me-2"></i>Editar</a></li>
+                                        <li><a class="dropdown-item" href="#"><i class="bi bi-calendar-x me-2"></i>Reagendar</a></li>
+                                        <li><hr class="dropdown-divider"></li>
+                                        <li><a class="dropdown-item text-danger" href="#"><i class="bi bi-trash me-2"></i>Cancelar</a></li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Entrevistas de Amanhã -->
+            <div class="section-header mb-3 mt-4">
+                <h4><i class="bi bi-calendar-plus me-2"></i>Amanhã - 02 de Outubro de 2025</h4>
+            </div>
+
+            <div class="entrevista-card card mb-3">
+                <div class="card-body">
+                    <div class="row align-items-center">
+                        <div class="col-md-6">
+                            <div class="entrevista-info">
+                                <h5 class="entrevista-aluno">Maria Santos</h5>
+                                <p class="entrevista-tipo">Acompanhamento - Auxílio Material Didático</p>
+                                <div class="entrevista-details">
+                                    <span class="me-3">
+                                        <i class="bi bi-clock me-1"></i>10:30 - 11:30
+                                    </span>
+                                    <span class="me-3">
+                                        <i class="bi bi-camera-video me-1"></i>Online - Microsoft Teams
+                                    </span>
+                                    <span class="priority-badge priority-baixa">Baixa Prioridade</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="entrevista-status">
+                                <span class="status-badge status-agendada">Agendada</span>
+                                <div class="mt-2">
+                                    <small class="text-muted">Agendada em: 30/09/2025</small>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="entrevista-actions text-end">
+                                <button class="btn btn-outline-secondary btn-sm me-2">
+                                    <i class="bi bi-calendar-x me-1"></i>Reagendar
+                                </button>
+                                <div class="btn-group">
+                                    <button class="btn btn-outline-secondary btn-sm dropdown-toggle" data-bs-toggle="dropdown">
+                                        <i class="bi bi-three-dots-vertical"></i>
+                                    </button>
+                                    <ul class="dropdown-menu">
+                                        <li><a class="dropdown-item" href="#"><i class="bi bi-eye me-2"></i>Visualizar</a></li>
+                                        <li><a class="dropdown-item" href="#"><i class="bi bi-pencil me-2"></i>Editar</a></li>
+                                        <li><a class="dropdown-item" href="#"><i class="bi bi-bell me-2"></i>Notificar Aluno</a></li>
+                                        <li><hr class="dropdown-divider"></li>
+                                        <li><a class="dropdown-item text-danger" href="#"><i class="bi bi-trash me-2"></i>Cancelar</a></li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Próximas Entrevistas -->
+            <div class="section-header mb-3 mt-4">
+                <h4><i class="bi bi-calendar-week me-2"></i>Próximas Entrevistas</h4>
+            </div>
+
+            <div class="entrevista-card card mb-3">
+                <div class="card-body">
+                    <div class="row align-items-center">
+                        <div class="col-md-6">
+                            <div class="entrevista-info">
+                                <h5 class="entrevista-aluno">Pedro Oliveira</h5>
+                                <p class="entrevista-tipo">Entrevista Inicial - Auxílio Moradia</p>
+                                <div class="entrevista-details">
+                                    <span class="me-3">
+                                        <i class="bi bi-calendar3 me-1"></i>05/10/2025
+                                    </span>
+                                    <span class="me-3">
+                                        <i class="bi bi-clock me-1"></i>09:00 - 10:30
+                                    </span>
+                                    <span class="me-3">
+                                        <i class="bi bi-geo-alt me-1"></i>Presencial - Sala 103, Bloco B
+                                    </span>
+                                    <span class="priority-badge priority-urgente">Urgente</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="entrevista-status">
+                                <span class="status-badge status-agendada">Agendada</span>
+                                <div class="mt-2">
+                                    <small class="text-muted">Agendada em: 01/10/2025</small>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="entrevista-actions text-end">
+                                <button class="btn btn-outline-secondary btn-sm me-2">
+                                    <i class="bi bi-bell me-1"></i>Notificar
+                                </button>
+                                <div class="btn-group">
+                                    <button class="btn btn-outline-secondary btn-sm dropdown-toggle" data-bs-toggle="dropdown">
+                                        <i class="bi bi-three-dots-vertical"></i>
+                                    </button>
+                                    <ul class="dropdown-menu">
+                                        <li><a class="dropdown-item" href="#"><i class="bi bi-eye me-2"></i>Visualizar</a></li>
+                                        <li><a class="dropdown-item" href="#"><i class="bi bi-pencil me-2"></i>Editar</a></li>
+                                        <li><a class="dropdown-item" href="#"><i class="bi bi-calendar-x me-2"></i>Reagendar</a></li>
+                                        <li><hr class="dropdown-divider"></li>
+                                        <li><a class="dropdown-item text-danger" href="#"><i class="bi bi-trash me-2"></i>Cancelar</a></li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="entrevista-card card mb-3">
+                <div class="card-body">
+                    <div class="row align-items-center">
+                        <div class="col-md-6">
+                            <div class="entrevista-info">
+                                <h5 class="entrevista-aluno">Carla Mendes</h5>
+                                <p class="entrevista-tipo">Renovação de Auxílio - Auxílio Transporte</p>
+                                <div class="entrevista-details">
+                                    <span class="me-3">
+                                        <i class="bi bi-calendar3 me-1"></i>07/10/2025
+                                    </span>
+                                    <span class="me-3">
+                                        <i class="bi bi-clock me-1"></i>14:30 - 15:30
+                                    </span>
+                                    <span class="me-3">
+                                        <i class="bi bi-camera-video me-1"></i>Online - Zoom
+                                    </span>
+                                    <span class="priority-badge priority-media">Média Prioridade</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="entrevista-status">
+                                <span class="status-badge status-confirmada">Confirmada</span>
+                                <div class="mt-2">
+                                    <small class="text-muted">Confirmada pelo aluno</small>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="entrevista-actions text-end">
+                                <button class="btn btn-outline-info btn-sm me-2">
+                                    <i class="bi bi-envelope me-1"></i>Enviar Link
+                                </button>
+                                <div class="btn-group">
+                                    <button class="btn btn-outline-secondary btn-sm dropdown-toggle" data-bs-toggle="dropdown">
+                                        <i class="bi bi-three-dots-vertical"></i>
+                                    </button>
+                                    <ul class="dropdown-menu">
+                                        <li><a class="dropdown-item" href="#"><i class="bi bi-eye me-2"></i>Visualizar</a></li>
+                                        <li><a class="dropdown-item" href="#"><i class="bi bi-pencil me-2"></i>Editar</a></li>
+                                        <li><a class="dropdown-item" href="#"><i class="bi bi-calendar-x me-2"></i>Reagendar</a></li>
+                                        <li><hr class="dropdown-divider"></li>
+                                        <li><a class="dropdown-item text-danger" href="#"><i class="bi bi-trash me-2"></i>Cancelar</a></li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Paginação -->
+        <nav aria-label="Navegação de páginas">
+            <ul class="pagination justify-content-center">
+                <li class="page-item disabled">
+                    <a class="page-link" href="#" tabindex="-1" aria-disabled="true">Anterior</a>
+                </li>
+                <li class="page-item active">
+                    <a class="page-link" href="#">1</a>
+                </li>
+                <li class="page-item">
+                    <a class="page-link" href="#">2</a>
+                </li>
+                <li class="page-item">
+                    <a class="page-link" href="#">3</a>
+                </li>
+                <li class="page-item">
+                    <a class="page-link" href="#">Próximo</a>
+                </li>
+            </ul>
+        </nav>
     </div>
 
-    <!-- Scripts -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="/static/js/sidebar.js"></script>
+    <script src="/static/js/entrevistas.js"></script>
+
+    <footer class="footer bg-success text-white py-4">
+        <div class="container">
+            <div class="row">
+                <div class="col-12 text-center">
+                    <p class="text-white mb-0">
+                        &copy; 2025 Sistema de Controle de Assistência Estudantil. Todos os direitos reservados.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </footer>
 </body>
 </html>
