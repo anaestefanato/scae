@@ -33,8 +33,8 @@ ORDER BY ad.tipo_admin
 OBTER_POR_ID = """
 SELECT 
     ad.id_usuario, 
+    u.nome,
     u.matricula,
-    u.nome, 
     u.email, 
     u.senha, 
     u.perfil,
