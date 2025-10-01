@@ -14,11 +14,16 @@ VALUES (?, ?)
 
 OBTER_TODOS = """
 SELECT
-ad.id_usuario, 
+    ad.id_usuario, 
+    u.matricula,
     u.nome, 
     u.email, 
     u.senha, 
-    u.perfil, 
+    u.perfil,
+    u.foto,
+    u.token_redefinicao,
+    u.data_token,
+    u.data_cadastro,
     ad.tipo_admin 
 FROM administrador ad
 INNER JOIN usuario u ON ad.id_usuario = u.id_usuario
@@ -28,10 +33,15 @@ ORDER BY ad.tipo_admin
 OBTER_POR_ID = """
 SELECT 
     ad.id_usuario, 
+    u.matricula,
     u.nome, 
     u.email, 
     u.senha, 
-    u.perfil, 
+    u.perfil,
+    u.foto,
+    u.token_redefinicao,
+    u.data_token,
+    u.data_cadastro,
     ad.tipo_admin 
 FROM administrador ad
 INNER JOIN usuario u ON ad.id_usuario = u.id_usuario
