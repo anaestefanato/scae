@@ -65,17 +65,33 @@ async def post_criar_admin(
     matricula: str = Form(...),
     email: str = Form(...),
     senha: str = Form(...),
+    tipo_admin: str = Form(...),
     usuario_logado: dict = None
 ):
+    print(f"=== POST CRIAR ADMIN INICIADO ===")
+    print(f"Nome: {nome}")
+    print(f"Matricula: {matricula}")
+    print(f"Email: {email}")
+    print(f"Tipo Admin: {tipo_admin}")
+    print(f"Usuario logado: {usuario_logado}")
+    
     try:
         # Obter dados do admin logado para retornar em caso de erro
         admin_logado = usuario_repo.obter_usuario_por_matricula(usuario_logado['matricula'])
         
         # Validação de entrada
-        if not nome or not matricula or not email or not senha:
+        if not nome or not matricula or not email or not senha or not tipo_admin:
             return templates.TemplateResponse(
                 "admin/novo_admin.html",
                 {"request": request, "admin": admin_logado, "erro": "Todos os campos são obrigatórios"}
+            )
+        
+        # Validar tipo_admin
+        tipos_validos = ["geral", "sistema", "assistencia"]
+        if tipo_admin not in tipos_validos:
+            return templates.TemplateResponse(
+                "admin/novo_admin.html",
+                {"request": request, "admin": admin_logado, "erro": "Tipo de administrador inválido"}
             )
         
         # Validar tamanho da senha para bcrypt (máximo 72 bytes)
@@ -123,7 +139,7 @@ async def post_criar_admin(
             token_redefinicao=None,
             data_token=None,
             data_cadastro=None,
-            tipo_admin="geral"
+            tipo_admin=tipo_admin
         )
 
         # Inserir no banco

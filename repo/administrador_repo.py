@@ -25,7 +25,11 @@ def inserir(administrador: Administrador) -> Optional[int]:
             matricula=administrador.matricula,
             email=administrador.email, 
             senha=administrador.senha,
-            perfil="admin"
+            perfil="admin",
+            foto=administrador.foto,
+            token_redefinicao=administrador.token_redefinicao,
+            data_token=administrador.data_token,
+            data_cadastro=administrador.data_cadastro
         )
         id_usuario = usuario_repo.inserir(usuario)
         
@@ -49,8 +53,15 @@ def obter_todos() -> list[Administrador]:
                 nome=row["nome"],
                 email=row["email"],
                 senha=row["senha"],
-                perfil=row["perfil"])
-            for row in rows]
+                perfil=row["perfil"],
+                foto=row["foto"],
+                token_redefinicao=row["token_redefinicao"],
+                data_token=row["data_token"],
+                data_cadastro=row["data_cadastro"],
+                tipo_admin=row["tipo_admin"]
+            )
+            for row in rows
+        ]
         return administradores
 
 def obter_por_id(id_usuario: int) -> Optional[Administrador]:
@@ -66,7 +77,12 @@ def obter_por_id(id_usuario: int) -> Optional[Administrador]:
             matricula=row["matricula"],
             email=row["email"],
             senha=row["senha"],
-            perfil=row["perfil"]
+            perfil=row["perfil"],
+            foto=row["foto"],
+            token_redefinicao=row["token_redefinicao"],
+            data_token=row["data_token"],
+            data_cadastro=row["data_cadastro"],
+            tipo_admin=row["tipo_admin"]
         )
     
 def atualizar(administrador: Administrador) -> bool:
@@ -78,10 +94,15 @@ def atualizar(administrador: Administrador) -> bool:
             matricula=administrador.matricula,
             email=administrador.email, 
             senha=administrador.senha, 
-            perfil=administrador.perfil)
+            perfil=administrador.perfil,
+            foto=administrador.foto,
+            token_redefinicao=administrador.token_redefinicao,
+            data_token=administrador.data_token,
+            data_cadastro=administrador.data_cadastro
+            )
         usuario_repo.atualizar(usuario)
         cursor.execute(ATUALIZAR, (
-            administrador.matricula, 
+            administrador.tipo_admin, 
             administrador.id_usuario))
         return (cursor.rowcount > 0)
     
