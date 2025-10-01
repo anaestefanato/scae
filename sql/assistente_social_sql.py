@@ -12,7 +12,7 @@ INSERT INTO assistente_social (id_usuario, siap) VALUES (?, ?)
 
 OBTER_TODOS = """
 SELECT 
-a.id_usuario, u.nome, u.email, u.senha, u.perfil, a.siap
+a.id_usuario, u.nome, u.matricula, u.email, u.senha, u.perfil, u.foto, u.token_redefinicao, u.data_token, u.data_cadastro, a.siap
 FROM assistente_social a
 INNER JOIN usuario u ON a.id_usuario = u.id_usuario
 ORDER BY a.siap
@@ -20,7 +20,7 @@ ORDER BY a.siap
 
 OBTER_POR_ID = """
 SELECT 
-a.id_usuario, u.nome, u.email, u.senha, u.perfil, a.siap
+a.id_usuario, u.nome, u.matricula, u.email, u.senha, u.perfil, u.foto, u.token_redefinicao, u.data_token, u.data_cadastro, a.siap
 FROM assistente_social a
 INNER JOIN usuario u ON a.id_usuario = u.id_usuario
 WHERE a.id_usuario = ?
