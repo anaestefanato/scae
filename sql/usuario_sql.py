@@ -63,7 +63,7 @@ LIMIT ? OFFSET ?;
 
 ATUALIZAR = """
 UPDATE usuario
-SET nome = ?, email = ?
+SET nome = ?, matricula = ?, email = ?
 WHERE id_usuario = ?
 """
 
