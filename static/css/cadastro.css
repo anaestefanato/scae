@@ -92,6 +92,7 @@ body {
     
     .subtitle {
         font-size: 1rem;
+        margin-top: 1.2rem !important;
         margin-bottom: 1.5rem;
         height: 1.2rem;
     }
@@ -127,6 +128,7 @@ body {
     
     .subtitle {
         font-size: 0.95rem;
+        margin-top: 1rem !important;
         margin-bottom: 1.2rem;
     }
     
