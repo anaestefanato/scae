@@ -36,6 +36,8 @@ body, .main-content, .container, .card, .table, h2, h3, h4, h5, h6, .btn, .form-
 
 /* Garantir que nenhum elemento sobreponha o menu */
 .main-content {
+    padding: 30px;
+    padding-left: 80px;
     position: relative;
     z-index: 1;
 }
