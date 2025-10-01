@@ -525,3 +525,111 @@
     max-width: 400px;
     margin: 0 auto;
 }
+
+/* ===== SEÇÕES ORGANIZADAS ===== */
+.entrevistas-sections {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+}
+
+.section-container {
+    background: #f8f9fa;
+    border-radius: 12px;
+    padding: 1.5rem;
+    border: 1px solid #e9ecef;
+    transition: all 0.3s ease;
+}
+
+.section-container:hover {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+.section-header h4 {
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    border: none;
+    padding: 0;
+}
+
+.section-header .badge {
+    font-size: 0.75rem;
+    padding: 0.5rem 0.75rem;
+    border-radius: 50px;
+}
+
+/* Status badges específicos para seções */
+.status-badge.status-realizada {
+    background-color: #0d6efd;
+    color: white;
+    border: 1px solid #0d6efd;
+}
+
+.status-badge.status-perdida {
+    background-color: #dc3545;
+    color: white;
+    border: 1px solid #dc3545;
+}
+
+/* Bordas coloridas para cada seção */
+.section-container .entrevista-card.border-start.border-success {
+    border-left-color: #28a745 !important;
+}
+
+.section-container .entrevista-card.border-start.border-primary {
+    border-left-color: #007bff !important;
+}
+
+.section-container .entrevista-card.border-start.border-danger {
+    border-left-color: #dc3545 !important;
+}
+
+.section-container .entrevista-card.border-start.border-secondary {
+    border-left-color: #6c757d !important;
+}
+
+/* Botões específicos para cada seção */
+.entrevista-actions .btn-outline-primary {
+    border-color: #007bff;
+    color: #007bff;
+}
+
+.entrevista-actions .btn-outline-primary:hover {
+    background-color: #007bff;
+    border-color: #007bff;
+    color: white;
+}
+
+.entrevista-actions .btn-outline-warning {
+    border-color: #ffc107;
+    color: #ffc107;
+}
+
+.entrevista-actions .btn-outline-warning:hover {
+    background-color: #ffc107;
+    border-color: #ffc107;
+    color: #212529;
+}
+
+/* Animações para as seções */
+.section-container {
+    animation: slideInFromLeft 0.6s ease-out;
+}
+
+.section-container:nth-child(1) { animation-delay: 0.1s; }
+.section-container:nth-child(2) { animation-delay: 0.2s; }
+.section-container:nth-child(3) { animation-delay: 0.3s; }
+.section-container:nth-child(4) { animation-delay: 0.4s; }
+
+@keyframes slideInFromLeft {
+    0% {
+        opacity: 0;
+        transform: translateX(-20px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
