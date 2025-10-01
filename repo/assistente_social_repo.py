@@ -25,7 +25,11 @@ def inserir(assistenteSocial: AssistenteSocial) -> Optional[int]:
             matricula=assistenteSocial.matricula,
             email=assistenteSocial.email,
             senha=assistenteSocial.senha,
-            perfil=assistenteSocial.perfil
+            perfil=assistenteSocial.perfil,
+            foto=assistenteSocial.foto,
+            token_redefinicao=assistenteSocial.token_redefinicao,
+            data_token=assistenteSocial.data_token,
+            data_cadastro=assistenteSocial.data_cadastro
         )
         id_usuario = usuario_repo.inserir(usuario)
         if not id_usuario:
@@ -50,6 +54,10 @@ def obter_todos() -> list[AssistenteSocial]:
                 email=row["email"],
                 senha=row["senha"],
                 perfil=row["perfil"],
+                foto=row["foto"],
+                token_redefinicao=row["token_redefinicao"],
+                data_token=row["data_token"],
+                data_cadastro=row["data_cadastro"],
                 siap=row["siap"])
             for row in rows]
         return assistentes
@@ -68,6 +76,11 @@ def obter_por_id( id: int) -> Optional[AssistenteSocial]:
             email=row["email"],
             senha=row["senha"],
             perfil=row["perfil"],
+            possivel_aluno=row["possivel_aluno"],
+            foto=row["foto"],
+            token_redefinicao=row["token_redefinicao"],
+            data_token=row["data_token"],
+            data_cadastro=row["data_cadastro"],
             siap=row["siap"])
         return assistentes
     

@@ -103,20 +103,6 @@ function setupFieldValidation() {
             }
         });
     }
-    
-    // Validação de matrícula SIAPE
-    const matriculaField = document.getElementById('matricula');
-    if (matriculaField) {
-        matriculaField.addEventListener('input', function() {
-            // Permitir apenas números
-            this.value = this.value.replace(/\D/g, '');
-            
-            if (this.value.length >= 7) {
-                this.classList.add('is-valid');
-                this.classList.remove('is-invalid');
-            }
-        });
-    }
 }
 
 // ===== VALIDAÇÃO DE CPF =====
@@ -198,8 +184,6 @@ function collectFormData() {
     for (let [key, value] of formDataObj.entries()) {
         formData[key] = value;
     }
-    
-    console.log('Dados coletados:', formData);
 }
 
 // ===== VISUALIZAR DADOS =====
@@ -394,13 +378,37 @@ function confirmCadastro() {
     const modal = bootstrap.Modal.getInstance(document.getElementById('confirmModal'));
     modal.hide();
     
-    // Simular processo de cadastro
+    // Enviar dados para o servidor
+    submitAssistantForm();
+}
+
+// ===== ENVIAR FORMULÁRIO =====
+async function submitAssistantForm() {
     showLoadingState();
     
-    setTimeout(() => {
+    try {
+        const form = document.getElementById('assistantForm');
+        const formData = new FormData(form);
+        
+        const response = await fetch('/admin/usuarios/assistente/novo', {
+            method: 'POST',
+            body: formData
+        });
+        
+        if (response.ok) {
+            hideLoadingState();
+            showSuccessMessage();
+        } else {
+            hideLoadingState();
+            const errorText = await response.text();
+            showNotification('Erro ao cadastrar assistente. Tente novamente.', 'danger');
+        }
+        
+    } catch (error) {
         hideLoadingState();
-        showSuccessMessage();
-    }, 2000);
+        console.error('Erro ao enviar formulário:', error);
+        showNotification('Erro de conexão. Tente novamente.', 'danger');
+    }
 }
 
 // ===== ESTADOS DE CARREGAMENTO =====
@@ -481,9 +489,3 @@ document.addEventListener('keydown', function(event) {
         }
     }
 });
-
-// ===== LOG DE INICIALIZAÇÃO =====
-console.log('=== SISTEMA DE CADASTRO DE ASSISTENTES ===');
-console.log('Versão: 1.0.0');
-console.log('Data: ' + new Date().toLocaleString('pt-BR'));
-console.log('Formulário inicializado com sucesso');
