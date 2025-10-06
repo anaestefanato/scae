@@ -189,7 +189,7 @@ async def post_criar_assistente(
     matricula: str = Form(...),
     email: str = Form(...),
     senha: str = Form(...),
-    siap: str = Form(...),
+    siape: str = Form(...),
     usuario_logado: dict = None
 ):
     try:
@@ -224,7 +224,7 @@ async def post_criar_assistente(
             token_redefinicao=None,
             data_token=None,
             data_cadastro=None,
-            siap=siap
+            siape=siape
         )
 
         # Inserir no banco

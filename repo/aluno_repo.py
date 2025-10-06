@@ -28,7 +28,7 @@ def completar_cadastro(aluno: Aluno) -> Optional[bool]:
         cursor = conn.cursor()
         
         # Verificar se já existe um registro para este usuário
-        cursor.execute("SELECT possivel_aluno FROM aluno WHERE id_usuario = ?", (aluno.id_usuario,))
+        cursor.execute("SELECT aprovado FROM aluno WHERE id_usuario = ?", (aluno.id_usuario,))
         registro_existente = cursor.fetchone()
         
         if registro_existente:
@@ -48,14 +48,14 @@ def completar_cadastro(aluno: Aluno) -> Optional[bool]:
                 aluno.id_usuario
             ))
         else:
-            # Se não existe, inserir como aprovado (possivel_aluno = 0)
+            # Se não existe, inserir como aprovado (aprovado = 1)
             cursor.execute("""
                 INSERT INTO aluno (id_usuario, cpf, telefone, curso, data_nascimento, filiacao, 
                                  cep, cidade, bairro, rua, numero, estado, complemento, 
                                  nome_banco, agencia_bancaria, numero_conta_bancaria, 
                                  renda_familiar, quantidade_pessoas, renda_per_capita, 
-                                 situacao_moradia, possivel_aluno) 
-                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 0)
+                                 situacao_moradia, aprovado) 
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 1)
             """, (
                 aluno.id_usuario, aluno.cpf, aluno.telefone, aluno.curso, aluno.data_nascimento, aluno.filiacao,
                 aluno.cep, aluno.cidade, aluno.bairro, aluno.rua, aluno.numero, aluno.estado,
@@ -330,22 +330,32 @@ def obter_possiveis_alunos() -> list[Usuario]:
                 data_cadastro=row["data_cadastro"])
             for row in rows]
         return usuarios
+    
+def existe_aluno_aprovado_por_matricula(matricula: str) -> bool:
+    """Obtém um aluno aprovado (não pendente) por matrícula"""
+    with get_connection() as conn:
+        cursor = conn.cursor()
+        cursor.execute(EXISTE_ALUNO_APROVADO_POR_MATRICULA, (matricula,))
+        row = cursor.fetchone()
+        if row:
+            return True
+        return False                
 
 def aprovar_aluno(id_usuario: int) -> bool:
-    """Aprova um aluno (define possivel_aluno como False)"""
+    """Aprova um aluno (define aprovado como True)"""
     with get_connection() as conn:
         cursor = conn.cursor()
         # Se o aluno ainda não tem registro na tabela aluno, cria um básico
         cursor.execute("SELECT id_usuario FROM aluno WHERE id_usuario = ?", (id_usuario,))
         if not cursor.fetchone():
-            # Cria registro básico na tabela aluno com possivel_aluno = False
+            # Cria registro básico na tabela aluno com aprovado = True
             cursor.execute("""
                 INSERT INTO aluno (id_usuario, cpf, telefone, curso, data_nascimento, filiacao, 
                                  cep, cidade, bairro, rua, numero, estado, complemento, 
                                  nome_banco, agencia_bancaria, numero_conta_bancaria, 
                                  renda_familiar, quantidade_pessoas, renda_per_capita, 
-                                 situacao_moradia, possivel_aluno) 
-                VALUES (?, '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', 0, 0, 0, '', 0)
+                                 situacao_moradia, aprovado) 
+                VALUES (?, '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', 0, 0, 0, '', 1)
             """, (id_usuario,))
         else:
             # Atualiza registro existente
@@ -361,26 +371,4 @@ def rejeitar_aluno(id_usuario: int) -> bool:
         # Depois exclui da tabela usuario
         cursor.execute("DELETE FROM usuario WHERE id_usuario = ? AND perfil = 'aluno'", (id_usuario,))
         return cursor.rowcount > 0
-
-def adicionar_coluna_possivel_aluno():
-    """Adiciona a coluna possivel_aluno se não existir"""
-    try:
-        with get_connection() as conn:
-            cursor = conn.cursor()
-            
-            # Verificar se a coluna já existe
-            cursor.execute("PRAGMA table_info(aluno)")
-            colunas = cursor.fetchall()
-            colunas_existentes = [coluna[1] for coluna in colunas]
-            
-            if 'possivel_aluno' not in colunas_existentes:
-                cursor.execute(ADICIONAR_COLUNA_POSSIVEL_ALUNO)
-                print("Info: Coluna possivel_aluno adicionada com sucesso")
-                return True
-            else:
-                # Coluna já existe, não precisa fazer nada
-                return True
-                
-    except Exception as e:
-        print(f"Erro ao verificar/adicionar coluna possivel_aluno: {e}")
-        return False
+    

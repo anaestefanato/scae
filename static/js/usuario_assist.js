@@ -9,35 +9,35 @@ let assistants = [
         nome: "Dra. Maria Silva Costa",
         matricula: "AS001",
         email: "maria.costa@ifes.edu.br",
-        siap: "12345678"
+        siape: "12345678"
     },
     {
         id: 2,
         nome: "Dr. João Pedro Santos",
         matricula: "AS002",
         email: "joao.santos@ifes.edu.br",
-        siap: "87654321"
+        siape: "87654321"
     },
     {
         id: 3,
         nome: "Dra. Ana Beatriz Lima",
         matricula: "AS003",
         email: "ana.lima@ifes.edu.br",
-        siap: "45678912"
+        siape: "45678912"
     },
     {
         id: 4,
         nome: "Dra. Carla Fernandes",
         matricula: "AS004",
         email: "carla.fernandes@ifes.edu.br",
-        siap: "78912345"
+        siape: "78912345"
     },
     {
         id: 5,
         nome: "Dr. Rafael Oliveira",
         matricula: "AS005",
         email: "rafael.oliveira@ifes.edu.br",
-        siap: "32165498"
+        siape: "32165498"
     }
 ];
 
@@ -72,7 +72,7 @@ function createAssistantRow(assistant) {
         <td><strong>${assistant.nome}</strong></td>
         <td>${assistant.matricula}</td>
         <td>${assistant.email}</td>
-        <td>${assistant.siap}</td>
+        <td>${assistant.siape}</td>
         <td>
             <div class="action-buttons">
                 <button class="btn btn-sm btn-outline-info" onclick="viewAssistant(${assistant.id})" title="Visualizar">
@@ -96,13 +96,13 @@ function updateStatistics() {
     const totalAssistentes = assistants.length;
     const totalEmails = assistants.filter(a => a.email).length;
     const totalMatriculas = assistants.filter(a => a.matricula).length;
-    const totalSiap = assistants.filter(a => a.siap).length;
+    const totalSiape = assistants.filter(a => a.siape).length;
     
     // Atualizar cards de estatísticas
     document.querySelector('.assistentes-ativos .number').textContent = totalAssistentes;
     document.querySelector('.casos-atendidos .number').textContent = totalEmails;
     document.querySelector('.inscricoes-analisadas .number').textContent = totalMatriculas;
-    document.querySelector('.media-produtividade .number').textContent = totalSiap;
+    document.querySelector('.media-produtividade .number').textContent = totalSiape;
 }
 
 // ===== FUNÇÃO PARA ATUALIZAR CONTADOR =====
@@ -126,7 +126,7 @@ function searchAssistant() {
         assistant.nome.toLowerCase().includes(searchTerm) ||
         assistant.matricula.toLowerCase().includes(searchTerm) ||
         assistant.email.toLowerCase().includes(searchTerm) ||
-        assistant.siap.toLowerCase().includes(searchTerm)
+        assistant.siape.toLowerCase().includes(searchTerm)
     );
 
     if (results.length === 0) {
@@ -169,8 +169,8 @@ function showSearchResult(assistant) {
                         <div class="info-value">${assistant.email}</div>
                     </div>
                     <div class="info-row">
-                        <div class="info-label">SIAP:</div>
-                        <div class="info-value">${assistant.siap}</div>
+                        <div class="info-label">siape:</div>
+                        <div class="info-value">${assistant.siape}</div>
                     </div>
                 </div>
             </div>
@@ -235,7 +235,7 @@ function openNewAssistantModal() {
                                 <div class="col-md-6">
                                     <div class="form-floating mb-3">
                                         <input type="text" class="form-control" id="newSiap" required>
-                                        <label for="newSiap">SIAP</label>
+                                        <label for="newSiap">siape</label>
                                     </div>
                                 </div>
                             </div>
@@ -277,7 +277,7 @@ function saveNewAssistant() {
         nome: document.getElementById('newNome').value,
         matricula: document.getElementById('newMatricula').value,
         email: document.getElementById('newEmail').value,
-        siap: document.getElementById('newSiap').value
+        siape: document.getElementById('newSiap').value
     };
     
     // Verificar se matrícula já existe
@@ -286,9 +286,9 @@ function saveNewAssistant() {
         return;
     }
     
-    // Verificar se SIAP já existe
-    if (assistants.find(a => a.siap === newAssistant.siap)) {
-        showToast('SIAP já cadastrado no sistema.', 'error');
+    // Verificar se SIAPE já existe
+    if (assistants.find(a => a.siape === newAssistant.siape)) {
+        showToast('SIAPE já cadastrado no sistema.', 'error');
         return;
     }
     
@@ -342,8 +342,8 @@ function viewAssistant(id) {
                                         <div class="info-value">${assistant.email}</div>
                                     </div>
                                     <div class="info-row">
-                                        <div class="info-label">SIAP:</div>
-                                        <div class="info-value">${assistant.siap}</div>
+                                        <div class="info-label">siape:</div>
+                                        <div class="info-value">${assistant.siape}</div>
                                     </div>
                                 </div>
                             </div>
@@ -406,8 +406,8 @@ function editAssistant(id) {
                                 </div>
                             </div>
                             <div class="form-floating mb-3">
-                                <input type="text" class="form-control" id="editSiap" value="${assistant.siap}" required>
-                                <label for="editSiap">SIAP</label>
+                                <input type="text" class="form-control" id="editSiap" value="${assistant.siape}" required>
+                                <label for="editSiap">siape</label>
                             </div>
                         </form>
                     </div>
@@ -451,7 +451,7 @@ function saveEditAssistant(id) {
         nome: document.getElementById('editNome').value,
         matricula: document.getElementById('editMatricula').value,
         email: document.getElementById('editEmail').value,
-        siap: document.getElementById('editSiap').value
+        siape: document.getElementById('editSiap').value
     };
     
     // Atualizar lista filtrada

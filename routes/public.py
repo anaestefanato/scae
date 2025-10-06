@@ -1,7 +1,9 @@
 from fastapi import APIRouter, Query, Request, Form, status
 from fastapi.responses import RedirectResponse
 from fastapi.templating import Jinja2Templates
+from pydantic import ValidationError
 
+from dtos.login_dto import LoginDTO
 from model.aluno_model import Aluno
 from model.usuario_model import Usuario
 from repo import aluno_repo, usuario_repo
@@ -32,48 +34,73 @@ async def post_login(
     senha: str = Form(...),
     redirect: str = Form(None)
 ):
-    usuario = usuario_repo.obter_usuario_por_matricula(matricula) 
+    dados_formulario = {"matricula": matricula}
+    try:
+        login_dto = LoginDTO(matricula=matricula, senha=senha)
     
-    if not usuario or not verificar_senha(senha, usuario.senha):
-        return templates.TemplateResponse(
-            "publicas/login.html",
-            {"request": request, "erro": "Matrícula ou senha inválidos"}
-        )
-    
-    # Verificar se o usuário é aluno e se está na lista de possíveis alunos (não aprovados)
-    if usuario.perfil == "aluno":
-        possiveis_alunos = aluno_repo.obter_possiveis_alunos()
-        ids_nao_aprovados = [u.id_usuario for u in possiveis_alunos]
-        if usuario.id_usuario in ids_nao_aprovados:
+        usuario = usuario_repo.obter_usuario_por_matricula(login_dto.matricula) 
+        
+        if not usuario or not verificar_senha(login_dto.senha, usuario.senha):
             return templates.TemplateResponse(
                 "publicas/login.html",
-                {"request": request, "erro": "Seu cadastro ainda está pendente de aprovação pelo administrador."}
+                {"request": request, "erro": "Matrícula ou senha inválidos"}
             )
-    
-    # Criar sessão
-    usuario_dict = {
-        "id": usuario.id_usuario,
-        "nome": usuario.nome,
-        "matricula": usuario.matricula,
-        "email": usuario.email,
-        "perfil": usuario.perfil,
-        "foto": usuario.foto,
-        "completo": aluno_repo.possui_cadastro_completo(usuario.id_usuario)
-    }
-    criar_sessao(request, usuario_dict)
-    
-    # Redirecionar
-    if redirect:
-        return RedirectResponse(redirect, status.HTTP_303_SEE_OTHER)
-    
-    if usuario.perfil == "admin":
-        return RedirectResponse("/admin/inicio", status.HTTP_303_SEE_OTHER)
-    elif usuario.perfil == "assistente":
-        return RedirectResponse("/assistente/inicio", status.HTTP_303_SEE_OTHER)
-    elif usuario.perfil == "aluno":
-        return RedirectResponse("/aluno/inicio", status.HTTP_303_SEE_OTHER)
+        
+        # Verificar se o usuário é aluno e se está na lista de possíveis alunos (não aprovados)
+        if usuario.perfil == "aluno":
+            aguardando_aprovacao = aluno_repo.existe_aluno_aprovado_por_matricula(matricula)
+            if aguardando_aprovacao:
+                return templates.TemplateResponse(
+                    "publicas/login.html",
+                    {"request": request, "erro": "Seu cadastro ainda está pendente de aprovação pelo administrador."}
+                )
+        
+        # Criar sessão
+        usuario_dict = {
+            "id": usuario.id_usuario,
+            "nome": usuario.nome,
+            "matricula": usuario.matricula,
+            "email": usuario.email,
+            "perfil": usuario.perfil,
+            "foto": usuario.foto,
+            "completo": aluno_repo.possui_cadastro_completo(usuario.id_usuario)
+        }
+        criar_sessao(request, usuario_dict)
+        
+        # Redirecionar
+        if redirect:
+            return RedirectResponse(redirect, status.HTTP_303_SEE_OTHER)
+        
+        if usuario.perfil == "admin":
+            return RedirectResponse("/admin/inicio", status.HTTP_303_SEE_OTHER)
+        elif usuario.perfil == "assistente":
+            return RedirectResponse("/assistente/inicio", status.HTTP_303_SEE_OTHER)
+        elif usuario.perfil == "aluno":
+            return RedirectResponse("/aluno/inicio", status.HTTP_303_SEE_OTHER)
 
-    return RedirectResponse("/", status.HTTP_303_SEE_OTHER)
+        return RedirectResponse("/", status.HTTP_303_SEE_OTHER)
+    except ValidationError as e:
+        # Extrair mensagens de erro do Pydantic
+        erros = []
+        for erro in e.errors():
+            campo = erro['loc'][0] if erro['loc'] else 'campo'
+            mensagem = erro['msg']
+            erros.append(f"{campo.capitalize()}: {mensagem}")
+
+        erro_msg = " | ".join(erros)
+        
+        # Retornar template com dados preservados e erro
+        return templates.TemplateResponse("/publicas/login.html", {
+            "request": request,
+            "erro": erro_msg,
+            "dados": dados_formulario  # Preservar dados digitados
+        })
+
+    except Exception as e:
+        return templates.TemplateResponse(
+            "publicas/login.html",
+            {"request": request, "erro": str(e), **dados_formulario}
+        )
 
 @router.get("/logout")
 async def logout(request: Request):

@@ -6,4 +6,4 @@ from model.usuario_model import Usuario
 @dataclass
 class AssistenteSocial(Usuario):
     id_usuario: int
-    siap: str
+    siape: str

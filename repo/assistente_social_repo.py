@@ -36,7 +36,7 @@ def inserir(assistenteSocial: AssistenteSocial) -> Optional[int]:
             return None
         cursor.execute(INSERIR, (
             id_usuario,  # usa o id retornado da inserção do usuário
-            assistenteSocial.siap
+            assistenteSocial.siape
         ))
         conn.commit()
         return id_usuario
@@ -58,7 +58,7 @@ def obter_todos() -> list[AssistenteSocial]:
                 token_redefinicao=row["token_redefinicao"],
                 data_token=row["data_token"],
                 data_cadastro=row["data_cadastro"],
-                siap=row["siap"])
+                siape=row["siape"])
             for row in rows]
         return assistentes
 
@@ -76,12 +76,11 @@ def obter_por_id( id: int) -> Optional[AssistenteSocial]:
             email=row["email"],
             senha=row["senha"],
             perfil=row["perfil"],
-            possivel_aluno=row["possivel_aluno"],
             foto=row["foto"],
             token_redefinicao=row["token_redefinicao"],
             data_token=row["data_token"],
             data_cadastro=row["data_cadastro"],
-            siap=row["siap"])
+            siape=row["siape"])
         return assistentes
     
 def atualizar(assistenteSocial: AssistenteSocial) -> bool:
@@ -96,7 +95,7 @@ def atualizar(assistenteSocial: AssistenteSocial) -> bool:
             perfil=assistenteSocial.perfil)
         usuario_repo.atualizar(usuario)
         cursor.execute(ATUALIZAR, (
-            assistenteSocial.siap,  # usa o id do usuário já existente
+            assistenteSocial.siape,  # usa o id do usuário já existente
             assistenteSocial.id_usuario))
         return (cursor.rowcount > 0)
     

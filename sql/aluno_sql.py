@@ -21,7 +21,7 @@ CREATE TABLE IF NOT EXISTS aluno (
     renda_per_capita REAL NOT NULL,
     situacao_moradia TEXT NOT NULL,
     cadastro_completo BOOLEAN DEFAULT 0,
-    possivel_aluno BOOLEAN DEFAULT 1,
+    aprovado BOOLEAN DEFAULT 0,
     FOREIGN KEY (id_usuario) REFERENCES usuario(id_usuario) ON DELETE CASCADE
 )
 """
@@ -65,7 +65,7 @@ OBTER_ALUNOS_APROVADOS = """
     INNER JOIN aluno a ON u.id_usuario = a.id_usuario  
     LEFT JOIN inscricao i ON a.id_usuario = i.id_aluno AND i.status = 'aprovado'
     LEFT JOIN edital e ON i.id_edital = e.id_edital
-    WHERE a.possivel_aluno = 0
+    WHERE a.aprovado = 1
     GROUP BY u.id_usuario, u.nome, u.matricula, u.email, a.curso
     ORDER BY u.nome
 """ 
@@ -202,21 +202,23 @@ SELECT
     u.id_usuario, u.nome, u.matricula, u.email, u.data_cadastro
 FROM usuario u
 LEFT JOIN aluno al ON u.id_usuario = al.id_usuario
-WHERE u.perfil = 'aluno' AND (al.possivel_aluno = 1 OR al.id_usuario IS NULL)
+WHERE u.perfil = 'aluno' AND (al.aprovado=0 OR al.id_usuario IS NULL)
 ORDER BY u.data_cadastro DESC
 """
 
 APROVAR_ALUNO = """
 UPDATE aluno
-SET possivel_aluno = 0
+SET aprovado = 1
 WHERE id_usuario = ?
 """
 
 REJEITAR_ALUNO = """
 DELETE FROM aluno
-WHERE id_usuario = ? AND possivel_aluno = 1
+WHERE id_usuario = ? AND aprovado=0
 """
 
-ADICIONAR_COLUNA_POSSIVEL_ALUNO = """
-ALTER TABLE aluno ADD COLUMN possivel_aluno BOOLEAN DEFAULT 1
+EXISTE_ALUNO_APROVADO_POR_MATRICULA = """
+SELECT 1
+FROM aluno al
+WHERE al.matricula = ? AND al.aprovado = 1
 """
