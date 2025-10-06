@@ -333,12 +333,11 @@
         </div>
     </section>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             // Filter functionality
             const filterTabs = document.querySelectorAll('#ticketTabs .nav-link');
-            const tickets = document.querySelectorAll('.ticket-card');
+            const tickets = document.querySelectorAll('[data-status]');
             
             filterTabs.forEach(tab => {
                 tab.addEventListener('click', function() {
@@ -364,34 +363,9 @@
             });
         });
 
-        // Função submitTicket() não é mais necessária - o formulário agora usa POST diretamente
-        /*
-        function submitTicket() {
-            const form = document.getElementById('newTicketForm');
-            const category = document.getElementById('ticketCategory').value;
-            const title = document.getElementById('ticketTitle').value;
-            const description = document.getElementById('ticketDescription').value;
-
-            if (!category || !title || !description) {
-                alert('Por favor, preencha todos os campos obrigatórios.');
-                return;
-            }
-
-            // Aqui você pode adicionar a lógica para enviar o chamado para o backend
-            // Por enquanto, apenas mostraremos uma mensagem de sucesso
-            alert('Chamado enviado com sucesso! Em breve nossa equipe entrará em contato.');
-            
-            // Fecha o modal
-            const modal = bootstrap.Modal.getInstance(document.getElementById('newTicketModal'));
-            modal.hide();
-            
-            // Limpa o formulário
-            form.reset();
-        }
-        */
-
         function showGuide(type) {
-            const modal = new bootstrap.Modal(document.getElementById('guideModal'));
+            const modalElement = document.getElementById('guideModal');
+            const modal = new bootstrap.Modal(modalElement);
             const modalTitle = document.getElementById('guideModalTitle');
             const modalContent = document.getElementById('guideModalContent');
 
@@ -506,21 +480,7 @@
         }
 
         function refreshTickets() {
-            // Aqui você pode adicionar a lógica para atualizar a lista de chamados
-            // Por enquanto, apenas mostraremos uma mensagem
-            alert('Lista de chamados atualizada!');
+            location.reload();
         }
     </script>
-
-    <!-- Script para fechar modal automaticamente se houver sucesso -->
-    {% if sucesso %}
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const modal = document.getElementById('newTicketModal');
-            if (modal && bootstrap.Modal.getInstance(modal)) {
-                bootstrap.Modal.getInstance(modal).hide();
-            }
-        });
-    </script>
-    {% endif %}
 {% endblock %}

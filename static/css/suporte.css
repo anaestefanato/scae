@@ -3,6 +3,17 @@
 /* Importa os estilos base de acompanhar inscrições */
 @import url('/static/css/acompanhar_inscricoes.css');
 
+/* ===== AJUSTE DO BACKDROP DO MODAL ===== */
+.modal-backdrop {
+    opacity: 0.3 !important; /* Reduz a opacidade para evitar aparência de duplo backdrop */
+    z-index: 1040 !important; /* Garante que fique abaixo do modal (1056) */
+}
+
+/* Garante que o modal e seu conteúdo sejam clicáveis */
+.modal {
+    pointer-events: auto !important;
+}
+
 /* ===== STATUS BADGES ESPECÍFICOS PARA SUPORTE ===== */
 .status-badge {
     padding: 0.25rem 0.75rem;

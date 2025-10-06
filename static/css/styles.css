@@ -28,7 +28,7 @@ body {
     position: fixed;
     box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
     width: 250px;
-    z-index: 1050; /* above main content */
+    z-index: 1030; /* above main content but below modals */
     transition: transform 0.25s ease;
     transform: translateX(0);
     top: 0;
@@ -44,7 +44,7 @@ body {
     position: fixed;
     inset: 0;
     background: rgba(0,0,0,0.45);
-    z-index: 1040; /* below sidebar (1050) */
+    z-index: 1020; /* below sidebar (1030) and below modals */
     opacity: 0;
     transition: opacity 0.2s ease;
     pointer-events: none;
@@ -490,7 +490,7 @@ body {
     position: fixed;
     top: 20px;
     left: 20px;
-    z-index: 1100;
+    z-index: 1040;
     background-color: var(--ifes-green);
     color: white;
     border: none;
@@ -758,7 +758,7 @@ body {
     position: fixed;
     top: 20px;
     left: 20px;
-    z-index: 1100;
+    z-index: 1040;
     background-color: var(--ifes-green);
     color: white;
     border: none;
@@ -1027,7 +1027,7 @@ body {
     position: fixed;
     top: 20px;
     left: 20px;
-    z-index: 1100;
+    z-index: 1040;
     background-color: var(--ifes-green);
     color: white;
     border: none;
@@ -1296,7 +1296,7 @@ body {
     position: fixed;
     top: 20px;
     left: 20px;
-    z-index: 1100;
+    z-index: 1040;
     background-color: var(--ifes-green);
     color: white;
     border: none;
@@ -1565,7 +1565,7 @@ body {
     position: fixed;
     top: 20px;
     left: 20px;
-    z-index: 1100;
+    z-index: 1040;
     background-color: var(--ifes-green);
     color: white;
     border: none;
@@ -1834,7 +1834,7 @@ body {
     position: fixed;
     top: 20px;
     left: 20px;
-    z-index: 1100;
+    z-index: 1040;
     background-color: var(--ifes-green);
     color: white;
     border: none;
@@ -2001,7 +2001,7 @@ body {
     position: fixed;
     top: 20px;
     left: 20px;
-    z-index: 1100;
+    z-index: 1040;
     background-color: var(--ifes-green);
     color: white;
     border: none;
@@ -2217,7 +2217,7 @@ body {
     position: fixed;
     top: 20px;
     left: 20px;
-    z-index: 1100;
+    z-index: 1040;
     background-color: var(--ifes-green);
     color: white;
     border: none;
@@ -2415,7 +2415,7 @@ body {
     position: fixed;
     top: 20px;
     left: 20px;
-    z-index: 1100;
+    z-index: 1040;
     background-color: var(--ifes-green);
     color: white;
     border: none;
@@ -2868,6 +2868,13 @@ body {
 /* =========================
    END MODAL NOVA ENTREVISTA STYLES
    ========================= */
+
+
+
+/* ===== MODAL STACKING FIX ===== */
+body.modal-open .main-content {
+    z-index: auto !important;
+}
 
 
 

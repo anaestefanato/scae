@@ -67,8 +67,12 @@ body, .main-content, .container, .card, .table, h2, h3, h4, h5, h6, .btn, .form-
 }
 
 /* ===== MODAIS ===== */
-.modal.fade.show.d-block { 
-    z-index: 2000; 
+.modal.fade.show { 
+    z-index: 1056 !important; /* Sempre acima do backdrop (1050) */
+}
+
+.modal-dialog {
+    z-index: 1057 !important; /* Garante que o conteúdo do modal esteja acima */
 }
 
 /* ===== CARDS ===== */
