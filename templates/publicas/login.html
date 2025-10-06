@@ -19,13 +19,6 @@
             </span><a href="/cadastro" class="text-danger">Cadastre-se</a>
         </div>
         
-        {% if erro %}
-        <div class="alert alert-danger alert-dismissible fade show" role="alert">
-            <i class="bi bi-exclamation-triangle-fill me-2"></i>{{ erro }}
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-        </div>
-        {% endif %}
-        
         {% if sucesso %}
         <div class="alert alert-success alert-dismissible fade show" role="alert">
             <i class="bi bi-check-circle-fill me-2"></i>{{ sucesso }}
@@ -35,17 +28,14 @@
         
         <form method="post" action="/login">
             <div class="mb-2 mt-5 text-center">
-                <input type="text" name="matricula" class="form-control login-input rounded-pill {% if erro and 'matricula' in erro.lower() %}is-invalid{% endif %}"
+                <input type="text" name="matricula" class="form-control login-input rounded-pill {% if erro %}is-invalid{% endif %}"
                     placeholder="Matrícula" required value="{{ matricula or (dados.matricula if dados else '') }}">
-                {% if erro and 'matricula' in erro.lower() %}
-                <div class="invalid-feedback">{{ erro }}</div>
-                {% endif %}
             </div>
             <div class="mb-3 mt-4 position-relative text-center">
-                <input type="password" name="senha" class="form-control login-input rounded-pill {% if erro and 'senha' in erro.lower() %}is-invalid{% endif %}" placeholder="Senha"
+                <input type="password" name="senha" class="form-control login-input rounded-pill {% if erro %}is-invalid{% endif %}" placeholder="Senha"
                     required>
-                {% if erro and 'senha' in erro.lower() %}
-                <div class="invalid-feedback">{{ erro }}</div>
+                {% if erro %}
+                <div class="invalid-feedback text-center">{{ erro }}</div>
                 {% endif %}
             </div>
             <div class="text-center mt-5">
