@@ -147,7 +147,10 @@
 				}
 
 				function closeOverlay() {
-					if (sidebar) sidebar.classList.add('collapsed');
+					if (sidebar) {
+						sidebar.classList.remove('open');
+						sidebar.classList.add('collapsed');
+					}
 					if (menuToggle) menuToggle.classList.add('visible');
 					if (sidebarBackdrop) sidebarBackdrop.classList.remove('visible');
 					document.body.classList.remove('no-scroll');
@@ -163,7 +166,10 @@
 
 				if (menuToggle) {
 					menuToggle.addEventListener('click', function () {
-						if (sidebar) sidebar.classList.remove('collapsed');
+						if (sidebar) {
+							sidebar.classList.remove('collapsed');
+							sidebar.classList.add('open');
+						}
 						if (menuToggle) menuToggle.classList.remove('visible');
 						if (sidebarBackdrop) sidebarBackdrop.classList.add('visible');
 						document.body.classList.add('no-scroll');
