@@ -48,8 +48,8 @@ async def post_login(
         
         # Verificar se o usuário é aluno e se está na lista de possíveis alunos (não aprovados)
         if usuario.perfil == "aluno":
-            aguardando_aprovacao = aluno_repo.existe_aluno_aprovado_por_matricula(matricula)
-            if aguardando_aprovacao:
+            aluno_aprovado = aluno_repo.existe_aluno_aprovado_por_matricula(matricula)
+            if not aluno_aprovado:
                 return templates.TemplateResponse(
                     "publicas/login.html",
                     {"request": request, "erro": "Seu cadastro ainda está pendente de aprovação pelo administrador."}
@@ -63,7 +63,7 @@ async def post_login(
             "email": usuario.email,
             "perfil": usuario.perfil,
             "foto": usuario.foto,
-            "completo": aluno_repo.possui_cadastro_completo(usuario.id_usuario)
+            "completo": aluno_repo.possui_cadastro_completo(usuario.id_usuario) if usuario.perfil == "aluno" else True
         }
         criar_sessao(request, usuario_dict)
         
@@ -79,6 +79,7 @@ async def post_login(
             return RedirectResponse("/aluno/inicio", status.HTTP_303_SEE_OTHER)
 
         return RedirectResponse("/", status.HTTP_303_SEE_OTHER)
+        
     except ValidationError as e:
         # Extrair mensagens de erro do Pydantic
         erros = []
@@ -95,12 +96,13 @@ async def post_login(
             "erro": erro_msg,
             "dados": dados_formulario  # Preservar dados digitados
         })
-
+    
     except Exception as e:
         return templates.TemplateResponse(
             "publicas/login.html",
             {"request": request, "erro": str(e), **dados_formulario}
         )
+       
 
 @router.get("/logout")
 async def logout(request: Request):

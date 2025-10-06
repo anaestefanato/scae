@@ -220,5 +220,6 @@ WHERE id_usuario = ? AND aprovado=0
 EXISTE_ALUNO_APROVADO_POR_MATRICULA = """
 SELECT 1
 FROM aluno al
-WHERE al.matricula = ? AND al.aprovado = 1
+INNER JOIN usuario u ON al.id_usuario = u.id_usuario
+WHERE u.matricula = ? AND al.aprovado = 1
 """
