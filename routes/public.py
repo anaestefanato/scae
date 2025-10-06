@@ -176,7 +176,7 @@ async def post_cadastro(
         "publicas/cadastro.html",
         {"request": request, "sucesso": "Cadastro realizado com sucesso! Aguarde aprovação do administrador para fazer login."}
     )
-
+    
 @router.get("/sobre")
 async def get_sobre(request: Request):
     response = templates.TemplateResponse("/publicas/sobre.html", {"request": request})
