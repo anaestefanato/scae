@@ -2,13 +2,17 @@ from fastapi import APIRouter, Query, Request, Form, status
 from fastapi.responses import RedirectResponse
 from fastapi.templating import Jinja2Templates
 from pydantic import ValidationError
+import logging
 
+from dtos.cadastro_dto import CadastroUsuarioDTO
 from dtos.login_dto import LoginDTO
 from model.aluno_model import Aluno
 from model.usuario_model import Usuario
 from repo import aluno_repo, usuario_repo
 from util.auth_decorator import criar_sessao
 from util.security import criar_hash_senha, verificar_senha
+
+logger = logging.getLogger(__name__)
 
 
 router = APIRouter()
@@ -115,8 +119,70 @@ async def get_cadastro(request: Request):
     response = templates.TemplateResponse("/publicas/cadastro.html", {"request": request})
     return response
 
+# @router.post("/cadastro")
+# async def post_cadastro(
+#     request: Request,
+#     nome: str = Form(...),
+#     matricula: str = Form(...),
+#     email: str = Form(...),
+#     senha: str = Form(...),
+#     conf_senha: str = Form(...),
+# ):
+#     usuario = usuario_repo.obter_usuario_por_matricula(matricula)
+#     if usuario:
+#         return templates.TemplateResponse(
+#                 "publicas/cadastro.html",
+#                 {"request": request, "erro": "Matrícula já cadastrada"}
+#         )
+        
+#     usuario = usuario_repo.obter_usuario_por_email(email)
+#     if usuario:
+#             return templates.TemplateResponse(
+#                     "publicas/cadastro.html",
+#                     {"request": request, "erro": "E-mail já cadastrado"}
+#             )
+            
+#     if senha != conf_senha:
+#         return templates.TemplateResponse(
+#                 "publicas/cadastro.html",
+#                 {"request": request, "erro": "Senhas não coincidem"}
+#         )   
+    
+#     # Verificar se a senha é muito longa (limite do bcrypt: 72 bytes)
+#     if len(senha.encode('utf-8')) > 72:
+#         return templates.TemplateResponse(
+#                 "publicas/cadastro.html",
+#                 {"request": request, "erro": "Senha muito longa. Use no máximo 72 caracteres."}
+#         )
+    
+#     aluno = Usuario(
+#         id_usuario=None,
+#         nome=nome,
+#         matricula=matricula,
+#         email=email,
+#         senha=criar_hash_senha(senha),
+#         perfil="aluno",
+#         foto=None,
+#         token_redefinicao=None,
+#         data_token=None,
+#         data_cadastro=None
+#     )
+    
+#     id_aluno = aluno_repo.inserir(aluno)
+#     if not id_aluno:
+#         return templates.TemplateResponse(
+#             "publicas/cadastro.html",
+#             {"request": request, "erro": "Erro ao criar cadastro. Tente novamente."}
+#         )
+        
+#     # Redirecionar para login com mensagem de cadastro pendente
+#     return templates.TemplateResponse(
+#         "publicas/cadastro.html",
+#         {"request": request, "sucesso": "Cadastro realizado com sucesso! Aguarde aprovação do administrador para fazer login."}
+#     )
+    
 @router.post("/cadastro")
-async def post_cadastro(
+async def processar_cadastro(
     request: Request,
     nome: str = Form(...),
     matricula: str = Form(...),
@@ -137,12 +203,7 @@ async def post_cadastro(
                     "publicas/cadastro.html",
                     {"request": request, "erro": "E-mail já cadastrado"}
             )
-            
-    if senha != conf_senha:
-        return templates.TemplateResponse(
-                "publicas/cadastro.html",
-                {"request": request, "erro": "Senhas não coincidem"}
-        )   
+             
     
     # Verificar se a senha é muito longa (limite do bcrypt: 72 bytes)
     if len(senha.encode('utf-8')) > 72:
@@ -150,32 +211,74 @@ async def post_cadastro(
                 "publicas/cadastro.html",
                 {"request": request, "erro": "Senha muito longa. Use no máximo 72 caracteres."}
         )
-    
-    aluno = Usuario(
-        id_usuario=None,
-        nome=nome,
-        matricula=matricula,
-        email=email,
-        senha=criar_hash_senha(senha),
-        perfil="aluno",
-        foto=None,
-        token_redefinicao=None,
-        data_token=None,
-        data_cadastro=None
-    )
-    
-    id_aluno = aluno_repo.inserir(aluno)
-    if not id_aluno:
-        return templates.TemplateResponse(
-            "publicas/cadastro.html",
-            {"request": request, "erro": "Erro ao criar cadastro. Tente novamente."}
+
+    # Criar dicionário com dados do formulário (para preservar)
+    dados_formulario = {
+        "nome": nome,
+        "matricula": matricula,
+        "email": email
+        # Não inclua senhas aqui (segurança)
+    }
+
+    try:
+        # Validar dados com Pydantic
+        dados = CadastroUsuarioDTO(
+            nome=nome,
+            email=email,
+            matricula=matricula,
+            senha=senha,
+            conf_senha=conf_senha
         )
-        
-    # Redirecionar para login com mensagem de cadastro pendente
-    return templates.TemplateResponse(
+
+        # Criar objeto Usuario
+        usuario = Usuario(
+            id_usuario=None,
+            nome=dados.nome,
+            matricula=dados.matricula,
+            email=dados.email,
+            senha=criar_hash_senha(dados.senha),
+            perfil="aluno",
+            foto=None,
+            token_redefinicao=None,
+            data_token=None,
+            data_cadastro=None
+        )
+
+        # Processar cadastro
+        id_aluno = aluno_repo.inserir(usuario)
+
+        # Sucesso - Redirecionar com mensagem flash
+        return templates.TemplateResponse(
         "publicas/cadastro.html",
         {"request": request, "sucesso": "Cadastro realizado com sucesso! Aguarde aprovação do administrador para fazer login."}
     )
+
+    except ValidationError as e:
+        # Extrair mensagens de erro do Pydantic
+        erros = []
+        for erro in e.errors():
+            campo = erro['loc'][0] if erro['loc'] else 'campo'
+            mensagem = erro['msg']
+            erros.append(f"{campo.capitalize()}: {mensagem}")
+
+        erro_msg = " | ".join(erros)
+        logger.warning(f"Erro de validação no cadastro: {erro_msg}")
+
+        # Retornar template com dados preservados e erro
+        return templates.TemplateResponse("publicas/cadastro.html", {
+            "request": request,
+            "erro": erro_msg,
+            "dados": dados_formulario  # Preservar dados digitados
+        })
+
+    except Exception as e:
+        logger.error(f"Erro ao processar cadastro: {e}")
+
+        return templates.TemplateResponse("publicas/cadastro.html", {
+            "request": request,
+            "erro": "Erro ao processar cadastro. Tente novamente.",
+            "dados": dados_formulario
+        })
     
 @router.get("/sobre")
 async def get_sobre(request: Request):

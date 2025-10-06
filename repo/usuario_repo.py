@@ -127,7 +127,7 @@ def obter_usuario_por_email(email: str) -> Optional[Usuario]:
                 email=row["email"],
                 senha=row["senha"],
                 perfil=row["perfil"],
-                foto=row["foto"],
+                foto=None,
                 token_redefinicao=None,
                 data_token=None,
                 data_cadastro=None)

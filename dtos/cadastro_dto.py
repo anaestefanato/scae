@@ -19,7 +19,7 @@ class CadastroUsuarioDTO(BaseModel):
             raise ValueError('Senha deve conter pelo menos um número')
         return v
 
-    @field_validator('confirmar_senha')
+    @field_validator('conf_senha')
     @classmethod
     def senhas_devem_coincidir(cls, v, info):
         if 'senha' in info.data and v != info.data['senha']:
