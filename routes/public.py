@@ -119,67 +119,6 @@ async def get_cadastro(request: Request):
     response = templates.TemplateResponse("/publicas/cadastro.html", {"request": request})
     return response
 
-# @router.post("/cadastro")
-# async def post_cadastro(
-#     request: Request,
-#     nome: str = Form(...),
-#     matricula: str = Form(...),
-#     email: str = Form(...),
-#     senha: str = Form(...),
-#     conf_senha: str = Form(...),
-# ):
-#     usuario = usuario_repo.obter_usuario_por_matricula(matricula)
-#     if usuario:
-#         return templates.TemplateResponse(
-#                 "publicas/cadastro.html",
-#                 {"request": request, "erro": "Matrícula já cadastrada"}
-#         )
-        
-#     usuario = usuario_repo.obter_usuario_por_email(email)
-#     if usuario:
-#             return templates.TemplateResponse(
-#                     "publicas/cadastro.html",
-#                     {"request": request, "erro": "E-mail já cadastrado"}
-#             )
-            
-#     if senha != conf_senha:
-#         return templates.TemplateResponse(
-#                 "publicas/cadastro.html",
-#                 {"request": request, "erro": "Senhas não coincidem"}
-#         )   
-    
-#     # Verificar se a senha é muito longa (limite do bcrypt: 72 bytes)
-#     if len(senha.encode('utf-8')) > 72:
-#         return templates.TemplateResponse(
-#                 "publicas/cadastro.html",
-#                 {"request": request, "erro": "Senha muito longa. Use no máximo 72 caracteres."}
-#         )
-    
-#     aluno = Usuario(
-#         id_usuario=None,
-#         nome=nome,
-#         matricula=matricula,
-#         email=email,
-#         senha=criar_hash_senha(senha),
-#         perfil="aluno",
-#         foto=None,
-#         token_redefinicao=None,
-#         data_token=None,
-#         data_cadastro=None
-#     )
-    
-#     id_aluno = aluno_repo.inserir(aluno)
-#     if not id_aluno:
-#         return templates.TemplateResponse(
-#             "publicas/cadastro.html",
-#             {"request": request, "erro": "Erro ao criar cadastro. Tente novamente."}
-#         )
-        
-#     # Redirecionar para login com mensagem de cadastro pendente
-#     return templates.TemplateResponse(
-#         "publicas/cadastro.html",
-#         {"request": request, "sucesso": "Cadastro realizado com sucesso! Aguarde aprovação do administrador para fazer login."}
-#     )
     
 @router.post("/cadastro")
 async def processar_cadastro(
