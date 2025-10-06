@@ -41,7 +41,7 @@ WHERE matricula = ?
 
 OBTER_POR_EMAIL = """
 SELECT
-id_usuario, nome, matricula, email, senha, perfil
+id_usuario, nome, matricula, email, senha, perfil, foto
 FROM usuario
 WHERE email = ?
 """
@@ -86,7 +86,7 @@ WHERE id_usuario=?
 
 OBTER_POR_TOKEN = """
 SELECT 
-id, nome, matricula, email, senha, perfil, foto, token_redefinicao, data_token
+id_usuario, nome, matricula, email, senha, perfil, foto, token_redefinicao, data_token
 FROM usuario
 WHERE token_redefinicao=? AND data_token > datetime('now')
 """
