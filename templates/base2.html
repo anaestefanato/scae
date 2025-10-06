@@ -136,6 +136,12 @@
 				const menuToggle = document.getElementById("menuToggle");
 				const closeSidebar = document.getElementById("closeSidebar");
 				const sidebarBackdrop = document.getElementById('sidebarBackdrop');
+					const allBackdrops = document.querySelectorAll('.sidebar-backdrop');
+					allBackdrops.forEach(function (backdrop) {
+						if (sidebarBackdrop && backdrop !== sidebarBackdrop) {
+							backdrop.remove();
+						}
+					});
 
 				// Apply initial collapsed state if elements exist
 				// Start collapsed by default (sidebar overlays content)
@@ -150,6 +156,9 @@
 					if (sidebar) {
 						sidebar.classList.remove('open');
 						sidebar.classList.add('collapsed');
+					}
+					if (mainContent) {
+						mainContent.classList.remove('shifted');
 					}
 					if (menuToggle) menuToggle.classList.add('visible');
 					if (sidebarBackdrop) sidebarBackdrop.classList.remove('visible');
@@ -170,11 +179,20 @@
 							sidebar.classList.remove('collapsed');
 							sidebar.classList.add('open');
 						}
+						if (mainContent) {
+							mainContent.classList.add('shifted');
+						}
 						if (menuToggle) menuToggle.classList.remove('visible');
 						if (sidebarBackdrop) sidebarBackdrop.classList.add('visible');
 						document.body.classList.add('no-scroll');
 					});
 				}
+
+				document.addEventListener('keydown', function (event) {
+					if (event.key === 'Escape' && sidebar && sidebar.classList.contains('open')) {
+						closeOverlay();
+					}
+				});
 			});
         </script>
 		{% block scripts %}

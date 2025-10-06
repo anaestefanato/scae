@@ -2,63 +2,6 @@
    DASHBOARD ALUNO - JAVASCRIPT
    ========================= */
 
-// Menu toggle functionality - Igual ao dashboard assistente
-document.addEventListener('DOMContentLoaded', function() {
-    const sidebar = document.getElementById('sidebar');
-    const mainContent = document.getElementById('mainContent');
-    const menuToggle = document.getElementById('menuToggle');
-    const closeSidebar = document.getElementById('closeSidebar');
-    
-    // Criar backdrop igual ao assistente
-    const sidebarBackdrop = document.createElement('div');
-    sidebarBackdrop.className = 'sidebar-backdrop';
-    document.body.appendChild(sidebarBackdrop);
-    
-    function closeSidebarFunction() {
-        if (sidebar) {
-            sidebar.classList.remove('open');
-            sidebar.classList.add('collapsed');
-        }
-        if (mainContent) mainContent.classList.remove('shifted');
-        if (menuToggle) menuToggle.classList.remove('hidden');
-        if (sidebarBackdrop) sidebarBackdrop.classList.remove('visible');
-        document.body.style.overflow = ''; // Permite scroll novamente
-    }
-    
-    function openSidebarFunction() {
-        if (sidebar) {
-            sidebar.classList.add('open');
-            sidebar.classList.remove('collapsed');
-        }
-        if (mainContent) mainContent.classList.add('shifted');
-        if (menuToggle) menuToggle.classList.add('hidden');
-        if (sidebarBackdrop) sidebarBackdrop.classList.add('visible');
-        document.body.style.overflow = 'hidden'; // Impede scroll da página
-    }
-    
-    // Close sidebar button
-    if (closeSidebar) {
-        closeSidebar.addEventListener('click', closeSidebarFunction);
-    }
-    
-    // Open sidebar button
-    if (menuToggle) {
-        menuToggle.addEventListener('click', openSidebarFunction);
-    }
-
-    // Close sidebar when clicking on backdrop
-    if (sidebarBackdrop) {
-        sidebarBackdrop.addEventListener('click', closeSidebarFunction);
-    }
-
-    // Close sidebar when pressing ESC key
-    document.addEventListener('keydown', function(event) {
-        if (event.key === 'Escape' && sidebar && sidebar.classList.contains('open')) {
-            closeSidebarFunction();
-        }
-    });
-});
-
 // Modal Confirmar Recebimento
 function confirmarRecebimento(idAuxilio) {
     // Aqui você pode implementar a lógica para confirmar o recebimento
