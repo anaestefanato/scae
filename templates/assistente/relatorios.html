@@ -10,80 +10,6 @@
     <link rel="stylesheet" href="/static/css/dashboard_assistente.css">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;700&display=swap" rel="stylesheet">
     <style>
-        /* Melhorias na rolagem */
-        .main-content {
-            max-height: calc(100vh - 100px);
-            overflow-y: auto;
-            scroll-behavior: smooth;
-        }
-        
-        .main-content::-webkit-scrollbar {
-            width: 8px;
-        }
-        
-        .main-content::-webkit-scrollbar-track {
-            background: #f1f1f1;
-            border-radius: 10px;
-        }
-        
-        .main-content::-webkit-scrollbar-thumb {
-            background: #28a745;
-            border-radius: 10px;
-        }
-        
-        .main-content::-webkit-scrollbar-thumb:hover {
-            background: #20c997;
-        }
-        
-        .card-body {
-            max-height: 400px;
-            overflow-y: auto;
-            scroll-behavior: smooth;
-        }
-        
-        .card-body::-webkit-scrollbar {
-            width: 6px;
-        }
-        
-        .card-body::-webkit-scrollbar-track {
-            background: #f8f9fa;
-            border-radius: 6px;
-        }
-        
-        .card-body::-webkit-scrollbar-thumb {
-            background: #dee2e6;
-            border-radius: 6px;
-        }
-        
-        .card-body::-webkit-scrollbar-thumb:hover {
-            background: #28a745;
-        }
-        
-        .table-responsive {
-            max-height: 350px;
-            overflow-y: auto;
-            scroll-behavior: smooth;
-        }
-        
-        .table-responsive::-webkit-scrollbar {
-            width: 6px;
-            height: 6px;
-        }
-        
-        .table-responsive::-webkit-scrollbar-track {
-            background: #f8f9fa;
-            border-radius: 6px;
-        }
-        
-        .table-responsive::-webkit-scrollbar-thumb {
-            background: #dee2e6;
-            border-radius: 6px;
-        }
-        
-        .table-responsive::-webkit-scrollbar-thumb:hover {
-            background: #28a745;
-        }
-        
         /* Melhorias na legibilidade - cores de fundo */
         .report-item {
             padding: 18px;
@@ -354,13 +280,6 @@
             font-weight: 500;
         }
         
-        /* Footer */
-        .footer {
-            margin-top: 60px;
-            background: linear-gradient(135deg, #28a745 0%, #20c997 100%) !important;
-            box-shadow: 0 -2px 10px rgba(0,0,0,0.1);
-        }
-        
         /* Responsividade */
         @media (max-width: 768px) {
             .main-content {
@@ -398,7 +317,7 @@
             <button class="close-sidebar" id="closeSidebar">
                 <i class="bi bi-x-lg"></i>
             </button>
-            <img src="/static/img/logoifes.png" alt="Logo SCAE" width="180">
+            <img src="/static/img/logoifes.png" alt="Logo IFES" width="180">
         </div>
         <div class="d-flex flex-column p-3">
             <div class="mb-4 text-center">
@@ -473,300 +392,158 @@
                 </div>
             </div>
         </div>
-        <!-- Report Categories -->
+        <!-- Main Report Generator -->
         <div class="row">
-            <div class="col-md-6">
-                <div class="card h-100">
-                    <div class="card-header d-flex justify-content-between align-items-center">
-                        <span><i class="bi bi-people me-2"></i>Relatórios de Beneficiários</span>
-                        <span class="badge bg-primary">4 tipos</span>
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="mb-0"><i class="bi bi-file-earmark-bar-graph me-2"></i>Gerador de Relatórios</h5>
                     </div>
                     <div class="card-body">
-                        <div class="report-item mb-3">
-                            <div class="d-flex justify-content-between align-items-center">
-                                <div>
-                                    <h6 class="mb-1">Beneficiários por Auxílio</h6>
-                                    <small class="text-muted">Lista detalhada de alunos por tipo de auxílio</small>
+                        <form id="quickReportForm">
+                            <div class="row">
+                                <div class="col-lg-3 col-md-6">
+                                    <div class="mb-3">
+                                        <label for="categoriaRelatorio" class="form-label">Categoria do Relatório</label>
+                                        <select class="form-select form-select-lg" id="categoriaRelatorio" required onchange="atualizarTiposRelatorio()">
+                                            <option value="">Selecione uma categoria...</option>
+                                            <option value="beneficiarios">📊 Beneficiários</option>
+                                            <option value="financeiro">💰 Financeiro</option>
+                                            <option value="atendimento">📋 Atendimento</option>
+                                            <option value="estatistico">📈 Estatístico</option>
+                                        </select>
+                                    </div>
                                 </div>
-                                <button class="btn btn-sm btn-outline-primary" onclick="gerarRelatorio('beneficiarios-auxilio')">
-                                    <i class="bi bi-file-earmark-pdf"></i> Gerar
-                                </button>
-                            </div>
-                        </div>
-                        <div class="report-item mb-3">
-                            <div class="d-flex justify-content-between align-items-center">
-                                <div>
-                                    <h6 class="mb-1">Perfil Socioeconômico</h6>
-                                    <small class="text-muted">Análise da situação socioeconômica dos beneficiários</small>
+                                <div class="col-lg-3 col-md-6">
+                                    <div class="mb-3">
+                                        <label for="tipoRelatorioRapido" class="form-label">Tipo de Relatório</label>
+                                        <select class="form-select form-select-lg" id="tipoRelatorioRapido" required disabled>
+                                            <option value="">Primeiro selecione uma categoria</option>
+                                        </select>
+                                    </div>
                                 </div>
-                                <button class="btn btn-sm btn-outline-primary" onclick="gerarRelatorio('perfil-socioeconomico')">
-                                    <i class="bi bi-file-earmark-excel"></i> Gerar
-                                </button>
-                            </div>
-                        </div>
-                        <div class="report-item mb-3">
-                            <div class="d-flex justify-content-between align-items-center">
-                                <div>
-                                    <h6 class="mb-1">Evolução de Beneficiários</h6>
-                                    <small class="text-muted">Histórico mensal de beneficiários</small>
+                                <div class="col-lg-2 col-md-4">
+                                    <div class="mb-3">
+                                        <label for="periodoRapido" class="form-label">Período</label>
+                                        <select class="form-select form-select-lg" id="periodoRapido">
+                                            <option value="mes-atual">Mês Atual</option>
+                                            <option value="mes-anterior">Mês Anterior</option>
+                                            <option value="trimestre">Trimestre Atual</option>
+                                            <option value="semestre">Semestre Atual</option>
+                                            <option value="personalizado">Personalizado</option>
+                                        </select>
+                                    </div>
                                 </div>
-                                <button class="btn btn-sm btn-outline-primary" onclick="gerarRelatorio('evolucao-beneficiarios')">
-                                    <i class="bi bi-file-earmark-pdf"></i> Gerar
-                                </button>
-                            </div>
-                        </div>
-                        <div class="report-item">
-                            <div class="d-flex justify-content-between align-items-center">
-                                <div>
-                                    <h6 class="mb-1">Beneficiários por Curso</h6>
-                                    <small class="text-muted">Distribuição de auxílios por curso/modalidade</small>
+                                <div class="col-lg-2 col-md-4">
+                                    <div class="mb-3">
+                                        <label for="formatoRapido" class="form-label">Formato</label>
+                                        <select class="form-select form-select-lg" id="formatoRapido">
+                                            <option value="pdf">📄 PDF</option>
+                                            <option value="excel">📊 Excel</option>
+                                            <option value="csv">📋 CSV</option>
+                                        </select>
+                                    </div>
                                 </div>
-                                <button class="btn btn-sm btn-outline-primary" onclick="gerarRelatorio('beneficiarios-curso')">
-                                    <i class="bi bi-file-earmark-excel"></i> Gerar
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-md-6">
-                <div class="card h-100">
-                    <div class="card-header d-flex justify-content-between align-items-center">
-                        <span><i class="bi bi-cash-stack me-2"></i>Relatórios Financeiros</span>
-                        <span class="badge bg-success">3 tipos</span>
-                    </div>
-                    <div class="card-body">
-                        <div class="report-item mb-3">
-                            <div class="d-flex justify-content-between align-items-center">
-                                <div>
-                                    <h6 class="mb-1">Execução Orçamentária</h6>
-                                    <small class="text-muted">Valores executados vs orçamento planejado</small>
+                                <div class="col-lg-2 col-md-4">
+                                    <div class="mb-3">
+                                        <label class="form-label">&nbsp;</label>
+                                        <button type="submit" class="btn btn-success btn-lg w-100">
+                                            <i class="bi bi-download me-2"></i>Gerar
+                                        </button>
+                                    </div>
                                 </div>
-                                <button class="btn btn-sm btn-outline-success" onclick="gerarRelatorio('execucao-orcamentaria')">
-                                    <i class="bi bi-file-earmark-pdf"></i> Gerar
-                                </button>
                             </div>
-                        </div>
-                        <div class="report-item mb-3">
-                            <div class="d-flex justify-content-between align-items-center">
-                                <div>
-                                    <h6 class="mb-1">Gastos por Auxílio</h6>
-                                    <small class="text-muted">Distribuição de gastos por tipo de auxílio</small>
+                            
+                            <!-- Período personalizado (hidden por padrão) -->
+                            <div class="row" id="periodoPersonalizado" style="display: none;">
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <label for="dataInicioRapido" class="form-label">Data Início</label>
+                                        <input type="date" class="form-control form-control-lg" id="dataInicioRapido">
+                                    </div>
                                 </div>
-                                <button class="btn btn-sm btn-outline-success" onclick="gerarRelatorio('gastos-auxilio')">
-                                    <i class="bi bi-file-earmark-excel"></i> Gerar
-                                </button>
-                            </div>
-                        </div>
-                        <div class="report-item">
-                            <div class="d-flex justify-content-between align-items-center">
-                                <div>
-                                    <h6 class="mb-1">Previsão de Gastos</h6>
-                                    <small class="text-muted">Projeção de gastos para próximos meses</small>
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <label for="dataFimRapido" class="form-label">Data Fim</label>
+                                        <input type="date" class="form-control form-control-lg" id="dataFimRapido">
+                                    </div>
                                 </div>
-                                <button class="btn btn-sm btn-outline-success" onclick="gerarRelatorio('previsao-gastos')">
-                                    <i class="bi bi-file-earmark-pdf"></i> Gerar
-                                </button>
                             </div>
-                        </div>
+                        </form>
                     </div>
                 </div>
             </div>
         </div>
 
-        <div class="row mt-4">
-            <div class="col-md-6">
-                <div class="card h-100">
-                    <div class="card-header d-flex justify-content-between align-items-center">
-                        <span><i class="bi bi-clipboard-data me-2"></i>Relatórios de Atendimento</span>
-                        <span class="badge bg-warning">4 tipos</span>
-                    </div>
-                    <div class="card-body">
-                        <div class="report-item mb-3">
-                            <div class="d-flex justify-content-between align-items-center">
-                                <div>
-                                    <h6 class="mb-1">Entrevistas Realizadas</h6>
-                                    <small class="text-muted">Relatório de entrevistas por período</small>
-                                </div>
-                                <button class="btn btn-sm btn-outline-warning" onclick="gerarRelatorio('entrevistas-realizadas')">
-                                    <i class="bi bi-file-earmark-pdf"></i> Gerar
-                                </button>
-                            </div>
-                        </div>
-                        <div class="report-item mb-3">
-                            <div class="d-flex justify-content-between align-items-center">
-                                <div>
-                                    <h6 class="mb-1">Análise de Inscrições</h6>
-                                    <small class="text-muted">Status das análises de inscrições</small>
-                                </div>
-                                <button class="btn btn-sm btn-outline-warning" onclick="gerarRelatorio('analise-inscricoes')">
-                                    <i class="bi bi-file-earmark-excel"></i> Gerar
-                                </button>
-                            </div>
-                        </div>
-                        <div class="report-item mb-3">
-                            <div class="d-flex justify-content-between align-items-center">
-                                <div>
-                                    <h6 class="mb-1">Recursos Analisados</h6>
-                                    <small class="text-muted">Relatório de recursos e resultados</small>
-                                </div>
-                                <button class="btn btn-sm btn-outline-warning" onclick="gerarRelatorio('recursos-analisados')">
-                                    <i class="bi bi-file-earmark-pdf"></i> Gerar
-                                </button>
-                            </div>
-                        </div>
-                        <div class="report-item">
-                            <div class="d-flex justify-content-between align-items-center">
-                                <div>
-                                    <h6 class="mb-1">Tempo de Atendimento</h6>
-                                    <small class="text-muted">Análise de tempo médio de processos</small>
-                                </div>
-                                <button class="btn btn-sm btn-outline-warning" onclick="gerarRelatorio('tempo-atendimento')">
-                                    <i class="bi bi-file-earmark-excel"></i> Gerar
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-md-6">
-                <div class="card h-100">
-                    <div class="card-header d-flex justify-content-between align-items-center">
-                        <span><i class="bi bi-graph-up me-2"></i>Relatórios Estatísticos</span>
-                        <span class="badge bg-info">3 tipos</span>
-                    </div>
-                    <div class="card-body">
-                        <div class="report-item mb-3">
-                            <div class="d-flex justify-content-between align-items-center">
-                                <div>
-                                    <h6 class="mb-1">Dashboard Executivo</h6>
-                                    <small class="text-muted">Indicadores gerais da assistência estudantil</small>
-                                </div>
-                                <button class="btn btn-sm btn-outline-info" onclick="gerarRelatorio('dashboard-executivo')">
-                                    <i class="bi bi-file-earmark-pdf"></i> Gerar
-                                </button>
-                            </div>
-                        </div>
-                        <div class="report-item mb-3">
-                            <div class="d-flex justify-content-between align-items-center">
-                                <div>
-                                    <h6 class="mb-1">Indicadores de Eficiência</h6>
-                                    <small class="text-muted">KPIs de produtividade e eficiência</small>
-                                </div>
-                                <button class="btn btn-sm btn-outline-info" onclick="gerarRelatorio('indicadores-eficiencia')">
-                                    <i class="bi bi-file-earmark-excel"></i> Gerar
-                                </button>
-                            </div>
-                        </div>
-                        <div class="report-item">
-                            <div class="d-flex justify-content-between align-items-center">
-                                <div>
-                                    <h6 class="mb-1">Comparativo Semestral</h6>
-                                    <small class="text-muted">Análise comparativa entre semestres</small>
-                                </div>
-                                <button class="btn btn-sm btn-outline-info" onclick="gerarRelatorio('comparativo-semestral')">
-                                    <i class="bi bi-file-earmark-pdf"></i> Gerar
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Custom Report Section -->
+        <!-- Advanced Options (Collapsible) -->
         <div class="row mt-4">
             <div class="col-12">
                 <div class="card">
                     <div class="card-header">
-                        <h5 class="mb-0"><i class="bi bi-gear me-2"></i>Relatório Personalizado</h5>
+                        <button class="btn btn-link text-decoration-none w-100 text-start" type="button" data-bs-toggle="collapse" data-bs-target="#opcoesAvancadas">
+                            <i class="bi bi-gear me-2"></i>Opções Avançadas 
+                            <i class="bi bi-chevron-down float-end"></i>
+                        </button>
                     </div>
-                    <div class="card-body">
-                        <form id="relatorioPersonalizadoForm">
-                            <div class="row">
-                                <div class="col-md-3">
-                                    <div class="mb-3">
-                                        <label for="tipoRelatorio" class="form-label">Tipo de Relatório</label>
-                                        <select class="form-select" id="tipoRelatorio" required>
-                                            <option value="">Selecione...</option>
-                                            <option value="beneficiarios">Beneficiários</option>
-                                            <option value="financeiro">Financeiro</option>
-                                            <option value="atendimento">Atendimento</option>
-                                            <option value="estatistico">Estatístico</option>
-                                        </select>
-                                    </div>
-                                </div>
-                                <div class="col-md-3">
-                                    <div class="mb-3">
-                                        <label for="dataInicio" class="form-label">Data Início</label>
-                                        <input type="date" class="form-control" id="dataInicio" required>
-                                    </div>
-                                </div>
-                                <div class="col-md-3">
-                                    <div class="mb-3">
-                                        <label for="dataFim" class="form-label">Data Fim</label>
-                                        <input type="date" class="form-control" id="dataFim" required>
-                                    </div>
-                                </div>
-                                <div class="col-md-3">
-                                    <div class="mb-3">
-                                        <label for="formato" class="form-label">Formato</label>
-                                        <select class="form-select" id="formato" required>
-                                            <option value="pdf">PDF</option>
-                                            <option value="excel">Excel</option>
-                                            <option value="csv">CSV</option>
-                                        </select>
-                                    </div>
-                                </div>
-                            </div>
+                    <div class="collapse" id="opcoesAvancadas">
+                        <div class="card-body">
                             <div class="row">
                                 <div class="col-md-6">
-                                    <div class="mb-3">
-                                        <label class="form-label">Filtros Adicionais</label>
-                                        <div class="form-check">
-                                            <input class="form-check-input" type="checkbox" id="filtroAuxilioTransporte">
-                                            <label class="form-check-label" for="filtroAuxilioTransporte">
-                                                Auxílio Transporte
-                                            </label>
-                                        </div>
-                                        <div class="form-check">
-                                            <input class="form-check-input" type="checkbox" id="filtroAuxilioAlimentacao">
-                                            <label class="form-check-label" for="filtroAuxilioAlimentacao">
-                                                Auxílio Alimentação
-                                            </label>
-                                        </div>
-                                        <div class="form-check">
-                                            <input class="form-check-input" type="checkbox" id="filtroAuxilioMaterial">
-                                            <label class="form-check-label" for="filtroAuxilioMaterial">
-                                                Auxílio Material Didático
-                                            </label>
-                                        </div>
-                                        <div class="form-check">
-                                            <input class="form-check-input" type="checkbox" id="filtroAuxilioMoradia">
-                                            <label class="form-check-label" for="filtroAuxilioMoradia">
-                                                Auxílio Moradia
-                                            </label>
-                                        </div>
+                                    <h6>Filtros de Auxílio</h6>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" id="filtroTransporte" checked>
+                                        <label class="form-check-label" for="filtroTransporte">
+                                            🚌 Auxílio Transporte
+                                        </label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" id="filtroAlimentacao" checked>
+                                        <label class="form-check-label" for="filtroAlimentacao">
+                                            🍽️ Auxílio Alimentação
+                                        </label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" id="filtroMaterial" checked>
+                                        <label class="form-check-label" for="filtroMaterial">
+                                            📚 Auxílio Material
+                                        </label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" id="filtroMoradia" checked>
+                                        <label class="form-check-label" for="filtroMoradia">
+                                            🏠 Auxílio Moradia
+                                        </label>
                                     </div>
                                 </div>
                                 <div class="col-md-6">
-                                    <div class="mb-3">
-                                        <label for="observacoes" class="form-label">Observações</label>
-                                        <textarea class="form-control" id="observacoes" rows="4" placeholder="Observações adicionais para o relatório..."></textarea>
+                                    <h6>Configurações do Relatório</h6>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" id="incluirGraficos" checked>
+                                        <label class="form-check-label" for="incluirGraficos">
+                                            📊 Incluir gráficos
+                                        </label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" id="incluirTotalizadores" checked>
+                                        <label class="form-check-label" for="incluirTotalizadores">
+                                            🧮 Incluir totalizadores
+                                        </label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" id="incluirComparativos">
+                                        <label class="form-check-label" for="incluirComparativos">
+                                            📈 Incluir comparativos
+                                        </label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" id="incluirDetalhes">
+                                        <label class="form-check-label" for="incluirDetalhes">
+                                            📋 Incluir detalhamento
+                                        </label>
                                     </div>
                                 </div>
                             </div>
-                            <div class="d-flex justify-content-end">
-                                <button type="button" class="btn btn-outline-secondary me-2" onclick="limparFormulario()">
-                                    <i class="bi bi-arrow-clockwise me-1"></i>Limpar
-                                </button>
-                                <button type="submit" class="btn btn-success">
-                                    <i class="bi bi-file-earmark-arrow-down me-1"></i>Gerar Relatório
-                                </button>
-                            </div>
-                        </form>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -847,11 +624,171 @@
 
     <!-- Scripts -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="/static/js/sidebar.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <script>
-        // Função para gerar relatórios predefinidos
+        // Menu toggle functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            const sidebar = document.getElementById('sidebar');
+            const mainContent = document.getElementById('mainContent');
+            const menuToggle = document.getElementById('menuToggle');
+            const closeSidebar = document.getElementById('closeSidebar');
+            const sidebarBackdrop = document.createElement('div');
+            sidebarBackdrop.className = 'sidebar-backdrop';
+            document.body.appendChild(sidebarBackdrop);
+            
+            function closeSidebarFunction() {
+                sidebar.classList.remove('open');
+                mainContent.classList.remove('shifted');
+                menuToggle.classList.remove('hidden');
+                sidebarBackdrop.classList.remove('visible');
+                document.body.style.overflow = '';
+            }
+            
+            function openSidebarFunction() {
+                sidebar.classList.add('open');
+                mainContent.classList.add('shifted');
+                menuToggle.classList.add('hidden');
+                sidebarBackdrop.classList.add('visible');
+                document.body.style.overflow = 'hidden';
+            }
+            
+            // Close sidebar button
+            closeSidebar.addEventListener('click', closeSidebarFunction);
+            
+            // Open sidebar button
+            menuToggle.addEventListener('click', openSidebarFunction);
+
+            // Close sidebar when clicking on backdrop
+            sidebarBackdrop.addEventListener('click', closeSidebarFunction);
+
+            // Close sidebar when pressing ESC key
+            document.addEventListener('keydown', function(event) {
+                if (event.key === 'Escape' && sidebar.classList.contains('open')) {
+                    closeSidebarFunction();
+                }
+            });
+        });
+    </script>
+    <script>
+        // Configuração dos tipos de relatório por categoria
+        const tiposRelatorio = {
+            beneficiarios: [
+                { value: 'beneficiarios-auxilio', text: 'Beneficiários por Auxílio' },
+                { value: 'perfil-socioeconomico', text: 'Perfil Socioeconômico' },
+                { value: 'evolucao-beneficiarios', text: 'Evolução de Beneficiários' },
+                { value: 'beneficiarios-curso', text: 'Beneficiários por Curso' }
+            ],
+            financeiro: [
+                { value: 'execucao-orcamentaria', text: 'Execução Orçamentária' },
+                { value: 'gastos-auxilio', text: 'Gastos por Auxílio' },
+                { value: 'previsao-gastos', text: 'Previsão de Gastos' }
+            ],
+            atendimento: [
+                { value: 'entrevistas-realizadas', text: 'Entrevistas Realizadas' },
+                { value: 'analise-inscricoes', text: 'Análise de Inscrições' },
+                { value: 'recursos-analisados', text: 'Recursos Analisados' },
+                { value: 'tempo-atendimento', text: 'Tempo de Atendimento' }
+            ],
+            estatistico: [
+                { value: 'dashboard-executivo', text: 'Dashboard Executivo' },
+                { value: 'indicadores-eficiencia', text: 'Indicadores de Eficiência' },
+                { value: 'comparativo-semestral', text: 'Comparativo Semestral' }
+            ]
+        };
+
+        // Função para atualizar tipos de relatório baseado na categoria
+        function atualizarTiposRelatorio() {
+            const categoria = document.getElementById('categoriaRelatorio').value;
+            const tipoSelect = document.getElementById('tipoRelatorioRapido');
+            
+            // Limpar opções
+            tipoSelect.innerHTML = '';
+            
+            if (categoria) {
+                tipoSelect.disabled = false;
+                tipoSelect.innerHTML = '<option value="">Selecione um tipo...</option>';
+                
+                tiposRelatorio[categoria].forEach(tipo => {
+                    const option = document.createElement('option');
+                    option.value = tipo.value;
+                    option.textContent = tipo.text;
+                    tipoSelect.appendChild(option);
+                });
+            } else {
+                tipoSelect.disabled = true;
+                tipoSelect.innerHTML = '<option value="">Primeiro selecione uma categoria</option>';
+            }
+        }
+
+        // Função para mostrar/esconder período personalizado
+        document.getElementById('periodoRapido').addEventListener('change', function() {
+            const periodoPersonalizado = document.getElementById('periodoPersonalizado');
+            if (this.value === 'personalizado') {
+                periodoPersonalizado.style.display = 'block';
+            } else {
+                periodoPersonalizado.style.display = 'none';
+            }
+        });
+
+        // Manipular formulário de relatório rápido
+        document.getElementById('quickReportForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const categoria = document.getElementById('categoriaRelatorio').value;
+            const tipo = document.getElementById('tipoRelatorioRapido').value;
+            const periodo = document.getElementById('periodoRapido').value;
+            const formato = document.getElementById('formatoRapido').value;
+            
+            if (!categoria || !tipo) {
+                alert('Por favor, selecione uma categoria e um tipo de relatório.');
+                return;
+            }
+            
+            gerarRelatorioRapido(tipo, periodo, formato);
+        });
+
+        // Função para gerar relatório rápido
+        function gerarRelatorioRapido(tipo, periodo, formato) {
+            const submitBtn = document.querySelector('#quickReportForm button[type="submit"]');
+            const originalContent = submitBtn.innerHTML;
+            
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = '<i class="bi bi-hourglass-split"></i> Gerando...';
+            
+            setTimeout(() => {
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = originalContent;
+                
+                // Gerar relatório baseado no formato
+                if (formato === 'pdf') {
+                    gerarPDFEspecifico(tipo);
+                } else if (formato === 'excel') {
+                    gerarExcelEspecifico(tipo);
+                } else if (formato === 'csv') {
+                    gerarCSVEspecifico(tipo);
+                }
+                
+            }, 2000);
+        }
+
+        // Função para gerar Excel
+        function gerarExcelEspecifico(tipo) {
+            console.log(`Gerando Excel: ${tipo}`);
+            // Simular download de Excel
+            const nomeArquivo = `relatorio_${tipo}_${new Date().toISOString().split('T')[0]}.xlsx`;
+            alert(`Relatório Excel "${nomeArquivo}" gerado com sucesso!`);
+        }
+
+        // Função para gerar CSV
+        function gerarCSVEspecifico(tipo) {
+            console.log(`Gerando CSV: ${tipo}`);
+            // Simular download de CSV
+            const nomeArquivo = `relatorio_${tipo}_${new Date().toISOString().split('T')[0]}.csv`;
+            alert(`Relatório CSV "${nomeArquivo}" gerado com sucesso!`);
+        }
+
+        // Função para gerar relatórios predefinidos (mantida para compatibilidade)
         function gerarRelatorio(tipo) {
             console.log('Gerando relatório:', tipo);
             
@@ -1015,7 +952,7 @@
             let currentY = startY;
             
             doc.setFontSize(12);
-            doc.text('Execução Orçamentária - Setembro 2025', margin, currentY);
+            doc.text('Execução Orçamentária - Outubro 2025', margin, currentY);
             currentY += 15;
             
             const dados = [
@@ -1075,7 +1012,7 @@
             let currentY = startY;
             
             doc.setFontSize(12);
-            doc.text('Indicadores Executivos - Setembro 2025', margin, currentY);
+            doc.text('Indicadores Executivos - Outubro 2025', margin, currentY);
             currentY += 15;
             
             // KPIs principais
@@ -1119,7 +1056,7 @@
             currentY += 8;
             doc.text('• Os dados foram coletados do sistema SCAE', margin + 10, currentY);
             currentY += 8;
-            doc.text('• Período de referência: Setembro 2025', margin + 10, currentY);
+            doc.text('• Período de referência: Outubro 2025', margin + 10, currentY);
             currentY += 8;
             doc.text('• Relatório gerado automaticamente', margin + 10, currentY);
         }
@@ -1220,7 +1157,9 @@
 
         // Função para limpar formulário personalizado
         function limparFormulario() {
-            document.getElementById('relatorioPersonalizadoForm').reset();
+            document.getElementById('quickReportForm').reset();
+            document.getElementById('periodoPersonalizado').style.display = 'none';
+            atualizarTiposRelatorio();
         }
 
         // Função para limpar histórico
@@ -1231,109 +1170,14 @@
             }
         }
 
-        // Manipular formulário de relatório personalizado
-        document.getElementById('relatorioPersonalizadoForm').addEventListener('submit', function(e) {
-            e.preventDefault();
-            
-            const formData = new FormData(this);
-            const dados = Object.fromEntries(formData);
-            
-            console.log('Dados do relatório personalizado:', dados);
-            
-            // Gerar PDF personalizado
-            gerarPDFPersonalizado(dados);
-        });
-
-        // Gerar PDF personalizado baseado no formulário
-        function gerarPDFPersonalizado(dados) {
-            const submitBtn = document.querySelector('#relatorioPersonalizadoForm button[type="submit"]');
-            const originalContent = submitBtn.innerHTML;
-            
-            submitBtn.disabled = true;
-            submitBtn.innerHTML = '<i class="bi bi-hourglass-split"></i> Gerando...';
-            
-            setTimeout(() => {
-                const { jsPDF } = window.jspdf;
-                const doc = new jsPDF();
-                
-                // Cabeçalho
-                doc.setFontSize(20);
-                doc.setTextColor(40, 167, 69);
-                doc.text('SCAE - Relatório Personalizado', 20, 30);
-                
-                doc.setFontSize(12);
-                doc.setTextColor(100, 100, 100);
-                doc.text('Instituto Federal do Espírito Santo - Campus Vitória', 20, 45);
-                doc.text(`Gerado em: ${new Date().toLocaleDateString('pt-BR')}`, 20, 55);
-                
-                // Parâmetros do relatório
-                let currentY = 75;
-                doc.setFontSize(14);
-                doc.setTextColor(0, 0, 0);
-                doc.text('Parâmetros do Relatório:', 20, currentY);
-                currentY += 15;
-                
-                doc.setFontSize(10);
-                doc.text(`Tipo: ${dados.tipoRelatorio || 'Não especificado'}`, 30, currentY);
-                currentY += 8;
-                doc.text(`Período: ${dados.dataInicio || 'N/A'} até ${dados.dataFim || 'N/A'}`, 30, currentY);
-                currentY += 8;
-                doc.text(`Formato: ${dados.formato || 'PDF'}`, 30, currentY);
-                currentY += 15;
-                
-                // Filtros selecionados
-                doc.setFontSize(12);
-                doc.text('Filtros Aplicados:', 20, currentY);
-                currentY += 10;
-                
-                doc.setFontSize(10);
-                const filtros = [];
-                if (document.getElementById('filtroAuxilioTransporte').checked) filtros.push('Auxílio Transporte');
-                if (document.getElementById('filtroAuxilioAlimentacao').checked) filtros.push('Auxílio Alimentação');
-                if (document.getElementById('filtroAuxilioMaterial').checked) filtros.push('Auxílio Material Didático');
-                if (document.getElementById('filtroAuxilioMoradia').checked) filtros.push('Auxílio Moradia');
-                
-                if (filtros.length > 0) {
-                    filtros.forEach(filtro => {
-                        doc.text(`• ${filtro}`, 30, currentY);
-                        currentY += 8;
-                    });
-                } else {
-                    doc.text('• Todos os auxílios incluídos', 30, currentY);
-                    currentY += 8;
-                }
-                
-                // Observações
-                if (dados.observacoes) {
-                    currentY += 10;
-                    doc.setFontSize(12);
-                    doc.text('Observações:', 20, currentY);
-                    currentY += 10;
-                    
-                    doc.setFontSize(10);
-                    const linhasObservacoes = doc.splitTextToSize(dados.observacoes, 170);
-                    doc.text(linhasObservacoes, 30, currentY);
-                }
-                
-                // Salvar
-                const dataAtual = new Date().toISOString().split('T')[0];
-                doc.save(`relatorio_personalizado_${dataAtual}.pdf`);
-                
-                submitBtn.disabled = false;
-                submitBtn.innerHTML = originalContent;
-                
-                alert('Relatório personalizado gerado com sucesso!');
-            }, 2000);
-        }
-
         // Definir data padrão (último mês)
         document.addEventListener('DOMContentLoaded', function() {
             const hoje = new Date();
             const umMesAtras = new Date(hoje);
             umMesAtras.setMonth(hoje.getMonth() - 1);
             
-            document.getElementById('dataInicio').value = umMesAtras.toISOString().split('T')[0];
-            document.getElementById('dataFim').value = hoje.toISOString().split('T')[0];
+            document.getElementById('dataInicioRapido').value = umMesAtras.toISOString().split('T')[0];
+            document.getElementById('dataFimRapido').value = hoje.toISOString().split('T')[0];
         });
     </script>
 
