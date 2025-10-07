@@ -1,68 +1,125 @@
 /* Perfil da Assistente Social - CSS */
 
-/* Header com foto de perfil */
+/* Header do perfil - Design moderno sem foto */
 .profile-header {
     background: linear-gradient(135deg, var(--ifes-green) 0%, var(--ifes-light-green) 100%);
     border-radius: 20px;
-    padding: 2rem;
+    padding: 2.5rem;
     margin-bottom: 2rem;
     color: white;
-    box-shadow: 0 10px 25px rgba(46, 125, 50, 0.15);
+    box-shadow: 0 10px 30px rgba(46, 125, 50, 0.2);
+    position: relative;
+    overflow: hidden;
 }
 
-.profile-picture {
-    width: 120px;
-    height: 120px;
-    border-radius: 50%;
-    border: 4px solid white;
-    object-fit: cover;
-    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
-    transition: all 0.3s ease;
-}
-
-.profile-picture:hover {
-    transform: scale(1.05);
-    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.3);
-}
-
-.status-badge {
+.profile-header::before {
+    content: '';
     position: absolute;
-    bottom: 8px;
-    right: 8px;
-    width: 32px;
-    height: 32px;
-    background: white;
+    top: -50%;
+    right: -10%;
+    width: 400px;
+    height: 400px;
+    background: rgba(255, 255, 255, 0.1);
     border-radius: 50%;
+    z-index: 0;
+}
+
+.profile-header::after {
+    content: '';
+    position: absolute;
+    bottom: -30%;
+    left: -5%;
+    width: 300px;
+    height: 300px;
+    background: rgba(255, 255, 255, 0.08);
+    border-radius: 50%;
+    z-index: 0;
+}
+
+.profile-header .container-fluid,
+.profile-header .row,
+.profile-header .col-lg-8,
+.profile-header .col-lg-4 {
+    position: relative;
+    z-index: 1;
+}
+
+/* Ícone grande do perfil */
+.profile-icon-large {
+    width: 100px;
+    height: 100px;
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 20px;
     display: flex;
     align-items: center;
     justify-content: center;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+    flex-shrink: 0;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
 }
 
-.status-badge.active {
-    color: var(--ifes-green);
+.profile-icon-large i {
+    font-size: 4rem;
+    color: white;
 }
 
-.profile-info h3 {
+.profile-icon-large:hover {
+    transform: translateY(-5px) scale(1.05);
+    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15);
+    background: rgba(255, 255, 255, 0.25);
+}
+
+/* Informações do perfil */
+.profile-info h2 {
     font-weight: 700;
-    font-size: 1.8rem;
-    margin-top: 1rem;
+    font-size: 2rem;
+    color: white;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    margin-bottom: 0.5rem;
 }
 
 .profile-info p {
     font-size: 1.1rem;
+    color: white;
+    margin-bottom: 0.25rem;
+}
+
+.profile-info p i {
     opacity: 0.9;
 }
 
+/* Badges modernos */
 .auxilios-ativos {
-    margin-top: 1rem;
+    margin-top: 0;
 }
 
 .auxilios-ativos .badge {
-    margin: 0 0.25rem;
-    padding: 0.5rem 1rem;
-    font-size: 0.9rem;
-    border-radius: 20px;
+    padding: 0.6rem 1.2rem;
+    font-size: 0.95rem;
+    border-radius: 12px;
+    font-weight: 600;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    transition: all 0.3s ease;
+    border: 2px solid transparent;
+}
+
+.auxilios-ativos .badge.bg-white {
+    background-color: white !important;
+}
+
+.auxilios-ativos .badge.text-success {
+    color: var(--ifes-green) !important;
+    border-color: rgba(255, 255, 255, 0.3);
+}
+
+.auxilios-ativos .badge.text-primary {
+    color: #0d6efd !important;
+    border-color: rgba(255, 255, 255, 0.3);
+}
+
+.auxilios-ativos .badge:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
 }
 
 /* Cards de dados */
@@ -276,16 +333,39 @@
 @media (max-width: 768px) {
     .profile-header {
         padding: 1.5rem;
+    }
+    
+    .profile-header .d-flex {
+        flex-direction: column;
         text-align: center;
     }
     
-    .profile-picture {
-        width: 100px;
-        height: 100px;
+    .profile-icon-large {
+        width: 80px;
+        height: 80px;
+        margin: 0 auto 1rem auto;
     }
     
-    .profile-info h3 {
+    .profile-icon-large i {
+        font-size: 3rem;
+    }
+    
+    .profile-info {
+        text-align: center !important;
+    }
+    
+    .profile-info h2 {
         font-size: 1.5rem;
+    }
+    
+    .profile-info p {
+        font-size: 1rem;
+    }
+    
+    .auxilios-ativos .badge {
+        padding: 0.5rem 1rem;
+        font-size: 0.85rem;
+        margin: 0.25rem !important;
     }
     
     .data-card .card-body {
@@ -373,4 +453,44 @@
     --ifes-green: #2e7d32;
     --ifes-light-green: #4caf50;
     --ifes-dark-green: #1b5e20;
+}
+
+/* Footer do perfil - No final da página, largura total */
+.footer-perfil {
+    position: relative;
+    width: 100%;
+    margin: 0;
+    margin-top: 1.5rem;
+    padding: 1.5rem 2rem !important;
+    box-shadow: 0 -5px 15px rgba(0, 0, 0, 0.1);
+}
+
+.footer-perfil p {
+    margin-bottom: 0;
+    font-size: 0.95rem;
+    font-weight: 500;
+}
+
+/* Garantir que o body tenha altura mínima */
+body {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Main content ocupa espaço disponível */
+.main-content {
+    flex: 1;
+    padding-bottom: 1rem;
+}
+
+/* Responsividade do footer */
+@media (max-width: 768px) {
+    .footer-perfil {
+        padding: 1rem 1.5rem !important;
+    }
+    
+    .footer-perfil p {
+        font-size: 0.85rem;
+    }
 }

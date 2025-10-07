@@ -135,24 +135,31 @@
             }
         </script>
 
-        <!-- Header com Foto e Nome -->
+        <!-- Header com Nome -->
         <div class="profile-header mb-4">
             <div class="container-fluid">
-                <div class="row justify-content-center">
-                    <div class="col-12 text-center">
-                        <div class="position-relative d-inline-block">
-                            <img src="/static/img/perfil.png" alt="Foto de Perfil" class="profile-picture">
-                            <div class="status-badge active">
-                                <i class="bi bi-check-circle-fill"></i>
+                <div class="row align-items-center">
+                    <div class="col-lg-8">
+                        <div class="d-flex align-items-center">
+                            <div class="profile-icon-large me-4">
+                                <i class="bi bi-person-circle"></i>
+                            </div>
+                            <div class="profile-info text-start">
+                                <h2 class="mb-2 fw-bold">{{ assistente.nome }}</h2>
+                                <p class="mb-2 fs-5"><i class="bi bi-briefcase me-2"></i>Assistente Social</p>
+                                <p class="mb-0 opacity-90"><i class="bi bi-credit-card-2-front me-2"></i>SIAPE: {{ assistente.matricula }}</p>
                             </div>
                         </div>
-                        <div class="profile-info">
-                            <h3 class="mb-1">{{ assistente.nome }}</h3>
-                            <p class="mb-0">Assistente Social | SIAPE: {{ assistente.matricula }}</p>
-                            <div class="auxilios-ativos mt-2">
-                                <span class="badge bg-success">Ativo</span>
-                                <span class="badge bg-primary">Sistema SCAE</span>
-                            </div>
+                    </div>
+                    <div class="col-lg-4 text-lg-end text-center mt-3 mt-lg-0">
+                        <div class="auxilios-ativos">
+                            <span class="badge bg-white text-success mb-2 d-inline-block">
+                                <i class="bi bi-check-circle-fill me-1"></i> Ativo
+                            </span>
+                            <br>
+                            <span class="badge bg-white text-primary d-inline-block">
+                                <i class="bi bi-shield-check me-1"></i> Sistema SCAE
+                            </span>
                         </div>
                     </div>
                 </div>
@@ -402,5 +409,15 @@
             this.submit();
         });
     </script>
+    </div>
+
+    <!-- Footer fora do main-content -->
+    <footer class="footer-perfil bg-success text-white py-4">
+        <div class="text-center">
+            <p class="text-white mb-0">
+                &copy; 2025 Sistema de Controle de Assistência Estudantil. Todos os direitos reservados.
+            </p>
+        </div>
+    </footer>
 </body>
 </html>
