@@ -322,3 +322,73 @@ function aprovarDocumento(botao, documentoId) {
         
     }, 1500);
 }
+
+// ===== MINI CALENDÁRIO =====
+function initMiniCalendar() {
+    const miniCalendarDays = document.getElementById('miniCalendarDays');
+    if (!miniCalendarDays) return;
+
+    const currentDate = new Date();
+    const currentMonth = currentDate.getMonth();
+    const currentYear = currentDate.getFullYear();
+    const today = currentDate.getDate();
+    
+    // Update month label
+    const monthNames = ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 
+                       'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'];
+    const miniCurrentMonth = document.getElementById('miniCurrentMonth');
+    if (miniCurrentMonth) {
+        miniCurrentMonth.textContent = `${monthNames[currentMonth]} ${currentYear}`;
+    }
+    
+    // Get first day of month and number of days
+    const firstDay = new Date(currentYear, currentMonth, 1).getDay();
+    const daysInMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
+    const daysInPrevMonth = new Date(currentYear, currentMonth, 0).getDate();
+    
+    miniCalendarDays.innerHTML = '';
+    
+    // Days with events (example - você pode substituir por dados reais)
+    const eventsOnDays = [8, 10, 12, 15]; // Dias com eventos
+    
+    // Add previous month's trailing days
+    for (let i = firstDay - 1; i >= 0; i--) {
+        const day = daysInPrevMonth - i;
+        const dayDiv = document.createElement('div');
+        dayDiv.className = 'mini-calendar-day other-month';
+        dayDiv.textContent = day;
+        miniCalendarDays.appendChild(dayDiv);
+    }
+    
+    // Add current month's days
+    for (let day = 1; day <= daysInMonth; day++) {
+        const dayDiv = document.createElement('div');
+        dayDiv.className = 'mini-calendar-day';
+        dayDiv.textContent = day;
+        
+        if (day === today) {
+            dayDiv.classList.add('today');
+        }
+        
+        if (eventsOnDays.includes(day)) {
+            dayDiv.classList.add('has-event');
+        }
+        
+        miniCalendarDays.appendChild(dayDiv);
+    }
+    
+    // Add next month's leading days to complete the grid
+    const totalCells = miniCalendarDays.children.length;
+    const remainingCells = 42 - totalCells; // 6 weeks * 7 days = 42
+    
+    for (let day = 1; day <= remainingCells; day++) {
+        const dayDiv = document.createElement('div');
+        dayDiv.className = 'mini-calendar-day other-month';
+        dayDiv.textContent = day;
+        miniCalendarDays.appendChild(dayDiv);
+    }
+}
+
+// Initialize mini calendar when page loads
+document.addEventListener('DOMContentLoaded', initMiniCalendar);
+

@@ -36,6 +36,16 @@
                     </a>
                 </li>
                 <li class="nav-item">
+                    <a href="/assistente/agenda" class="nav-link">
+                        <i class="bi bi-calendar-event"></i> <span>Agenda</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="/assistente/alunos" class="nav-link">
+                        <i class="bi bi-people"></i> <span>Alunos</span>
+                    </a>
+                </li>
+                <li class="nav-item">
                     <a href="/assistente/analise-inscricoes" class="nav-link">
                         <i class="bi bi-clipboard-check"></i> <span>Análise de Inscrições</span>
                     </a>
@@ -46,8 +56,8 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="/assistente/alunos" class="nav-link">
-                        <i class="bi bi-people"></i> <span>Alunos</span>
+                    <a href="/assistente/editais" class="nav-link">
+                        <i class="bi bi-file-earmark-ruled"></i> <span>Editais</span>
                     </a>
                 </li>
                 <li class="nav-item">
@@ -56,18 +66,13 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="/assistente/relatorios" class="nav-link">
-                        <i class="bi bi-file-earmark-bar-graph"></i> <span>Relatórios</span>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a href="/assistente/agenda" class="nav-link">
-                        <i class="bi bi-calendar-event"></i> <span>Agenda</span>
-                    </a>
-                </li>
-                <li class="nav-item">
                     <a href="/assistente/perfil" class="nav-link">
                         <i class="bi bi-person-circle"></i> <span>Meu Perfil</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="/assistente/relatorios" class="nav-link">
+                        <i class="bi bi-file-earmark-bar-graph"></i> <span>Relatórios</span>
                     </a>
                 </li>
             </ul>
@@ -90,7 +95,7 @@
                 </div>
                 <div class="col-md-4 text-end">
                     <div class="user-profile-card">
-                        <img src="/static/img/perfil.png" alt="Perfil" class="mb-2">
+                        <i class="bi bi-person-circle" style="font-size: 2.5rem; color: #2e7d32; margin-right: 1rem;"></i>
                         <div>
                             <small class="text-muted">Assistente Social</small>
                             <div class="fw-bold">Juliana Silva</div>
@@ -127,174 +132,194 @@
             </div>
         </div>
 
-        <div class="row">
-            <div class="col-md-6">
+        <div class="dashboard-sections">
+            <div class="dashboard-left-column d-flex flex-column gap-4">
+                <!-- Inscrições para Análise -->
                 <div class="table-card card h-100">
+                        <div class="card-header d-flex justify-content-between align-items-center">
+                            <span>Inscrições para Análise</span>
+                            <a href="/assistente/analise-inscricoes" class="btn btn-sm btn-light">Ver Todas</a>
+                        </div>
+                        <div class="table-responsive">
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th>Aluno</th>
+                                        <th>Auxílio</th>
+                                        <th>Data</th>
+                                        <th>Prioridade</th>
+                                        <th>Ações</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>João Silva</td>
+                                        <td>Auxílio Transporte</td>
+                                        <td>01/04/2025</td>
+                                        <td><span class="priority-high">Alta</span></td>
+                                        <td>
+                                            <div class="action-buttons">
+                                                <button class="btn btn-sm btn-outline-primary"><i class="bi bi-eye"></i></button>
+                                                <button class="btn btn-sm btn-outline-success"><i class="bi bi-check-lg"></i></button>
+                                                <button class="btn btn-sm btn-outline-danger"><i class="bi bi-x-lg"></i></button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>Maria Santos</td>
+                                        <td>Auxílio Material Didático</td>
+                                        <td>20/04/2025</td>
+                                        <td><span class="priority-medium">Média</span></td>
+                                        <td>
+                                            <div class="action-buttons">
+                                                <button class="btn btn-sm btn-outline-primary"><i class="bi bi-eye"></i></button>
+                                                <button class="btn btn-sm btn-outline-success"><i class="bi bi-check-lg"></i></button>
+                                                <button class="btn btn-sm btn-outline-danger"><i class="bi bi-x-lg"></i></button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>Pedro Oliveira</td>
+                                        <td>Auxílio Alimentação</td>
+                                        <td>15/03/2025</td>
+                                        <td><span class="priority-high">Alta</span></td>
+                                        <td>
+                                            <div class="action-buttons">
+                                                <button class="btn btn-sm btn-outline-primary"><i class="bi bi-eye"></i></button>
+                                                <button class="btn btn-sm btn-outline-success"><i class="bi bi-check-lg"></i></button>
+                                                <button class="btn btn-sm btn-outline-danger"><i class="bi bi-x-lg"></i></button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>Carla Mendes</td>
+                                        <td>Auxílio Transporte</td>
+                                        <td>28/03/2025</td>
+                                        <td><span class="priority-low">Baixa</span></td>
+                                        <td>
+                                            <div class="action-buttons">
+                                                <button class="btn btn-sm btn-outline-primary"><i class="bi bi-eye"></i></button>
+                                                <button class="btn btn-sm btn-outline-success"><i class="bi bi-check-lg"></i></button>
+                                                <button class="btn btn-sm btn-outline-danger"><i class="bi bi-x-lg"></i></button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                </div>
+
+                <!-- Entrevistas Agendadas -->
+                <div class="card card-entrevistas">
+                        <div class="card-header d-flex justify-content-between align-items-center">
+                            <span>Entrevistas Agendadas</span>
+                            <a href="/assistente/entrevistas" class="btn btn-sm btn-light">Ver Todas</a>
+                        </div>
+                        <div class="card-body overflow-scroll" id="entrevistasContainer">
+                            <div class="d-flex justify-content-between align-items-center mb-3 p-3 bg-light rounded">
+                                <div>
+                                    <h5 class="mb-0">João Silva</h5>
+                                    <small class="text-muted">Entrevista Inicial - Auxílio Transporte</small>
+                                    <br>
+                                    <small class="text-info">
+                                        <i class="bi bi-geo-alt"></i> Presencial - Sala 201 - Bloco A
+                                    </small>
+                                </div>
+                                <div class="text-end">
+                                    <div class="fw-bold">Hoje, 14:00</div>
+                                    <span class="badge bg-danger mb-2">Alta</span>
+                                    <br>
+                                    <button class="btn btn-sm btn-outline-primary mt-1">Iniciar</button>
+                                </div>
+                            </div>
+                            <div class="d-flex justify-content-between align-items-center mb-3 p-3 bg-light rounded">
+                                <div>
+                                    <h5 class="mb-0">Alice Souza</h5>
+                                    <small class="text-muted">Reavaliação - Auxílio Alimentação</small>
+                                    <br>
+                                    <small class="text-info">
+                                        <i class="bi bi-camera-video"></i> Online - https://meet.google.com/abc-defg-hij
+                                    </small>
+                                </div>
+                                <div class="text-end">
+                                    <div class="fw-bold">Hoje, 16:00</div>
+                                    <span class="badge bg-warning mb-2">Média</span>
+                                    <br>
+                                    <button class="btn btn-sm btn-outline-primary mt-1">Iniciar</button>
+                                </div>
+                            </div>
+                            <div class="d-flex justify-content-between align-items-center mb-3 p-3 bg-light rounded">
+                                <div>
+                                    <h5 class="mb-0">Maria Santos</h5>
+                                    <small class="text-muted">Acompanhamento - Auxílio Material Didático</small>
+                                    <br>
+                                    <small class="text-info">
+                                        <i class="bi bi-camera-video"></i> Online - https://teams.microsoft.com/l/meetup-join/xyz123
+                                    </small>
+                                </div>
+                                <div class="text-end">
+                                    <div class="fw-bold">Amanhã, 10:30</div>
+                                    <span class="badge bg-success mb-2">Baixa</span>
+                                    <br>
+                                    <button class="btn btn-sm btn-outline-secondary mt-1">Reagendar</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="dashboard-right-column">
+                <!-- Calendário e Próximos Eventos -->
+                <div class="card card-agenda">
                     <div class="card-header d-flex justify-content-between align-items-center">
-                        <span>Inscrições para Análise</span>
-                        <a href="/assistente/analise-inscricoes" class="btn btn-sm btn-light">Ver Todas</a>
+                        <span><i class="bi bi-calendar-event me-2"></i>Agenda</span>
+                        <a href="/assistente/agenda" class="btn btn-sm btn-light">Ver Completa</a>
                     </div>
-                    <div class="table-responsive">
-                        <table class="table">
-                            <thead>
-                                <tr>
-                                    <th>Aluno</th>
-                                    <th>Auxílio</th>
-                                    <th>Data</th>
-                                    <th>Prioridade</th>
-                                    <th>Ações</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td>João Silva</td>
-                                    <td>Auxílio Transporte</td>
-                                    <td>01/04/2025</td>
-                                    <td><span class="priority-high">Alta</span></td>
-                                    <td>
-                                        <div class="action-buttons">
-                                            <button class="btn btn-sm btn-outline-primary"><i class="bi bi-eye"></i></button>
-                                            <button class="btn btn-sm btn-outline-success"><i class="bi bi-check-lg"></i></button>
-                                            <button class="btn btn-sm btn-outline-danger"><i class="bi bi-x-lg"></i></button>
-                                        </div>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>Maria Santos</td>
-                                    <td>Auxílio Material Didático</td>
-                                    <td>20/04/2025</td>
-                                    <td><span class="priority-medium">Média</span></td>
-                                    <td>
-                                        <div class="action-buttons">
-                                            <button class="btn btn-sm btn-outline-primary"><i class="bi bi-eye"></i></button>
-                                            <button class="btn btn-sm btn-outline-success"><i class="bi bi-check-lg"></i></button>
-                                            <button class="btn btn-sm btn-outline-danger"><i class="bi bi-x-lg"></i></button>
-                                        </div>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>Pedro Oliveira</td>
-                                    <td>Auxílio Alimentação</td>
-                                    <td>15/03/2025</td>
-                                    <td><span class="priority-high">Alta</span></td>
-                                    <td>
-                                        <div class="action-buttons">
-                                            <button class="btn btn-sm btn-outline-primary"><i class="bi bi-eye"></i></button>
-                                            <button class="btn btn-sm btn-outline-success"><i class="bi bi-check-lg"></i></button>
-                                            <button class="btn btn-sm btn-outline-danger"><i class="bi bi-x-lg"></i></button>
-                                        </div>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>Carla Mendes</td>
-                                    <td>Auxílio Transporte</td>
-                                    <td>28/03/2025</td>
-                                    <td><span class="priority-low">Baixa</span></td>
-                                    <td>
-                                        <div class="action-buttons">
-                                            <button class="btn btn-sm btn-outline-primary"><i class="bi bi-eye"></i></button>
-                                            <button class="btn btn-sm btn-outline-success"><i class="bi bi-check-lg"></i></button>
-                                            <button class="btn btn-sm btn-outline-danger"><i class="bi bi-x-lg"></i></button>
-                                        </div>
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-6">
-                <div class="card h-100">
-                    <div class="card-header">Entrevistas Agendadas</div>
-                    <div class="card-body overflow-scroll" id="entrevistasContainer">
-                        <div class="d-flex justify-content-between align-items-center mb-3 p-3 bg-light rounded">
-                            <div>
-                                <h5 class="mb-0">João Silva</h5>
-                                <small class="text-muted">Entrevista Inicial - Auxílio Transporte</small>
-                                <br>
-                                <small class="text-info">
-                                    <i class="bi bi-geo-alt"></i> Presencial - Sala 201 - Bloco A
-                                </small>
+                    <div class="card-body p-3">
+                        <!-- Mini Calendário -->
+                        <div class="mini-calendar mb-3">
+                            <div class="text-center mb-2">
+                                <strong id="miniCurrentMonth">Outubro 2025</strong>
                             </div>
-                            <div class="text-end">
-                                <div class="fw-bold">Hoje, 14:00</div>
-                                <span class="badge bg-danger mb-2">Alta</span>
-                                <br>
-                                <button class="btn btn-sm btn-outline-primary mt-1">Iniciar</button>
+                            <div class="mini-calendar-weekdays">
+                                <div>D</div><div>S</div><div>T</div><div>Q</div><div>Q</div><div>S</div><div>S</div>
+                            </div>
+                            <div class="mini-calendar-days" id="miniCalendarDays">
+                                <!-- Dias serão gerados via JavaScript -->
                             </div>
                         </div>
-                        <div class="d-flex justify-content-between align-items-center mb-3 p-3 bg-light rounded">
-                            <div>
-                                <h5 class="mb-0">Alice Souza</h5>
-                                <small class="text-muted">Reavaliação - Auxílio Alimentação</small>
-                                <br>
-                                <small class="text-info">
-                                    <i class="bi bi-camera-video"></i> Online - https://meet.google.com/abc-defg-hij
-                                </small>
+
+                        <hr class="my-4">
+
+                        <!-- Próximos Eventos -->
+                        <div>
+                            <h6 class="mb-3 fw-bold"><i class="bi bi-clock-history me-2"></i>Próximos Eventos</h6>
+                            <div class="evento-resumo-mini entrevista mb-2">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <div>
+                                        <div class="fw-semibold small">Entrevista - João Silva</div>
+                                        <small class="text-muted"><i class="bi bi-clock"></i> Hoje, 14:00</small>
+                                    </div>
+                                    <span class="badge bg-danger">Alta</span>
+                                </div>
                             </div>
-                            <div class="text-end">
-                                <div class="fw-bold">Hoje, 16:00</div>
-                                <span class="badge bg-warning mb-2">Média</span>
-                                <br>
-                                <button class="btn btn-sm btn-outline-primary mt-1">Iniciar</button>
+                            <div class="evento-resumo-mini reuniao mb-2">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <div>
+                                        <div class="fw-semibold small">Reunião de Equipe</div>
+                                        <small class="text-muted"><i class="bi bi-clock"></i> Hoje, 16:00</small>
+                                    </div>
+                                    <span class="badge bg-warning">Média</span>
+                                </div>
                             </div>
-                        </div>
-                        <div class="d-flex justify-content-between align-items-center mb-3 p-3 bg-light rounded">
-                            <div>
-                                <h5 class="mb-0">Maria Santos</h5>
-                                <small class="text-muted">Acompanhamento - Auxílio Material Didático</small>
-                                <br>
-                                <small class="text-info">
-                                    <i class="bi bi-camera-video"></i> Online - https://teams.microsoft.com/l/meetup-join/xyz123
-                                </small>
-                            </div>
-                            <div class="text-end">
-                                <div class="fw-bold">Amanhã, 10:30</div>
-                                <span class="badge bg-success mb-2">Baixa</span>
-                                <br>
-                                <button class="btn btn-sm btn-outline-secondary mt-1">Reagendar</button>
-                            </div>
-                        </div>
-                        <div class="d-flex justify-content-end mt-3">
-                            <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#novaEntrevistaModal">Nova Entrevista</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="row mt-4">
-            <div class="col-12">
-                <div class="card documents">
-                    <div class="card-header">Documentos Pendentes</div>
-                    <div class="card-body">
-                        <div class="d-flex justify-content-between align-items-center mb-3">
-                            <div>
-                                <h5 class="mb-0">João Silva</h5>
-                                <small class="text-muted">Comprovante de residência atualizado</small>
-                            </div>
-                            <div>
-                                <button class="btn btn-sm btn-outline-primary me-2"><i class="bi bi-eye"></i></button>
-                                <button class="btn btn-sm btn-outline-success btn-aprovar" data-documento="joao-residencia">Aprovar</button>
-                            </div>
-                        </div>
-                        <div class="d-flex justify-content-between align-items-center mb-3">
-                            <div>
-                                <h5 class="mb-0">Maria Santos</h5>
-                                <small class="text-muted">Comprovante de renda familiar</small>
-                            </div>
-                            <div>
-                                <button class="btn btn-sm btn-outline-primary me-2"><i class="bi bi-eye"></i></button>
-                                <button class="btn btn-sm btn-outline-success btn-aprovar" data-documento="maria-renda">Aprovar</button>
-                            </div>
-                        </div>
-                        <div class="d-flex justify-content-between align-items-center">
-                            <div>
-                                <h5 class="mb-0">Pedro Oliveira</h5>
-                                <small class="text-muted">Declaração de matrícula</small>
-                            </div>
-                            <div>
-                                <button class="btn btn-sm btn-outline-primary me-2"><i class="bi bi-eye"></i></button>
-                                <button class="btn btn-sm btn-outline-success btn-aprovar" data-documento="pedro-matricula">Aprovar</button>
+                            <div class="evento-resumo-mini entrevista mb-2">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <div>
+                                        <div class="fw-semibold small">Entrevista - Maria Santos</div>
+                                        <small class="text-muted"><i class="bi bi-clock"></i> Amanhã, 10:00</small>
+                                    </div>
+                                    <span class="badge bg-success">Baixa</span>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -303,128 +328,122 @@
         </div>
     </div>
 
-    <!-- Modal Nova Entrevista -->
-    <div class="modal fade" id="novaEntrevistaModal" tabindex="-1" aria-labelledby="novaEntrevistaModalLabel" aria-hidden="true">
+    <!-- No modal needed on dashboard anymore -->
+    <div class="modal fade" id="novoEditalModal" tabindex="-1" aria-labelledby="novoEditalModalLabel" aria-hidden="true" style="display:none;">
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="novaEntrevistaModalLabel">
-                        <i class="bi bi-calendar-plus me-2"></i>Agendar Nova Entrevista
+                    <h5 class="modal-title" id="novoEditalModalLabel">
+                        <i class="bi bi-file-earmark-plus me-2"></i>Publicar Novo Documento
                     </h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <form id="novaEntrevistaForm">
-                        <div class="row">
-                            <div class="col-md-6">
-                                <div class="mb-3">
-                                    <label for="alunoNome" class="form-label">
-                                        <i class="bi bi-person me-1"></i>Nome do Aluno
-                                    </label>
-                                    <input type="text" class="form-control" id="alunoNome" placeholder="Digite o nome completo do aluno..." required>
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="mb-3">
-                                    <label for="tipoEntrevista" class="form-label">
-                                        <i class="bi bi-clipboard me-1"></i>Tipo de Entrevista
-                                    </label>
-                                    <select class="form-select" id="tipoEntrevista" required>
-                                        <option value="">Selecione o tipo...</option>
-                                        <option value="inicial">Entrevista Inicial</option>
-                                        <option value="reavaliacao">Reavaliação</option>
-                                        <option value="acompanhamento">Acompanhamento</option>
-                                        <option value="renovacao">Renovação de Auxílio</option>
-                                    </select>
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <div class="row">
-                            <div class="col-md-4">
-                                <div class="mb-3">
-                                    <label for="dataEntrevista" class="form-label">
-                                        <i class="bi bi-calendar me-1"></i>Data
-                                    </label>
-                                    <input type="date" class="form-control" id="dataEntrevista" required>
-                                </div>
-                            </div>
-                            <div class="col-md-4">
-                                <div class="mb-3">
-                                    <label for="horaEntrevista" class="form-label">
-                                        <i class="bi bi-clock me-1"></i>Horário
-                                    </label>
-                                    <input type="time" class="form-control" id="horaEntrevista" required>
-                                </div>
-                            </div>
-                            <div class="col-md-4">
-                                <div class="mb-3">
-                                    <label for="duracao" class="form-label">
-                                        <i class="bi bi-stopwatch me-1"></i>Duração (min)
-                                    </label>
-                                    <select class="form-select" id="duracao" required>
-                                        <option value="30">30 minutos</option>
-                                        <option value="45">45 minutos</option>
-                                        <option value="60" selected>60 minutos</option>
-                                        <option value="90">90 minutos</option>
-                                    </select>
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <div class="row">
-                            <div class="col-md-6">
-                                <div class="mb-3">
-                                    <label for="modalidade" class="form-label">
-                                        <i class="bi bi-geo-alt me-1"></i>Modalidade
-                                    </label>
-                                    <select class="form-select" id="modalidade" required>
-                                        <option value="presencial" selected>Presencial</option>
-                                        <option value="online">Online</option>
-                                        <option value="hibrido">Híbrido</option>
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="mb-3">
-                                    <label for="local" class="form-label">
-                                        <i class="bi bi-building me-1"></i>Local/Sala
-                                    </label>
-                                    <input type="text" class="form-control" id="local" placeholder="Ex: Sala 201 - Bloco A">
-                                </div>
-                            </div>
-                        </div>
-                        
+                    <form id="novoEditalForm">
                         <div class="mb-3">
-                            <label for="prioridade" class="form-label">
-                                <i class="bi bi-exclamation-triangle me-1"></i>Prioridade
+                            <label for="categoriaDocumento" class="form-label">
+                                <i class="bi bi-folder me-1"></i>Categoria
                             </label>
-                            <select class="form-select" id="prioridade" required>
-                                <option value="baixa">Baixa</option>
-                                <option value="media" selected>Média</option>
-                                <option value="alta">Alta</option>
-                                <option value="urgente">Urgente</option>
+                            <select class="form-select" id="categoriaDocumento" required>
+                                <option value="">Selecione a categoria...</option>
+                                <option value="geral">Edital Geral</option>
+                                <option value="cronograma">Cronograma</option>
+                                <option value="anexo">Anexo de Inscrição</option>
+                                <option value="resultado">Resultado (Preliminar/Final)</option>
                             </select>
                         </div>
                         
-                        <div class="mb-3">
-                            <label for="observacoes" class="form-label">
-                                <i class="bi bi-chat-text me-1"></i>Observações
+                        <div class="mb-3" id="campoTitulo">
+                            <label for="tituloDocumento" class="form-label">
+                                <i class="bi bi-type me-1"></i>Título do Documento
                             </label>
-                            <textarea class="form-control" id="observacoes" rows="3" placeholder="Observações adicionais sobre a entrevista..."></textarea>
+                            <input type="text" class="form-control" id="tituloDocumento" placeholder="Ex: Edital Geral 001/2025" required>
+                        </div>
+                        
+                        <!-- Campos específicos para Resultados -->
+                        <div id="camposResultado" style="display: none;">
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <div class="mb-3">
+                                        <label for="semestreResultado" class="form-label">
+                                            <i class="bi bi-calendar-check me-1"></i>Semestre
+                                        </label>
+                                        <select class="form-select" id="semestreResultado">
+                                            <option value="1">1º Semestre</option>
+                                            <option value="2" selected>2º Semestre</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="mb-3">
+                                        <label for="tipoInscricaoResultado" class="form-label">
+                                            <i class="bi bi-people me-1"></i>Tipo de Inscrição
+                                        </label>
+                                        <select class="form-select" id="tipoInscricaoResultado">
+                                            <option value="primeira">1ª Participação</option>
+                                            <option value="atualizacao">Atualização</option>
+                                            <option value="renovacao">Renovação</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="mb-3">
+                                        <label for="tipoResultado" class="form-label">
+                                            <i class="bi bi-file-text me-1"></i>Tipo de Resultado
+                                        </label>
+                                        <select class="form-select" id="tipoResultado">
+                                            <option value="preliminar">Preliminar</option>
+                                            <option value="final">Final</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Campos específicos para Anexos -->
+                        <div id="camposAnexo" style="display: none;">
+                            <div class="mb-3">
+                                <label for="numeroAnexo" class="form-label">
+                                    <i class="bi bi-hash me-1"></i>Número do Anexo
+                                </label>
+                                <select class="form-select" id="numeroAnexo">
+                                    <option value="1">Anexo I</option>
+                                    <option value="2">Anexo II</option>
+                                    <option value="3">Anexo III</option>
+                                    <option value="4">Anexo IV</option>
+                                    <option value="5">Anexo V</option>
+                                    <option value="6">Anexo VI</option>
+                                </select>
+                            </div>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="dataPublicacao" class="form-label">
+                                <i class="bi bi-calendar-event me-1"></i>Data de Publicação
+                            </label>
+                            <input type="date" class="form-control" id="dataPublicacao" required>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="arquivoDocumento" class="form-label">
+                                <i class="bi bi-file-pdf me-1"></i>Arquivo (PDF)
+                            </label>
+                            <input type="file" class="form-control" id="arquivoDocumento" accept=".pdf" required>
+                            <small class="text-muted">Apenas arquivos PDF. Tamanho máximo: 10MB</small>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="descricaoDocumento" class="form-label">
+                                <i class="bi bi-card-text me-1"></i>Descrição
+                            </label>
+                            <textarea class="form-control" id="descricaoDocumento" rows="2" placeholder="Breve descrição do documento..."></textarea>
                         </div>
                         
                         <div class="mb-3">
                             <div class="form-check">
-                                <input class="form-check-input" type="checkbox" id="notificarAluno">
-                                <label class="form-check-label" for="notificarAluno">
-                                    <i class="bi bi-bell me-1"></i>Notificar aluno por email
-                                </label>
-                            </div>
-                            <div class="form-check">
-                                <input class="form-check-input" type="checkbox" id="lembrete">
-                                <label class="form-check-label" for="lembrete">
-                                    <i class="bi bi-alarm me-1"></i>Criar lembrete 1 dia antes
+                                <input class="form-check-input" type="checkbox" id="documentoAtivo" checked>
+                                <label class="form-check-label" for="documentoAtivo">
+                                    <i class="bi bi-check-circle me-1"></i>Publicar como ativo (visível para alunos)
                                 </label>
                             </div>
                         </div>
@@ -434,27 +453,25 @@
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
                         <i class="bi bi-x-circle me-1"></i>Cancelar
                     </button>
-                    <button type="button" class="btn btn-success" id="agendarEntrevista">
-                        <i class="bi bi-check-circle me-1"></i>Agendar Entrevista
+                    <button type="button" class="btn btn-success" id="publicarDocumento">
+                        <i class="bi bi-check-circle me-1"></i>Publicar Documento
                     </button>
                 </div>
             </div>
         </div>
     </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="/static/js/dashboard_assistente.js"></script>
-
-    <footer class="footer bg-success text-white py-4">
-        <div class="container">
-            <div class="row">
-                <div class="col-12 text-center">
-                    <p class="text-white mb-0">
-                        &copy; 2025 Sistema de Controle de Assistência Estudantil. Todos os direitos reservados.
-                    </p>
-                </div>
-            </div>
+    <!-- Footer -->
+    <footer class="footer-perfil bg-success text-white py-4 mt-auto">
+        <div class="text-center">
+            <p class="text-white mb-0">
+                &copy; 2025 Sistema de Controle de Assistência Estudantil. Todos os direitos reservados.
+            </p>
         </div>
     </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="/static/js/dashboard_assistente.js"></script>
 </body>
 </html>
+
