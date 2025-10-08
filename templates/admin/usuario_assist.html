@@ -157,34 +157,23 @@
             </div>
         </div>
 
-        <!-- Seção de Busca e Filtros -->
+        <!-- Seção de Busca -->
         <div class="search-filter-section mb-4">
             <div class="row">
-                <div class="col-md-6">
+                <div class="col-md-12">
                     <div class="search-box">
                         <label for="searchAssistant" class="form-label">
                             <i class="bi bi-search me-1"></i>Buscar Assistente
                         </label>
                         <div class="input-group">
                             <input type="text" class="form-control" id="searchAssistant" placeholder="Digite o nome ou matrícula do assistente">
+                            <button class="btn btn-outline-light bg-white text-dark border" type="button" onclick="clearSearch()" title="Limpar busca">
+                                <i class="bi bi-x-circle"></i>
+                            </button>
                             <button class="btn btn-outline-success" type="button" onclick="searchAssistant()">
                                 <i class="bi bi-search"></i>
                             </button>
                         </div>
-                    </div>
-                </div>
-                <div class="col-md-6">
-                    <div class="filter-section">
-                        <label for="filterStatus" class="form-label">
-                            <i class="bi bi-funnel me-1"></i>Filtrar por Status
-                        </label>
-                        <select class="form-select" id="filterStatus" onchange="filterAssistants()">
-                            <option value="">Todos os assistentes</option>
-                            <option value="ativo">Assistentes Ativos</option>
-                            <option value="inativo">Assistentes Inativos</option>
-                            <option value="ferias">Em Férias</option>
-                            <option value="licenca">Em Licença</option>
-                        </select>
                     </div>
                 </div>
             </div>
@@ -241,13 +230,13 @@
                                         <td>{{ assistente.email }}</td>
                                         <td>
                                             <div class="action-buttons">
-                                                <button class="btn btn-sm btn-outline-info" onclick="viewAssistant({{ assistente.id_usuario }})" title="Visualizar">
+                                                <button class="btn btn-sm btn-outline-info" onclick="viewAssistant('{{ assistente.id_usuario }}')" title="Visualizar">
                                                     <i class="bi bi-eye"></i>
                                                 </button>
-                                                <button class="btn btn-sm btn-outline-secondary" onclick="editAssistant({{ assistente.id_usuario }})" title="Editar">
+                                                <button class="btn btn-sm btn-outline-secondary" onclick="editAssistant('{{ assistente.id_usuario }}')" title="Editar">
                                                     <i class="bi bi-pencil"></i>
                                                 </button>
-                                                <button class="btn btn-sm btn-outline-danger" onclick="deleteAssistant({{ assistente.id_usuario }})" title="Excluir">
+                                                <button class="btn btn-sm btn-outline-danger" onclick="deleteAssistant('{{ assistente.id_usuario }}')" title="Excluir">
                                                     <i class="bi bi-trash"></i>
                                                 </button>
                                             </div>
@@ -332,7 +321,7 @@
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
                         <i class="bi bi-x-circle me-1"></i>Fechar
                     </button>
-                    <button type="button" class="btn btn-primary" onclick="editAssistantFromModal()">
+                    <button type="button" class="btn btn-success" onclick="editAssistantFromModal()">
                         <i class="bi bi-pencil me-1"></i>Editar
                     </button>
                 </div>
@@ -381,8 +370,8 @@
         const assistentes = {{ assistentes | tojson | safe }};
 
         function viewAssistant(id) {
-            // Buscar o assistente pelo id
-            const assistente = assistentes.find(a => a.id_usuario === id);
+            // Buscar o assistente pelo id (comparação flexível para string e número)
+            const assistente = assistentes.find(a => a.id_usuario == id);
             
             if (assistente) {
                 // Preencher os campos do modal
@@ -395,6 +384,9 @@
                 // Abrir o modal
                 const modal = new bootstrap.Modal(document.getElementById('viewAssistantModal'));
                 modal.show();
+            } else {
+                console.error('Assistente não encontrado:', id);
+                console.log('IDs disponíveis:', assistentes.map(a => a.id_usuario));
             }
         }
 
@@ -420,8 +412,8 @@
         let assistantToDeleteId = null;
 
         function deleteAssistant(id) {
-            // Buscar o assistente pelo id
-            const assistente = assistentes.find(a => a.id_usuario === id);
+            // Buscar o assistente pelo id (comparação flexível para string e número)
+            const assistente = assistentes.find(a => a.id_usuario == id);
             
             if (assistente) {
                 // Guardar o ID para exclusão
@@ -448,6 +440,107 @@
                 form.submit();
             }
         }
+
+        function searchAssistant() {
+            const searchTerm = document.getElementById('searchAssistant').value.toLowerCase().trim();
+            
+            if (!searchTerm) {
+                // Se não há termo de busca, mostrar todos
+                location.reload();
+                return;
+            }
+            
+            // Buscar assistente por nome, matrícula ou SIAPE
+            const results = assistentes.filter(a => 
+                a.nome.toLowerCase().includes(searchTerm) ||
+                a.matricula.toLowerCase().includes(searchTerm) ||
+                a.siape.toLowerCase().includes(searchTerm) ||
+                a.email.toLowerCase().includes(searchTerm)
+            );
+            
+            // Atualizar tabela com resultados
+            const tbody = document.getElementById('assistantsTableBody');
+            tbody.innerHTML = '';
+            
+            if (results.length === 0) {
+                tbody.innerHTML = `
+                    <tr>
+                        <td colspan="4" class="text-center text-muted py-4">
+                            <i class="bi bi-search fs-1 d-block mb-2"></i>
+                            Nenhum assistente encontrado com "${searchTerm}"
+                        </td>
+                    </tr>
+                `;
+            } else {
+                results.forEach(assistente => {
+                    tbody.innerHTML += `
+                        <tr>
+                            <td><strong>${assistente.nome}</strong></td>
+                            <td>${assistente.siape}</td>
+                            <td>${assistente.email}</td>
+                            <td>
+                                <div class="action-buttons">
+                                    <button class="btn btn-sm btn-outline-info" onclick="viewAssistant(${assistente.id_usuario})" title="Visualizar">
+                                        <i class="bi bi-eye"></i>
+                                    </button>
+                                    <button class="btn btn-sm btn-outline-secondary" onclick="editAssistant(${assistente.id_usuario})" title="Editar">
+                                        <i class="bi bi-pencil"></i>
+                                    </button>
+                                    <button class="btn btn-sm btn-outline-danger" onclick="deleteAssistant(${assistente.id_usuario})" title="Excluir">
+                                        <i class="bi bi-trash"></i>
+                                    </button>
+                                </div>
+                            </td>
+                        </tr>
+                    `;
+                });
+            }
+            
+            // Atualizar contagem
+            document.getElementById('assistantsCount').textContent = results.length;
+        }
+
+        function clearSearch() {
+            // Limpar campo de busca
+            document.getElementById('searchAssistant').value = '';
+            
+            // Mostrar todos os assistentes novamente
+            const tbody = document.getElementById('assistantsTableBody');
+            tbody.innerHTML = '';
+            
+            assistentes.forEach(assistente => {
+                tbody.innerHTML += `
+                    <tr>
+                        <td><strong>${assistente.nome}</strong></td>
+                        <td>${assistente.siape}</td>
+                        <td>${assistente.email}</td>
+                        <td>
+                            <div class="action-buttons">
+                                <button class="btn btn-sm btn-outline-info" onclick="viewAssistant(${assistente.id_usuario})" title="Visualizar">
+                                    <i class="bi bi-eye"></i>
+                                </button>
+                                <button class="btn btn-sm btn-outline-secondary" onclick="editAssistant(${assistente.id_usuario})" title="Editar">
+                                    <i class="bi bi-pencil"></i>
+                                </button>
+                                <button class="btn btn-sm btn-outline-danger" onclick="deleteAssistant(${assistente.id_usuario})" title="Excluir">
+                                    <i class="bi bi-trash"></i>
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                `;
+            });
+            
+            // Atualizar contagem
+            document.getElementById('assistantsCount').textContent = assistentes.length;
+        }
+
+        // Buscar ao pressionar Enter
+        document.getElementById('searchAssistant').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                searchAssistant();
+            }
+        });
     </script>
 
     <footer class="footer bg-success text-white py-4">
