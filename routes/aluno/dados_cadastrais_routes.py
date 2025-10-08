@@ -144,6 +144,9 @@ async def post_perfil(
         if isinstance(e, ValidationError):
             erro_info = e.errors()[0]
             erro_msg = erro_info['msg']
+            # Remover o prefixo "Value error, " se existir
+            if erro_msg.startswith('Value error, '):
+                erro_msg = erro_msg.replace('Value error, ', '', 1)
             # Pegar o nome do campo com erro
             campo_erro = erro_info['loc'][0] if erro_info.get('loc') else ''
         else:
@@ -163,7 +166,7 @@ async def post_perfil(
         
         return templates.TemplateResponse(
             "aluno/perfil.html",
-            {"request": request, "aluno": aluno, "mensagem_erro": f"Erro ao validar dados: {str(e)}"}
+            {"request": request, "aluno": aluno, "mensagem_erro": str(e)}
         )
     
     usuario = usuario_repo.obter_usuario_por_matricula(usuario_logado['matricula'])
