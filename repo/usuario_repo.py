@@ -36,7 +36,11 @@ def obter_todos() -> list[Usuario]:
                 matricula=row["matricula"],
                 email=row["email"],
                 senha=row["senha"],
-                perfil=row["perfil"])
+                perfil=row["perfil"],
+                foto=row["foto"],
+                token_redefinicao=None,
+                data_token=None,
+                data_cadastro=None)
             for row in rows]
         return usuarios
     
@@ -53,7 +57,12 @@ def obter_usuarios_por_pagina(pagina: int, limite: int) -> list[Usuario]:
                 matricula=row["matricula"],
                 email=row["email"],
                 senha=row["senha"],
-                perfil=row["perfil"])
+                perfil=row["perfil"],
+                foto=row["foto"],
+                token_redefinicao=None,
+                data_token=None,
+                data_cadastro=None
+                )
             for row in rows]
         return usuarios
 
@@ -69,7 +78,11 @@ def obter_por_id(id: int) -> Optional[Usuario]:
                 matricula=row["matricula"],
                 email=row["email"],
                 senha=row["senha"],
-                perfil=row["perfil"])
+                perfil=row["perfil"],
+                foto=row["foto"],
+                token_redefinicao=None,
+                data_token=None,
+                data_cadastro=None)
             return usuario
         return None
     
@@ -127,7 +140,7 @@ def obter_usuario_por_email(email: str) -> Optional[Usuario]:
                 email=row["email"],
                 senha=row["senha"],
                 perfil=row["perfil"],
-                foto=None,
+                foto=row["foto"],
                 token_redefinicao=None,
                 data_token=None,
                 data_cadastro=None)
@@ -174,7 +187,7 @@ def limpar_token(id: int) -> bool:
 def atualizar(usuario: Usuario) -> bool:
     with get_connection() as conn:
         cursor = conn.cursor()
-        cursor.execute(ATUALIZAR, (usuario.nome, usuario.email, usuario.matricula, usuario.id_usuario))
+        cursor.execute(ATUALIZAR, (usuario.nome, usuario.matricula, usuario.email, usuario.id_usuario))
         return cursor.rowcount > 0
 
 def atualizar_senha(id: int, senha: str) -> bool:

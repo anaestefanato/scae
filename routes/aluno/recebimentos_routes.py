@@ -17,9 +17,9 @@ async def get_recebimentos(request: Request, usuario_logado: dict = None):
         return RedirectResponse("/aluno/perfil", status_code=303)
     
     aluno = usuario_repo.obter_usuario_por_matricula(usuario_logado['matricula'])
-    recebimentos = recebimento_repo.obter_por_aluno(aluno.id_usuario)
-    estatisticas = recebimento_repo.obter_estatisticas_aluno(aluno.id_usuario)
-    
+    recebimentos = recebimento_repo.obter_por_aluno(usuario_logado['id'])
+    estatisticas = recebimento_repo.obter_estatisticas_aluno(usuario_logado['id'])
+
     response = templates.TemplateResponse("/aluno/recebimentos.html", {
         "request": request, 
         "aluno": aluno,

@@ -23,7 +23,42 @@ async def get_dados_cadastrais(request: Request, usuario_logado: dict = None, su
     # Se não encontrar dados completos, busca dados básicos do usuário
     if not aluno:
         usuario = usuario_repo.obter_usuario_por_matricula(usuario_logado['matricula'])
-        aluno = usuario
+        # Criar objeto aluno com valores padrão para os campos que não existem no usuário
+        if usuario:
+            from model.aluno_model import Aluno
+            aluno = Aluno(
+                id_usuario=usuario.id_usuario,
+                nome=usuario.nome,
+                matricula=usuario.matricula,
+                email=usuario.email,
+                senha=usuario.senha,
+                perfil=usuario.perfil,
+                foto=usuario.foto,
+                token_redefinicao=usuario.token_redefinicao,
+                data_token=usuario.data_token,
+                data_cadastro=usuario.data_cadastro,
+                cpf="",
+                telefone="",
+                curso="",
+                data_nascimento="",
+                filiacao="",
+                cep="",
+                cidade="",
+                bairro="",
+                rua="",
+                numero="",
+                estado="",
+                complemento="",
+                nome_banco="",
+                agencia_bancaria="",
+                numero_conta_bancaria="",
+                renda_familiar=0.0,
+                quantidade_pessoas=1,
+                renda_per_capita=0.0,
+                situacao_moradia=""
+            )
+        else:
+            aluno = usuario
     
     context = {"request": request, "aluno": aluno}
     
@@ -73,10 +108,10 @@ async def post_perfil(
     usuario = usuario_repo.obter_usuario_por_matricula(usuario_logado['matricula'])
     
     # Verificar se o cadastro já está completo (atualização) ou é primeira vez (inserção)
-    if aluno_repo.possui_cadastro_completo(usuario.id_usuario):
+    if aluno_repo.possui_cadastro_completo(usuario_logado['id']):
         # Atualizar dados existentes do aluno
         aluno = Aluno(
-            id_usuario=usuario.id_usuario,
+            id_usuario=usuario_logado['id'],
             nome=nome,
             matricula=matricula,
             email=email,
@@ -125,7 +160,7 @@ async def post_perfil(
     else:
         # Primeiro cadastro (inserção)
         aluno = Aluno(
-            id_usuario=usuario.id_usuario,
+            id_usuario=usuario_logado['id'],
             nome=nome,
             matricula=matricula,
             email=email,
@@ -158,7 +193,7 @@ async def post_perfil(
         sucesso = aluno_repo.completar_cadastro(aluno)
 
         if sucesso:
-            aluno_repo.marcar_cadastro_completo(usuario.id_usuario)
+            aluno_repo.marcar_cadastro_completo(usuario_logado['id'])
             # Atualiza a sessão para refletir cadastro completo
             if hasattr(request, 'session'):
                 request.session['usuario']['completo'] = True
