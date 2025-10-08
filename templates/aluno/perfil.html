@@ -69,27 +69,27 @@
                         <div class="row g-3">
                             <div class="col-md-6">
                                 <label class="form-label">Nome Completo</label>
-                                <input type="text" class="form-control" name="nome" value="{{ aluno.nome }}" required>
+                                <input type="text" class="form-control {% if campo_erro == 'nome' %}is-invalid{% endif %}" name="nome" value="{{ aluno.nome }}" required>
                             </div>
                             <div class="col-md-6">
                                 <label class="form-label">CPF</label>
-                                <input type="text" class="form-control" name="cpf" value="{{ aluno.cpf }}" required>
+                                <input type="text" class="form-control {% if campo_erro == 'cpf' %}is-invalid{% endif %}" name="cpf" value="{{ aluno.cpf }}" required>
                             </div>
                             <div class="col-md-6">
                                 <label class="form-label">Data de Nascimento</label>
-                                <input type="date" class="form-control" name="data_nascimento" value="{{ aluno.data_nascimento }}" required>
+                                <input type="date" class="form-control {% if campo_erro == 'data_nascimento' %}is-invalid{% endif %}" name="data_nascimento" value="{{ aluno.data_nascimento }}" required>
                             </div>
                             <div class="col-md-6">
                                 <label class="form-label">E-mail</label>
-                                <input type="email" class="form-control" name="email" value="{{ aluno.email }}" required>
+                                <input type="email" class="form-control {% if campo_erro == 'email' %}is-invalid{% endif %}" name="email" value="{{ aluno.email }}" required>
                             </div>
                             <div class="col-md-6">
                                 <label class="form-label">Telefone</label>
-                                <input type="tel" class="form-control" name="telefone" value="{{ aluno.telefone }}" required>
+                                <input type="tel" class="form-control {% if campo_erro == 'telefone' %}is-invalid{% endif %}" name="telefone" value="{{ aluno.telefone }}" required>
                             </div>
                             <div class="col-md-6">
                                 <label class="form-label">Filiação</label>
-                                <input type="text" class="form-control" name="filiacao" value="{{ aluno.filiacao }}" required>
+                                <input type="text" class="form-control {% if campo_erro == 'filiacao' %}is-invalid{% endif %}" name="filiacao" value="{{ aluno.filiacao }}" required>
                             </div>
                         </div>
                 </div>
@@ -106,11 +106,11 @@
                         <div class="row g-3">
                             <div class="col-md-6">
                                 <label class="form-label">Matrícula</label>
-                                <input type="text" class="form-control" name="matricula" value="{{ aluno.matricula }}" required>
+                                <input type="text" class="form-control {% if campo_erro == 'matricula' %}is-invalid{% endif %}" name="matricula" value="{{ aluno.matricula }}" required>
                             </div>
                             <div class="col-md-6">
                                 <label class="form-label">Curso</label>
-                                <input type="text" class="form-control" name="curso" value="{{ aluno.curso }}" required>
+                                <input type="text" class="form-control {% if campo_erro == 'curso' %}is-invalid{% endif %}" name="curso" value="{{ aluno.curso }}" required>
                             </div>
                         </div>
                 </div>
@@ -128,7 +128,7 @@
                             <div class="col-md-6">
                                 <label class="form-label">CEP</label>
                                 <div class="input-group">
-                                    <input type="text" class="form-control" id="cep" name="cep" value="{{ aluno.cep }}" 
+                                    <input type="text" class="form-control {% if campo_erro == 'cep' %}is-invalid{% endif %}" id="cep" name="cep" value="{{ aluno.cep }}" 
                                            maxlength="9" placeholder="00000-000" required>
                                     <button class="btn btn-outline-secondary" type="button" id="btn-buscar-cep" disabled>
                                         <i class="bi bi-search"></i>
@@ -143,27 +143,27 @@
                             </div>
                             <div class="col-md-6">
                                 <label class="form-label">Cidade</label>
-                                <input type="text" class="form-control" id="cidade" name="cidade" value="{{ aluno.cidade }}" required>
+                                <input type="text" class="form-control {% if campo_erro == 'cidade' %}is-invalid{% endif %}" id="cidade" name="cidade" value="{{ aluno.cidade }}" required>
                             </div>
                             <div class="col-md-6">
                                 <label class="form-label">Bairro</label>
-                                <input type="text" class="form-control" id="bairro" name="bairro" value="{{ aluno.bairro }}" required>
+                                <input type="text" class="form-control {% if campo_erro == 'bairro' %}is-invalid{% endif %}" id="bairro" name="bairro" value="{{ aluno.bairro }}" required>
                             </div>
                             <div class="col-md-6">
                                 <label class="form-label">Rua</label>
-                                <input type="text" class="form-control" id="rua" name="rua" value="{{ aluno.rua }}" required>
+                                <input type="text" class="form-control {% if campo_erro == 'rua' %}is-invalid{% endif %}" id="rua" name="rua" value="{{ aluno.rua }}" required>
                             </div>
                             <div class="col-md-3">
                                 <label class="form-label">Estado</label>
-                                <input type="text" class="form-control" id="estado" name="estado" value="{{ aluno.estado }}" required>
+                                <input type="text" class="form-control {% if campo_erro == 'estado' %}is-invalid{% endif %}" id="estado" name="estado" value="{{ aluno.estado }}" required>
                             </div>
                             <div class="col-md-3">
                                 <label class="form-label">Número</label>
-                                <input type="text" class="form-control" name="numero" value="{{ aluno.numero }}" required>
+                                <input type="text" class="form-control {% if campo_erro == 'numero' %}is-invalid{% endif %}" name="numero" value="{{ aluno.numero }}" required>
                             </div>
                             <div class="col-md-6">
                                 <label class="form-label">Complemento</label>
-                                <input type="text" class="form-control" name="complemento" value="{{ aluno.complemento }}">
+                                <input type="text" class="form-control {% if campo_erro == 'complemento' %}is-invalid{% endif %}" name="complemento" value="{{ aluno.complemento }}">
                             </div>
                         </div>
                 </div>
@@ -180,37 +180,37 @@
                         <div class="row g-3">
                             <div class="col-md-4">
                                 <label class="form-label">Banco</label>
-                                <input type="text" class="form-control" name="nome_banco" value="{{ aluno.nome_banco }}" required>
+                                <input type="text" class="form-control {% if campo_erro == 'nome_banco' %}is-invalid{% endif %}" name="nome_banco" value="{{ aluno.nome_banco }}" required>
                             </div>
                             <div class="col-md-4">
                                 <label class="form-label">Agência</label>
-                                <input type="text" class="form-control" name="agencia_bancaria" value="{{ aluno.agencia_bancaria }}" required>
+                                <input type="text" class="form-control {% if campo_erro == 'agencia_bancaria' %}is-invalid{% endif %}" name="agencia_bancaria" value="{{ aluno.agencia_bancaria }}" required>
                             </div>
                             <div class="col-md-4">
                                 <label class="form-label">Conta</label>
-                                <input type="text" class="form-control" name="numero_conta_bancaria" value="{{ aluno.numero_conta_bancaria }}" required>
+                                <input type="text" class="form-control {% if campo_erro == 'numero_conta_bancaria' %}is-invalid{% endif %}" name="numero_conta_bancaria" value="{{ aluno.numero_conta_bancaria }}" required>
                             </div>
                             <div class="col-md-6">
                                 <label class="form-label">Renda Familiar Total</label>
                                 <div class="input-group">
                                     <span class="input-group-text">R$</span>
-                                    <input type="text" class="form-control" name="renda_familiar" value="{{ aluno.renda_familiar }}" required>
+                                    <input type="text" class="form-control {% if campo_erro == 'renda_familiar' %}is-invalid{% endif %}" name="renda_familiar" value="{{ aluno.renda_familiar }}" required>
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <label class="form-label">Quantidade de Membros na Família</label>
-                                <input type="number" class="form-control" name="quantidade_pessoas" value="{{ aluno.quantidade_pessoas }}" required>
+                                <input type="number" class="form-control {% if campo_erro == 'quantidade_pessoas' %}is-invalid{% endif %}" name="quantidade_pessoas" value="{{ aluno.quantidade_pessoas }}" required>
                             </div>
                             <div class="col-md-6">
                                 <label class="form-label">Renda Per Capita</label>
                                 <div class="input-group">
                                     <span class="input-group-text">R$</span>
-                                    <input type="text" class="form-control" name="renda_per_capita" value="{{ aluno.renda_per_capita }}" required>
+                                    <input type="text" class="form-control {% if campo_erro == 'renda_per_capita' %}is-invalid{% endif %}" name="renda_per_capita" value="{{ aluno.renda_per_capita }}" required>
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <label class="form-label">Situação de Moradia</label>
-                                <select class="form-select" name="situacao_moradia" required>
+                                <select class="form-select {% if campo_erro == 'situacao_moradia' %}is-invalid{% endif %}" name="situacao_moradia" required>
                                     <option value="" disabled {% if not aluno.situacao_moradia %}selected{% endif %}>Selecione</option>
                                     <option value="Casa Própria" {% if aluno.situacao_moradia == "Casa Própria" %}selected{% endif %}>Casa Própria</option>
                                     <option value="Alugada" {% if aluno.situacao_moradia == "Alugada" %}selected{% endif %}>Alugada</option>
