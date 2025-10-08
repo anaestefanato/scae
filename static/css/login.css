@@ -59,11 +59,17 @@ body {
 
 /* Responsividade para mobile */
 @media (max-width: 768px) {
+    body.vh-100 {
+        min-height: 100vh;
+        height: auto !important;
+        padding: 1rem 0 !important;
+    }
+    
     .login-container {
         max-width: 400px;
         width: 85%;
         padding: 2rem 1.5rem;
-        margin: 1rem;
+        margin: 0.5rem auto !important;
     }
     
     .login-input {
@@ -89,10 +95,15 @@ body {
 }
 
 @media (max-width: 480px) {
+    body.vh-100 {
+        padding: 0.5rem 0 !important;
+    }
+    
     .login-container {
         max-width: 320px;
         width: 80%;
         padding: 1.5rem 1rem;
+        margin: 0.3rem auto !important;
     }
     
     .login-input {
