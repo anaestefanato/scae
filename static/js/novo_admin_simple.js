@@ -152,8 +152,10 @@ document.addEventListener('DOMContentLoaded', function() {
                 // Verificar se o HTML retornado contém erro
                 const html = await response.text();
                 if (html.includes('alert-danger') || html.includes('erro')) {
-                    hideLoadingState();
-                    showAlert('Erro ao cadastrar administrador. Verifique os dados informados.', 'danger');
+                    // Recarregar a página com o HTML retornado para mostrar o erro específico
+                    document.open();
+                    document.write(html);
+                    document.close();
                 } else {
                     hideLoadingState();
                     showSuccessMessage();
