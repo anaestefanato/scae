@@ -27,10 +27,34 @@ async def get_usuario_aluno(request: Request, usuario_logado: dict = None):
 
 @router.get("/usuarios/assistente")
 @requer_autenticacao("admin")
-async def get_usuario_assistente(request: Request, usuario_logado: dict = None):
+async def get_usuario_assistente(request: Request, usuario_logado: dict = None, sucesso: str = None):
     
     admin = usuario_repo.obter_usuario_por_matricula(usuario_logado['matricula'])
-    response = templates.TemplateResponse("/admin/usuario_assist.html", {"request": request, "admin": admin})
+    assistentes = assistente_social_repo.obter_todos()
+    
+    # Converter objetos para dicionários para serialização JSON
+    assistentes_dict = [
+        {
+            "id_usuario": a.id_usuario,
+            "nome": a.nome,
+            "matricula": a.matricula,
+            "email": a.email,
+            "siape": a.siape,
+            "perfil": a.perfil
+        }
+        for a in assistentes
+    ]
+    
+    context = {
+        "request": request,
+        "admin": admin,
+        "assistentes": assistentes_dict
+    }
+    
+    if sucesso:
+        context["sucesso"] = sucesso
+    
+    response = templates.TemplateResponse("/admin/usuario_assist.html", context)
     return response
 
 @router.get("/usuarios/admin")
@@ -309,6 +333,150 @@ async def post_criar_assistente(
         return templates.TemplateResponse(
             "admin/novo_assist.html",
             {"request": request, "admin": admin_logado, "erro": "Erro interno do sistema"}
+        )
+
+@router.get("/usuarios/assistente/editar/{id_usuario}")
+@requer_autenticacao("admin")
+async def get_editar_assistente(request: Request, id_usuario: int, usuario_logado: dict = None):
+    admin = usuario_repo.obter_usuario_por_matricula(usuario_logado['matricula'])
+    assistente = assistente_social_repo.obter_por_id(id_usuario)
+    
+    if not assistente:
+        return RedirectResponse(url="/admin/usuarios/assistente?erro=Assistente não encontrado", status_code=303)
+    
+    return templates.TemplateResponse(
+        "/admin/editar_assist.html",
+        {"request": request, "admin": admin, "assistente": assistente}
+    )
+
+@router.post("/usuarios/assistente/editar/{id_usuario}")
+@requer_autenticacao("admin")
+async def post_editar_assistente(
+    request: Request,
+    id_usuario: int,
+    nome: str = Form(...),
+    matricula: str = Form(...),
+    email: str = Form(...),
+    siape: str = Form(...),
+    senha: str = Form(None),
+    usuario_logado: dict = None
+):
+    try:
+        admin_logado = usuario_repo.obter_usuario_por_matricula(usuario_logado['matricula'])
+        assistente_atual = assistente_social_repo.obter_por_id(id_usuario)
+        
+        if not assistente_atual:
+            return RedirectResponse(url="/admin/usuarios/assistente?erro=Assistente não encontrado", status_code=303)
+        
+        # Validar com DTO (sem senha se não foi fornecida)
+        try:
+            # Se senha não foi fornecida, usar a atual
+            senha_validar = senha if senha else "senha123"  # senha temporária só para validação
+            
+            dados_dto = CadastroAssistDTO(
+                nome=nome,
+                matricula=matricula,
+                email=email,
+                senha=senha_validar,
+                siape=siape
+            )
+        except ValidationError as e:
+            erro_info = e.errors()[0]
+            erro_msg = erro_info['msg']
+            if erro_msg.startswith('Value error, '):
+                erro_msg = erro_msg.replace('Value error, ', '', 1)
+            campo_erro = erro_info['loc'][0] if erro_info.get('loc') else ''
+            
+            return templates.TemplateResponse(
+                "admin/editar_assist.html",
+                {"request": request, "admin": admin_logado, "assistente": assistente_atual, "erro": erro_msg, "campo_erro": campo_erro}
+            )
+        
+        # Atualizar senha apenas se foi fornecida
+        if senha:
+            try:
+                senha_hash = criar_hash_senha(senha)
+                assistente_atual.senha = senha_hash
+            except Exception as e:
+                print(f"Erro ao criar hash da senha: {e}")
+                return templates.TemplateResponse(
+                    "admin/editar_assist.html",
+                    {"request": request, "admin": admin_logado, "assistente": assistente_atual, "erro": "Erro ao processar senha"}
+                )
+        
+        # Atualizar dados
+        assistente_atual.nome = nome.strip()
+        assistente_atual.matricula = matricula.strip()
+        assistente_atual.email = email.strip().lower()
+        assistente_atual.siape = siape.strip()
+        
+        # Garantir que campos obrigatórios estejam presentes
+        if not assistente_atual.foto:
+            assistente_atual.foto = None
+        if not assistente_atual.token_redefinicao:
+            assistente_atual.token_redefinicao = None
+        if not assistente_atual.data_token:
+            assistente_atual.data_token = None
+        if not assistente_atual.data_cadastro:
+            assistente_atual.data_cadastro = None
+        
+        # Atualizar no banco
+        try:
+            sucesso = assistente_social_repo.atualizar(assistente_atual)
+            if not sucesso:
+                return templates.TemplateResponse(
+                    "admin/editar_assist.html",
+                    {"request": request, "admin": admin_logado, "assistente": assistente_atual, "erro": "Erro ao atualizar cadastro"}
+                )
+        except Exception as e:
+            print(f"Erro ao atualizar assistente: {e}")
+            return templates.TemplateResponse(
+                "admin/editar_assist.html",
+                {"request": request, "admin": admin_logado, "assistente": assistente_atual, "erro": "Erro interno do sistema"}
+            )
+        
+        return RedirectResponse(url="/admin/usuarios/assistente?sucesso=Assistente atualizado com sucesso!", status_code=303)
+        
+    except Exception as e:
+        print(f"Erro geral ao editar assistente: {e}")
+        return RedirectResponse(url="/admin/usuarios/assistente?erro=Erro ao editar assistente", status_code=303)
+
+@router.post("/usuarios/assistente/excluir/{id_usuario}")
+@requer_autenticacao("admin")
+async def post_excluir_assistente(
+    request: Request,
+    id_usuario: int,
+    usuario_logado: dict = None
+):
+    try:
+        # Verificar se o assistente existe
+        assistente = assistente_social_repo.obter_por_id(id_usuario)
+        
+        if not assistente:
+            return RedirectResponse(
+                url="/admin/usuarios/assistente?erro=Assistente não encontrado",
+                status_code=303
+            )
+        
+        # Excluir do banco de dados
+        sucesso = assistente_social_repo.excluir(id_usuario)
+        
+        if sucesso:
+            return RedirectResponse(
+                url="/admin/usuarios/assistente?sucesso=Assistente excluído com sucesso!",
+                status_code=303
+            )
+        else:
+            return RedirectResponse(
+                url="/admin/usuarios/assistente?erro=Erro ao excluir assistente",
+                status_code=303
+            )
+            
+    except Exception as e:
+        print(f"Erro ao excluir assistente: {e}")
+        return RedirectResponse(
+            url="/admin/usuarios/assistente?erro=Erro interno ao excluir assistente",
+            status_code=303
         )
 
        

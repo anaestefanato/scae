@@ -92,7 +92,11 @@ def atualizar(assistenteSocial: AssistenteSocial) -> bool:
             matricula=assistenteSocial.matricula,
             email=assistenteSocial.email,
             senha=assistenteSocial.senha,
-            perfil=assistenteSocial.perfil)
+            perfil=assistenteSocial.perfil,
+            foto=assistenteSocial.foto,
+            token_redefinicao=assistenteSocial.token_redefinicao,
+            data_token=assistenteSocial.data_token,
+            data_cadastro=assistenteSocial.data_cadastro)
         usuario_repo.atualizar(usuario)
         cursor.execute(ATUALIZAR, (
             assistenteSocial.siape,  # usa o id do usuário já existente
