@@ -9,6 +9,19 @@
 		<link rel="stylesheet" href="/static/css/styles.css" />
 		<link rel="icon" type="image/png" href="/static/img/logo.png" />
 		<style>
+			/* Garantir z-index correto da sidebar e backdrop */
+			.sidebar {
+				z-index: 1050 !important;
+			}
+			
+			.sidebar-backdrop {
+				z-index: 1040 !important;
+			}
+			
+			.menu-toggle {
+				z-index: 1100 !important;
+			}
+			
 			/* Sobrescrever regras do styles.css que escondem spans em mobile */
 			.sidebar .nav-link span,
 			.sidebar .btn span {
