@@ -28,45 +28,60 @@ body, .main-content, .container, .card, .table, h2, h3, h4, h5, h6, .btn, .form-
     font-family: 'Poppins', sans-serif !important;
 }
 
-/* ===== MAIN CONTENT ===== */
-.main-content {
-    padding: 30px;
-    padding-left: 80px;
-    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-    position: relative;
-    z-index: 1;
-}
-
-/* ===== SIDEBAR BEHAVIOR - SEMPRE FECHADA POR PADRÃO ===== */
-/* Garantir que a sidebar sempre comece fechada, independente do tamanho da tela */
+/* ===== SIDEBAR STYLES ===== */
 .sidebar {
-    transform: translateX(-100%) !important; /* Força a sidebar a ficar fechada */
-    transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1) !important;
+    background-color: white;
+    height: 100vh;
+    position: fixed;
+    box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
+    width: 250px;
+    z-index: 1050;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    transform: translateX(-100%);
+    top: 0;
+    left: 0;
     opacity: 0;
     visibility: hidden;
 }
 
-/* Apenas quando explicitamente não collapsed, a sidebar pode aparecer */
-.sidebar:not(.collapsed) {
-    transform: translateX(-100%) !important; /* Ainda fechada mesmo sem .collapsed */
-}
-
-/* A sidebar só aparece quando tem a classe 'open' ou quando é explicitamente ativada */
 .sidebar.open {
-    transform: translateX(0) !important;
-    opacity: 1 !important;
-    visibility: visible !important;
+    transform: translateX(0);
+    opacity: 1;
+    visibility: visible;
 }
 
-/* Backdrop para escurecer o fundo quando sidebar aberta */
+.sidebar.collapsed {
+    transform: translateX(-100%);
+    opacity: 0;
+    visibility: hidden;
+}
+
+/* Garantir que os textos dos links sempre apareçam */
+.sidebar .nav-link span,
+.sidebar .btn span {
+    display: inline !important;
+}
+
+.sidebar .nav-link i {
+    margin-right: 10px !important;
+}
+
+/* Garantir que o header da sidebar sempre mostre o conteúdo */
+.sidebar-header h6,
+.sidebar-header small,
+.sidebar-header img {
+    display: block !important;
+}
+
+/* Backdrop para o overlay da sidebar */
 .sidebar-backdrop {
     position: fixed;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
-    background-color: rgba(0, 0, 0, 0.25); /* Reduzido de 0.5 para 0.25 - menos escuro */
-    z-index: 1020;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 1040;
     opacity: 0;
     visibility: hidden;
     transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
@@ -77,7 +92,7 @@ body, .main-content, .container, .card, .table, h2, h3, h4, h5, h6, .btn, .form-
     visibility: visible;
 }
 
-/* Main content com comportamento igual ao assistente */
+/* ===== MAIN CONTENT ===== */
 .main-content {
     margin-left: 0;
     padding: 30px;
@@ -92,45 +107,82 @@ body, .main-content, .container, .card, .table, h2, h3, h4, h5, h6, .btn, .form-
     padding-left: 30px;
 }
 
-/* Responsividade - em desktop maior que 992px, sidebar ainda começa fechada */
-@media (min-width: 993px) {
-    .sidebar {
-        transform: translateX(-100%) !important; /* Força fechada mesmo em desktop */
-        opacity: 0;
-        visibility: hidden;
-    }
-    
-    .sidebar.open {
-        transform: translateX(0) !important; /* Só abre quando classe 'open' for adicionada */
-        opacity: 1 !important;
-        visibility: visible !important;
-    }
-    
-    /* Main content sempre com margin normal até a sidebar abrir */
-    .main-content {
+/* Responsividade */
+@media (max-width: 992px) {
+    /* Em mobile, main content não deve recuar - sidebar fica sobre o conteúdo */
+    .main-content.shifted {
         margin-left: 0 !important;
         padding-left: 80px !important;
     }
     
-    /* Quando sidebar abrir, estreitar o main content */
-    .main-content.shifted {
-        margin-left: 250px !important;
-        padding-left: 30px !important;
+    /* Sobrescrever as regras do styles.css que escondem os spans */
+    .sidebar {
+        width: 250px !important;
+        overflow: visible !important;
+    }
+    
+    .sidebar .nav-link span {
+        display: inline !important;
+    }
+    
+    .sidebar .nav-link i {
+        margin-right: 10px !important;
+        font-size: 1rem !important;
+    }
+    
+    .sidebar-header h6,
+    .sidebar-header small {
+        display: block !important;
+    }
+    
+    .sidebar-header {
+        text-align: left !important;
+        padding: 20px 15px !important;
+    }
+    
+    /* Garantir que o botão Sair mostre o texto */
+    .sidebar .btn span {
+        display: inline !important;
     }
 }
 
-@media (max-width: 992px) {
-    /* Em mobile, main content não deve recuar */
-    .main-content.shifted {
-        margin-left: 0 !important;
-        padding-left: 80px !important;
+@media (max-width: 480px) {
+    .sidebar {
+        width: 100% !important;
     }
-    
-    .sidebar.open {
-        transform: translateX(0) !important;
-        opacity: 1 !important;
-        visibility: visible !important;
-    }
+}
+
+/* ===== MENU TOGGLE ===== */
+.menu-toggle {
+    position: fixed;
+    top: 20px;
+    left: 20px;
+    z-index: 1100;
+    background-color: var(--ifes-green);
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    opacity: 1;
+    transform: scale(1);
+}
+
+.menu-toggle.hidden {
+    opacity: 0;
+    transform: scale(0.8);
+    pointer-events: none;
+}
+
+.menu-toggle:hover {
+    background-color: var(--ifes-light-green);
+    transform: scale(1.05);
 }
 
 /* ===== USER PROFILE ===== */

@@ -9,6 +9,50 @@
 		<link rel="stylesheet" href="/static/css/styles.css" />
 		<link rel="icon" type="image/png" href="/static/img/logo.png" />
 		<style>
+			/* Garantir z-index correto da sidebar e backdrop */
+			.sidebar {
+				z-index: 1050 !important;
+			}
+			
+			.sidebar-backdrop {
+				z-index: 1040 !important;
+			}
+			
+			.menu-toggle {
+				z-index: 1100 !important;
+			}
+			
+			/* Sobrescrever regras do styles.css que escondem spans em mobile */
+			.sidebar .nav-link span,
+			.sidebar .btn span {
+				display: inline !important;
+			}
+			
+			.sidebar .nav-link i {
+				margin-right: 10px !important;
+				font-size: 1rem !important;
+			}
+			
+			.sidebar-header h6,
+			.sidebar-header small {
+				display: block !important;
+			}
+			
+			/* Garantir largura adequada da sidebar - igual ao admin */
+			@media (max-width: 992px) {
+				.sidebar {
+					width: 250px !important;
+					overflow: visible !important;
+				}
+			}
+			
+			@media (max-width: 480px) {
+				.sidebar {
+					width: 100% !important;
+				}
+			}
+		</style>
+		<style>
 			html, body {
 				height: 100%;
 			}
@@ -109,9 +153,6 @@
 			</div>
 		</div>
 
-		<!-- Backdrop for overlay sidebar -->
-		<div class="sidebar-backdrop" id="sidebarBackdrop"></div>
-
 		<div class="content-wrapper" style="flex: 1;">
 			{% block content %}{% endblock %}
 		</div>
@@ -135,24 +176,44 @@
 				const mainContent = document.getElementById("mainContent");
 				const menuToggle = document.getElementById("menuToggle");
 				const closeSidebar = document.getElementById("closeSidebar");
-				const sidebarBackdrop = document.getElementById('sidebarBackdrop');
-					const allBackdrops = document.querySelectorAll('.sidebar-backdrop');
-					allBackdrops.forEach(function (backdrop) {
-						if (sidebarBackdrop && backdrop !== sidebarBackdrop) {
-							backdrop.remove();
-						}
-					});
-
-				// Apply initial collapsed state if elements exist
-				// Start collapsed by default (sidebar overlays content)
-				if (sidebar && !sidebar.classList.contains('collapsed')) {
-					sidebar.classList.add('collapsed');
+				const body = document.body;
+				
+				// Criar backdrop se não existir
+				let sidebarBackdrop = document.querySelector('.sidebar-backdrop');
+				if (!sidebarBackdrop) {
+					sidebarBackdrop = document.createElement('div');
+					sidebarBackdrop.className = 'sidebar-backdrop';
+					body.appendChild(sidebarBackdrop);
 				}
-				if (menuToggle && !menuToggle.classList.contains('visible')) {
-					menuToggle.classList.add('visible');
+				
+				// Remover backdrops duplicados
+				const allBackdrops = document.querySelectorAll('.sidebar-backdrop');
+				allBackdrops.forEach(function (backdrop) {
+					if (sidebarBackdrop && backdrop !== sidebarBackdrop) {
+						backdrop.remove();
+					}
+				});
+
+				// Funções de controle da sidebar
+				function openSidebar() {
+					if (sidebar) {
+						sidebar.classList.remove('collapsed');
+						sidebar.classList.add('open');
+					}
+					if (mainContent) {
+						mainContent.classList.add('shifted');
+					}
+					if (menuToggle) {
+						menuToggle.classList.remove('visible');
+						menuToggle.classList.add('hidden');
+					}
+					if (sidebarBackdrop) {
+						sidebarBackdrop.classList.add('visible');
+					}
+					body.style.overflow = 'hidden';
 				}
 
-				function closeOverlay() {
+				function closeSidebarFunc() {
 					if (sidebar) {
 						sidebar.classList.remove('open');
 						sidebar.classList.add('collapsed');
@@ -160,37 +221,33 @@
 					if (mainContent) {
 						mainContent.classList.remove('shifted');
 					}
-					if (menuToggle) menuToggle.classList.add('visible');
-					if (sidebarBackdrop) sidebarBackdrop.classList.remove('visible');
-					document.body.classList.remove('no-scroll');
+					if (menuToggle) {
+						menuToggle.classList.add('visible');
+						menuToggle.classList.remove('hidden');
+					}
+					if (sidebarBackdrop) {
+						sidebarBackdrop.classList.remove('visible');
+					}
+					body.style.overflow = '';
+				}
+
+				// Event listeners
+				if (menuToggle) {
+					menuToggle.addEventListener('click', openSidebar);
 				}
 
 				if (closeSidebar) {
-					closeSidebar.addEventListener('click', closeOverlay);
+					closeSidebar.addEventListener('click', closeSidebarFunc);
 				}
 
 				if (sidebarBackdrop) {
-					sidebarBackdrop.addEventListener('click', closeOverlay);
+					sidebarBackdrop.addEventListener('click', closeSidebarFunc);
 				}
 
-				if (menuToggle) {
-					menuToggle.addEventListener('click', function () {
-						if (sidebar) {
-							sidebar.classList.remove('collapsed');
-							sidebar.classList.add('open');
-						}
-						if (mainContent) {
-							mainContent.classList.add('shifted');
-						}
-						if (menuToggle) menuToggle.classList.remove('visible');
-						if (sidebarBackdrop) sidebarBackdrop.classList.add('visible');
-						document.body.classList.add('no-scroll');
-					});
-				}
-
+				// Fechar sidebar com ESC
 				document.addEventListener('keydown', function (event) {
 					if (event.key === 'Escape' && sidebar && sidebar.classList.contains('open')) {
-						closeOverlay();
+						closeSidebarFunc();
 					}
 				});
 			});

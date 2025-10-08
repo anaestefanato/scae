@@ -2,12 +2,14 @@ import os
 from fastapi import APIRouter, Form, Request, UploadFile, File, status
 from fastapi.responses import RedirectResponse
 from fastapi.templating import Jinja2Templates
+from pydantic import ValidationError
 
 from model.aluno_model import Aluno
 from repo import usuario_repo
 from repo import aluno_repo
 from repo.aluno_repo import marcar_cadastro_completo, atualizar
 from util.auth_decorator import obter_usuario_logado, requer_autenticacao
+from dtos.perfil_aluno_dto import DadosAlunoDTO
 
 
 router = APIRouter()
@@ -23,7 +25,42 @@ async def get_dados_cadastrais(request: Request, usuario_logado: dict = None, su
     # Se não encontrar dados completos, busca dados básicos do usuário
     if not aluno:
         usuario = usuario_repo.obter_usuario_por_matricula(usuario_logado['matricula'])
-        aluno = usuario
+        # Criar objeto aluno com valores padrão para os campos que não existem no usuário
+        if usuario:
+            from model.aluno_model import Aluno
+            aluno = Aluno(
+                id_usuario=usuario.id_usuario,
+                nome=usuario.nome,
+                matricula=usuario.matricula,
+                email=usuario.email,
+                senha=usuario.senha,
+                perfil=usuario.perfil,
+                foto=usuario.foto,
+                token_redefinicao=usuario.token_redefinicao,
+                data_token=usuario.data_token,
+                data_cadastro=usuario.data_cadastro,
+                cpf="",
+                telefone="",
+                curso="",
+                data_nascimento="",
+                filiacao="",
+                cep="",
+                cidade="",
+                bairro="",
+                rua="",
+                numero="",
+                estado="",
+                complemento="",
+                nome_banco="",
+                agencia_bancaria="",
+                numero_conta_bancaria="",
+                renda_familiar=0.0,
+                quantidade_pessoas=1,
+                renda_per_capita=0.0,
+                situacao_moradia=""
+            )
+        else:
+            aluno = usuario
     
     context = {"request": request, "aluno": aluno}
     
@@ -61,7 +98,7 @@ async def post_perfil(
     rua: str = Form(...),
     numero: str = Form(...),
     estado: str = Form(...),
-    complemento: str = Form(...),
+    complemento: str = Form(),
     nome_banco: str = Form(...),
     agencia_bancaria: str = Form(...),
     numero_conta_bancaria: str = Form(...),
@@ -70,13 +107,75 @@ async def post_perfil(
     renda_per_capita: str = Form(...),
     situacao_moradia: str = Form(...)
 ):
+    # Validar dados com o DTO
+    try:
+        dados_validados = DadosAlunoDTO(
+            nome=nome,
+            matricula=matricula,
+            email=email,
+            cpf=cpf,
+            telefone=telefone,
+            curso=curso,
+            data_nascimento=data_nascimento,
+            filiacao=filiacao,
+            cep=cep,
+            cidade=cidade,
+            bairro=bairro,
+            rua=rua,
+            numero=numero,
+            estado=estado,
+            complemento=complemento if complemento else "",
+            nome_banco=nome_banco,
+            agencia_bancaria=agencia_bancaria,
+            numero_conta_bancaria=numero_conta_bancaria,
+            renda_familiar=float(renda_familiar),
+            quantidade_pessoas=int(quantidade_pessoas),
+            renda_per_capita=float(renda_per_capita),
+            situacao_moradia=situacao_moradia
+        )
+    except (ValidationError, ValueError) as e:
+        # Buscar aluno para exibir no formulário
+        aluno = aluno_repo.obter_por_matricula(usuario_logado['matricula'])
+        if not aluno:
+            usuario = usuario_repo.obter_usuario_por_matricula(usuario_logado['matricula'])
+            aluno = usuario
+        
+        # Extrair mensagem de erro e campo com problema
+        if isinstance(e, ValidationError):
+            erro_info = e.errors()[0]
+            erro_msg = erro_info['msg']
+            # Remover o prefixo "Value error, " se existir
+            if erro_msg.startswith('Value error, '):
+                erro_msg = erro_msg.replace('Value error, ', '', 1)
+            # Pegar o nome do campo com erro
+            campo_erro = erro_info['loc'][0] if erro_info.get('loc') else ''
+        else:
+            erro_msg = str(e)
+            campo_erro = ''
+        
+        return templates.TemplateResponse(
+            "aluno/perfil.html",
+            {"request": request, "aluno": aluno, "mensagem_erro": erro_msg, "campo_erro": campo_erro}
+        )
+    except Exception as e:
+        # Capturar qualquer outro erro
+        aluno = aluno_repo.obter_por_matricula(usuario_logado['matricula'])
+        if not aluno:
+            usuario = usuario_repo.obter_usuario_por_matricula(usuario_logado['matricula'])
+            aluno = usuario
+        
+        return templates.TemplateResponse(
+            "aluno/perfil.html",
+            {"request": request, "aluno": aluno, "mensagem_erro": str(e)}
+        )
+    
     usuario = usuario_repo.obter_usuario_por_matricula(usuario_logado['matricula'])
     
     # Verificar se o cadastro já está completo (atualização) ou é primeira vez (inserção)
-    if aluno_repo.possui_cadastro_completo(usuario.id_usuario):
+    if aluno_repo.possui_cadastro_completo(usuario_logado['id']):
         # Atualizar dados existentes do aluno
         aluno = Aluno(
-            id_usuario=usuario.id_usuario,
+            id_usuario=usuario_logado['id'],
             nome=nome,
             matricula=matricula,
             email=email,
@@ -125,7 +224,7 @@ async def post_perfil(
     else:
         # Primeiro cadastro (inserção)
         aluno = Aluno(
-            id_usuario=usuario.id_usuario,
+            id_usuario=usuario_logado['id'],
             nome=nome,
             matricula=matricula,
             email=email,
@@ -158,7 +257,7 @@ async def post_perfil(
         sucesso = aluno_repo.completar_cadastro(aluno)
 
         if sucesso:
-            aluno_repo.marcar_cadastro_completo(usuario.id_usuario)
+            aluno_repo.marcar_cadastro_completo(usuario_logado['id'])
             # Atualiza a sessão para refletir cadastro completo
             if hasattr(request, 'session'):
                 request.session['usuario']['completo'] = True

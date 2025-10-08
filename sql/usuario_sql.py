@@ -20,14 +20,14 @@ VALUES (?, ?, ?, ?, ?)
 
 OBTER_TODOS = """
 SELECT 
-id_usuario, nome, matricula, email, senha, perfil 
+id_usuario, nome, matricula, email, senha, perfil, foto, token_redefinicao, data_token, data_cadastro
 FROM usuario
 ORDER BY nome
 """ 
 
 OBTER_POR_ID = """
 SELECT 
-id_usuario, nome, matricula, email, senha, perfil 
+id_usuario, nome, matricula, email, senha, perfil, foto, token_redefinicao, data_token, data_cadastro
 FROM usuario
 WHERE id_usuario = ?
 """ 
@@ -41,14 +41,14 @@ WHERE matricula = ?
 
 OBTER_POR_EMAIL = """
 SELECT
-id_usuario, nome, matricula, email, senha, perfil, foto
+id_usuario, nome, matricula, email, senha, perfil, foto, token_redefinicao, data_token, data_cadastro
 FROM usuario
 WHERE email = ?
 """
 
 OBTER_TODOS_POR_PERFIL = """
 SELECT
-id_usuario, nome, matricula, email, senha, perfil
+id_usuario, nome, matricula, email, senha, perfil, foto, token_redefinicao, data_token, data_cadastro
 FROM usuario
 WHERE perfil = ?
 ORDER BY nome

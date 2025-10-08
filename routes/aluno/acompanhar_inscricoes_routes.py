@@ -19,7 +19,7 @@ async def get_acompanhar_inscricoes(request: Request, usuario_logado: dict = Non
     aluno = usuario_repo.obter_usuario_por_matricula(usuario_logado['matricula'])
     
     # Buscar todas as inscrições do aluno
-    inscricoes = inscricao_repo.obter_por_aluno(aluno.id_usuario)
+    inscricoes = inscricao_repo.obter_por_aluno(usuario_logado['id'])
     
     response = templates.TemplateResponse("/aluno/acompanhar_inscricoes.html", {
         "request": request, 

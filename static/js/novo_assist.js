@@ -88,18 +88,18 @@ function setupFieldValidation() {
         });
     }
     
-    // Validação de email institucional
+    // Validação de email
     const emailField = document.getElementById('email');
     if (emailField) {
         emailField.addEventListener('blur', function() {
             const email = this.value.toLowerCase();
-            if (email && !email.includes('@ifes.edu.br')) {
-                this.classList.add('is-invalid');
-                this.classList.remove('is-valid');
-                this.nextElementSibling.textContent = 'O email deve ser do domínio @ifes.edu.br';
-            } else if (email) {
+            if (email && email.includes('@')) {
                 this.classList.add('is-valid');
                 this.classList.remove('is-invalid');
+            } else if (email && !email.includes('@')) {
+                this.classList.add('is-invalid');
+                this.classList.remove('is-valid');
+                this.nextElementSibling.textContent = 'Por favor, informe um email válido.';
             }
         });
     }
@@ -392,15 +392,28 @@ async function submitAssistantForm() {
         
         const response = await fetch('/admin/usuarios/assistente/novo', {
             method: 'POST',
-            body: formData
+            body: formData,
+            redirect: 'manual' // Não seguir redirecionamentos automaticamente
         });
         
-        if (response.ok) {
+        // Se retornou 303 (redirect), significa sucesso
+        if (response.status === 303 || response.type === 'opaqueredirect') {
             hideLoadingState();
             showSuccessMessage();
+        } else if (response.ok) {
+            // Verificar se o HTML retornado contém erro
+            const html = await response.text();
+            if (html.includes('alert-danger') || html.includes('erro')) {
+                // Recarregar a página com o HTML retornado para mostrar o erro específico
+                document.open();
+                document.write(html);
+                document.close();
+            } else {
+                hideLoadingState();
+                showSuccessMessage();
+            }
         } else {
             hideLoadingState();
-            const errorText = await response.text();
             showNotification('Erro ao cadastrar assistente. Tente novamente.', 'danger');
         }
         

@@ -16,7 +16,7 @@ async def get_root(request: Request, usuario_logado: dict = None):
         return RedirectResponse("/aluno/perfil", status_code=303)
 
     aluno = usuario_repo.obter_usuario_por_matricula(usuario_logado['matricula'])
-    auxilios = auxilio_repo.obter_por_aluno(aluno.id_usuario)
+    auxilios = auxilio_repo.obter_por_aluno(usuario_logado['id'])
     editais_abertos = edital_repo.obter_editais_abertos()
     
     response = templates.TemplateResponse("/aluno/dashboard.html", {

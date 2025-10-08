@@ -108,6 +108,15 @@
             </div>
         </div>
 
+        <!-- Mensagem de Sucesso -->
+        {% if sucesso %}
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            <i class="bi bi-check-circle me-2"></i>
+            {{ sucesso }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+        {% endif %}
+
         <!-- Cards de Estatísticas -->
         <div class="row mb-4">
             <div class="col-md-3">
@@ -115,7 +124,7 @@
                     <div class="icon">
                         <i class="bi bi-person-check"></i>
                     </div>
-                    <div class="number">8</div>
+                    <div class="number">{{ assistentes|length }}</div>
                     <div class="label">Assistentes Ativos</div>
                 </div>
             </div>
@@ -148,34 +157,23 @@
             </div>
         </div>
 
-        <!-- Seção de Busca e Filtros -->
+        <!-- Seção de Busca -->
         <div class="search-filter-section mb-4">
             <div class="row">
-                <div class="col-md-6">
+                <div class="col-md-12">
                     <div class="search-box">
                         <label for="searchAssistant" class="form-label">
                             <i class="bi bi-search me-1"></i>Buscar Assistente
                         </label>
                         <div class="input-group">
                             <input type="text" class="form-control" id="searchAssistant" placeholder="Digite o nome ou matrícula do assistente">
+                            <button class="btn btn-outline-light bg-white text-dark border" type="button" onclick="clearSearch()" title="Limpar busca">
+                                <i class="bi bi-x-circle"></i>
+                            </button>
                             <button class="btn btn-outline-success" type="button" onclick="searchAssistant()">
                                 <i class="bi bi-search"></i>
                             </button>
                         </div>
-                    </div>
-                </div>
-                <div class="col-md-6">
-                    <div class="filter-section">
-                        <label for="filterStatus" class="form-label">
-                            <i class="bi bi-funnel me-1"></i>Filtrar por Status
-                        </label>
-                        <select class="form-select" id="filterStatus" onchange="filterAssistants()">
-                            <option value="">Todos os assistentes</option>
-                            <option value="ativo">Assistentes Ativos</option>
-                            <option value="inativo">Assistentes Inativos</option>
-                            <option value="ferias">Em Férias</option>
-                            <option value="licenca">Em Licença</option>
-                        </select>
                     </div>
                 </div>
             </div>
@@ -201,7 +199,7 @@
                     <div>
                         <i class="bi bi-people me-2"></i>
                         <span>Lista de Assistentes Sociais</span>
-                        <span class="badge bg-info ms-2" id="assistantsCount">8</span>
+                        <span class="badge bg-info ms-2" id="assistantsCount">{{ assistentes|length }}</span>
                     </div>
                     <div>
                         <button class="btn btn-sm btn-outline-light me-2" onclick="exportAssistantsList()">
@@ -218,81 +216,41 @@
                             <thead class="table-header">
                                 <tr>
                                     <th>Nome</th>
-                                    <th>Matrícula</th>
+                                    <th>SIAPE</th>
                                     <th>Email</th>
-                                    <th>Área de Atuação</th>
-                                    <th>Status</th>
-                                    <th>Ações</th>
+                                    <th class="text-center">Ações</th>
                                 </tr>
                             </thead>
                             <tbody id="assistantsTableBody">
-                                <!-- Dados serão carregados via JavaScript -->
-                                <tr>
-                                    <td><strong>Dra. Maria Silva Costa</strong></td>
-                                    <td>AS001</td>
-                                    <td>maria.costa@ifes.edu.br</td>
-                                    <td>
-                                        <span class="area-badge psicologia">Psicologia</span>
-                                    </td>
-                                    <td><span class="badge bg-success">Ativo</span></td>
-                                    <td>
-                                        <div class="action-buttons">
-                                            <button class="btn btn-sm btn-outline-info" onclick="viewAssistant(1)">
-                                                <i class="bi bi-eye"></i>
-                                            </button>
-                                            <button class="btn btn-sm btn-outline-secondary" onclick="editAssistant(1)">
-                                                <i class="bi bi-pencil"></i>
-                                            </button>
-                                            <button class="btn btn-sm btn-outline-danger" onclick="deleteAssistant(1)">
-                                                <i class="bi bi-trash"></i>
-                                            </button>
-                                        </div>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td><strong>Dr. João Pedro Santos</strong></td>
-                                    <td>AS002</td>
-                                    <td>joao.santos@ifes.edu.br</td>
-                                    <td>
-                                        <span class="area-badge servico-social">Serviço Social</span>
-                                    </td>
-                                    <td><span class="badge bg-success">Ativo</span></td>
-                                    <td>
-                                        <div class="action-buttons">
-                                            <button class="btn btn-sm btn-outline-info" onclick="viewAssistant(2)">
-                                                <i class="bi bi-eye"></i>
-                                            </button>
-                                            <button class="btn btn-sm btn-outline-secondary" onclick="editAssistant(2)">
-                                                <i class="bi bi-pencil"></i>
-                                            </button>
-                                            <button class="btn btn-sm btn-outline-danger" onclick="deleteAssistant(2)">
-                                                <i class="bi bi-trash"></i>
-                                            </button>
-                                        </div>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td><strong>Dra. Ana Beatriz Lima</strong></td>
-                                    <td>AS003</td>
-                                    <td>ana.lima@ifes.edu.br</td>
-                                    <td>
-                                        <span class="area-badge pedagogia">Pedagogia</span>
-                                    </td>
-                                    <td><span class="badge bg-warning text-dark">Férias</span></td>
-                                    <td>
-                                        <div class="action-buttons">
-                                            <button class="btn btn-sm btn-outline-info" onclick="viewAssistant(3)">
-                                                <i class="bi bi-eye"></i>
-                                            </button>
-                                            <button class="btn btn-sm btn-outline-secondary" onclick="editAssistant(3)">
-                                                <i class="bi bi-pencil"></i>
-                                            </button>
-                                            <button class="btn btn-sm btn-outline-danger" onclick="deleteAssistant(3)">
-                                                <i class="bi bi-trash"></i>
-                                            </button>
-                                        </div>
-                                    </td>
-                                </tr>
+                                {% if assistentes %}
+                                    {% for assistente in assistentes %}
+                                    <tr>
+                                        <td><strong>{{ assistente.nome }}</strong></td>
+                                        <td>{{ assistente.siape }}</td>
+                                        <td>{{ assistente.email }}</td>
+                                        <td>
+                                            <div class="action-buttons">
+                                                <button class="btn btn-sm btn-outline-info" onclick="viewAssistant('{{ assistente.id_usuario }}')" title="Visualizar">
+                                                    <i class="bi bi-eye"></i>
+                                                </button>
+                                                <button class="btn btn-sm btn-outline-secondary" onclick="editAssistant('{{ assistente.id_usuario }}')" title="Editar">
+                                                    <i class="bi bi-pencil"></i>
+                                                </button>
+                                                <button class="btn btn-sm btn-outline-danger" onclick="deleteAssistant('{{ assistente.id_usuario }}')" title="Excluir">
+                                                    <i class="bi bi-trash"></i>
+                                                </button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    {% endfor %}
+                                {% else %}
+                                    <tr>
+                                        <td colspan="4" class="text-center text-muted py-4">
+                                            <i class="bi bi-inbox fs-1 d-block mb-2"></i>
+                                            Nenhum assistente social cadastrado
+                                        </td>
+                                    </tr>
+                                {% endif %}
                             </tbody>
                         </table>
                     </div>
@@ -319,9 +277,271 @@
         </div>
     </div>
 
+    <!-- Modal para Visualizar Assistente -->
+    <div class="modal fade" id="viewAssistantModal" tabindex="-1" aria-labelledby="viewAssistantModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header bg-success text-white">
+                    <h5 class="modal-title" id="viewAssistantModalLabel">
+                        <i class="bi bi-person-badge me-2"></i>Detalhes do Assistente Social
+                    </h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form>
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <label class="form-label fw-bold">Nome Completo</label>
+                                <input type="text" class="form-control" id="viewNome" readonly>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label fw-bold">Matrícula</label>
+                                <input type="text" class="form-control" id="viewMatricula" readonly>
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <label class="form-label fw-bold">SIAPE</label>
+                                <input type="text" class="form-control" id="viewSiape" readonly>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label fw-bold">E-mail</label>
+                                <input type="text" class="form-control" id="viewEmail" readonly>
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <label class="form-label fw-bold">Perfil</label>
+                                <input type="text" class="form-control" id="viewPerfil" readonly>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                        <i class="bi bi-x-circle me-1"></i>Fechar
+                    </button>
+                    <button type="button" class="btn btn-success" onclick="editAssistantFromModal()">
+                        <i class="bi bi-pencil me-1"></i>Editar
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de Confirmação de Exclusão -->
+    <div class="modal fade" id="deleteAssistantModal" tabindex="-1" aria-labelledby="deleteAssistantModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="deleteAssistantModalLabel">
+                        <i class="bi bi-exclamation-triangle me-2"></i>Confirmar Exclusão
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <p>Tem certeza que deseja excluir este assistente social?</p>
+                    <div class="alert alert-warning">
+                        <i class="bi bi-exclamation-triangle me-2"></i>
+                        <strong>Atenção:</strong> Esta ação não pode ser desfeita!
+                    </div>
+                    <div id="assistantToDeleteInfo" class="alert alert-info">
+                        <strong>Nome:</strong> <span id="deleteAssistantName"></span><br>
+                        <strong>SIAPE:</strong> <span id="deleteAssistantSiape"></span><br>
+                        <strong>Email:</strong> <span id="deleteAssistantEmail"></span>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="button" class="btn btn-danger" onclick="confirmDeleteAssistant()">
+                        <i class="bi bi-trash me-1"></i>Confirmar Exclusão
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
     <script src="/static/js/dashboard_admin.js"></script>
-    <script src="/static/js/usuario_assist.js"></script>
+    <!-- <script src="/static/js/usuario_assist.js"></script> -->
+
+    <script>
+        // Dados dos assistentes do backend
+        const assistentes = {{ assistentes | tojson | safe }};
+
+        function viewAssistant(id) {
+            // Buscar o assistente pelo id (comparação flexível para string e número)
+            const assistente = assistentes.find(a => a.id_usuario == id);
+            
+            if (assistente) {
+                // Preencher os campos do modal
+                document.getElementById('viewNome').value = assistente.nome || '';
+                document.getElementById('viewMatricula').value = assistente.matricula || '';
+                document.getElementById('viewSiape').value = assistente.siape || '';
+                document.getElementById('viewEmail').value = assistente.email || '';
+                document.getElementById('viewPerfil').value = assistente.perfil || 'Assistente Social';
+                
+                // Abrir o modal
+                const modal = new bootstrap.Modal(document.getElementById('viewAssistantModal'));
+                modal.show();
+            } else {
+                console.error('Assistente não encontrado:', id);
+                console.log('IDs disponíveis:', assistentes.map(a => a.id_usuario));
+            }
+        }
+
+        function editAssistant(id) {
+            // Redirecionar para página de edição
+            window.location.href = `/admin/usuarios/assistente/editar/${id}`;
+        }
+
+        function editAssistantFromModal() {
+            // Buscar o assistente atual
+            const assistente = assistentes.find(a => 
+                a.nome === document.getElementById('viewNome').value
+            );
+            
+            if (assistente) {
+                // Fechar modal e redirecionar para edição
+                const modal = bootstrap.Modal.getInstance(document.getElementById('viewAssistantModal'));
+                modal.hide();
+                window.location.href = `/admin/usuarios/assistente/editar/${assistente.id_usuario}`;
+            }
+        }
+
+        let assistantToDeleteId = null;
+
+        function deleteAssistant(id) {
+            // Buscar o assistente pelo id (comparação flexível para string e número)
+            const assistente = assistentes.find(a => a.id_usuario == id);
+            
+            if (assistente) {
+                // Guardar o ID para exclusão
+                assistantToDeleteId = id;
+                
+                // Preencher informações no modal
+                document.getElementById('deleteAssistantName').textContent = assistente.nome;
+                document.getElementById('deleteAssistantSiape').textContent = assistente.siape;
+                document.getElementById('deleteAssistantEmail').textContent = assistente.email;
+                
+                // Abrir o modal
+                const modal = new bootstrap.Modal(document.getElementById('deleteAssistantModal'));
+                modal.show();
+            }
+        }
+
+        function confirmDeleteAssistant() {
+            if (assistantToDeleteId) {
+                // Criar formulário para enviar requisição DELETE via POST
+                const form = document.createElement('form');
+                form.method = 'POST';
+                form.action = `/admin/usuarios/assistente/excluir/${assistantToDeleteId}`;
+                document.body.appendChild(form);
+                form.submit();
+            }
+        }
+
+        function searchAssistant() {
+            const searchTerm = document.getElementById('searchAssistant').value.toLowerCase().trim();
+            
+            if (!searchTerm) {
+                // Se não há termo de busca, mostrar todos
+                location.reload();
+                return;
+            }
+            
+            // Buscar assistente por nome, matrícula ou SIAPE
+            const results = assistentes.filter(a => 
+                a.nome.toLowerCase().includes(searchTerm) ||
+                a.matricula.toLowerCase().includes(searchTerm) ||
+                a.siape.toLowerCase().includes(searchTerm) ||
+                a.email.toLowerCase().includes(searchTerm)
+            );
+            
+            // Atualizar tabela com resultados
+            const tbody = document.getElementById('assistantsTableBody');
+            tbody.innerHTML = '';
+            
+            if (results.length === 0) {
+                tbody.innerHTML = `
+                    <tr>
+                        <td colspan="4" class="text-center text-muted py-4">
+                            <i class="bi bi-search fs-1 d-block mb-2"></i>
+                            Nenhum assistente encontrado com "${searchTerm}"
+                        </td>
+                    </tr>
+                `;
+            } else {
+                results.forEach(assistente => {
+                    tbody.innerHTML += `
+                        <tr>
+                            <td><strong>${assistente.nome}</strong></td>
+                            <td>${assistente.siape}</td>
+                            <td>${assistente.email}</td>
+                            <td>
+                                <div class="action-buttons">
+                                    <button class="btn btn-sm btn-outline-info" onclick="viewAssistant(${assistente.id_usuario})" title="Visualizar">
+                                        <i class="bi bi-eye"></i>
+                                    </button>
+                                    <button class="btn btn-sm btn-outline-secondary" onclick="editAssistant(${assistente.id_usuario})" title="Editar">
+                                        <i class="bi bi-pencil"></i>
+                                    </button>
+                                    <button class="btn btn-sm btn-outline-danger" onclick="deleteAssistant(${assistente.id_usuario})" title="Excluir">
+                                        <i class="bi bi-trash"></i>
+                                    </button>
+                                </div>
+                            </td>
+                        </tr>
+                    `;
+                });
+            }
+            
+            // Atualizar contagem
+            document.getElementById('assistantsCount').textContent = results.length;
+        }
+
+        function clearSearch() {
+            // Limpar campo de busca
+            document.getElementById('searchAssistant').value = '';
+            
+            // Mostrar todos os assistentes novamente
+            const tbody = document.getElementById('assistantsTableBody');
+            tbody.innerHTML = '';
+            
+            assistentes.forEach(assistente => {
+                tbody.innerHTML += `
+                    <tr>
+                        <td><strong>${assistente.nome}</strong></td>
+                        <td>${assistente.siape}</td>
+                        <td>${assistente.email}</td>
+                        <td>
+                            <div class="action-buttons">
+                                <button class="btn btn-sm btn-outline-info" onclick="viewAssistant(${assistente.id_usuario})" title="Visualizar">
+                                    <i class="bi bi-eye"></i>
+                                </button>
+                                <button class="btn btn-sm btn-outline-secondary" onclick="editAssistant(${assistente.id_usuario})" title="Editar">
+                                    <i class="bi bi-pencil"></i>
+                                </button>
+                                <button class="btn btn-sm btn-outline-danger" onclick="deleteAssistant(${assistente.id_usuario})" title="Excluir">
+                                    <i class="bi bi-trash"></i>
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                `;
+            });
+            
+            // Atualizar contagem
+            document.getElementById('assistantsCount').textContent = assistentes.length;
+        }
+
+        // Buscar ao pressionar Enter
+        document.getElementById('searchAssistant').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                searchAssistant();
+            }
+        });
+    </script>
 
     <footer class="footer bg-success text-white py-4">
         <div class="container">

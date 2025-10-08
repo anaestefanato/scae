@@ -22,6 +22,152 @@
         .footer {
             margin-top: auto;
         }
+
+        /* Ícone de lupa branco - Desktop */
+        .card-header .input-group .btn-outline-secondary {
+            background-color: #2E7D32 !important;
+            border-color: #2E7D32 !important;
+            color: white !important;
+        }
+
+        .card-header .input-group .btn-outline-secondary:hover {
+            background-color: #4CAF50 !important;
+            border-color: #4CAF50 !important;
+        }
+
+        .card-header .input-group .btn-outline-secondary i,
+        .card-header .input-group .btn-outline-secondary .bi-search {
+            color: white !important;
+        }
+
+        /* Mobile Responsiveness */
+        @media (max-width: 768px) {
+            .main-content {
+                padding: 20px 15px !important;
+                padding-left: 15px !important;
+                margin-left: 0 !important;
+            }
+
+            .welcome-banner {
+                padding: 15px;
+                margin-bottom: 20px;
+            }
+
+            .welcome-banner h4 {
+                font-size: 1.5rem;
+                margin-bottom: 10px !important;
+            }
+
+            .welcome-banner p {
+                font-size: 0.9rem;
+            }
+
+            .card {
+                border-radius: 8px;
+                margin-bottom: 20px;
+            }
+
+            .card-header h5 {
+                font-size: 1.1rem;
+            }
+
+            /* Aumentar título Lista de Recursos */
+            .card-header h5 {
+                font-size: 1.4rem !important;
+                font-weight: 600 !important;
+                margin-bottom: 12px !important;
+            }
+
+            /* Forçar layout do card header */
+            .card-header.d-flex {
+                display: flex !important;
+                flex-direction: column !important;
+                align-items: flex-start !important;
+            }
+
+            .card-header .d-flex.gap-2 {
+                display: flex !important;
+                flex-direction: row !important;
+                flex-wrap: wrap !important;
+                align-items: center !important;
+            }
+
+            /* Garantir ordem e visibilidade dos elementos */
+            .card-header .input-group {
+                order: 1 !important;
+                display: flex !important;
+                width: 100% !important;
+                margin-bottom: 10px !important;
+                text-align: left !important;
+                flex: 1 1 100% !important;
+            }
+
+            .card-header .form-select {
+                order: 2 !important;
+                width: calc(100% - 110px) !important;
+                display: inline-block !important;
+                margin-bottom: 0 !important;
+                text-align: left !important;
+                flex: 1 !important;
+            }
+
+            .card-header .btn-success {
+                order: 2 !important;
+                width: 100px !important;
+                display: inline-flex !important;
+                align-items: center !important;
+                justify-content: center !important;
+                text-align: center !important;
+                flex: 0 0 100px !important;
+                margin-left: 10px !important;
+                white-space: nowrap !important;
+                font-size: 0.85rem !important;
+            }
+
+            .card-header .btn-success i {
+                display: inline-block !important;
+                margin-right: 4px !important;
+                font-size: 0.9rem !important;
+            }
+
+            .menu-toggle {
+                top: 15px;
+                left: 15px;
+            }
+
+            /* Footer responsivo */
+            .footer {
+                padding: 20px 15px !important;
+            }
+
+            .footer p {
+                font-size: 0.85rem;
+            }
+
+            /* Ajustar sidebar para mobile */
+            .sidebar {
+                width: 280px;
+                max-width: 85vw;
+            }
+
+            .sidebar .nav-link {
+                font-size: 0.9rem;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .welcome-banner h4 {
+                font-size: 1.3rem;
+            }
+
+            .welcome-banner p {
+                font-size: 0.85rem;
+            }
+
+            .card-header h5 {
+                font-size: 1rem;
+            }
+        }
     </style>
 </head>
 <body>

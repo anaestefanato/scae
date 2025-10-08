@@ -97,6 +97,15 @@
                     </h5>
                 </div>
                 <div class="card-body">
+                    <!-- Mensagens de Erro/Sucesso -->
+                    {% if erro %}
+                    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                        <i class="bi bi-exclamation-triangle me-2"></i>
+                        {{ erro }}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                    {% endif %}
+                    
                     <form id="assistantForm" class="needs-validation" novalidate>
                         <!-- Dados do Assistente Social -->
                         <div class="form-section mb-4">
@@ -107,19 +116,13 @@
                                 <div class="col-md-6">
                                     <div class="mb-3">
                                         <label for="nome" class="form-label">Nome *</label>
-                                        <input type="text" class="form-control" id="nome" name="nome" required>
-                                        <div class="invalid-feedback">
-                                            Por favor, informe o nome.
-                                        </div>
+                                        <input type="text" class="form-control {% if campo_erro == 'nome' %}is-invalid{% endif %}" id="nome" name="nome" required>
                                     </div>
                                 </div>
                                 <div class="col-md-6">
                                     <div class="mb-3">
                                         <label for="matricula" class="form-label">Matrícula *</label>
-                                        <input type="text" class="form-control" id="matricula" name="matricula" placeholder="Ex: 1234567" required>
-                                        <div class="invalid-feedback">
-                                            Por favor, informe a matrícula para acessar o sistema.
-                                        </div>
+                                        <input type="text" class="form-control {% if campo_erro == 'matricula' %}is-invalid{% endif %}" id="matricula" name="matricula" placeholder="Ex: 1234567" required>
                                     </div>
                                 </div>
                             </div>
@@ -127,20 +130,14 @@
                                 <div class="col-md-6">
                                     <div class="mb-3">
                                         <label for="siape" class="form-label">SIAPE *</label>
-                                        <input type="text" class="form-control" id="siape" name="siape" placeholder="Ex: SIAE123" required>
-                                        <div class="invalid-feedback">
-                                            Por favor, informe o SIAPE.
-                                        </div>
+                                        <input type="text" class="form-control {% if campo_erro == 'siape' %}is-invalid{% endif %}" id="siape" name="siape" placeholder="Ex: SIAE123" required>
                                     </div>
                                 </div>
 
                                 <div class="col-md-6">
                                     <div class="mb-3">
                                         <label for="email" class="form-label">E-mail *</label>
-                                        <input type="email" class="form-control" id="email" name="email" placeholder="nome@ifes.edu.br" required>
-                                        <div class="invalid-feedback">
-                                            Por favor, informe um email válido.
-                                        </div>
+                                        <input type="email" class="form-control {% if campo_erro == 'email' %}is-invalid{% endif %}" id="email" name="email" placeholder="nome@ifes.edu.br" required>
                                     </div>
                                 </div>
                             </div>
@@ -148,11 +145,8 @@
                                 <div class="col-md-6">
                                     <div class="mb-3">
                                         <label for="senha" class="form-label">Senha *</label>
-                                        <input type="password" class="form-control" id="senha" name="senha" required>
+                                        <input type="password" class="form-control {% if campo_erro == 'senha' %}is-invalid{% endif %}" id="senha" name="senha" required>
                                         <div class="form-text">A senha deve ter no mínimo 8 caracteres.</div>
-                                        <div class="invalid-feedback">
-                                            Por favor, informe uma senha válida.
-                                        </div>
                                     </div>
                                 </div>
                             </div>

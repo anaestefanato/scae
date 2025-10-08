@@ -109,7 +109,7 @@ def validar_cpf(cpf: Optional[str]) -> Optional[str]:
     return cpf_limpo
 
 
-def validar_telefone(telefone: str) -> str:
+def validar_telefone(telefone: str) -> Optional[str]:
     """
     Valida telefone brasileiro (celular ou fixo)
 
@@ -130,12 +130,12 @@ def validar_telefone(telefone: str) -> str:
 
     # Telefone deve ter 10 (fixo) ou 11 (celular) dígitos
     if len(telefone_limpo) not in [10, 11]:
-        raise ValidacaoError('Telefone deve ter 10 ou 11 dígitos')
+        return None
 
     # Validar DDD (11 a 99)
     ddd = int(telefone_limpo[:2])
     if ddd < 11 or ddd > 99:
-        raise ValidacaoError('DDD inválido')
+        return None
 
     return telefone_limpo
 
