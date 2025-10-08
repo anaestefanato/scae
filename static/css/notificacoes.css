@@ -35,12 +35,7 @@ body, .main-content, .container, .card, .table, h2, h3, h4, h5, h6, .btn, .form-
 }
 
 /* Garantir que nenhum elemento sobreponha o menu */
-.main-content {
-    padding: 30px;
-    padding-left: 80px;
-    position: relative;
-    z-index: 1;
-}
+/* Removido as regras de .main-content para usar as do dashboard_aluno.css */
 
 .notification-stats,
 .welcome-banner {
@@ -319,4 +314,13 @@ body, .main-content, .container, .card, .table, h2, h3, h4, h5, h6, .btn, .form-
 .user-profile .text-muted {
     font-size: 0.8rem;
     color: #6c757d;
+}
+
+/* ===== RESPONSIVIDADE ===== */
+@media (max-width: 992px) {
+    /* Em mobile, main content não deve recuar - sidebar fica sobre o conteúdo */
+    .main-content.shifted {
+        margin-left: 0 !important;
+        padding-left: 80px !important;
+    }
 }
