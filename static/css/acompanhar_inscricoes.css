@@ -186,3 +186,16 @@ body, .main-content, .container, .card, .table, h2, h3, h4, h5, h6, .btn, .form-
     font-size: 1rem;
     color: #333;
 }
+
+/* ===== RESPONSIVIDADE ===== */
+@media (max-width: 992px) {
+    /* Em mobile, main content não deve recuar - sidebar fica sobre o conteúdo */
+    .main-content {
+        padding-left: 80px !important;
+    }
+    
+    .main-content.shifted {
+        margin-left: 0 !important;
+        padding-left: 80px !important;
+    }
+}
