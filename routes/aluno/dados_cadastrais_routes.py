@@ -73,10 +73,10 @@ async def post_perfil(
     usuario = usuario_repo.obter_usuario_por_matricula(usuario_logado['matricula'])
     
     # Verificar se o cadastro já está completo (atualização) ou é primeira vez (inserção)
-    if aluno_repo.possui_cadastro_completo(usuario.id_usuario):
+    if aluno_repo.possui_cadastro_completo(usuario_logado['id']):
         # Atualizar dados existentes do aluno
         aluno = Aluno(
-            id_usuario=usuario.id_usuario,
+            id_usuario=usuario_logado['id'],
             nome=nome,
             matricula=matricula,
             email=email,
@@ -125,7 +125,7 @@ async def post_perfil(
     else:
         # Primeiro cadastro (inserção)
         aluno = Aluno(
-            id_usuario=usuario.id_usuario,
+            id_usuario=usuario_logado['id'],
             nome=nome,
             matricula=matricula,
             email=email,
@@ -158,7 +158,7 @@ async def post_perfil(
         sucesso = aluno_repo.completar_cadastro(aluno)
 
         if sucesso:
-            aluno_repo.marcar_cadastro_completo(usuario.id_usuario)
+            aluno_repo.marcar_cadastro_completo(usuario_logado['id'])
             # Atualiza a sessão para refletir cadastro completo
             if hasattr(request, 'session'):
                 request.session['usuario']['completo'] = True

@@ -21,16 +21,16 @@ async def get_suporte(request: Request, usuario_logado: dict = None):
     aluno = usuario_repo.obter_usuario_por_matricula(usuario_logado['matricula'])
     
     # Buscar chamados do usuário
-    chamados = chamado_repo.obter_por_usuario(aluno.id_usuario)
+    chamados = chamado_repo.obter_por_usuario(usuario_logado['id'])
     
     # Buscar estatísticas
-    estatisticas = chamado_repo.obter_estatisticas_usuario(aluno.id_usuario)
+    estatisticas = chamado_repo.obter_estatisticas_usuario(usuario_logado['id'])
     
     # Se não há chamados, criar dados de exemplo
     if not chamados:
-        chamado_repo.inserir_dados_exemplo(aluno.id_usuario)
-        chamados = chamado_repo.obter_por_usuario(aluno.id_usuario)
-        estatisticas = chamado_repo.obter_estatisticas_usuario(aluno.id_usuario)
+        chamado_repo.inserir_dados_exemplo(usuario_logado['id'])
+        chamados = chamado_repo.obter_por_usuario(usuario_logado['id'])
+        estatisticas = chamado_repo.obter_estatisticas_usuario(usuario_logado['id'])
     
     # Verificar se há mensagem de sucesso
     sucesso = request.query_params.get("sucesso")
@@ -61,7 +61,7 @@ async def post_novo_chamado(
     
     chamado = Chamado(
         id_chamado=None,   
-        id_usuario_criador=usuario.id_usuario,
+        id_usuario_criador=usuario_logado['id'],
         id_administrador_responsavel=None,
         titulo=titulo,
         descricao=descricao,
@@ -75,8 +75,8 @@ async def post_novo_chamado(
     if not id_chamado:
         # Em caso de erro, recarregar a página com os dados necessários
         aluno = usuario_repo.obter_usuario_por_matricula(usuario_logado['matricula'])
-        chamados = chamado_repo.obter_por_usuario(aluno.id_usuario)
-        estatisticas = chamado_repo.obter_estatisticas_usuario(aluno.id_usuario)
+        chamados = chamado_repo.obter_por_usuario(usuario_logado['id'])
+        estatisticas = chamado_repo.obter_estatisticas_usuario(usuario_logado['id'])
         return templates.TemplateResponse(
             "aluno/suporte.html",
             {
