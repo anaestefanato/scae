@@ -62,7 +62,7 @@ body, .main-content, .container, .card, .table, h2, h3, h4, h5, h6, .btn, .form-
 
 .welcome-banner p {
     color: #666666;
-    margin-bottom: 0;
+    margin-bottom: 1rem;
     font-size: 1rem;
 }
 
@@ -188,14 +188,19 @@ body, .main-content, .container, .card, .table, h2, h3, h4, h5, h6, .btn, .form-
 }
 
 /* ===== RESPONSIVIDADE ===== */
-@media (max-width: 992px) {
+@media (max-width: 768px) {
     /* Em mobile, main content não deve recuar - sidebar fica sobre o conteúdo */
     .main-content {
-        padding-left: 80px !important;
+        padding: 20px;
+        padding-left: 70px;
     }
     
     .main-content.shifted {
         margin-left: 0 !important;
-        padding-left: 80px !important;
+        padding-left: 70px !important;
+    }
+    
+    .welcome-banner {
+        padding: 1.5rem;
     }
 }
