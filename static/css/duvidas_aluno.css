@@ -30,56 +30,7 @@ body, .main-content, .container, .card, .table, h2, h3, h4, h5, h6, .btn, .form-
     transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
     position: relative;
     z-index: 1;
-}
-
-/* ===== SIDEBAR BEHAVIOR - SEMPRE FECHADA POR PADRÃO ===== */
-/* Garantir que a sidebar sempre comece fechada, independente do tamanho da tela */
-.sidebar {
-    transform: translateX(-100%) !important; /* Força a sidebar a ficar fechada */
-    transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1) !important;
-    opacity: 0;
-    visibility: hidden;
-}
-
-/* Apenas quando explicitamente não collapsed, a sidebar pode aparecer */
-.sidebar:not(.collapsed) {
-    transform: translateX(-100%) !important; /* Ainda fechada mesmo sem .collapsed */
-}
-
-/* A sidebar só aparece quando tem a classe 'open' ou quando é explicitamente ativada */
-.sidebar.open {
-    transform: translateX(0) !important;
-    opacity: 1 !important;
-    visibility: visible !important;
-}
-
-/* Backdrop para escurecer o fundo quando sidebar aberta */
-.sidebar-backdrop {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.25); /* Menos escuro */
-    z-index: 1040;
-    opacity: 0;
-    visibility: hidden;
-    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-.sidebar-backdrop.visible {
-    opacity: 1;
-    visibility: visible;
-}
-
-/* Main content com comportamento igual ao assistente */
-.main-content {
     margin-left: 0;
-    padding: 30px;
-    padding-left: 80px;
-    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-    position: relative;
-    z-index: 1;
 }
 
 .main-content.shifted {
