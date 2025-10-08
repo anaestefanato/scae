@@ -1,4 +1,4 @@
-from pydantic import BaseModel, EmailStr, Field, field_validator
+from pydantic import BaseModel, Field, field_validator, model_validator
 
 from util.validacoes_dto import validar_cpf, validar_telefone, validar_valor_monetario
 
@@ -7,7 +7,7 @@ class DadosAlunoDTO(BaseModel):
     """DTO para perfil de aluno"""
     nome: str 
     matricula: str 
-    email: EmailStr
+    email: str
     cpf: str
     telefone: str
     curso: str 
@@ -28,7 +28,12 @@ class DadosAlunoDTO(BaseModel):
     renda_per_capita: float 
     situacao_moradia: str 
     
-    
+    @field_validator('email')
+    @classmethod
+    def validar_email(cls, v):
+        if '@' not in v or '.' not in v.split('@')[-1]:
+            raise ValueError('E-mail deve ser um endereço de e-mail válido')
+        return v
 
     @field_validator('cpf')
     @classmethod    
@@ -110,7 +115,7 @@ class DadosAlunoDTO(BaseModel):
             Decimal(str(v)),
             campo="Renda familiar",
             obrigatorio=True,
-            min_valor=Decimal('0.01')  # Não pode ser 0 ou negativo
+            min_valor=Decimal('1')  # Não pode ser 0 ou negativo
         )
         
         if valor is None or valor == 0:
@@ -135,7 +140,7 @@ class DadosAlunoDTO(BaseModel):
             Decimal(str(v)),
             campo="Renda per capita",
             obrigatorio=True,
-            min_valor=Decimal('0.01')  # Não pode ser 0 ou negativo
+            min_valor=Decimal('1')  # Não pode ser 0 ou negativo
         )
         
         if valor is None or valor == 0:
@@ -153,3 +158,11 @@ class DadosAlunoDTO(BaseModel):
             raise ValueError('Quantidade de pessoas não pode ser maior que 50')
         
         return v
+    
+    @model_validator(mode='after')
+    def validar_renda_per_capita_menor_que_familiar(self):
+        """Valida se a renda per capita não é maior que a renda familiar"""
+        if self.renda_per_capita and self.renda_familiar:
+            if self.renda_per_capita > self.renda_familiar:
+                raise ValueError('Renda per capita não pode ser maior que a renda familiar')
+        return self
