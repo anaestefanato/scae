@@ -124,7 +124,7 @@
                                 <div class="col-md-6">
                                     <div class="mb-3">
                                         <label for="nome" class="form-label">Nome *</label>
-                                        <input type="text" class="form-control" id="nome" name="nome" required>
+                                        <input type="text" class="form-control {% if campo_erro == 'nome' %}is-invalid{% endif %}" id="nome" name="nome" required>
                                         <div class="invalid-feedback">
                                             Por favor, informe o nome.
                                         </div>
@@ -133,7 +133,7 @@
                                 <div class="col-md-6">
                                     <div class="mb-3">
                                         <label for="matricula" class="form-label">Matrícula *</label>
-                                        <input type="text" class="form-control" id="matricula" name="matricula" required>
+                                        <input type="text" class="form-control {% if campo_erro == 'matricula' %}is-invalid{% endif %}" id="matricula" name="matricula" required>
                                         <div class="invalid-feedback">
                                             Por favor, informe a matrícula.
                                         </div>
@@ -144,7 +144,7 @@
                                 <div class="col-md-6">
                                     <div class="mb-3">
                                         <label for="email" class="form-label">Email *</label>
-                                        <input type="email" class="form-control" id="email" name="email" placeholder="nome@ifes.edu.br" required>
+                                        <input type="email" class="form-control {% if campo_erro == 'email' %}is-invalid{% endif %}" id="email" name="email" placeholder="nome@ifes.edu.br" required>
                                         <div class="invalid-feedback">
                                             Por favor, informe um email válido.
                                         </div>
@@ -153,7 +153,7 @@
                                 <div class="col-md-6">
                                     <div class="mb-3">
                                         <label for="tipo_admin" class="form-label">Tipo de Administrador *</label>
-                                        <select class="form-select" id="tipo_admin" name="tipo_admin" required>
+                                        <select class="form-select {% if campo_erro == 'tipo_admin' %}is-invalid{% endif %}" id="tipo_admin" name="tipo_admin" required>
                                             <option value="">Selecione o tipo</option>
                                             <option value="geral">Administrador Geral</option>
                                             <option value="sistema">Administrador de Sistema</option>
@@ -169,7 +169,7 @@
                                 <div class="col-md-6">
                                     <div class="mb-3">
                                         <label for="senha" class="form-label">Senha *</label>
-                                        <input type="password" class="form-control" id="senha" name="senha" required>
+                                        <input type="password" class="form-control {% if campo_erro == 'senha' %}is-invalid{% endif %}" id="senha" name="senha" required>
                                         <div class="form-text">A senha deve ter no mínimo 8 caracteres.</div>
                                         <div class="invalid-feedback">
                                             Por favor, informe uma senha válida.
