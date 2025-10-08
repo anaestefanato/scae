@@ -5,6 +5,7 @@
 
 {% block head %}
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/static/css/dashboard_aluno.css">
     <link rel="stylesheet" href="/static/css/notificacoes.css">
 {% endblock %}
 
@@ -318,6 +319,20 @@
     <script>
         // Aguardar o menu toggle do base2.html ser inicializado
         document.addEventListener('DOMContentLoaded', function() {
+            // Debug: Verificar se a classe shifted está sendo adicionada
+            const mainContent = document.getElementById('mainContent');
+            if (mainContent) {
+                const observer = new MutationObserver(function(mutations) {
+                    mutations.forEach(function(mutation) {
+                        if (mutation.attributeName === 'class') {
+                            console.log('Classes do mainContent:', mainContent.className);
+                            console.log('Tem classe shifted?', mainContent.classList.contains('shifted'));
+                        }
+                    });
+                });
+                observer.observe(mainContent, { attributes: true });
+            }
+            
             // Aguardar um pouco para não interferir com o base2.html
             setTimeout(function() {
                 initializeNotificationsPage();
