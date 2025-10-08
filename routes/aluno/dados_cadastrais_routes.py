@@ -2,12 +2,14 @@ import os
 from fastapi import APIRouter, Form, Request, UploadFile, File, status
 from fastapi.responses import RedirectResponse
 from fastapi.templating import Jinja2Templates
+from pydantic import ValidationError
 
 from model.aluno_model import Aluno
 from repo import usuario_repo
 from repo import aluno_repo
 from repo.aluno_repo import marcar_cadastro_completo, atualizar
 from util.auth_decorator import obter_usuario_logado, requer_autenticacao
+from dtos.perfil_aluno_dto import DadosAlunoDTO
 
 
 router = APIRouter()
@@ -96,7 +98,7 @@ async def post_perfil(
     rua: str = Form(...),
     numero: str = Form(...),
     estado: str = Form(...),
-    complemento: str = Form(...),
+    complemento: str = Form(),
     nome_banco: str = Form(...),
     agencia_bancaria: str = Form(...),
     numero_conta_bancaria: str = Form(...),
@@ -105,6 +107,65 @@ async def post_perfil(
     renda_per_capita: str = Form(...),
     situacao_moradia: str = Form(...)
 ):
+    # Validar dados com o DTO
+    try:
+        dados_validados = DadosAlunoDTO(
+            nome=nome,
+            matricula=matricula,
+            email=email,
+            cpf=cpf,
+            telefone=telefone,
+            curso=curso,
+            data_nascimento=data_nascimento,
+            filiacao=filiacao,
+            cep=cep,
+            cidade=cidade,
+            bairro=bairro,
+            rua=rua,
+            numero=numero,
+            estado=estado,
+            complemento=complemento if complemento else "",
+            nome_banco=nome_banco,
+            agencia_bancaria=agencia_bancaria,
+            numero_conta_bancaria=numero_conta_bancaria,
+            renda_familiar=float(renda_familiar),
+            quantidade_pessoas=int(quantidade_pessoas),
+            renda_per_capita=float(renda_per_capita),
+            situacao_moradia=situacao_moradia
+        )
+    except (ValidationError, ValueError) as e:
+        # Buscar aluno para exibir no formulário
+        aluno = aluno_repo.obter_por_matricula(usuario_logado['matricula'])
+        if not aluno:
+            usuario = usuario_repo.obter_usuario_por_matricula(usuario_logado['matricula'])
+            aluno = usuario
+        
+        # Extrair mensagem de erro e campo com problema
+        if isinstance(e, ValidationError):
+            erro_info = e.errors()[0]
+            erro_msg = erro_info['msg']
+            # Pegar o nome do campo com erro
+            campo_erro = erro_info['loc'][0] if erro_info.get('loc') else ''
+        else:
+            erro_msg = str(e)
+            campo_erro = ''
+        
+        return templates.TemplateResponse(
+            "aluno/perfil.html",
+            {"request": request, "aluno": aluno, "mensagem_erro": erro_msg, "campo_erro": campo_erro}
+        )
+    except Exception as e:
+        # Capturar qualquer outro erro
+        aluno = aluno_repo.obter_por_matricula(usuario_logado['matricula'])
+        if not aluno:
+            usuario = usuario_repo.obter_usuario_por_matricula(usuario_logado['matricula'])
+            aluno = usuario
+        
+        return templates.TemplateResponse(
+            "aluno/perfil.html",
+            {"request": request, "aluno": aluno, "mensagem_erro": f"Erro ao validar dados: {str(e)}"}
+        )
+    
     usuario = usuario_repo.obter_usuario_por_matricula(usuario_logado['matricula'])
     
     # Verificar se o cadastro já está completo (atualização) ou é primeira vez (inserção)
