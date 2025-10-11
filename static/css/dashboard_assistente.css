@@ -701,17 +701,26 @@ body, .body-cadastro-login {
 @media (min-width: 992px) {
     .dashboard-sections {
         flex-direction: row;
-        align-items: flex-start;
+        align-items: stretch;
         gap: 2rem;
     }
 
     .dashboard-left-column {
         flex: 1.75 1 0;
+        display: flex;
+        flex-direction: column;
     }
 
     .dashboard-right-column {
         flex: 1 1 0;
         max-width: 420px;
+        display: flex;
+        flex-direction: column;
+    }
+
+    /* Faz o card de entrevistas crescer para preencher o espaço */
+    .dashboard-left-column .card-entrevistas {
+        flex: 1;
     }
 }
 
@@ -868,6 +877,24 @@ body, .body-cadastro-login {
 
 .mini-calendar-day.today.has-event::after {
     background: white;
+}
+
+/* ===== PRÓXIMOS EVENTOS SECTION ===== */
+.proximos-eventos-section {
+    margin-top: 25px;
+    padding-top: 25px;
+    border-top: 2px solid #e0e0e0;
+}
+
+.proximos-eventos-header {
+    color: var(--ifes-dark-gray);
+    padding: 0 0 15px 0;
+    font-weight: 700;
+    font-size: 1.1rem;
+}
+
+.proximos-eventos-header i {
+    font-size: 1.1rem;
 }
 
 /* ===== EVENTO RESUMO MINI ===== */
