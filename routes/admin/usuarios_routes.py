@@ -62,9 +62,26 @@ async def get_usuario_assistente(request: Request, usuario_logado: dict = None, 
 async def get_usuario_administrador(request: Request, usuario_logado: dict = None, sucesso: str = None, erro: str = None):
 
     admin = usuario_repo.obter_usuario_por_matricula(usuario_logado['matricula'])
+    administradores_obj = administrador_repo.obter_todos()
+    
+    # Converter objetos Administrador para dicionários
+    administradores = [
+        {
+            "id_usuario": a.id_usuario,
+            "matricula": a.matricula,
+            "nome": a.nome,
+            "email": a.email,
+            "perfil": a.perfil,
+            "tipo_admin": a.tipo_admin,
+            "data_cadastro": str(a.data_cadastro) if a.data_cadastro else None
+        }
+        for a in administradores_obj
+    ]
+    
     context = {
         "request": request, 
-        "admin": admin
+        "admin": admin,
+        "administradores": administradores
     }
     
     # Adicionar mensagens se existirem
@@ -75,6 +92,52 @@ async def get_usuario_administrador(request: Request, usuario_logado: dict = Non
     
     response = templates.TemplateResponse("/admin/usuario_admin.html", context)
     return response
+
+@router.post("/usuarios/admin/excluir/{id_usuario}")
+@requer_autenticacao("admin")
+async def post_excluir_administrador(
+    request: Request,
+    id_usuario: int,
+    usuario_logado: dict = None
+):
+    try:
+        # Verificar se o administrador existe
+        administrador = administrador_repo.obter_por_id(id_usuario)
+        
+        if not administrador:
+            return RedirectResponse(
+                url="/admin/usuarios/admin?erro=Administrador não encontrado",
+                status_code=303
+            )
+        
+        # Verificar se não está tentando excluir a si mesmo
+        usuario_atual = usuario_repo.obter_usuario_por_matricula(usuario_logado['matricula'])
+        if usuario_atual.id_usuario == id_usuario:
+            return RedirectResponse(
+                url="/admin/usuarios/admin?erro=Você não pode excluir sua própria conta",
+                status_code=303
+            )
+        
+        # Excluir do banco de dados
+        sucesso = administrador_repo.excluir(id_usuario)
+        
+        if sucesso:
+            return RedirectResponse(
+                url="/admin/usuarios/admin?sucesso=Administrador excluído com sucesso!",
+                status_code=303
+            )
+        else:
+            return RedirectResponse(
+                url="/admin/usuarios/admin?erro=Erro ao excluir administrador",
+                status_code=303
+            )
+            
+    except Exception as e:
+        print(f"Erro ao excluir administrador: {e}")
+        return RedirectResponse(
+            url="/admin/usuarios/admin?erro=Erro interno ao excluir administrador",
+            status_code=303
+        )
 
 @router.get("/usuarios/admin/novo")
 @requer_autenticacao("admin")

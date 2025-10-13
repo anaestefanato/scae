@@ -182,6 +182,11 @@
     justify-content: center;
 }
 
+/* Centralizar célula de ações */
+.admins-list-card .table td:last-child {
+    text-align: center;
+}
+
 .action-buttons .btn {
     padding: 6px 10px;
     border-radius: 8px;
