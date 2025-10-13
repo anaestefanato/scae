@@ -234,37 +234,44 @@
             <div class="modal-content">
                 <div class="modal-header bg-success text-white">
                     <h5 class="modal-title" id="viewAdminModalLabel">
-                        <i class="bi bi-person-badge me-2"></i>Detalhes do Administrador
+                        <i class="bi bi-file-earmark-person me-2"></i>Detalhes do Administrador
                     </h5>
                     <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-                <div class="modal-body">
-                    <form>
-                        <div class="row mb-3">
-                            <div class="col-md-6">
-                                <label class="form-label fw-bold">Nome Completo</label>
-                                <input type="text" class="form-control" id="viewNome" readonly>
+                <div class="modal-body p-4">
+                    <!-- Dados Pessoais -->
+                    <div class="mb-4">
+                        <h6 class="text-uppercase text-muted fw-bold mb-3" style="font-size: 0.85rem; letter-spacing: 0.5px;">DADOS PESSOAIS</h6>
+                        <div class="row g-3">
+                            <div class="col-12">
+                                <label class="form-label fw-bold mb-1" style="font-size: 0.9rem;">Nome:</label>
+                                <p class="form-control-plaintext border-bottom pb-2 mb-0" id="viewNome" style="color: #333;"></p>
                             </div>
                             <div class="col-md-6">
-                                <label class="form-label fw-bold">Matrícula</label>
-                                <input type="text" class="form-control" id="viewMatricula" readonly>
-                            </div>
-                        </div>
-                        <div class="row mb-3">
-                            <div class="col-md-6">
-                                <label class="form-label fw-bold">E-mail</label>
-                                <input type="text" class="form-control" id="viewEmail" readonly>
-                            </div>
-                            <div class="col-md-6">
-                                <label class="form-label fw-bold">Perfil</label>
-                                <input type="text" class="form-control" id="viewPerfil" readonly>
+                                <label class="form-label fw-bold mb-1" style="font-size: 0.9rem;">Email:</label>
+                                <p class="form-control-plaintext border-bottom pb-2 mb-0" id="viewEmail" style="color: #333;"></p>
                             </div>
                         </div>
-                    </form>
+                    </div>
+
+                    <!-- Dados Profissionais -->
+                    <div class="mb-4">
+                        <h6 class="text-uppercase text-muted fw-bold mb-3" style="font-size: 0.85rem; letter-spacing: 0.5px;">DADOS PROFISSIONAIS</h6>
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <label class="form-label fw-bold mb-1" style="font-size: 0.9rem;">Matrícula:</label>
+                                <p class="form-control-plaintext border-bottom pb-2 mb-0" id="viewMatricula" style="color: #333;"></p>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label fw-bold mb-1" style="font-size: 0.9rem;">Perfil:</label>
+                                <p class="form-control-plaintext border-bottom pb-2 mb-0" id="viewPerfil" style="color: #333;"></p>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
-                        <i class="bi bi-x-circle me-1"></i>Fechar
+                <div class="modal-footer bg-light">
+                    <button type="button" class="btn btn-secondary px-4" data-bs-dismiss="modal">
+                        Fechar
                     </button>
                 </div>
             </div>
@@ -309,7 +316,7 @@
         // Dados dos administradores do backend
         const administradores = {{ administradores | tojson | safe }};
     </script>
-    <script src="/static/js/usuario_admin.js"></script>
+    <script src="/static/js/usuario_admin.js?v=2"></script>
 
     <footer class="footer bg-success text-white py-4">
         <div class="container">

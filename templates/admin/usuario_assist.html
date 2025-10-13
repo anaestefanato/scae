@@ -283,45 +283,50 @@
             <div class="modal-content">
                 <div class="modal-header bg-success text-white">
                     <h5 class="modal-title" id="viewAssistantModalLabel">
-                        <i class="bi bi-person-badge me-2"></i>Detalhes do Assistente Social
+                        <i class="bi bi-file-earmark-person me-2"></i>Detalhes do Assistente
                     </h5>
                     <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-                <div class="modal-body">
-                    <form>
-                        <div class="row mb-3">
-                            <div class="col-md-6">
-                                <label class="form-label fw-bold">Nome Completo</label>
-                                <input type="text" class="form-control" id="viewNome" readonly>
+                <div class="modal-body p-4">
+                    <!-- Dados Pessoais -->
+                    <div class="mb-4">
+                        <h6 class="text-uppercase text-muted fw-bold mb-3" style="font-size: 0.85rem; letter-spacing: 0.5px;">DADOS PESSOAIS</h6>
+                        <div class="row g-3">
+                            <div class="col-12">
+                                <label class="form-label fw-bold mb-1" style="font-size: 0.9rem;">Nome:</label>
+                                <p class="form-control-plaintext border-bottom pb-2 mb-0" id="viewNome" style="color: #333;"></p>
                             </div>
                             <div class="col-md-6">
-                                <label class="form-label fw-bold">Matrícula</label>
-                                <input type="text" class="form-control" id="viewMatricula" readonly>
-                            </div>
-                        </div>
-                        <div class="row mb-3">
-                            <div class="col-md-6">
-                                <label class="form-label fw-bold">SIAPE</label>
-                                <input type="text" class="form-control" id="viewSiape" readonly>
-                            </div>
-                            <div class="col-md-6">
-                                <label class="form-label fw-bold">E-mail</label>
-                                <input type="text" class="form-control" id="viewEmail" readonly>
+                                <label class="form-label fw-bold mb-1" style="font-size: 0.9rem;">Email:</label>
+                                <p class="form-control-plaintext border-bottom pb-2 mb-0" id="viewEmail" style="color: #333;"></p>
                             </div>
                         </div>
-                        <div class="row mb-3">
+                    </div>
+
+                    <!-- Dados Profissionais -->
+                    <div class="mb-4">
+                        <h6 class="text-uppercase text-muted fw-bold mb-3" style="font-size: 0.85rem; letter-spacing: 0.5px;">DADOS PROFISSIONAIS</h6>
+                        <div class="row g-3">
                             <div class="col-md-6">
-                                <label class="form-label fw-bold">Perfil</label>
-                                <input type="text" class="form-control" id="viewPerfil" readonly>
+                                <label class="form-label fw-bold mb-1" style="font-size: 0.9rem;">Matrícula:</label>
+                                <p class="form-control-plaintext border-bottom pb-2 mb-0" id="viewMatricula" style="color: #333;"></p>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label fw-bold mb-1" style="font-size: 0.9rem;">SIAPE:</label>
+                                <p class="form-control-plaintext border-bottom pb-2 mb-0" id="viewSiape" style="color: #333;"></p>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label fw-bold mb-1" style="font-size: 0.9rem;">Perfil:</label>
+                                <p class="form-control-plaintext border-bottom pb-2 mb-0" id="viewPerfil" style="color: #333;"></p>
                             </div>
                         </div>
-                    </form>
+                    </div>
                 </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
-                        <i class="bi bi-x-circle me-1"></i>Fechar
+                <div class="modal-footer bg-light">
+                    <button type="button" class="btn btn-secondary px-4" data-bs-dismiss="modal">
+                        Fechar
                     </button>
-                    <button type="button" class="btn btn-success" onclick="editAssistantFromModal()">
+                    <button type="button" class="btn btn-success px-4" onclick="editAssistantFromModal()">
                         <i class="bi bi-pencil me-1"></i>Editar
                     </button>
                 </div>
@@ -375,11 +380,11 @@
             
             if (assistente) {
                 // Preencher os campos do modal
-                document.getElementById('viewNome').value = assistente.nome || '';
-                document.getElementById('viewMatricula').value = assistente.matricula || '';
-                document.getElementById('viewSiape').value = assistente.siape || '';
-                document.getElementById('viewEmail').value = assistente.email || '';
-                document.getElementById('viewPerfil').value = assistente.perfil || 'Assistente Social';
+                document.getElementById('viewNome').textContent = assistente.nome || '';
+                document.getElementById('viewMatricula').textContent = assistente.matricula || '';
+                document.getElementById('viewSiape').textContent = assistente.siape || '';
+                document.getElementById('viewEmail').textContent = assistente.email || '';
+                document.getElementById('viewPerfil').textContent = assistente.perfil || 'Assistente Social';
                 
                 // Abrir o modal
                 const modal = new bootstrap.Modal(document.getElementById('viewAssistantModal'));
@@ -398,7 +403,7 @@
         function editAssistantFromModal() {
             // Buscar o assistente atual
             const assistente = assistentes.find(a => 
-                a.nome === document.getElementById('viewNome').value
+                a.nome === document.getElementById('viewNome').textContent
             );
             
             if (assistente) {
