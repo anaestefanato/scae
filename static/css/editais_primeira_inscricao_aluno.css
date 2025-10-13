@@ -15,21 +15,49 @@ body {
     min-height: 100vh;
 }
 
-/* Main Content Area */
+/* Sidebar Animation */
+.sidebar {
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1) !important;
+    transform: translateX(-100%);
+    opacity: 0;
+    visibility: hidden;
+}
+
+.sidebar.open {
+    transform: translateX(0) !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+}
+
+.sidebar.collapsed {
+    transform: translateX(-100%) !important;
+    opacity: 0 !important;
+    visibility: hidden !important;
+}
+
+/* Main Content Area - Recua quando sidebar abre */
 .main-content {
     margin-left: 0;
     padding: 2rem;
-    padding-top: 20px; /* Reduzido para alinhar com o ícone do menu */
-    transition: margin-left 0.3s ease;
+    padding-top: 20px;
+    padding-left: 80px;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
     min-height: 100vh;
-    max-width: 1400px; /* Aumentado para cards um pouco mais largos */
-    margin: 0 auto; /* Centraliza o conteúdo */
+    position: relative;
+    z-index: 1;
 }
 
 .main-content.shifted {
     margin-left: 250px;
-    max-width: calc(100vw - 290px); /* Ajustado para nova largura */
-    margin-right: 0;
+    padding-left: 2rem;
+}
+
+/* Responsividade - Em mobile, sidebar sobrepõe */
+@media (max-width: 992px) {
+    .main-content.shifted {
+        margin-left: 0 !important;
+        padding-left: 80px !important;
+    }
 }
 
 /* Sidebar Backdrop */
@@ -39,16 +67,18 @@ body {
     left: 0;
     width: 100%;
     height: 100%;
-    background-color: rgba(0, 0, 0, 0.25);
+    background-color: rgba(0, 0, 0, 0.5);
     z-index: 1040;
     opacity: 0;
     visibility: hidden;
-    transition: opacity 0.3s ease, visibility 0.3s ease;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    pointer-events: none;
 }
 
-.sidebar-backdrop.show {
+.sidebar-backdrop.visible {
     opacity: 1;
     visibility: visible;
+    pointer-events: auto;
 }
 
 /* Welcome Banner */
@@ -476,15 +506,6 @@ body {
 }
 
 /* Responsive Design */
-@media (max-width: 1200px) {
-    .main-content.shifted {
-        margin-left: 0;
-        max-width: 100%;
-        margin: 0;
-        padding-top: 70px;
-    }
-}
-
 @media (max-width: 768px) {
     .main-content {
         padding: 1rem;
