@@ -8,7 +8,7 @@ from dtos.novo_assist_dto import CadastroAssistDTO
 from model.usuario_model import Usuario
 from model.administrador_model import Administrador
 from model.assistente_social_model import AssistenteSocial
-from repo import administrador_repo, assistente_social_repo, usuario_repo
+from repo import administrador_repo, assistente_social_repo, usuario_repo, aluno_repo
 from util.auth_decorator import obter_usuario_logado, requer_autenticacao
 from util.security import criar_hash_senha
 
@@ -22,7 +22,46 @@ templates = Jinja2Templates(directory="templates")
 async def get_usuario_aluno(request: Request, usuario_logado: dict = None):
 
     admin = usuario_repo.obter_usuario_por_matricula(usuario_logado['matricula'])
-    response = templates.TemplateResponse("/admin/usuario_aluno.html", {"request": request, "admin": admin})
+    alunos = aluno_repo.obter_todos()
+    
+    # Converter objetos para dicionários para serialização JSON com todos os campos
+    alunos_dict = [
+        {
+            "id_usuario": a.id_usuario,
+            "nome": a.nome,
+            "matricula": a.matricula,
+            "email": a.email,
+            "cpf": a.cpf if a.cpf else "",
+            "telefone": a.telefone if a.telefone else "",
+            "curso": a.curso if a.curso else "",
+            "data_nascimento": a.data_nascimento if a.data_nascimento else "",
+            "filiacao": a.filiacao if a.filiacao else "",
+            "cep": a.cep if a.cep else "",
+            "cidade": a.cidade if a.cidade else "",
+            "bairro": a.bairro if a.bairro else "",
+            "rua": a.rua if a.rua else "",
+            "numero": a.numero if a.numero else "",
+            "estado": a.estado if a.estado else "",
+            "complemento": a.complemento if a.complemento else "",
+            "nome_banco": a.nome_banco if a.nome_banco else "",
+            "agencia_bancaria": a.agencia_bancaria if a.agencia_bancaria else "",
+            "numero_conta_bancaria": a.numero_conta_bancaria if a.numero_conta_bancaria else "",
+            "renda_familiar": a.renda_familiar if a.renda_familiar else 0,
+            "quantidade_pessoas": a.quantidade_pessoas if a.quantidade_pessoas else 0,
+            "renda_per_capita": a.renda_per_capita if a.renda_per_capita else 0,
+            "situacao_moradia": a.situacao_moradia if a.situacao_moradia else "",
+            "aprovado": a.aprovado if hasattr(a, 'aprovado') else False,
+            "perfil": a.perfil
+        }
+        for a in alunos
+    ]
+    
+    response = templates.TemplateResponse("/admin/usuario_aluno.html", {
+        "request": request, 
+        "admin": admin,
+        "alunos": alunos_dict,
+        "total_alunos": len(alunos_dict)
+    })
     return response
 
 @router.get("/usuarios/assistente")
