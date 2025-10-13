@@ -1,132 +1,468 @@
-/* Estilos para o perfil do aluno */
+/* Estilos modernos para o perfil do aluno */
 
+/* ===== BACKGROUND ===== */
+body, html {
+    background-color: #e8e9ea !important;
+}
+
+.main-content {
+    background-color: #e8e9ea !important;
+}
+
+/* ===== HEADER DO PERFIL ===== */
 .profile-header {
-    background: linear-gradient(135deg, #f8f9fa, #e9ecef);
-    padding: 2rem 0;
+    background: linear-gradient(135deg, #2E7D32 0%, #4CAF50 100%);
+    padding: 3rem 0;
     margin-bottom: 2rem;
+    position: relative;
+    box-shadow: 0 4px 20px rgba(46, 125, 50, 0.2);
+    overflow: hidden;
+}
+
+/* Padrão decorativo no header */
+.profile-header::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 400px;
+    height: 400px;
+    background: radial-gradient(circle, rgba(255, 255, 255, 0.1) 0%, transparent 70%);
+    border-radius: 50%;
+    transform: translate(30%, -30%);
+}
+
+.profile-header .position-relative {
+    z-index: 10;
+}
+
+.profile-header img {
+    border: 5px solid white !important;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15) !important;
+    transition: transform 0.3s ease;
+}
+
+.profile-header img:hover {
+    transform: scale(1.05);
+}
+
+.profile-header .btn-light {
+    width: 50px;
+    height: 50px;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+    border: 4px solid white;
+    background: white;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.profile-header .btn-light i {
+    font-size: 1.25rem;
+}
+
+.profile-header .btn-light:hover {
+    background: #2E7D32;
+    color: white;
+    transform: scale(1.15) rotate(10deg);
+    box-shadow: 0 8px 25px rgba(46, 125, 50, 0.4);
 }
 
 .profile-info h3 {
-    color: #2c3e50;
-    font-weight: 600;
+    color: white;
+    font-weight: 700;
+    font-size: 2rem;
+    margin-bottom: 0.5rem;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .profile-info p {
-    color: #6c757d;
+    color: rgba(255, 255, 255, 0.95);
     font-size: 1.1rem;
+    font-weight: 500;
 }
 
+/* ===== CARDS DE DADOS ===== */
 .data-card {
-    margin-bottom: 1.5rem;
+    margin-bottom: 2rem;
     border: none;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    border-radius: 10px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    border-radius: 16px;
+    overflow: hidden;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    background: white;
+}
+
+.data-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 24px rgba(46, 125, 50, 0.12);
 }
 
 .data-card .card-header {
-    background: linear-gradient(135deg, #28a745, #20c997);
+    background: linear-gradient(135deg, #2E7D32 0%, #388E3C 100%);
     color: white;
-    border-radius: 10px 10px 0 0 !important;
-    padding: 1rem 1.25rem;
+    border-radius: 0 !important;
+    padding: 1.25rem 1.5rem;
+    border-bottom: none;
 }
 
 .data-card .card-header h5 {
     margin: 0;
     font-weight: 600;
+    font-size: 1.15rem;
+    display: flex;
+    align-items: center;
+}
+
+.data-card .card-header i {
+    font-size: 1.3rem;
+    opacity: 0.95;
 }
 
 .data-card .card-body {
-    padding: 1.5rem;
+    padding: 2rem 1.5rem;
+    background: white;
+}
+
+/* ===== ESTILOS DOS FORMULÁRIOS ===== */
+.form-label {
+    font-weight: 600;
+    color: #2c3e50;
+    font-size: 0.9rem;
+    margin-bottom: 0.5rem;
+    letter-spacing: 0.3px;
+}
+
+.form-control, .form-select {
+    border: 2px solid #e0e0e0;
+    border-radius: 10px;
+    padding: 0.75rem 1rem;
+    font-size: 0.95rem;
+    transition: all 0.3s ease;
+    background-color: #fafafa;
+}
+
+.form-control:focus, .form-select:focus {
+    border-color: #2E7D32;
+    box-shadow: 0 0 0 0.2rem rgba(46, 125, 50, 0.15);
+    background-color: white;
+    outline: none;
+}
+
+.form-control:hover:not(:focus), .form-select:hover:not(:focus) {
+    border-color: #4CAF50;
+    background-color: white;
+}
+
+/* Input com ícone de moeda */
+.input-group-text {
+    background: linear-gradient(135deg, #2E7D32, #4CAF50);
+    color: white;
+    border: none;
+    font-weight: 600;
+    border-radius: 10px 0 0 10px;
+}
+
+.input-group .form-control {
+    border-left: none;
+    border-radius: 0 10px 10px 0;
 }
 
 /* Estilos específicos para o campo CEP */
-.input-group .btn-outline-primary {
-    border-color: #28a745;
-    color: #28a745;
+.input-group .btn-outline-secondary {
+    border: 2px solid #e0e0e0;
+    border-left: none;
+    background: white;
+    color: #2E7D32;
+    border-radius: 0 10px 10px 0;
+    transition: all 0.3s ease;
 }
 
-.input-group .btn-outline-primary:hover {
-    background-color: #28a745;
-    border-color: #28a745;
+.input-group .btn-outline-secondary:hover {
+    background-color: #2E7D32;
+    border-color: #2E7D32;
     color: white;
 }
 
-.input-group .btn-outline-primary:disabled {
-    border-color: #6c757d;
+.input-group .btn-outline-secondary:disabled {
+    border-color: #e0e0e0;
     color: #6c757d;
-    background-color: transparent;
+    background-color: #fafafa;
 }
 
-/* Animação para os campos sendo preenchidos automaticamente */
+#cep {
+    border-radius: 10px 0 0 10px !important;
+}
+
+/* ===== ANIMAÇÕES ===== */
 .campo-preenchido {
-    animation: preenchimentoSucesso 0.5s ease-in-out;
-    border-color: #28a745 !important;
-    box-shadow: 0 0 0 0.2rem rgba(40, 167, 69, 0.25) !important;
+    animation: preenchimentoSucesso 0.6s ease-in-out;
+    border-color: #2E7D32 !important;
+    box-shadow: 0 0 0 0.2rem rgba(46, 125, 50, 0.2) !important;
 }
 
 @keyframes preenchimentoSucesso {
     0% {
-        background-color: #d4edda;
+        background-color: #e8f5e9;
+        transform: scale(1.02);
+    }
+    50% {
+        background-color: #c8e6c9;
     }
     100% {
         background-color: white;
+        transform: scale(1);
     }
 }
 
-/* Estilos responsivos */
+/* Feedback de loading e erro do CEP */
+#cep-loading, #cep-error {
+    font-size: 0.85rem;
+    margin-top: 0.5rem;
+    font-weight: 500;
+}
+
+#cep-loading {
+    animation: pulse 1.5s ease-in-out infinite;
+}
+
+@keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.5; }
+}
+
+/* ===== BOTÃO PRINCIPAL ===== */
+.btn-success.btn-lg {
+    padding: 1rem 3rem;
+    font-weight: 700;
+    border-radius: 50px;
+    font-size: 1.1rem;
+    border: none;
+    background: linear-gradient(135deg, #2E7D32 0%, #4CAF50 100%);
+    box-shadow: 0 4px 15px rgba(46, 125, 50, 0.3);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.btn-success.btn-lg:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 25px rgba(46, 125, 50, 0.4);
+    background: linear-gradient(135deg, #388E3C 0%, #66BB6A 100%);
+}
+
+.btn-success.btn-lg:active {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 15px rgba(46, 125, 50, 0.3);
+}
+
+/* ===== ALERTAS ===== */
+.alert {
+    border-radius: 16px;
+    border: none;
+    padding: 1.25rem 1.5rem;
+    margin-bottom: 2rem;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    font-size: 1rem;
+    font-weight: 500;
+    animation: slideInDown 0.5s ease-out;
+}
+
+@keyframes slideInDown {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.alert i {
+    font-size: 1.25rem;
+    vertical-align: middle;
+}
+
+.alert strong {
+    font-weight: 700;
+}
+
+.alert-success {
+    background: linear-gradient(135deg, #e8f5e9 0%, #c8e6c9 100%);
+    color: #1b5e20;
+    border-left: 5px solid #2E7D32;
+}
+
+.alert-danger {
+    background: linear-gradient(135deg, #ffebee 0%, #ffcdd2 100%);
+    color: #b71c1c;
+    border-left: 5px solid #c62828;
+}
+
+.alert .btn-close {
+    opacity: 0.5;
+}
+
+.alert .btn-close:hover {
+    opacity: 1;
+}
+
+/* ===== RESPONSIVIDADE ===== */
 @media (max-width: 768px) {
     .profile-header {
-        padding: 1.5rem 0;
+        padding: 2rem 0 3rem;
+    }
+    
+    .profile-header::after {
+        height: 30px;
     }
     
     .data-card .card-body {
-        padding: 1rem;
+        padding: 1.5rem 1rem;
     }
     
     .profile-info h3 {
         font-size: 1.5rem;
     }
+    
+    .profile-info p {
+        font-size: 1rem;
+    }
+    
+    .btn-success.btn-lg {
+        padding: 0.875rem 2rem;
+        font-size: 1rem;
+    }
+    
+    .form-control, .form-select {
+        font-size: 0.9rem;
+    }
 }
 
-/* Melhorias no modal de foto */
+/* ===== MODAL DE FOTO ===== */
 .modal-content {
-    border-radius: 10px;
+    border-radius: 20px;
     border: none;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+    overflow: hidden;
 }
 
 .modal-header {
-    background: linear-gradient(135deg, #28a745, #20c997);
+    background: linear-gradient(135deg, #2E7D32 0%, #4CAF50 100%);
     color: white;
-    border-radius: 10px 10px 0 0;
+    border-radius: 0;
+    padding: 1.5rem;
+    border-bottom: none;
+}
+
+.modal-header .modal-title {
+    font-weight: 700;
+    font-size: 1.25rem;
 }
 
 .modal-header .btn-close {
-    filter: invert(1);
+    filter: brightness(0) invert(1);
+    opacity: 0.9;
 }
 
-/* Estilo para campos obrigatórios */
+.modal-header .btn-close:hover {
+    opacity: 1;
+}
+
+.modal-body {
+    padding: 2rem;
+}
+
+.modal-footer {
+    padding: 1.25rem 2rem;
+    background: #f8f9fa;
+    border-top: 1px solid #e9ecef;
+}
+
+#preview-foto-container {
+    background: linear-gradient(135deg, #e8f5e9 0%, #c8e6c9 50%, #a5d6a7 100%);
+    padding: 2rem;
+    border-radius: 16px;
+    margin-bottom: 1.5rem;
+}
+
+#preview-foto {
+    border: 5px solid white !important;
+    box-shadow: 0 8px 24px rgba(46, 125, 50, 0.2) !important;
+}
+
+.modal .btn-primary {
+    background: linear-gradient(135deg, #2E7D32 0%, #4CAF50 100%);
+    border: none;
+    padding: 0.75rem 1.5rem;
+    font-weight: 600;
+    border-radius: 10px;
+    transition: all 0.3s ease;
+}
+
+.modal .btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(46, 125, 50, 0.3);
+}
+
+.modal .btn-secondary {
+    border-radius: 10px;
+    padding: 0.75rem 1.5rem;
+    font-weight: 600;
+}
+
+/* ===== ESTILO PARA CAMPOS OBRIGATÓRIOS ===== */
 .form-label::after {
     content: " *";
-    color: #dc3545;
+    color: #c62828;
+    font-weight: 700;
 }
 
-/* Hover effects nos cards */
-.data-card:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
-    transition: all 0.3s ease;
+/* ===== VALIDAÇÃO DE CAMPOS ===== */
+.is-invalid {
+    border-color: #c62828 !important;
+    background-color: #ffebee !important;
 }
 
-/* Botão principal */
-.btn-success.btn-lg {
-    padding: 0.75rem 2rem;
-    font-weight: 600;
-    border-radius: 25px;
-    transition: all 0.3s ease;
+.is-invalid:focus {
+    box-shadow: 0 0 0 0.2rem rgba(198, 40, 40, 0.15) !important;
 }
 
-.btn-success.btn-lg:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(40, 167, 69, 0.4);
+/* ===== ESPAÇAMENTO E ORGANIZAÇÃO ===== */
+.container {
+    max-width: 1200px;
+}
+
+.row.g-3 {
+    row-gap: 1.25rem !important;
+}
+
+/* ===== MELHORIAS VISUAIS EXTRAS ===== */
+.text-center.mt-4 {
+    padding: 2rem 0;
+    margin-top: 2rem !important;
+}
+
+/* Ícones nos headers dos cards */
+.card-header h5 i.bi {
+    margin-right: 0.875rem;
+    font-size: 1.35rem;
+    opacity: 0.95;
+    vertical-align: middle;
+}
+
+/* Badge nos ícones do header de perfil */
+.profile-info i.bi {
+    font-size: 1rem;
+    vertical-align: middle;
+}
+
+/* Efeito nos inputs ao digitar */
+.form-control:not(:placeholder-shown),
+.form-select:not([value=""]) {
+    background-color: white;
+    border-color: #4CAF50;
 }

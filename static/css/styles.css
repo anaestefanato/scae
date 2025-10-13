@@ -29,28 +29,41 @@ body {
     box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
     width: 250px;
     z-index: 1050; /* above backdrop (1040) but below modals */
-    transition: transform 0.25s ease;
-    transform: translateX(0);
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    transform: translateX(-100%);
     top: 0;
     left: 0;
+    opacity: 0;
+    visibility: hidden;
+    overflow-y: auto;
+}
+
+.sidebar.open {
+    transform: translateX(0);
+    opacity: 1;
+    visibility: visible;
 }
 
 .sidebar.collapsed {
     transform: translateX(-100%); /* slide out of view without affecting layout */
+    opacity: 0;
+    visibility: hidden;
 }
 
 /* Backdrop shown when sidebar is open (for overlay effect) */
 .sidebar-backdrop {
     position: fixed;
     inset: 0;
-    background: rgba(0,0,0,0.45);
-    z-index: 1020; /* below sidebar (1030) and below modals */
+    background: rgba(0,0,0,0.5);
+    z-index: 1040; /* below sidebar (1050) but above content */
     opacity: 0;
-    transition: opacity 0.2s ease;
+    visibility: hidden;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
     pointer-events: none;
 }
 .sidebar-backdrop.visible {
     opacity: 1;
+    visibility: visible;
     pointer-events: auto;
 }
 
