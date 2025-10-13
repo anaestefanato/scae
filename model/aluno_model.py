@@ -27,3 +27,8 @@ class Aluno(Usuario):
     situacao_moradia: str
     aprovado: bool = False
     auxilios: str = None  # Lista de auxílios separados por vírgula
+    ano_ingresso: int = None
+    ano_conclusao_previsto: int = None
+    bolsa_pesquisa: str = None
+    cad_unico: str = None
+    bolsa_familia: str = None

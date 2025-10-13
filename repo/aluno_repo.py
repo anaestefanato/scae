@@ -38,13 +38,15 @@ def completar_cadastro(aluno: Aluno) -> Optional[bool]:
                     cpf = ?, telefone = ?, curso = ?, data_nascimento = ?, filiacao = ?, 
                     cep = ?, cidade = ?, bairro = ?, rua = ?, numero = ?, estado = ?, 
                     complemento = ?, nome_banco = ?, agencia_bancaria = ?, numero_conta_bancaria = ?, 
-                    renda_familiar = ?, quantidade_pessoas = ?, renda_per_capita = ?, situacao_moradia = ?
+                    renda_familiar = ?, quantidade_pessoas = ?, renda_per_capita = ?, situacao_moradia = ?,
+                    ano_ingresso = ?, ano_conclusao_previsto = ?, bolsa_pesquisa = ?, cad_unico = ?, bolsa_familia = ?
                 WHERE id_usuario = ?
             """, (
                 aluno.cpf, aluno.telefone, aluno.curso, aluno.data_nascimento, aluno.filiacao,
                 aluno.cep, aluno.cidade, aluno.bairro, aluno.rua, aluno.numero, aluno.estado,
                 aluno.complemento, aluno.nome_banco, aluno.agencia_bancaria, aluno.numero_conta_bancaria,
                 aluno.renda_familiar, aluno.quantidade_pessoas, aluno.renda_per_capita, aluno.situacao_moradia,
+                aluno.ano_ingresso, aluno.ano_conclusao_previsto, aluno.bolsa_pesquisa, aluno.cad_unico, aluno.bolsa_familia,
                 aluno.id_usuario
             ))
         else:
@@ -54,13 +56,15 @@ def completar_cadastro(aluno: Aluno) -> Optional[bool]:
                                  cep, cidade, bairro, rua, numero, estado, complemento, 
                                  nome_banco, agencia_bancaria, numero_conta_bancaria, 
                                  renda_familiar, quantidade_pessoas, renda_per_capita, 
-                                 situacao_moradia, aprovado) 
-                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 1)
+                                 situacao_moradia, aprovado, ano_ingresso, ano_conclusao_previsto, 
+                                 bolsa_pesquisa, cad_unico, bolsa_familia) 
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 1, ?, ?, ?, ?, ?)
             """, (
                 aluno.id_usuario, aluno.cpf, aluno.telefone, aluno.curso, aluno.data_nascimento, aluno.filiacao,
                 aluno.cep, aluno.cidade, aluno.bairro, aluno.rua, aluno.numero, aluno.estado,
                 aluno.complemento, aluno.nome_banco, aluno.agencia_bancaria, aluno.numero_conta_bancaria,
-                aluno.renda_familiar, aluno.quantidade_pessoas, aluno.renda_per_capita, aluno.situacao_moradia
+                aluno.renda_familiar, aluno.quantidade_pessoas, aluno.renda_per_capita, aluno.situacao_moradia,
+                aluno.ano_ingresso, aluno.ano_conclusao_previsto, aluno.bolsa_pesquisa, aluno.cad_unico, aluno.bolsa_familia
             ))
         
         return cursor.rowcount > 0
@@ -363,6 +367,11 @@ def atualizar(aluno: Aluno) -> bool:
             aluno.quantidade_pessoas,
             aluno.renda_per_capita,
             aluno.situacao_moradia,
+            aluno.ano_ingresso,
+            aluno.ano_conclusao_previsto,
+            aluno.bolsa_pesquisa,
+            aluno.cad_unico,
+            aluno.bolsa_familia,
             aluno.id_usuario))
         return (cursor.rowcount > 0)
     
@@ -425,7 +434,12 @@ def obter_por_matricula(matricula: str) -> Optional[Aluno]:
                 renda_familiar=row["renda_familiar"],
                 quantidade_pessoas=row["quantidade_pessoas"],
                 renda_per_capita=row["renda_per_capita"],
-                situacao_moradia=row["situacao_moradia"]
+                situacao_moradia=row["situacao_moradia"],
+                ano_ingresso=row.get("ano_ingresso"),
+                ano_conclusao_previsto=row.get("ano_conclusao_previsto"),
+                bolsa_pesquisa=row.get("bolsa_pesquisa"),
+                cad_unico=row.get("cad_unico"),
+                bolsa_familia=row.get("bolsa_familia")
             )
         return None
 

@@ -22,6 +22,11 @@ CREATE TABLE IF NOT EXISTS aluno (
     situacao_moradia TEXT NOT NULL,
     cadastro_completo BOOLEAN DEFAULT 0,
     aprovado BOOLEAN DEFAULT 0,
+    ano_ingresso INTEGER,
+    ano_conclusao_previsto INTEGER,
+    bolsa_pesquisa TEXT,
+    cad_unico TEXT,
+    bolsa_familia TEXT,
     FOREIGN KEY (id_usuario) REFERENCES usuario(id_usuario) ON DELETE CASCADE
 )
 """
@@ -254,7 +259,7 @@ WHERE i.id_inscricao IS NULL
 
 ATUALIZAR = """
 UPDATE aluno
-SET cpf = ?, telefone = ?, curso = ?, data_nascimento = ?, filiacao = ?, cep = ?, cidade = ?, bairro = ?, rua = ?, numero = ?, estado = ?, complemento = ?, nome_banco = ?, agencia_bancaria = ?, numero_conta_bancaria = ?, renda_familiar = ?, quantidade_pessoas = ?, renda_per_capita = ?, situacao_moradia = ?
+SET cpf = ?, telefone = ?, curso = ?, data_nascimento = ?, filiacao = ?, cep = ?, cidade = ?, bairro = ?, rua = ?, numero = ?, estado = ?, complemento = ?, nome_banco = ?, agencia_bancaria = ?, numero_conta_bancaria = ?, renda_familiar = ?, quantidade_pessoas = ?, renda_per_capita = ?, situacao_moradia = ?, ano_ingresso = ?, ano_conclusao_previsto = ?, bolsa_pesquisa = ?, cad_unico = ?, bolsa_familia = ?
 WHERE id_usuario = ?
 """
 
@@ -301,7 +306,12 @@ SELECT
     al.renda_familiar AS renda_familiar,
     al.quantidade_pessoas AS quantidade_pessoas,
     al.renda_per_capita AS renda_per_capita,
-    al.situacao_moradia AS situacao_moradia
+    al.situacao_moradia AS situacao_moradia,
+    al.ano_ingresso AS ano_ingresso,
+    al.ano_conclusao_previsto AS ano_conclusao_previsto,
+    al.bolsa_pesquisa AS bolsa_pesquisa,
+    al.cad_unico AS cad_unico,
+    al.bolsa_familia AS bolsa_familia
 FROM aluno al
 JOIN usuario u ON al.id_usuario = u.id_usuario
 WHERE u.matricula = ?
