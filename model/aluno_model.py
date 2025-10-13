@@ -26,3 +26,4 @@ class Aluno(Usuario):
     renda_per_capita: float 
     situacao_moradia: str
     aprovado: bool = False
+    auxilios: str = None  # Lista de auxílios separados por vírgula

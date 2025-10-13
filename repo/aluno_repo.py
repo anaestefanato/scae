@@ -150,8 +150,12 @@ def obter_por_id(id: int) -> Optional[Aluno]:
                 matricula=row["matricula"],
                 email=row["email"],
                 senha=row["senha"],
+                perfil=row["perfil"],
+                foto=None,  # Não está na query atual
+                token_redefinicao=None,
+                data_token=None,
+                data_cadastro=None,
                 cpf=row["cpf"],
-                rg=row["rg"],
                 telefone=row["telefone"],
                 curso=row["curso"],
                 data_nascimento=row["data_nascimento"],
@@ -168,10 +172,18 @@ def obter_por_id(id: int) -> Optional[Aluno]:
                 numero_conta_bancaria=row["numero_conta_bancaria"],
                 renda_familiar=row["renda_familiar"],
                 quantidade_pessoas=row["quantidade_pessoas"],
+                renda_per_capita=row["renda_per_capita"],
                 situacao_moradia=row["situacao_moradia"]
             )
         return None
 
+
+def contar_todos() -> int:
+    """Conta o total de alunos cadastrados"""
+    with get_connection() as conn:
+        cursor = conn.cursor()
+        cursor.execute(CONTAR_TODOS)
+        return cursor.fetchone()["total"]
 
 def obter_alunos_por_pagina(pagina: int, limite: int) -> list[Usuario]:
     offset = (pagina - 1) * limite
@@ -188,7 +200,6 @@ def obter_alunos_por_pagina(pagina: int, limite: int) -> list[Usuario]:
                 senha=row["senha"],
                 perfil=row["perfil"],
                 cpf=row["cpf"],
-                rg=row["rg"],
                 telefone=row["telefone"],
                 curso=row["curso"],
                 data_nascimento=row["data_nascimento"],
@@ -205,7 +216,113 @@ def obter_alunos_por_pagina(pagina: int, limite: int) -> list[Usuario]:
                 numero_conta_bancaria=row["numero_conta_bancaria"],
                 renda_familiar=row["renda_familiar"],
                 quantidade_pessoas=row["quantidade_pessoas"],
-                situacao_moradia=row["situacao_moradia"]
+                renda_per_capita=row["renda_per_capita"],
+                situacao_moradia=row["situacao_moradia"],
+                auxilios=row["auxilios"] if row["auxilios"] else None,
+                foto=None,
+                token_redefinicao=None,
+                data_token=None,
+                data_cadastro=None
+            )
+            for row in rows]
+        return alunos
+
+def contar_beneficiados() -> int:
+    """Conta o total de alunos beneficiados (com auxílios aprovados)"""
+    with get_connection() as conn:
+        cursor = conn.cursor()
+        cursor.execute(CONTAR_BENEFICIADOS)
+        return cursor.fetchone()["total"]
+
+def obter_beneficiados_por_pagina(pagina: int, limite: int) -> list[Usuario]:
+    """Obtém alunos beneficiados com paginação"""
+    offset = (pagina - 1) * limite
+    with get_connection() as conn:
+        cursor = conn.cursor()
+        cursor.execute(OBTER_BENEFICIADOS_POR_PAGINA, (limite, offset))
+        rows = cursor.fetchall()
+        alunos = [
+            Aluno(
+                id_usuario=row["id_usuario"],
+                nome=row["nome"],
+                matricula=row["matricula"],
+                email=row["email"],
+                senha=row["senha"],
+                perfil=row["perfil"],
+                cpf=row["cpf"],
+                telefone=row["telefone"],
+                curso=row["curso"],
+                data_nascimento=row["data_nascimento"],
+                filiacao=row["filiacao"],
+                cep=row["cep"],
+                cidade=row["cidade"],
+                bairro=row["bairro"],
+                rua=row["rua"],
+                numero=row["numero"],
+                estado=row["estado"],
+                complemento=row["complemento"],
+                nome_banco=row["nome_banco"],
+                agencia_bancaria=row["agencia_bancaria"],
+                numero_conta_bancaria=row["numero_conta_bancaria"],
+                renda_familiar=row["renda_familiar"],
+                quantidade_pessoas=row["quantidade_pessoas"],
+                renda_per_capita=row["renda_per_capita"],
+                situacao_moradia=row["situacao_moradia"],
+                auxilios=row["auxilios"] if row["auxilios"] else None,
+                foto=None,
+                token_redefinicao=None,
+                data_token=None,
+                data_cadastro=None
+            )
+            for row in rows]
+        return alunos
+
+def contar_nao_beneficiados() -> int:
+    """Conta o total de alunos não beneficiados (sem auxílios aprovados)"""
+    with get_connection() as conn:
+        cursor = conn.cursor()
+        cursor.execute(CONTAR_NAO_BENEFICIADOS)
+        return cursor.fetchone()["total"]
+
+def obter_nao_beneficiados_por_pagina(pagina: int, limite: int) -> list[Usuario]:
+    """Obtém alunos não beneficiados com paginação"""
+    offset = (pagina - 1) * limite
+    with get_connection() as conn:
+        cursor = conn.cursor()
+        cursor.execute(OBTER_NAO_BENEFICIADOS_POR_PAGINA, (limite, offset))
+        rows = cursor.fetchall()
+        alunos = [
+            Aluno(
+                id_usuario=row["id_usuario"],
+                nome=row["nome"],
+                matricula=row["matricula"],
+                email=row["email"],
+                senha=row["senha"],
+                perfil=row["perfil"],
+                cpf=row["cpf"],
+                telefone=row["telefone"],
+                curso=row["curso"],
+                data_nascimento=row["data_nascimento"],
+                filiacao=row["filiacao"],
+                cep=row["cep"],
+                cidade=row["cidade"],
+                bairro=row["bairro"],
+                rua=row["rua"],
+                numero=row["numero"],
+                estado=row["estado"],
+                complemento=row["complemento"],
+                nome_banco=row["nome_banco"],
+                agencia_bancaria=row["agencia_bancaria"],
+                numero_conta_bancaria=row["numero_conta_bancaria"],
+                renda_familiar=row["renda_familiar"],
+                quantidade_pessoas=row["quantidade_pessoas"],
+                renda_per_capita=row["renda_per_capita"],
+                situacao_moradia=row["situacao_moradia"],
+                auxilios=row["auxilios"] if row["auxilios"] else None,
+                foto=None,
+                token_redefinicao=None,
+                data_token=None,
+                data_cadastro=None
             )
             for row in rows]
         return alunos
@@ -252,9 +369,11 @@ def atualizar(aluno: Aluno) -> bool:
 def excluir(id: int) -> bool:
     with get_connection() as conn:
         cursor = conn.cursor()
+        # Primeiro exclui da tabela aluno
         cursor.execute(EXCLUIR, (id,))
+        # Depois exclui da tabela usuario
         usuario_repo.excluir(id, cursor)
-        return (cursor.rowcount > 0)
+        return True
     
 def possui_cadastro_completo(id: int) -> bool:
     with get_connection() as conn:
