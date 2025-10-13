@@ -19,10 +19,27 @@ templates = Jinja2Templates(directory="templates")
 
 @router.get("/usuarios/alunos")
 @requer_autenticacao("admin")
-async def get_usuario_aluno(request: Request, usuario_logado: dict = None):
+async def get_usuario_aluno(request: Request, usuario_logado: dict = None, pagina: int = 1, filtro: str = ""):
 
     admin = usuario_repo.obter_usuario_por_matricula(usuario_logado['matricula'])
-    alunos = aluno_repo.obter_todos()
+    
+    # Definir quantidade de alunos por página
+    por_pagina = 20
+    
+    # Obter alunos paginados conforme filtro
+    if filtro == "beneficiados":
+        alunos = aluno_repo.obter_beneficiados_por_pagina(pagina, por_pagina)
+        total_alunos = aluno_repo.contar_beneficiados()
+    elif filtro == "nao_beneficiados":
+        alunos = aluno_repo.obter_nao_beneficiados_por_pagina(pagina, por_pagina)
+        total_alunos = aluno_repo.contar_nao_beneficiados()
+    else:
+        alunos = aluno_repo.obter_alunos_por_pagina(pagina, por_pagina)
+        total_alunos = aluno_repo.contar_todos()
+    
+    # Calcular total de páginas
+    import math
+    total_paginas = math.ceil(total_alunos / por_pagina)
     
     # Converter objetos para dicionários para serialização JSON com todos os campos
     alunos_dict = [
@@ -51,7 +68,8 @@ async def get_usuario_aluno(request: Request, usuario_logado: dict = None):
             "renda_per_capita": a.renda_per_capita if a.renda_per_capita else 0,
             "situacao_moradia": a.situacao_moradia if a.situacao_moradia else "",
             "aprovado": a.aprovado if hasattr(a, 'aprovado') else False,
-            "perfil": a.perfil
+            "perfil": a.perfil,
+            "auxilios": a.auxilios if hasattr(a, 'auxilios') and a.auxilios else None
         }
         for a in alunos
     ]
@@ -60,9 +78,58 @@ async def get_usuario_aluno(request: Request, usuario_logado: dict = None):
         "request": request, 
         "admin": admin,
         "alunos": alunos_dict,
-        "total_alunos": len(alunos_dict)
+        "total_alunos": total_alunos,
+        "pagina_atual": pagina,
+        "total_paginas": total_paginas,
+        "por_pagina": por_pagina,
+        "filtro_atual": filtro
     })
     return response
+
+@router.post("/usuarios/aluno/excluir/{id_usuario}")
+@requer_autenticacao("admin")
+async def post_excluir_aluno(
+    request: Request,
+    id_usuario: int,
+    usuario_logado: dict = None
+):
+    try:
+        # Verificar se o aluno existe
+        aluno = aluno_repo.obter_por_id(id_usuario)
+        
+        if not aluno:
+            print(f"Aluno com ID {id_usuario} não encontrado")
+            return RedirectResponse(
+                url="/admin/usuarios/alunos?erro=Aluno não encontrado",
+                status_code=303
+            )
+        
+        print(f"Tentando excluir aluno: {aluno.nome} (ID: {id_usuario})")
+        
+        # Excluir do banco de dados
+        sucesso = aluno_repo.excluir(id_usuario)
+        
+        print(f"Resultado da exclusão: {sucesso}")
+        
+        if sucesso:
+            return RedirectResponse(
+                url="/admin/usuarios/alunos?sucesso=Aluno excluído com sucesso!",
+                status_code=303
+            )
+        else:
+            return RedirectResponse(
+                url="/admin/usuarios/alunos?erro=Erro ao excluir aluno",
+                status_code=303
+            )
+            
+    except Exception as e:
+        import traceback
+        print(f"Erro ao excluir aluno: {e}")
+        print(traceback.format_exc())
+        return RedirectResponse(
+            url=f"/admin/usuarios/alunos?erro=Erro interno ao excluir aluno: {str(e)}",
+            status_code=303
+        )
 
 @router.get("/usuarios/assistente")
 @requer_autenticacao("admin")

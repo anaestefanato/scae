@@ -37,7 +37,13 @@ al.id_usuario, al.cpf, al.telefone, al.curso, al.data_nascimento, al.filiacao, a
 FROM aluno al 
 INNER JOIN usuario u ON al.id_usuario = u.id_usuario    
 ORDER BY u.nome
-""" 
+"""
+
+CONTAR_TODOS = """
+SELECT COUNT(*) as total
+FROM aluno al 
+INNER JOIN usuario u ON al.id_usuario = u.id_usuario
+"""
 
 # Obter apenas alunos aprovados (não pendentes) com seus auxílios
 OBTER_ALUNOS_APROVADOS = """
@@ -128,11 +134,122 @@ al.numero_conta_bancaria,
 al.renda_familiar,
 al.quantidade_pessoas,
 al.renda_per_capita,
-al.situacao_moradia
+al.situacao_moradia,
+GROUP_CONCAT(DISTINCT CASE 
+    WHEN i.status = 'aprovado' THEN aux.tipo_auxilio 
+END) as auxilios
 FROM aluno al
 INNER JOIN usuario u ON al.id_usuario = u.id_usuario
+LEFT JOIN inscricao i ON al.id_usuario = i.id_aluno
+LEFT JOIN auxilio aux ON i.id_inscricao = aux.id_inscricao
+GROUP BY u.id_usuario, u.matricula, u.nome, u.email, u.senha, u.perfil, 
+         al.cpf, al.telefone, al.curso, al.data_nascimento, al.filiacao,
+         al.cep, al.cidade, al.bairro, al.rua, al.numero, al.estado,
+         al.complemento, al.nome_banco, al.agencia_bancaria, 
+         al.numero_conta_bancaria, al.renda_familiar, al.quantidade_pessoas,
+         al.renda_per_capita, al.situacao_moradia
 ORDER BY u.matricula
 LIMIT ? OFFSET ?
+"""
+
+OBTER_BENEFICIADOS_POR_PAGINA = """
+SELECT
+u.id_usuario,
+u.matricula,
+u.nome,
+u.email,
+u.senha,
+u.perfil,
+al.cpf,
+al.telefone,
+al.curso,
+al.data_nascimento,
+al.filiacao,
+al.cep,
+al.cidade,
+al.bairro,
+al.rua,
+al.numero,
+al.estado,
+al.complemento,
+al.nome_banco,
+al.agencia_bancaria,
+al.numero_conta_bancaria,
+al.renda_familiar,
+al.quantidade_pessoas,
+al.renda_per_capita,
+al.situacao_moradia,
+GROUP_CONCAT(DISTINCT aux.tipo_auxilio) as auxilios
+FROM aluno al
+INNER JOIN usuario u ON al.id_usuario = u.id_usuario
+INNER JOIN inscricao i ON al.id_usuario = i.id_aluno AND i.status = 'aprovado'
+INNER JOIN auxilio aux ON i.id_inscricao = aux.id_inscricao
+GROUP BY u.id_usuario, u.matricula, u.nome, u.email, u.senha, u.perfil, 
+         al.cpf, al.telefone, al.curso, al.data_nascimento, al.filiacao,
+         al.cep, al.cidade, al.bairro, al.rua, al.numero, al.estado,
+         al.complemento, al.nome_banco, al.agencia_bancaria, 
+         al.numero_conta_bancaria, al.renda_familiar, al.quantidade_pessoas,
+         al.renda_per_capita, al.situacao_moradia
+ORDER BY u.matricula
+LIMIT ? OFFSET ?
+"""
+
+CONTAR_BENEFICIADOS = """
+SELECT COUNT(DISTINCT u.id_usuario) as total
+FROM aluno al 
+INNER JOIN usuario u ON al.id_usuario = u.id_usuario
+INNER JOIN inscricao i ON al.id_usuario = i.id_aluno
+WHERE i.status = 'aprovado'
+"""
+
+OBTER_NAO_BENEFICIADOS_POR_PAGINA = """
+SELECT
+u.id_usuario,
+u.matricula,
+u.nome,
+u.email,
+u.senha,
+u.perfil,
+al.cpf,
+al.telefone,
+al.curso,
+al.data_nascimento,
+al.filiacao,
+al.cep,
+al.cidade,
+al.bairro,
+al.rua,
+al.numero,
+al.estado,
+al.complemento,
+al.nome_banco,
+al.agencia_bancaria,
+al.numero_conta_bancaria,
+al.renda_familiar,
+al.quantidade_pessoas,
+al.renda_per_capita,
+al.situacao_moradia,
+NULL as auxilios
+FROM aluno al
+INNER JOIN usuario u ON al.id_usuario = u.id_usuario
+LEFT JOIN inscricao i ON al.id_usuario = i.id_aluno AND i.status = 'aprovado'
+WHERE i.id_inscricao IS NULL
+GROUP BY u.id_usuario, u.matricula, u.nome, u.email, u.senha, u.perfil, 
+         al.cpf, al.telefone, al.curso, al.data_nascimento, al.filiacao,
+         al.cep, al.cidade, al.bairro, al.rua, al.numero, al.estado,
+         al.complemento, al.nome_banco, al.agencia_bancaria, 
+         al.numero_conta_bancaria, al.renda_familiar, al.quantidade_pessoas,
+         al.renda_per_capita, al.situacao_moradia
+ORDER BY u.matricula
+LIMIT ? OFFSET ?
+"""
+
+CONTAR_NAO_BENEFICIADOS = """
+SELECT COUNT(DISTINCT u.id_usuario) as total
+FROM aluno al 
+INNER JOIN usuario u ON al.id_usuario = u.id_usuario
+LEFT JOIN inscricao i ON al.id_usuario = i.id_aluno AND i.status = 'aprovado'
+WHERE i.id_inscricao IS NULL
 """
 
 ATUALIZAR = """
