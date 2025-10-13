@@ -40,6 +40,7 @@ body, .body-cadastro-login {
     left: 0;
     opacity: 0;
     visibility: hidden;
+    overflow-y: auto;
 }
 
 .sidebar.open {

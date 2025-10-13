@@ -47,7 +47,7 @@
         <h6><i class="bi bi-info-circle me-2"></i>Requisitos para Participação</h6>
         <ul>
             <li>Estar regularmente matriculado no IFES</li>
-            <li>Renda familiar per capita de até 1,5 salário mínimo</li>
+            <li>Renda familiar per capita de até 1 salário mínimo</li>
             <li>Não possuir auxílio de outros programas governamentais</li>
             <li>Apresentar toda a documentação exigida</li>
         </ul>
@@ -220,7 +220,7 @@
                         <label for="renda_percapita" class="form-label required-field">Renda Familiar Per Capita</label>
                         <select class="form-control" id="renda_percapita" name="renda_percapita" required>
                             <option value="">Selecione...</option>
-                            <option value="menor_1">Menor que 1 salário mínimo</option>
+                            <option value="menor_1">Menor ou igual a 1 salário mínimo</option>
                             <option value="ate_1_5">Até 1,5 salário mínimo</option>
                             <option value="maior_1_5">Maior que 1,5 salário mínimo</option>
                         </select>
@@ -302,6 +302,83 @@
                                     </label>
                                 </div>
                             </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Perguntas sobre Transporte -->
+                <div class="form-section" id="perguntas-transporte" style="display: none;">
+                    <div class="section-title">
+                        <i class="bi bi-question-circle"></i>
+                        Informações sobre Transporte
+                    </div>
+                    
+                    <div class="form-row single-column">
+                        <div>
+                            <label class="form-label required-field">Qual tipo de transporte você utiliza para vir até o campus?</label>
+                            <div class="radio-group">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" id="transporte_van" name="tipo_transporte" value="van_escolar" onchange="toggleTipoTransporte()">
+                                    <label class="form-check-label" for="transporte_van">
+                                        <i class="bi bi-minecart text-primary me-2"></i>
+                                        <strong>Van Escolar</strong>
+                                    </label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" id="transporte_onibus" name="tipo_transporte" value="onibus" onchange="toggleTipoTransporte()">
+                                    <label class="form-check-label" for="transporte_onibus">
+                                        <i class="bi bi-bus-front text-success me-2"></i>
+                                        <strong>Ônibus</strong>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Opções de Ônibus -->
+                    <div class="form-row single-column" id="opcoes-onibus" style="display: none;">
+                        <div>
+                            <label class="form-label required-field">Tipo de ônibus (pode selecionar mais de um):</label>
+                            <div class="checkbox-group">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="onibus_municipal" name="tipo_onibus" value="municipal">
+                                    <label class="form-check-label" for="onibus_municipal">
+                                        <i class="bi bi-building text-info me-2"></i>
+                                        <strong>Ônibus Municipal</strong>
+                                    </label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="onibus_intermunicipal" name="tipo_onibus" value="intermunicipal">
+                                    <label class="form-check-label" for="onibus_intermunicipal">
+                                        <i class="bi bi-signpost-2 text-warning me-2"></i>
+                                        <strong>Ônibus Intermunicipal</strong>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Gasto com Ônibus (Diário) -->
+                    <div class="form-row single-column" id="gasto-onibus" style="display: none;">
+                        <div>
+                            <label for="gasto_passagens_dia" class="form-label required-field">Quanto você gasta com passagens em um dia (ida e volta)?</label>
+                            <div class="input-group" style="max-width: 500px; height: 45px;">
+                                <span class="input-group-text" style="min-width: 50px; height: 45px; display: flex; align-items: center; justify-content: center;">R$</span>
+                                <input type="number" class="form-control" id="gasto_passagens_dia" name="gasto_passagens_dia" placeholder="Ex: 12.00" step="0.01" min="0" style="height: 45px;">
+                            </div>
+                            <div class="form-text">Informe o valor total gasto diariamente com passagens (ida + volta)</div>
+                        </div>
+                    </div>
+
+                    <!-- Gasto com Van Escolar (Mensal) -->
+                    <div class="form-row single-column" id="gasto-van" style="display: none;">
+                        <div>
+                            <label for="gasto_van_mensal" class="form-label required-field">Quanto você gasta mensalmente com a van escolar?</label>
+                            <div class="input-group" style="max-width: 500px; height: 45px;">
+                                <span class="input-group-text" style="min-width: 50px; height: 45px; display: flex; align-items: center; justify-content: center;">R$</span>
+                                <input type="number" class="form-control" id="gasto_van_mensal" name="gasto_van_mensal" placeholder="Ex: 300.00" step="0.01" min="0" style="height: 45px;">
+                            </div>
+                            <div class="form-text">Informe o valor mensal pago pelo serviço de van escolar</div>
                         </div>
                     </div>
                 </div>
@@ -610,12 +687,20 @@ document.addEventListener('DOMContentLoaded', function() {
 
 function toggleDocumentosTransporte() {
     const checkbox = document.getElementById('auxilio_transporte');
+    const perguntasSection = document.getElementById('perguntas-transporte');
     const docsSection = document.getElementById('docs-transporte');
     
     if (checkbox.checked) {
+        perguntasSection.style.display = 'block';
         docsSection.style.display = 'block';
     } else {
+        perguntasSection.style.display = 'none';
         docsSection.style.display = 'none';
+        // Limpar seleções
+        document.querySelectorAll('input[name="tipo_transporte"]').forEach(radio => radio.checked = false);
+        document.getElementById('opcoes-onibus').style.display = 'none';
+        document.getElementById('gasto-onibus').style.display = 'none';
+        document.getElementById('gasto-van').style.display = 'none';
     }
 }
 
@@ -627,6 +712,30 @@ function toggleDocumentosMoradia() {
         docsSection.style.display = 'block';
     } else {
         docsSection.style.display = 'none';
+    }
+}
+
+function toggleTipoTransporte() {
+    const vanRadio = document.getElementById('transporte_van');
+    const onibusRadio = document.getElementById('transporte_onibus');
+    const opcoesOnibus = document.getElementById('opcoes-onibus');
+    const gastoOnibus = document.getElementById('gasto-onibus');
+    const gastoVan = document.getElementById('gasto-van');
+    
+    if (vanRadio.checked) {
+        // Mostrar campo de gasto com van
+        gastoVan.style.display = 'block';
+        // Ocultar opções de ônibus
+        opcoesOnibus.style.display = 'none';
+        gastoOnibus.style.display = 'none';
+        // Limpar seleções de ônibus (checkboxes)
+        document.querySelectorAll('input[name="tipo_onibus"]').forEach(checkbox => checkbox.checked = false);
+    } else if (onibusRadio.checked) {
+        // Mostrar opções de ônibus
+        opcoesOnibus.style.display = 'block';
+        gastoOnibus.style.display = 'block';
+        // Ocultar campo de van
+        gastoVan.style.display = 'none';
     }
 }
 </script>
