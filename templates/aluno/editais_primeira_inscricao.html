@@ -25,17 +25,20 @@
 
     <!-- Progress Steps -->
     <div class="progress-steps mb-4">
-        <div class="step active">
+        <div class="step active" id="step-1">
             <span>1</span>
-            <div class="step-label">Dados Pessoais</div>
+            <div class="step-label">Dados</div>
         </div>
-        <div class="step">
+        <div class="step" id="step-2">
             <span>2</span>
-            <div class="step-label">Dados Acadêmicos</div>
+            <div class="step-label">Auxílios</div>
         </div>
-        <div class="step">
+        <div class="step" id="step-3">
             <span>3</span>
             <div class="step-label">Documentos</div>
+        </div>
+        <div class="progress-line">
+            <div class="progress-line-fill" id="progress-fill"></div>
         </div>
     </div>
 
@@ -50,33 +53,6 @@
         </ul>
     </div>
 
-    <!-- Document Checklist -->
-    <div class="document-checklist mb-4">
-        <h6 class="mb-3"><i class="bi bi-file-earmark-check me-2"></i>Documentos Necessários</h6>
-        <div class="row">
-            <div class="col-md-6">
-                <div class="checklist-item">
-                    <i class="bi bi-file-earmark-pdf checklist-icon"></i>
-                    <span>Documentos Pessoais (RG, CPF)</span>
-                </div>
-                <div class="checklist-item">
-                    <i class="bi bi-file-earmark-pdf checklist-icon"></i>
-                    <span>Comprovante de Renda Familiar</span>
-                </div>
-            </div>
-            <div class="col-md-6">
-                <div class="checklist-item">
-                    <i class="bi bi-file-earmark-pdf checklist-icon"></i>
-                    <span>Comprovante de Residência</span>
-                </div>
-                <div class="checklist-item">
-                    <i class="bi bi-file-earmark-pdf checklist-icon"></i>
-                    <span>Histórico Escolar</span>
-                </div>
-            </div>
-        </div>
-    </div>
-
     <!-- Form Container -->
     <div class="form-container">
         <div class="form-title">
@@ -87,7 +63,9 @@
             Complete todas as etapas para efetivar sua inscrição no programa de assistência estudantil.
         </p>
 
-        <form method="post" enctype="multipart/form-data">
+        <form method="post" enctype="multipart/form-data" id="inscricaoForm">
+            <!-- Etapa 1: Preenchimento dos Dados -->
+            <div class="form-etapa" id="etapa-1" style="display: block;">
             <!-- Dados Pessoais -->
             <div class="form-section">
                 <div class="section-title">
@@ -117,24 +95,90 @@
                     </div>
                 </div>
 
-                <div class="form-row">
+                <div class="form-row single-column">
                     <div>
                         <label for="email" class="form-label required-field">E-mail</label>
                         <input type="email" class="form-control" id="email" name="email" required>
                         <div class="form-text">Será usado para todas as comunicações do programa</div>
                     </div>
+                </div>
+
+                <div class="form-row">
                     <div>
-                        <label for="endereco" class="form-label required-field">Endereço Completo</label>
-                        <input type="text" class="form-control" id="endereco" name="endereco" placeholder="Rua, número, bairro, cidade" required>
+                        <label for="logradouro" class="form-label required-field">Logradouro (Rua/Avenida)</label>
+                        <input type="text" class="form-control" id="logradouro" name="logradouro" placeholder="Ex: Rua das Flores" required>
                     </div>
+                    <div>
+                        <label for="numero" class="form-label required-field">Número</label>
+                        <input type="text" class="form-control" id="numero" name="numero" placeholder="Ex: 123" required>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div>
+                        <label for="complemento" class="form-label">Complemento</label>
+                        <input type="text" class="form-control" id="complemento" name="complemento" placeholder="Ex: Apto 201, Bloco B">
+                    </div>
+                    <div>
+                        <label for="bairro" class="form-label required-field">Bairro</label>
+                        <input type="text" class="form-control" id="bairro" name="bairro" placeholder="Ex: Centro" required>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div>
+                        <label for="cidade" class="form-label required-field">Cidade</label>
+                        <input type="text" class="form-control" id="cidade" name="cidade" placeholder="Ex: Cachoeiro de Itapemirim" required>
+                    </div>
+                    <div>
+                        <label for="estado" class="form-label required-field">Estado</label>
+                        <select class="form-control" id="estado" name="estado" required>
+                            <option value="">Selecione...</option>
+                            <option value="ES">Espírito Santo</option>
+                            <option value="AC">Acre</option>
+                            <option value="AL">Alagoas</option>
+                            <option value="AP">Amapá</option>
+                            <option value="AM">Amazonas</option>
+                            <option value="BA">Bahia</option>
+                            <option value="CE">Ceará</option>
+                            <option value="DF">Distrito Federal</option>
+                            <option value="GO">Goiás</option>
+                            <option value="MA">Maranhão</option>
+                            <option value="MT">Mato Grosso</option>
+                            <option value="MS">Mato Grosso do Sul</option>
+                            <option value="MG">Minas Gerais</option>
+                            <option value="PA">Pará</option>
+                            <option value="PB">Paraíba</option>
+                            <option value="PR">Paraná</option>
+                            <option value="PE">Pernambuco</option>
+                            <option value="PI">Piauí</option>
+                            <option value="RJ">Rio de Janeiro</option>
+                            <option value="RN">Rio Grande do Norte</option>
+                            <option value="RS">Rio Grande do Sul</option>
+                            <option value="RO">Rondônia</option>
+                            <option value="RR">Roraima</option>
+                            <option value="SC">Santa Catarina</option>
+                            <option value="SP">São Paulo</option>
+                            <option value="SE">Sergipe</option>
+                            <option value="TO">Tocantins</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div>
+                        <label for="cep" class="form-label required-field">CEP</label>
+                        <input type="text" class="form-control" id="cep" name="cep" placeholder="00000-000" required>
+                    </div>
+                    <div></div>
                 </div>
             </div>
 
-            <!-- Dados Acadêmicos e Financeiros -->
+            <!-- Dados Acadêmicos -->
             <div class="form-section">
                 <div class="section-title">
                     <i class="bi bi-mortarboard"></i>
-                    Dados Acadêmicos e Financeiros
+                    Dados Acadêmicos
                 </div>
                 
                 <div class="form-row">
@@ -148,15 +192,218 @@
                     </div>
                 </div>
 
-                <div class="form-row single-column">
+                <div class="form-row">
                     <div>
-                        <label for="renda_familiar" class="form-label required-field">Renda Familiar Mensal</label>
-                        <input type="number" class="form-control" id="renda_familiar" name="renda_familiar" step="0.01" min="0" required>
-                        <div class="form-text">Informe a renda total de todos os membros da família</div>
+                        <label for="ano_ingresso" class="form-label required-field">Ano de Ingresso</label>
+                        <input type="number" class="form-control" id="ano_ingresso" name="ano_ingresso" placeholder="Ex: 2024" min="2000" max="2030" required>
+                    </div>
+                    <div>
+                        <label for="ano_conclusao_previsto" class="form-label required-field">Ano Previsto para Conclusão</label>
+                        <input type="number" class="form-control" id="ano_conclusao_previsto" name="ano_conclusao_previsto" placeholder="Ex: 2028" min="2024" max="2035" required>
                     </div>
                 </div>
             </div>
 
+            <!-- Dados Financeiros -->
+            <div class="form-section">
+                <div class="section-title">
+                    <i class="bi bi-cash-stack"></i>
+                    Dados Financeiros
+                </div>
+
+                <div class="form-row">
+                    <div>
+                        <label for="pessoas_residencia" class="form-label required-field">Quantas pessoas residem com você?</label>
+                        <input type="number" class="form-control" id="pessoas_residencia" name="pessoas_residencia" min="0" placeholder="Ex: 3" required>
+                    </div>
+                    <div>
+                        <label for="renda_percapita" class="form-label required-field">Renda Familiar Per Capita</label>
+                        <select class="form-control" id="renda_percapita" name="renda_percapita" required>
+                            <option value="">Selecione...</option>
+                            <option value="menor_1">Menor que 1 salário mínimo</option>
+                            <option value="ate_1_5">Até 1,5 salário mínimo</option>
+                            <option value="maior_1_5">Maior que 1,5 salário mínimo</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div>
+                        <label for="bolsa_pesquisa" class="form-label required-field">Você recebe alguma bolsa de pesquisa ou estágio?</label>
+                        <select class="form-control" id="bolsa_pesquisa" name="bolsa_pesquisa" required>
+                            <option value="">Selecione...</option>
+                            <option value="sim">Sim</option>
+                            <option value="nao">Não</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label for="cad_unico" class="form-label required-field">Está inscrito no programa CAD Único?</label>
+                        <select class="form-control" id="cad_unico" name="cad_unico" required>
+                            <option value="">Selecione...</option>
+                            <option value="sim">Sim</option>
+                            <option value="nao">Não</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div>
+                        <label for="bolsa_familia" class="form-label required-field">Recebe Bolsa Família?</label>
+                        <select class="form-control" id="bolsa_familia" name="bolsa_familia" required>
+                            <option value="">Selecione...</option>
+                            <option value="sim">Sim</option>
+                            <option value="nao">Não</option>
+                        </select>
+                    </div>
+                    <div></div>
+                </div>
+            </div>
+            </div>
+            <!-- Fim Etapa 1 -->
+
+            <!-- Etapa 2: Escolha de Auxílios -->
+            <div class="form-etapa" id="etapa-2" style="display: none;">
+                <div class="form-section">
+                    <div class="section-title">
+                        <i class="bi bi-card-checklist"></i>
+                        Escolha de Auxílios
+                    </div>
+                    
+                    <div class="form-row single-column">
+                        <div>
+                            <label class="form-label required-field">Selecione os auxílios que deseja receber:</label>
+                            <div class="checkbox-group">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="auxilio_alimentacao" name="auxilios" value="alimentacao">
+                                    <label class="form-check-label" for="auxilio_alimentacao">
+                                        <i class="bi bi-egg-fried text-warning me-2"></i>
+                                        <strong>Auxílio Alimentação</strong> - R$ 600,00/mês
+                                    </label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="auxilio_moradia" name="auxilios" value="moradia" onchange="toggleDocumentosMoradia()">
+                                    <label class="form-check-label" for="auxilio_moradia">
+                                        <i class="bi bi-house-door text-primary me-2"></i>
+                                        <strong>Auxílio Moradia</strong> - R$ 400,00/mês
+                                    </label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="auxilio_transporte" name="auxilios" value="transporte" onchange="toggleDocumentosTransporte()">
+                                    <label class="form-check-label" for="auxilio_transporte">
+                                        <i class="bi bi-bus-front text-success me-2"></i>
+                                        <strong>Auxílio Transporte</strong> - R$ 300,00/mês
+                                    </label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="auxilio_material" name="auxilios" value="material">
+                                    <label class="form-check-label" for="auxilio_material">
+                                        <i class="bi bi-book text-info me-2"></i>
+                                        <strong>Auxílio Material Didático</strong> - R$ 200,00/semestre
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Documentação Específica para Transporte -->
+                <div class="form-section" id="docs-transporte" style="display: none;">
+                    <div class="section-title">
+                        <i class="bi bi-file-earmark-text"></i>
+                        Documentação Específica - Auxílio Transporte
+                    </div>
+                    
+                    <div class="alert alert-info">
+                        <i class="bi bi-info-circle me-2"></i>
+                        <strong>Escolha UMA das opções abaixo:</strong>
+                    </div>
+
+                    <div class="form-row">
+                        <div>
+                            <label for="comprovante_residencia_transporte" class="form-label required-field">Comprovante de Residência Recente</label>
+                            <input type="file" class="form-control" id="comprovante_residencia_transporte" name="comprovante_residencia_transporte" accept="application/pdf">
+                            <div class="form-text">Documento atualizado</div>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div>
+                            <label for="passe_escolar_frente" class="form-label">Foto Cartão Passe Escolar (Frente)</label>
+                            <input type="file" class="form-control" id="passe_escolar_frente" name="passe_escolar_frente" accept="image/*,application/pdf">
+                        </div>
+                        <div>
+                            <label for="passe_escolar_verso" class="form-label">Foto Cartão Passe Escolar (Verso)</label>
+                            <input type="file" class="form-control" id="passe_escolar_verso" name="passe_escolar_verso" accept="image/*,application/pdf">
+                        </div>
+                    </div>
+
+                    <div class="form-row single-column">
+                        <div>
+                            <label for="comprovante_recarga" class="form-label">Último Comprovante de Recarga do Cartão</label>
+                            <input type="file" class="form-control" id="comprovante_recarga" name="comprovante_recarga" accept="image/*,application/pdf">
+                            <div class="form-text">Com menos de 2 meses</div>
+                        </div>
+                    </div>
+
+                    <div class="separator-ou">OU</div>
+
+                    <div class="form-row single-column">
+                        <div>
+                            <label for="comprovante_passagens" class="form-label">Comprovante de Pagamento de Passagens</label>
+                            <input type="file" class="form-control" id="comprovante_passagens" name="comprovante_passagens" accept="application/pdf">
+                            <div class="form-text">2 viagens de ida e 2 de volta, com data a partir do início das aulas</div>
+                        </div>
+                    </div>
+
+                    <div class="separator-ou">OU</div>
+
+                    <div class="form-row single-column">
+                        <div>
+                            <label for="contrato_transporte" class="form-label">Contrato de Transporte Escolar</label>
+                            <input type="file" class="form-control" id="contrato_transporte" name="contrato_transporte" accept="application/pdf">
+                            <div class="form-text">Cópia do contrato atual de serviço</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Documentação Específica para Moradia -->
+                <div class="form-section" id="docs-moradia" style="display: none;">
+                    <div class="section-title">
+                        <i class="bi bi-file-earmark-text"></i>
+                        Documentação Específica - Auxílio Moradia
+                    </div>
+
+                    <div class="form-row">
+                        <div>
+                            <label for="comprovante_residencia_anterior" class="form-label required-field">Comprovante de Residência do Endereço Anterior</label>
+                            <input type="file" class="form-control" id="comprovante_residencia_anterior" name="comprovante_residencia_anterior" accept="application/pdf">
+                            <div class="form-text">Endereço antes de mudar-se para a cidade do campus</div>
+                        </div>
+                        <div>
+                            <label for="comprovante_residencia_atual" class="form-label required-field">Comprovante de Residência Atual</label>
+                            <input type="file" class="form-control" id="comprovante_residencia_atual" name="comprovante_residencia_atual" accept="application/pdf">
+                            <div class="form-text">Do imóvel alugado na cidade do campus</div>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div>
+                            <label for="contrato_aluguel_atual" class="form-label required-field">Contrato de Aluguel Atual</label>
+                            <input type="file" class="form-control" id="contrato_aluguel_atual" name="contrato_aluguel_atual" accept="application/pdf">
+                            <div class="form-text">Imóvel na cidade do campus em nome do estudante, pais ou responsáveis</div>
+                        </div>
+                        <div>
+                            <label for="contrato_aluguel_anterior" class="form-label">Contrato de Aluguel Anterior</label>
+                            <input type="file" class="form-control" id="contrato_aluguel_anterior" name="contrato_aluguel_anterior" accept="application/pdf">
+                            <div class="form-text">Se a moradia anterior foi alugada (opcional)</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Fim Etapa 2 -->
+
+            <!-- Etapa 3: Upload de Documentos -->
+            <div class="form-etapa" id="etapa-3" style="display: none;">
             <!-- Upload de Documentos -->
             <div class="form-section">
                 <div class="section-title">
@@ -164,51 +411,48 @@
                     Documentos Obrigatórios
                 </div>
                 
-                <div class="form-row">
+                <div class="form-row single-column">
                     <div>
-                        <label for="anexo_documentos" class="form-label required-field">Documentos Pessoais</label>
+                        <label for="anexo_documentos" class="form-label required-field">Documento de Identificação</label>
                         <input type="file" class="form-control" id="anexo_documentos" name="anexo_documentos" accept="application/pdf" required>
                         <div class="file-upload-helper">
                             <i class="bi bi-info-circle"></i>
-                            RG, CPF e outros documentos pessoais (PDF, máx. 10MB)
-                        </div>
-                    </div>
-                    <div>
-                        <label for="comprovante_renda" class="form-label required-field">Comprovante de Renda</label>
-                        <input type="file" class="form-control" id="comprovante_renda" name="comprovante_renda" accept="application/pdf" required>
-                        <div class="file-upload-helper">
-                            <i class="bi bi-info-circle"></i>
-                            Renda de todos os membros da família
+                            Documento de identificação da(o) estudante e de todas as pessoas que residem no mesmo imóvel (PDF, máx. 10MB)
                         </div>
                     </div>
                 </div>
 
                 <div class="form-row">
                     <div>
-                        <label for="comprovante_residencia" class="form-label required-field">Comprovante de Residência</label>
-                        <input type="file" class="form-control" id="comprovante_residencia" name="comprovante_residencia" accept="application/pdf" required>
+                        <label for="anexo_1" class="form-label required-field">Anexo I - Termo Comprobatório de Declaração de Renda</label>
+                        <input type="file" class="form-control" id="anexo_1" name="anexo_1" accept="application/pdf" required>
                         <div class="file-upload-helper">
                             <i class="bi bi-info-circle"></i>
-                            Documento recente (máximo 3 meses)
+                            Anexo I devidamente preenchido (PDF, máx. 10MB)
                         </div>
                     </div>
                     <div>
-                        <label for="historico_escolar" class="form-label required-field">Histórico Escolar</label>
-                        <input type="file" class="form-control" id="historico_escolar" name="historico_escolar" accept="application/pdf" required>
+                        <label for="anexo_3" class="form-label required-field">Anexo III - Termo de Responsabilidade</label>
+                        <input type="file" class="form-control" id="anexo_3" name="anexo_3" accept="application/pdf" required>
                         <div class="file-upload-helper">
                             <i class="bi bi-info-circle"></i>
-                            Histórico completo do ensino médio ou superior
+                            Anexo III devidamente preenchido (PDF, máx. 10MB)
                         </div>
                     </div>
                 </div>
             </div>
+            </div>
+            <!-- Fim Etapa 3 -->
 
             <!-- Form Actions -->
             <div class="form-actions">
-                <button type="button" class="btn btn-secondary" onclick="window.history.back()">
+                <button type="button" class="btn btn-secondary" id="btn-voltar" onclick="voltarEtapa()" style="display: none;">
                     <i class="bi bi-arrow-left me-2"></i>Voltar
                 </button>
-                <button type="submit" class="btn btn-primary">
+                <button type="button" class="btn btn-primary" id="btn-proxima" onclick="proximaEtapa()">
+                    <i class="bi bi-arrow-right me-2"></i>Próxima Etapa
+                </button>
+                <button type="submit" class="btn btn-success" id="btn-enviar" style="display: none;">
                     <i class="bi bi-send me-2"></i>Enviar Inscrição
                 </button>
             </div>
@@ -279,4 +523,111 @@
 </div>
 
 <script src="/static/js/editais_primeira_inscricao_aluno.js"></script>
+<script>
+let etapaAtual = 1;
+
+function atualizarBarraProgresso() {
+    const progressFill = document.getElementById('progress-fill');
+    
+    // Etapa 1: 0%, Etapa 2: 50%, Etapa 3: 100%
+    let porcentagem;
+    if (etapaAtual === 1) {
+        porcentagem = 0;
+    } else if (etapaAtual === 2) {
+        porcentagem = 50;
+    } else if (etapaAtual === 3) {
+        porcentagem = 100;
+    }
+    
+    progressFill.style.width = porcentagem + '%';
+}
+
+function proximaEtapa() {
+    if (etapaAtual < 3) {
+        // Esconder etapa atual
+        document.getElementById('etapa-' + etapaAtual).style.display = 'none';
+        document.getElementById('step-' + etapaAtual).classList.remove('active');
+        document.getElementById('step-' + etapaAtual).classList.add('completed');
+        
+        // Avançar etapa
+        etapaAtual++;
+        
+        // Mostrar próxima etapa
+        document.getElementById('etapa-' + etapaAtual).style.display = 'block';
+        document.getElementById('step-' + etapaAtual).classList.add('active');
+        
+        // Atualizar barra de progresso
+        atualizarBarraProgresso();
+        
+        // Controlar botões
+        document.getElementById('btn-voltar').style.display = 'inline-block';
+        
+        if (etapaAtual === 3) {
+            document.getElementById('btn-proxima').style.display = 'none';
+            document.getElementById('btn-enviar').style.display = 'inline-block';
+        }
+        
+        // Scroll para o topo
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+}
+
+function voltarEtapa() {
+    if (etapaAtual > 1) {
+        // Esconder etapa atual
+        document.getElementById('etapa-' + etapaAtual).style.display = 'none';
+        document.getElementById('step-' + etapaAtual).classList.remove('active');
+        document.getElementById('step-' + etapaAtual).classList.remove('completed');
+        
+        // Voltar etapa
+        etapaAtual--;
+        
+        // Mostrar etapa anterior
+        document.getElementById('etapa-' + etapaAtual).style.display = 'block';
+        document.getElementById('step-' + etapaAtual).classList.add('active');
+        document.getElementById('step-' + etapaAtual).classList.remove('completed');
+        
+        // Atualizar barra de progresso
+        atualizarBarraProgresso();
+        
+        // Controlar botões
+        if (etapaAtual === 1) {
+            document.getElementById('btn-voltar').style.display = 'none';
+        }
+        
+        document.getElementById('btn-proxima').style.display = 'inline-block';
+        document.getElementById('btn-enviar').style.display = 'none';
+        
+        // Scroll para o topo
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+}
+
+// Inicializar barra de progresso
+document.addEventListener('DOMContentLoaded', function() {
+    atualizarBarraProgresso();
+});
+
+function toggleDocumentosTransporte() {
+    const checkbox = document.getElementById('auxilio_transporte');
+    const docsSection = document.getElementById('docs-transporte');
+    
+    if (checkbox.checked) {
+        docsSection.style.display = 'block';
+    } else {
+        docsSection.style.display = 'none';
+    }
+}
+
+function toggleDocumentosMoradia() {
+    const checkbox = document.getElementById('auxilio_moradia');
+    const docsSection = document.getElementById('docs-moradia');
+    
+    if (checkbox.checked) {
+        docsSection.style.display = 'block';
+    } else {
+        docsSection.style.display = 'none';
+    }
+}
+</script>
 {% endblock %}

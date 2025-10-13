@@ -127,47 +127,24 @@
             </div>
         </div>
 
-        <!-- Seção de Busca e Filtros -->
+        <!-- Seção de Busca -->
         <div class="search-filter-section mb-4">
             <div class="row">
-                <div class="col-md-6">
+                <div class="col-md-12">
                     <div class="search-box">
                         <label for="searchAdmin" class="form-label">
-                            <i class="bi bi-search me-1"></i>Buscar Administrador por Email
+                            <i class="bi bi-search me-1"></i>Buscar Administrador
                         </label>
                         <div class="input-group">
-                            <input type="text" class="form-control" id="searchAdmin" placeholder="Digite o email do administrador">
+                            <input type="text" class="form-control" id="searchAdmin" placeholder="Digite o nome ou matrícula do administrador">
+                            <button class="btn btn-outline-light bg-white text-dark border" type="button" onclick="clearSearch()" title="Limpar busca">
+                                <i class="bi bi-x-circle"></i>
+                            </button>
                             <button class="btn btn-outline-success" type="button" onclick="searchAdmin()">
                                 <i class="bi bi-search"></i>
                             </button>
                         </div>
                     </div>
-                </div>
-                <div class="col-md-6">
-                    <div class="filter-section">
-                        <label for="filterCategory" class="form-label">
-                            <i class="bi bi-funnel me-1"></i>Filtrar por Status
-                        </label>
-                        <select class="form-select" id="filterCategory" onchange="filterAdmins()">
-                            <option value="">Todos os administradores</option>
-                            <option value="ativos">Administradores Ativos</option>
-                            <option value="inativos">Administradores Inativos</option>
-                            <option value="superadmin">Super Administradores</option>
-                        </select>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Resultado da Busca Individual -->
-        <div id="searchResult" class="search-result-card mb-4" style="display: none;">
-            <div class="card">
-                <div class="card-header">
-                    <i class="bi bi-person-check me-2"></i>Resultado da Busca
-                    <button type="button" class="btn-close float-end" onclick="clearSearch()"></button>
-                </div>
-                <div class="card-body" id="searchResultContent">
-                    <!-- Conteúdo será preenchido via JavaScript -->
                 </div>
             </div>
         </div>
@@ -179,7 +156,7 @@
                     <div>
                         <i class="bi bi-person-check me-2"></i>
                         <span>Lista de Administradores</span>
-                        <span class="badge bg-info ms-2" id="adminsCount">8</span>
+                        <span class="badge bg-info ms-2" id="adminsCount">{{ administradores|length }}</span>
                     </div>
                     <div>
                         <button class="btn btn-sm btn-outline-light me-2" onclick="exportAdminsList()">
@@ -195,76 +172,36 @@
                         <table class="table table-hover mb-0" id="adminsTable">
                             <thead class="table-header">
                                 <tr>
-                                    <th>Nome</th>
-                                    <th>Email</th>
-                                    <th>Nível</th>
-                                    <th>Data Criação</th>
-                                    <th>Status</th>
-                                    <th>Ações</th>
+                                    <th style="width: 30%;">Nome</th>
+                                    <th style="width: 35%;">Email</th>
+                                    <th style="width: 20%;">Matrícula</th>
+                                    <th style="width: 15%; text-align: center;">Ações</th>
                                 </tr>
                             </thead>
                             <tbody id="adminsTableBody">
-                                <!-- Dados serão carregados via JavaScript -->
-                                <tr>
-                                    <td><strong>João Silva Santos</strong></td>
-                                    <td>joao.santos@ifes.edu.br</td>
-                                    <td><span class="badge bg-warning">Super Admin</span></td>
-                                    <td>15/01/2024</td>
-                                    <td><span class="badge bg-success">Ativo</span></td>
-                                    <td>
-                                        <div class="action-buttons">
-                                            <button class="btn btn-sm btn-outline-info" onclick="viewAdmin(1)">
-                                                <i class="bi bi-eye"></i>
-                                            </button>
-                                            <button class="btn btn-sm btn-outline-secondary" onclick="editAdmin(1)">
-                                                <i class="bi bi-pencil"></i>
-                                            </button>
-                                            <button class="btn btn-sm btn-outline-danger" onclick="deleteAdmin(1)">
-                                                <i class="bi bi-trash"></i>
-                                            </button>
-                                        </div>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td><strong>Maria Oliveira Costa</strong></td>
-                                    <td>maria.oliveira@ifes.edu.br</td>
-                                    <td><span class="badge bg-primary">Admin</span></td>
-                                    <td>22/02/2024</td>
-                                    <td><span class="badge bg-success">Ativo</span></td>
-                                    <td>
-                                        <div class="action-buttons">
-                                            <button class="btn btn-sm btn-outline-info" onclick="viewAdmin(2)">
-                                                <i class="bi bi-eye"></i>
-                                            </button>
-                                            <button class="btn btn-sm btn-outline-secondary" onclick="editAdmin(2)">
-                                                <i class="bi bi-pencil"></i>
-                                            </button>
-                                            <button class="btn btn-sm btn-outline-danger" onclick="deleteAdmin(2)">
-                                                <i class="bi bi-trash"></i>
-                                            </button>
-                                        </div>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td><strong>Pedro Henrique Lima</strong></td>
-                                    <td>pedro.lima@ifes.edu.br</td>
-                                    <td><span class="badge bg-primary">Admin</span></td>
-                                    <td>10/03/2024</td>
-                                    <td><span class="badge bg-success">Ativo</span></td>
-                                    <td>
-                                        <div class="action-buttons">
-                                            <button class="btn btn-sm btn-outline-info" onclick="viewAdmin(3)">
-                                                <i class="bi bi-eye"></i>
-                                            </button>
-                                            <button class="btn btn-sm btn-outline-secondary" onclick="editAdmin(3)">
-                                                <i class="bi bi-pencil"></i>
-                                            </button>
-                                            <button class="btn btn-sm btn-outline-danger" onclick="deleteAdmin(3)">
-                                                <i class="bi bi-trash"></i>
-                                            </button>
-                                        </div>
-                                    </td>
-                                </tr>
+                                {% if administradores %}
+                                    {% for administrador in administradores %}
+                                    <tr>
+                                        <td><strong>{{ administrador.nome }}</strong></td>
+                                        <td>{{ administrador.email }}</td>
+                                        <td>{{ administrador.matricula }}</td>
+                                        <td>
+                                            <div class="action-buttons">
+                                                <button class="btn btn-sm btn-outline-info" onclick="viewAdmin('{{ administrador.id_usuario }}')">
+                                                    <i class="bi bi-eye"></i>
+                                                </button>
+                                                <button class="btn btn-sm btn-outline-danger" onclick="deleteAdmin('{{ administrador.id_usuario }}')">
+                                                    <i class="bi bi-trash"></i>
+                                                </button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    {% endfor %}
+                                {% else %}
+                                    <tr>
+                                        <td colspan="4" class="text-center text-muted">Nenhum administrador cadastrado</td>
+                                    </tr>
+                                {% endif %}
                             </tbody>
                         </table>
                     </div>
@@ -291,6 +228,49 @@
         </div>
     </div>
 
+    <!-- Modal para Visualizar Administrador -->
+    <div class="modal fade" id="viewAdminModal" tabindex="-1" aria-labelledby="viewAdminModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header bg-success text-white">
+                    <h5 class="modal-title" id="viewAdminModalLabel">
+                        <i class="bi bi-person-badge me-2"></i>Detalhes do Administrador
+                    </h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form>
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <label class="form-label fw-bold">Nome Completo</label>
+                                <input type="text" class="form-control" id="viewNome" readonly>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label fw-bold">Matrícula</label>
+                                <input type="text" class="form-control" id="viewMatricula" readonly>
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <label class="form-label fw-bold">E-mail</label>
+                                <input type="text" class="form-control" id="viewEmail" readonly>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label fw-bold">Perfil</label>
+                                <input type="text" class="form-control" id="viewPerfil" readonly>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                        <i class="bi bi-x-circle me-1"></i>Fechar
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- Modal para Confirmar Exclusão -->
     <div class="modal fade" id="deleteAdminModal" tabindex="-1" aria-labelledby="deleteAdminModalLabel" aria-hidden="true">
         <div class="modal-dialog">
@@ -303,15 +283,20 @@
                 </div>
                 <div class="modal-body">
                     <p>Tem certeza que deseja excluir este administrador?</p>
-                    <p class="text-danger"><strong>Esta ação não pode ser desfeita!</strong></p>
-                    <div id="adminToDeleteInfo" class="alert alert-warning">
-                        <!-- Informações do admin a ser excluído serão preenchidas via JavaScript -->
+                    <div class="alert alert-warning">
+                        <i class="bi bi-exclamation-triangle me-2"></i>
+                        <strong>Atenção:</strong> Esta ação não pode ser desfeita!
+                    </div>
+                    <div id="adminToDeleteInfo" class="alert alert-info">
+                        <strong>Nome:</strong> <span id="deleteAdminName"></span><br>
+                        <strong>Matrícula:</strong> <span id="deleteAdminMatricula"></span><br>
+                        <strong>Email:</strong> <span id="deleteAdminEmail"></span>
                     </div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
                     <button type="button" class="btn btn-danger" onclick="confirmDeleteAdmin()">
-                        <i class="bi bi-trash me-1"></i>Excluir Administrador
+                        <i class="bi bi-trash me-1"></i>Confirmar Exclusão
                     </button>
                 </div>
             </div>
@@ -320,6 +305,10 @@
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
     <script src="/static/js/dashboard_admin.js"></script>
+    <script>
+        // Dados dos administradores do backend
+        const administradores = {{ administradores | tojson | safe }};
+    </script>
     <script src="/static/js/usuario_admin.js"></script>
 
     <footer class="footer bg-success text-white py-4">
