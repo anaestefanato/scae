@@ -124,16 +124,16 @@ function viewAdmin(adminId) {
     
     if (administrador) {
         // Preencher os campos do modal
-        document.getElementById('viewNome').value = administrador.nome || '';
-        document.getElementById('viewMatricula').value = administrador.matricula || '';
-        document.getElementById('viewEmail').value = administrador.email || '';
+        document.getElementById('viewNome').textContent = administrador.nome || '';
+        document.getElementById('viewMatricula').textContent = administrador.matricula || '';
+        document.getElementById('viewEmail').textContent = administrador.email || '';
         
         // Determinar o tipo de perfil
         let perfil = 'Administrador';
         if (administrador.tipo_admin === 'super') {
             perfil = 'Super Administrador';
         }
-        document.getElementById('viewPerfil').value = perfil;
+        document.getElementById('viewPerfil').textContent = perfil;
         
         // Abrir o modal
         const modal = new bootstrap.Modal(document.getElementById('viewAdminModal'));
