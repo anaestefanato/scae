@@ -1,1 +1,0 @@
-está quase tudo certo, de acordo com como era antes. quando deslizo a tela para baixo, a imagem de fato gira, porém, quando paro de rolar, ela volta para posição inicial. Preciso que ela não faça isso, ela tem que girar e ficar na posição "girada" até que eu role a imagem de novo. Ou seja, a posição que ela fica, digo, a rotação, tem qye acompanhar 
