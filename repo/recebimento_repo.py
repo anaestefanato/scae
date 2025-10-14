@@ -81,6 +81,13 @@ def excluir(id: int) -> bool:
         cursor.execute(EXCLUIR, (id,))
         return (cursor.rowcount > 0)
 
+def confirmar_recebimento(id_recebimento: int, comprovante_transporte: Optional[str] = None, comprovante_moradia: Optional[str] = None) -> bool:
+    """Confirma um recebimento e salva os comprovantes se fornecidos"""
+    with get_connection() as conn:
+        cursor = conn.cursor()
+        cursor.execute(CONFIRMAR_RECEBIMENTO, (comprovante_transporte, comprovante_moradia, id_recebimento))
+        return cursor.rowcount > 0
+
 def obter_por_aluno(id_aluno: int) -> list[dict]:
     with get_connection() as conn:
         cursor = conn.cursor()

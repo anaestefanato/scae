@@ -1,0 +1,10 @@
+COMPROVANTE DE GASTOS COM MORADIA
+
+Aluno: Aluno Padrão
+Matrícula: aluno123
+Mês de referência: Outubro/2025
+
+Descrição: Recibo de aluguel
+Valor: R$ 200,00
+
+Data: 14/10/2025

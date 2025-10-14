@@ -86,25 +86,14 @@ function filtrarAuxilio(tipo) {
 }
 
 // Modal detalhes
-function mostrarDetalhes(auxilio, mes, valor, data) {
+function mostrarDetalhes(idRecebimento) {
     var body = document.getElementById('detalhesRecebimentoBody');
     body.innerHTML = `
         <div class="row">
-            <div class="col-md-6">
+            <div class="col-12">
                 <h6 class="mb-3">Informações do Pagamento</h6>
-                <p><strong>Tipo de Auxílio:</strong> ${auxilio}</p>
-                <p><strong>Mês de Referência:</strong> ${mes}</p>
-                <p><strong>Valor Recebido:</strong> <span class="text-success fw-bold">${valor}</span></p>
-                <p><strong>Data do Recebimento:</strong> ${data}</p>
+                <p><strong>ID do Recebimento:</strong> ${idRecebimento}</p>
                 <p><strong>Status:</strong> <span class='status-badge status-deferido'>Confirmado</span></p>
-            </div>
-            <div class="col-md-6">
-                <h6 class="mb-3">Dados Bancários</h6>
-                <p><strong>Banco:</strong> Banco do Brasil</p>
-                <p><strong>Agência:</strong> 1234-5</p>
-                <p><strong>Conta:</strong> 12345-6</p>
-                <p><strong>Forma de Pagamento:</strong> Transferência Eletrônica</p>
-                <p><strong>Comprovante:</strong> Disponível para download</p>
             </div>
         </div>
         <div class="row mt-3">
@@ -124,6 +113,70 @@ function mostrarDetalhes(auxilio, mes, valor, data) {
 function fecharModalDetalhesRecebimento() {
     document.getElementById('modalDetalhesRecebimento').style.display = 'none';
     document.getElementById('modalDetalhesRecebimento').classList.remove('show');
+}
+
+// Modal de confirmação
+let idRecebimentoAtual = null;
+let tipoAuxilioAtual = null;
+
+function abrirModalConfirmacao(idRecebimento, tipoAuxilio, mes, valor) {
+    idRecebimentoAtual = idRecebimento;
+    tipoAuxilioAtual = tipoAuxilio;
+    
+    // Preencher detalhes
+    document.getElementById('detalheAuxilio').textContent = formatarTipoAuxilio(tipoAuxilio);
+    document.getElementById('detalheMes').textContent = mes;
+    document.getElementById('detalheValor').textContent = 'R$ ' + valor.toFixed(2);
+    
+    // Definir ação do formulário
+    document.getElementById('formConfirmacao').action = `/aluno/recebimentos/confirmar/${idRecebimento}`;
+    
+    // Mostrar/ocultar campos de comprovante baseado no tipo de auxílio
+    const divComprovantes = document.getElementById('divComprovantes');
+    const divTransporte = document.getElementById('divComprovanteTransporte');
+    const divMoradia = document.getElementById('divComprovanteMoradia');
+    const inputTransporte = document.getElementById('comprovante_transporte');
+    const inputMoradia = document.getElementById('comprovante_moradia');
+    
+    // Resetar campos
+    divTransporte.style.display = 'none';
+    divMoradia.style.display = 'none';
+    inputTransporte.required = false;
+    inputMoradia.required = false;
+    inputTransporte.value = '';
+    inputMoradia.value = '';
+    
+    // Mostrar campos necessários
+    if (tipoAuxilio.includes('transporte')) {
+        divComprovantes.style.display = 'block';
+        divTransporte.style.display = 'block';
+        inputTransporte.required = true;
+    } else if (tipoAuxilio.includes('moradia')) {
+        divComprovantes.style.display = 'block';
+        divMoradia.style.display = 'block';
+        inputMoradia.required = true;
+    } else {
+        divComprovantes.style.display = 'none';
+    }
+    
+    // Mostrar modal
+    document.getElementById('modalConfirmacao').style.display = 'block';
+    document.getElementById('modalConfirmacao').classList.add('show');
+}
+
+function fecharModalConfirmacao() {
+    document.getElementById('modalConfirmacao').style.display = 'none';
+    document.getElementById('modalConfirmacao').classList.remove('show');
+    idRecebimentoAtual = null;
+    tipoAuxilioAtual = null;
+}
+
+function formatarTipoAuxilio(tipo) {
+    if (tipo.includes('alimentacao')) return 'Auxílio Alimentação';
+    if (tipo.includes('transporte')) return 'Auxílio Transporte';
+    if (tipo.includes('moradia')) return 'Auxílio Moradia';
+    if (tipo.includes('material')) return 'Auxílio Material Didático';
+    return tipo.replace('auxilio', 'Auxílio').replace(/_/g, ' ');
 }
 
 function baixarComprovante() {

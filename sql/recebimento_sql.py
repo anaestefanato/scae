@@ -8,6 +8,9 @@ CREATE TABLE IF NOT EXISTS recebimento (
     data_recebimento DATE NOT NULL,
     status TEXT NOT NULL CHECK (status IN ('confirmado', 'pendente', 'cancelado')),
     observacoes TEXT DEFAULT '',
+    data_confirmacao DATE,
+    comprovante_transporte TEXT,
+    comprovante_moradia TEXT,
     FOREIGN KEY (id_auxilio) REFERENCES auxilio(id_auxilio) ON DELETE CASCADE
 )
 """
@@ -60,6 +63,15 @@ WHERE id_recebimento = ?
 
 EXCLUIR = """
 DELETE FROM recebimento
+WHERE id_recebimento = ?
+"""
+
+CONFIRMAR_RECEBIMENTO = """
+UPDATE recebimento
+SET status = 'confirmado',
+    data_confirmacao = datetime('now'),
+    comprovante_transporte = ?,
+    comprovante_moradia = ?
 WHERE id_recebimento = ?
 """
 
