@@ -43,6 +43,17 @@
     </div>
 
     <!-- Information Card -->
+    {% if not auxilios_atuais or auxilios_atuais|length == 0 %}
+    <div class="alert alert-info mb-4 d-flex justify-content-between align-items-center">
+        <div>
+            <i class="bi bi-exclamation-circle me-2"></i>
+            <strong>Não possui nenhum auxílio ativo?</strong> Esta página é para renovação de auxílios existentes.
+        </div>
+        <a href="/aluno/editais/primeira-inscricao" class="btn btn-primary">
+            <i class="bi bi-pencil-square me-2"></i>Fazer Primeira Inscrição
+        </a>
+    </div>
+    {% else %}
     <div class="info-card mb-4">
         <h6><i class="bi bi-info-circle me-2"></i>Informações sobre a Renovação</h6>
         <ul>
@@ -52,6 +63,7 @@
             <li>Mantenha seus documentos atualizados</li>
         </ul>
     </div>
+    {% endif %}
 
     <!-- Form Container -->
     <div class="form-container">
@@ -66,25 +78,11 @@
         <form method="post" enctype="multipart/form-data" id="renovacaoForm">
             <!-- Etapa 1: Dados Cadastrais -->
             <div class="form-etapa" id="etapa-1" style="display: block;">
-                <!-- Alert de edição -->
-                <div class="alert alert-info d-flex justify-content-between align-items-center" id="alert-edit-mode" style="display: none;">
-                    <div>
-                        <i class="bi bi-pencil-square me-2"></i>
-                        <strong>Modo de edição ativado.</strong> Você pode alterar seus dados abaixo.
-                    </div>
-                    <button type="button" class="btn btn-secondary" onclick="cancelarEdicao()">
-                        <i class="bi bi-x-circle me-1"></i>Cancelar Edição
-                    </button>
-                </div>
-
                 <!-- Dados Pessoais -->
                 <div class="form-section">
                     <div class="section-title">
                         <i class="bi bi-person"></i>
                         Dados Pessoais
-                        <button type="button" class="btn btn-sm btn-outline-primary float-end" id="btn-editar-pessoais" onclick="habilitarEdicao('pessoais')">
-                            <i class="bi bi-pencil me-1"></i>Editar
-                        </button>
                     </div>
                     
                     <div class="form-row">
@@ -141,9 +139,9 @@
                     <div class="form-row">
                         <div>
                             <label for="cep" class="form-label required-field">CEP</label>
-                            <div class="input-group">
-                                <input type="text" class="form-control" id="cep" name="cep" placeholder="00000-000" maxlength="9" value="{{ aluno.cep if aluno and aluno.cep else '' }}" readonly required>
-                                <button class="btn btn-outline-secondary" type="button" id="btn-buscar-cep" disabled>
+                            <div class="input-group" style="height: 38px;">
+                                <input type="text" class="form-control" id="cep" name="cep" placeholder="00000-000" maxlength="9" value="{{ aluno.cep if aluno and aluno.cep else '' }}" readonly required style="height: 38px;">
+                                <button class="btn btn-outline-secondary" type="button" id="btn-buscar-cep" disabled style="height: 38px; padding: 0 12px;">
                                     <i class="bi bi-search"></i>
                                 </button>
                             </div>
@@ -166,9 +164,6 @@
                     <div class="section-title">
                         <i class="bi bi-mortarboard"></i>
                         Dados Acadêmicos
-                        <button type="button" class="btn btn-sm btn-outline-primary float-end" id="btn-editar-academicos" onclick="habilitarEdicao('academicos')">
-                            <i class="bi bi-pencil me-1"></i>Editar
-                        </button>
                     </div>
 
                     <div class="form-row">
@@ -185,11 +180,11 @@
                     <div class="form-row">
                         <div>
                             <label for="ano_ingresso" class="form-label required-field">Ano de Ingresso</label>
-                            <input type="number" class="form-control" id="ano_ingresso" name="ano_ingresso" value="{{ aluno.ano_ingresso if aluno and aluno.ano_ingresso else 2023 }}" readonly required>
+                            <input type="number" class="form-control" id="ano_ingresso" name="ano_ingresso" value="{{ aluno.ano_ingresso if aluno and aluno.ano_ingresso else '' }}" min="2000" max="2030" readonly required>
                         </div>
                         <div>
                             <label for="ano_conclusao_previsto" class="form-label required-field">Ano Previsto para Conclusão</label>
-                            <input type="number" class="form-control" id="ano_conclusao_previsto" name="ano_conclusao_previsto" value="{{ aluno.ano_conclusao_previsto if aluno and aluno.ano_conclusao_previsto else 2026 }}" readonly required>
+                            <input type="number" class="form-control" id="ano_conclusao_previsto" name="ano_conclusao_previsto" value="{{ aluno.ano_conclusao_previsto if aluno and aluno.ano_conclusao_previsto else '' }}" min="2024" max="2035" readonly required>
                         </div>
                     </div>
                 </div>
@@ -199,22 +194,19 @@
                     <div class="section-title">
                         <i class="bi bi-cash-stack"></i>
                         Dados Financeiros
-                        <button type="button" class="btn btn-sm btn-outline-primary float-end" id="btn-editar-financeiros" onclick="habilitarEdicao('financeiros')">
-                            <i class="bi bi-pencil me-1"></i>Editar
-                        </button>
                     </div>
 
                     <div class="form-row">
                         <div>
                             <label for="pessoas_residencia" class="form-label required-field">Pessoas na Residência</label>
-                            <input type="number" class="form-control" id="pessoas_residencia" name="pessoas_residencia" value="{{ quantidade_pessoas_residencia }}" readonly required>
+                            <input type="number" class="form-control" id="pessoas_residencia" name="pessoas_residencia" value="{{ aluno.quantidade_pessoas if aluno and aluno.quantidade_pessoas else '' }}" readonly required>
                         </div>
                         <div>
                             <label for="renda_percapita" class="form-label required-field">Renda Familiar Per Capita</label>
                             <select class="form-control" id="renda_percapita" name="renda_percapita" disabled required>
-                                <option value="menor_1" selected>Menor ou igual a 1 salário mínimo</option>
-                                <option value="ate_1_5">Até 1,5 salário mínimo</option>
-                                <option value="maior_1_5">Maior que 1,5 salário mínimo</option>
+                                <option value="menor_1" {% if aluno and aluno.renda_per_capita and aluno.renda_per_capita <= 1412 %}selected{% endif %}>Menor ou igual a 1 salário mínimo</option>
+                                <option value="ate_1_5" {% if aluno and aluno.renda_per_capita and aluno.renda_per_capita > 1412 and aluno.renda_per_capita <= 2118 %}selected{% endif %}>Até 1,5 salário mínimo</option>
+                                <option value="maior_1_5" {% if aluno and aluno.renda_per_capita and aluno.renda_per_capita > 2118 %}selected{% endif %}>Maior que 1,5 salário mínimo</option>
                             </select>
                         </div>
                     </div>
@@ -223,17 +215,28 @@
                         <div>
                             <label for="bolsa_pesquisa" class="form-label required-field">Recebe Bolsa de Pesquisa?</label>
                             <select class="form-control" id="bolsa_pesquisa" name="bolsa_pesquisa" disabled required>
-                                <option value="nao" selected>Não</option>
-                                <option value="sim">Sim</option>
+                                <option value="nao" {% if not aluno or not aluno.bolsa_pesquisa or aluno.bolsa_pesquisa == 'nao' %}selected{% endif %}>Não</option>
+                                <option value="sim" {% if aluno and aluno.bolsa_pesquisa == 'sim' %}selected{% endif %}>Sim</option>
                             </select>
                         </div>
                         <div>
                             <label for="cad_unico" class="form-label required-field">Inscrito no CAD Único?</label>
                             <select class="form-control" id="cad_unico" name="cad_unico" disabled required>
-                                <option value="sim" selected>Sim</option>
-                                <option value="nao">Não</option>
+                                <option value="sim" {% if aluno and aluno.cad_unico == 'sim' %}selected{% endif %}>Sim</option>
+                                <option value="nao" {% if not aluno or not aluno.cad_unico or aluno.cad_unico == 'nao' %}selected{% endif %}>Não</option>
                             </select>
                         </div>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div>
+                            <label for="bolsa_familia" class="form-label required-field">Recebe Bolsa Família?</label>
+                            <select class="form-control" id="bolsa_familia" name="bolsa_familia" disabled required>
+                                <option value="nao" {% if not aluno or not aluno.bolsa_familia or aluno.bolsa_familia == 'nao' %}selected{% endif %}>Não</option>
+                                <option value="sim" {% if aluno and aluno.bolsa_familia == 'sim' %}selected{% endif %}>Sim</option>
+                            </select>
+                        </div>
+                        <div></div>
                     </div>
                 </div>
             </div>
@@ -257,6 +260,7 @@
                         <div>
                             <label class="form-label required-field">Renovar auxílios:</label>
                             <div class="checkbox-group">
+                                {% if 'alimentacao' in auxilios_atuais %}
                                 <div class="form-check">
                                     <input class="form-check-input" type="checkbox" id="renovar_alimentacao" name="renovar_auxilios" value="alimentacao" checked>
                                     <label class="form-check-label" for="renovar_alimentacao">
@@ -265,6 +269,9 @@
                                         <span class="badge bg-success ms-2">Recebendo</span>
                                     </label>
                                 </div>
+                                {% endif %}
+                                
+                                {% if 'transporte' in auxilios_atuais %}
                                 <div class="form-check">
                                     <input class="form-check-input" type="checkbox" id="renovar_transporte" name="renovar_auxilios" value="transporte" checked onchange="toggleDocumentosTransporteRenovacao()">
                                     <label class="form-check-label" for="renovar_transporte">
@@ -273,13 +280,43 @@
                                         <span class="badge bg-success ms-2">Recebendo</span>
                                     </label>
                                 </div>
+                                {% endif %}
+                                
+                                {% if 'moradia' in auxilios_atuais %}
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="renovar_moradia" name="renovar_auxilios" value="moradia" checked>
+                                    <label class="form-check-label" for="renovar_moradia">
+                                        <i class="bi bi-house-door text-primary me-2"></i>
+                                        <strong>Auxílio Moradia</strong> - R$ 400,00/mês
+                                        <span class="badge bg-success ms-2">Recebendo</span>
+                                    </label>
+                                </div>
+                                {% endif %}
+                                
+                                {% if 'material' in auxilios_atuais %}
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="renovar_material" name="renovar_auxilios" value="material" checked>
+                                    <label class="form-check-label" for="renovar_material">
+                                        <i class="bi bi-book text-info me-2"></i>
+                                        <strong>Auxílio Material Didático</strong> - R$ 200,00/semestre
+                                        <span class="badge bg-success ms-2">Recebendo</span>
+                                    </label>
+                                </div>
+                                {% endif %}
+                                
+                                {% if not auxilios_atuais or auxilios_atuais|length == 0 %}
+                                <div class="alert alert-warning">
+                                    <i class="bi bi-exclamation-triangle me-2"></i>
+                                    Você não possui auxílios ativos no momento. Selecione os auxílios que deseja solicitar na seção "Solicitar Novos Auxílios" abaixo.
+                                </div>
+                                {% endif %}
                             </div>
                         </div>
                     </div>
                 </div>
 
                 <!-- Perguntas de Transporte (se renovado) -->
-                <div class="form-section" id="perguntas-transporte-renovacao" style="display: block;">
+                <div class="form-section" id="perguntas-transporte-renovacao" style="{% if 'transporte' in auxilios_atuais %}display: block;{% else %}display: none;{% endif %}">
                     <div class="section-title">
                         <i class="bi bi-question-circle"></i>
                         Informações sobre Transporte
@@ -290,14 +327,14 @@
                             <label class="form-label required-field">Tipo de transporte atual:</label>
                             <div class="radio-group">
                                 <div class="form-check">
-                                    <input class="form-check-input" type="radio" id="transporte_van_renovacao" name="tipo_transporte_renovacao" value="van_escolar" onchange="toggleTipoTransporteRenovacao()">
+                                    <input class="form-check-input" type="radio" id="transporte_van_renovacao" name="tipo_transporte_renovacao" value="van" {% if auxilio_transporte and auxilio_transporte.tipo_transporte == 'van' %}checked{% endif %} onchange="toggleTipoTransporteRenovacao()">
                                     <label class="form-check-label" for="transporte_van_renovacao">
                                         <i class="bi bi-minecart text-primary me-2"></i>
                                         <strong>Van Escolar</strong>
                                     </label>
                                 </div>
                                 <div class="form-check">
-                                    <input class="form-check-input" type="radio" id="transporte_onibus_renovacao" name="tipo_transporte_renovacao" value="onibus" checked onchange="toggleTipoTransporteRenovacao()">
+                                    <input class="form-check-input" type="radio" id="transporte_onibus_renovacao" name="tipo_transporte_renovacao" value="onibus" {% if not auxilio_transporte or auxilio_transporte.tipo_transporte == 'onibus' %}checked{% endif %} onchange="toggleTipoTransporteRenovacao()">
                                     <label class="form-check-label" for="transporte_onibus_renovacao">
                                         <i class="bi bi-bus-front text-success me-2"></i>
                                         <strong>Ônibus</strong>
@@ -307,19 +344,19 @@
                         </div>
                     </div>
 
-                    <div class="form-row single-column" id="opcoes-onibus-renovacao" style="display: block;">
+                    <div class="form-row single-column" id="opcoes-onibus-renovacao" style="{% if not auxilio_transporte or auxilio_transporte.tipo_transporte == 'onibus' %}display: block;{% else %}display: none;{% endif %}">
                         <div>
                             <label class="form-label required-field">Tipo de ônibus:</label>
                             <div class="checkbox-group">
                                 <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" id="onibus_municipal_renovacao" name="tipo_onibus_renovacao" value="municipal" checked>
+                                    <input class="form-check-input" type="checkbox" id="onibus_municipal_renovacao" name="tipo_onibus_renovacao" value="municipal" {% if auxilio_transporte and auxilio_transporte.tipo_onibus and 'municipal' in auxilio_transporte.tipo_onibus %}checked{% endif %}>
                                     <label class="form-check-label" for="onibus_municipal_renovacao">
                                         <i class="bi bi-building text-info me-2"></i>
                                         <strong>Ônibus Municipal</strong>
                                     </label>
                                 </div>
                                 <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" id="onibus_intermunicipal_renovacao" name="tipo_onibus_renovacao" value="intermunicipal">
+                                    <input class="form-check-input" type="checkbox" id="onibus_intermunicipal_renovacao" name="tipo_onibus_renovacao" value="intermunicipal" {% if auxilio_transporte and auxilio_transporte.tipo_onibus and 'intermunicipal' in auxilio_transporte.tipo_onibus %}checked{% endif %}>
                                     <label class="form-check-label" for="onibus_intermunicipal_renovacao">
                                         <i class="bi bi-signpost-2 text-warning me-2"></i>
                                         <strong>Ônibus Intermunicipal</strong>
@@ -329,22 +366,22 @@
                         </div>
                     </div>
 
-                    <div class="form-row single-column" id="gasto-onibus-renovacao" style="display: block;">
+                    <div class="form-row single-column" id="gasto-onibus-renovacao" style="{% if not auxilio_transporte or auxilio_transporte.tipo_transporte == 'onibus' %}display: block;{% else %}display: none;{% endif %}">
                         <div>
                             <label for="gasto_passagens_dia_renovacao" class="form-label required-field">Gasto com passagens (ida e volta):</label>
                             <div class="input-group" style="max-width: 500px; height: 45px;">
                                 <span class="input-group-text" style="min-width: 50px; height: 45px; display: flex; align-items: center; justify-content: center;">R$</span>
-                                <input type="number" class="form-control" id="gasto_passagens_dia_renovacao" name="gasto_passagens_dia_renovacao" value="12.00" step="0.01" min="0" style="height: 45px;">
+                                <input type="number" class="form-control" id="gasto_passagens_dia_renovacao" name="gasto_passagens_dia_renovacao" value="{{ auxilio_transporte.gasto_passagens_dia if auxilio_transporte and auxilio_transporte.gasto_passagens_dia else '' }}" step="0.01" min="0" style="height: 45px;">
                             </div>
                         </div>
                     </div>
 
-                    <div class="form-row single-column" id="gasto-van-renovacao" style="display: none;">
+                    <div class="form-row single-column" id="gasto-van-renovacao" style="{% if auxilio_transporte and auxilio_transporte.tipo_transporte == 'van' %}display: block;{% else %}display: none;{% endif %}">
                         <div>
                             <label for="gasto_van_mensal_renovacao" class="form-label required-field">Gasto mensal com van:</label>
                             <div class="input-group" style="max-width: 500px; height: 45px;">
                                 <span class="input-group-text" style="min-width: 50px; height: 45px; display: flex; align-items: center; justify-content: center;">R$</span>
-                                <input type="number" class="form-control" id="gasto_van_mensal_renovacao" name="gasto_van_mensal_renovacao" placeholder="Ex: 300.00" step="0.01" min="0" style="height: 45px;">
+                                <input type="number" class="form-control" id="gasto_van_mensal_renovacao" name="gasto_van_mensal_renovacao" value="{{ auxilio_transporte.gasto_van_mensal if auxilio_transporte and auxilio_transporte.gasto_van_mensal else '' }}" step="0.01" min="0" style="height: 45px;">
                             </div>
                         </div>
                     </div>
@@ -366,6 +403,17 @@
                         <div>
                             <label class="form-label">Novos auxílios (opcional):</label>
                             <div class="checkbox-group">
+                                {% if 'alimentacao' not in auxilios_atuais %}
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="novo_alimentacao" name="novos_auxilios" value="alimentacao">
+                                    <label class="form-check-label" for="novo_alimentacao">
+                                        <i class="bi bi-egg-fried text-warning me-2"></i>
+                                        <strong>Auxílio Alimentação</strong> - R$ 600,00/mês
+                                    </label>
+                                </div>
+                                {% endif %}
+                                
+                                {% if 'moradia' not in auxilios_atuais %}
                                 <div class="form-check">
                                     <input class="form-check-input" type="checkbox" id="novo_moradia" name="novos_auxilios" value="moradia" onchange="toggleDocumentosMoradiaRenovacao()">
                                     <label class="form-check-label" for="novo_moradia">
@@ -373,6 +421,19 @@
                                         <strong>Auxílio Moradia</strong> - R$ 400,00/mês
                                     </label>
                                 </div>
+                                {% endif %}
+                                
+                                {% if 'transporte' not in auxilios_atuais %}
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="novo_transporte" name="novos_auxilios" value="transporte" onchange="toggleDocumentosTransporteNovoRenovacao()">
+                                    <label class="form-check-label" for="novo_transporte">
+                                        <i class="bi bi-bus-front text-success me-2"></i>
+                                        <strong>Auxílio Transporte</strong> - R$ 300,00/mês
+                                    </label>
+                                </div>
+                                {% endif %}
+                                
+                                {% if 'material' not in auxilios_atuais %}
                                 <div class="form-check">
                                     <input class="form-check-input" type="checkbox" id="novo_material" name="novos_auxilios" value="material">
                                     <label class="form-check-label" for="novo_material">
@@ -380,6 +441,7 @@
                                         <strong>Auxílio Material Didático</strong> - R$ 200,00/semestre
                                     </label>
                                 </div>
+                                {% endif %}
                             </div>
                         </div>
                     </div>

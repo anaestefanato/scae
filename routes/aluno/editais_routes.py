@@ -600,6 +600,62 @@ async def get_editais_renovacao(request: Request, usuario_logado: dict = None):
     if not usuario_logado.get('completo', True):
         return RedirectResponse("/aluno/perfil", status_code=303)
 
-    aluno = usuario_repo.obter_usuario_por_matricula(usuario_logado['matricula'])
-    response = templates.TemplateResponse("/aluno/editais_renovacao.html", {"request": request, "aluno": aluno})
+    # Buscar dados completos do aluno
+    aluno = aluno_repo.obter_por_matricula(usuario_logado['matricula'])
+    
+    # Buscar inscrições anteriores do aluno
+    inscricoes = inscricao_repo.obter_por_aluno(aluno.id_usuario)
+    inscricao_anterior = inscricoes[0] if inscricoes else None
+    
+    # Buscar auxílios atuais do aluno (se houver inscrição anterior)
+    auxilios_atuais = []
+    auxilio_transporte = None
+    auxilio_moradia = None
+    
+    if inscricao_anterior:
+        # Buscar todos os auxílios da inscrição anterior
+        id_inscricao = inscricao_anterior['id_inscricao']
+        
+        # Tentar buscar auxílio transporte
+        try:
+            auxilio_transporte_list = AuxilioTransporteRepo.obter_todos()
+            for aux in auxilio_transporte_list:
+                if aux.id_inscricao == id_inscricao:
+                    auxilio_transporte = aux
+                    auxilios_atuais.append('transporte')
+                    break
+        except:
+            pass
+        
+        # Tentar buscar auxílio moradia
+        try:
+            auxilio_moradia_list = AuxilioMoradiaRepo.obter_todos()
+            for aux in auxilio_moradia_list:
+                if aux.id_inscricao == id_inscricao:
+                    auxilio_moradia = aux
+                    auxilios_atuais.append('moradia')
+                    break
+        except:
+            pass
+        
+        # Verificar outros auxílios através do tipo
+        if inscricao_anterior.get('tipo_auxilio'):
+            tipo = inscricao_anterior['tipo_auxilio'].lower()
+            if 'alimentacao' in tipo or 'alimentação' in tipo:
+                auxilios_atuais.append('alimentacao')
+            if 'material' in tipo:
+                auxilios_atuais.append('material')
+    
+    response = templates.TemplateResponse(
+        "/aluno/editais_renovacao.html", 
+        {
+            "request": request, 
+            "aluno": aluno,
+            "inscricao_anterior": inscricao_anterior,
+            "auxilios_atuais": auxilios_atuais,
+            "auxilio_transporte": auxilio_transporte,
+            "auxilio_moradia": auxilio_moradia,
+            "quantidade_pessoas_residencia": aluno.quantidade_pessoas if aluno else 0
+        }
+    )
     return response
