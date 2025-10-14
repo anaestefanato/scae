@@ -139,9 +139,9 @@
                 <div class="form-row">
                     <div>
                         <label for="cep" class="form-label required-field">CEP</label>
-                        <div class="input-group">
-                            <input type="text" class="form-control {% if campo_erro == 'cep' %}is-invalid{% endif %}" id="cep" name="cep" placeholder="00000-000" maxlength="9" value="{{ aluno.cep if aluno and aluno.cep else '' }}" required>
-                            <button class="btn btn-outline-secondary" type="button" id="btn-buscar-cep" disabled>
+                        <div class="input-group" style="height: 38px;">
+                            <input type="text" class="form-control {% if campo_erro == 'cep' %}is-invalid{% endif %}" id="cep" name="cep" placeholder="00000-000" maxlength="9" value="{{ aluno.cep if aluno and aluno.cep else '' }}" required style="height: 38px;">
+                            <button class="btn btn-outline-secondary" type="button" id="btn-buscar-cep" disabled style="height: 38px; padding: 0 12px;">
                                 <i class="bi bi-search"></i>
                             </button>
                         </div>
