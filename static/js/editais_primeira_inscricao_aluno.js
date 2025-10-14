@@ -145,13 +145,28 @@ function previousStep() {
 function validateCurrentStep() {
     const currentStepFields = getCurrentStepFields();
     let isValid = true;
+    let firstInvalidField = null;
     
     currentStepFields.forEach(field => {
         const mockEvent = { target: field };
         if (!validateField(mockEvent)) {
             isValid = false;
+            if (!firstInvalidField) {
+                firstInvalidField = field;
+            }
         }
     });
+    
+    // Se houver campo inválido, mostrar alerta e focar no primeiro campo com erro
+    if (!isValid) {
+        if (firstInvalidField) {
+            firstInvalidField.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            firstInvalidField.focus();
+        }
+        
+        // Mostrar alerta toast
+        showToast('Por favor, corrija os campos destacados em vermelho antes de continuar.', 'error');
+    }
     
     return isValid;
 }
@@ -159,13 +174,47 @@ function validateCurrentStep() {
 function getCurrentStepFields() {
     // Define which fields belong to each step
     const stepFields = {
-        1: ['nome', 'cpf', 'data_nascimento', 'email', 'telefone', 'endereco'],
-        2: ['curso', 'matricula', 'renda_familiar'],
-        3: ['anexo_documentos', 'comprovante_renda', 'comprovante_residencia', 'historico_escolar']
+        1: [
+            'nome', 'cpf', 'data_nascimento', 'telefone', 'email',
+            'logradouro', 'numero', 'bairro', 'cidade', 'estado', 'cep',
+            'curso', 'matricula', 'ano_ingresso', 'ano_conclusao_previsto',
+            'pessoas_residencia', 'renda_percapita', 'bolsa_pesquisa', 'cad_unico', 'bolsa_familia'
+        ],
+        2: [], // Etapa 2 não tem campos obrigatórios (checkboxes de auxílios são opcionais)
+        3: ['anexo_documentos', 'anexo_1', 'anexo_3'] // Documentos obrigatórios
     };
     
     const fieldNames = stepFields[currentStep] || [];
     return fieldNames.map(name => document.querySelector(`[name="${name}"]`)).filter(field => field);
+}
+
+// Função auxiliar para mostrar toast de erro
+function showToast(message, type = 'info') {
+    // Remover toast anterior se existir
+    const existingToast = document.querySelector('.validation-toast');
+    if (existingToast) {
+        existingToast.remove();
+    }
+    
+    // Criar novo toast
+    const toast = document.createElement('div');
+    toast.className = `validation-toast alert alert-${type === 'error' ? 'danger' : 'info'} alert-dismissible fade show`;
+    toast.style.cssText = 'position: fixed; top: 80px; right: 20px; z-index: 9999; min-width: 300px; max-width: 500px; box-shadow: 0 4px 12px rgba(0,0,0,0.15);';
+    toast.innerHTML = `
+        <i class="bi bi-exclamation-triangle-fill me-2"></i>
+        ${message}
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    `;
+    
+    document.body.appendChild(toast);
+    
+    // Auto-remover após 5 segundos
+    setTimeout(() => {
+        if (toast.parentNode) {
+            toast.classList.remove('show');
+            setTimeout(() => toast.remove(), 150);
+        }
+    }, 5000);
 }
 
 function scrollToTop() {
@@ -414,12 +463,10 @@ function updateFormProgress() {
 
 // Form submission handling
 function handleFormSubmission(event) {
-    event.preventDefault();
-    
     const form = event.target;
     const submitButton = form.querySelector('.btn-primary');
     
-    // Validate all fields
+    // Validate all fields (apenas validação visual, o servidor validará de novo)
     let isValid = true;
     const inputs = form.querySelectorAll('input[required], select[required], textarea[required]');
     
@@ -431,6 +478,7 @@ function handleFormSubmission(event) {
     });
     
     if (!isValid) {
+        event.preventDefault();
         showErrorMessage('Por favor, corrija os erros no formulário antes de continuar.');
         return;
     }
@@ -438,22 +486,13 @@ function handleFormSubmission(event) {
     // Show loading state
     submitButton.classList.add('btn-loading');
     submitButton.disabled = true;
+    submitButton.textContent = 'Enviando...';
     
-    // Simulate form submission
-    setTimeout(() => {
-        // Reset button
-        submitButton.classList.remove('btn-loading');
-        submitButton.disabled = false;
-        
-        // Show success message
-        showSuccessMessage('Primeira inscrição enviada com sucesso! Você receberá uma confirmação por e-mail.');
-        
-        // Clear auto-saved data
-        clearAutoSavedData();
-        
-        // Optional: redirect
-        // window.location.href = '/aluno/editais';
-    }, 3000);
+    // Clear auto-saved data
+    clearAutoSavedData();
+    
+    // Permite que o formulário seja enviado normalmente ao servidor
+    // O servidor responderá com redirect ou erro
 }
 
 // Message functions

@@ -37,8 +37,16 @@ class AuxilioTransporteRepo:
                 return None
             cursor.execute(INSERIR, (
                 id_auxilio,
+                auxilioTransporte.tipo_transporte,
+                auxilioTransporte.tipo_onibus,
+                auxilioTransporte.gasto_passagens_dia,
+                auxilioTransporte.gasto_van_mensal,
                 auxilioTransporte.urlCompResidencia,
-                auxilioTransporte.urlCompTransporte
+                auxilioTransporte.urlPasseEscolarFrente,
+                auxilioTransporte.urlPasseEscolarVerso,
+                auxilioTransporte.urlComprovanteRecarga,
+                auxilioTransporte.urlComprovantePassagens,
+                auxilioTransporte.urlContratoTransporte
             ))
             return id_auxilio
 
@@ -58,8 +66,16 @@ class AuxilioTransporteRepo:
                     data_inicio=row["data_inicio"],
                     data_fim=row["data_fim"],
                     tipo_auxilio=row["tipo_auxilio"],
+                    tipo_transporte=row["tipo_transporte"],
+                    tipo_onibus=row["tipo_onibus"],
+                    gasto_passagens_dia=row["gasto_passagens_dia"],
+                    gasto_van_mensal=row["gasto_van_mensal"],
                     urlCompResidencia=row["urlCompResidencia"],
-                    urlCompTransporte=row["urlCompTransporte"]
+                    urlPasseEscolarFrente=row["urlPasseEscolarFrente"],
+                    urlPasseEscolarVerso=row["urlPasseEscolarVerso"],
+                    urlComprovanteRecarga=row["urlComprovanteRecarga"],
+                    urlComprovantePassagens=row["urlComprovantePassagens"],
+                    urlContratoTransporte=row["urlContratoTransporte"]
                 ) for row in rows
             ]
 
@@ -80,8 +96,16 @@ class AuxilioTransporteRepo:
                 data_inicio=row["data_inicio"],
                 data_fim=row["data_fim"],
                 tipo_auxilio=row["tipo_auxilio"],
+                tipo_transporte=row["tipo_transporte"],
+                tipo_onibus=row["tipo_onibus"],
+                gasto_passagens_dia=row["gasto_passagens_dia"],
+                gasto_van_mensal=row["gasto_van_mensal"],
                 urlCompResidencia=row["urlCompResidencia"],
-                urlCompTransporte=row["urlCompTransporte"]
+                urlPasseEscolarFrente=row["urlPasseEscolarFrente"],
+                urlPasseEscolarVerso=row["urlPasseEscolarVerso"],
+                urlComprovanteRecarga=row["urlComprovanteRecarga"],
+                urlComprovantePassagens=row["urlComprovantePassagens"],
+                urlContratoTransporte=row["urlContratoTransporte"]
             )
 
     @staticmethod
@@ -89,8 +113,16 @@ class AuxilioTransporteRepo:
         with get_connection() as conn:
             cursor = conn.cursor()
             cursor.execute(ATUALIZAR, (
+                auxilioTransporte.tipo_transporte,
+                auxilioTransporte.tipo_onibus,
+                auxilioTransporte.gasto_passagens_dia,
+                auxilioTransporte.gasto_van_mensal,
                 auxilioTransporte.urlCompResidencia,
-                auxilioTransporte.urlCompTransporte,
+                auxilioTransporte.urlPasseEscolarFrente,
+                auxilioTransporte.urlPasseEscolarVerso,
+                auxilioTransporte.urlComprovanteRecarga,
+                auxilioTransporte.urlComprovantePassagens,
+                auxilioTransporte.urlContratoTransporte,
                 auxilioTransporte.id_auxilio
             ))
             return cursor.rowcount > 0

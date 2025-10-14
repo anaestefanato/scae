@@ -11,25 +11,29 @@
 {% block content %}
 
     <div class="main-content" id="mainContent">
-        <!-- Header com Foto e Nome -->
+        <!-- Header com Foto e Nome - Design Moderno -->
         <div class="profile-header">
             <div class="container">
                 <div class="row justify-content-center">
                     <div class="col-12 text-center">
-                        <div class="position-relative d-inline-block">
+                        <div class="position-relative d-inline-block mb-3">
                             <img id="foto-atual"
                                 src="{{ aluno.foto or '/static/img/perfil.png' }}?v={{ range(1, 999999) | random }}"
-                                class="rounded-circle mb-3"
-                                style="width: 150px; height: 150px; object-fit: cover; border: 3px solid #dee2e6;"
+                                class="rounded-circle"
+                                style="width: 160px; height: 160px; object-fit: cover;"
                                 alt="Foto do perfil">
-                            <button class="btn btn-light btn-sm position-absolute bottom-0 end-0 rounded-circle p-2" 
-                                    data-bs-toggle="modal" data-bs-target="#changePhotoModal">
-                                <i class="bi bi-camera"></i>
+                            <button class="btn btn-light position-absolute bottom-0 end-0 rounded-circle" 
+                                    data-bs-toggle="modal" data-bs-target="#changePhotoModal"
+                                    title="Alterar foto">
+                                <i class="bi bi-camera-fill"></i>
                             </button>
                         </div>
                         <div class="profile-info">
-                            <h3 class="mb-1">{{ aluno.nome }}</h3>
-                            <p class="mb-0">Aluno | Matrícula: {{ aluno.matricula }}</p>
+                            <h3 class="mb-2">{{ aluno.nome }}</h3>
+                            <p class="mb-0">
+                                <i class="bi bi-person-badge me-2"></i>Aluno | 
+                                <i class="bi bi-mortarboard-fill ms-2 me-2"></i>Matrícula: {{ aluno.matricula }}
+                            </p>
                         </div>
                     </div>
                 </div>
@@ -41,8 +45,8 @@
             <!-- Mensagem de Sucesso -->
             {% if mensagem_sucesso %}
             <div id="mensagem-sucesso" class="alert alert-success alert-dismissible fade show" role="alert">
-                <i class="bi bi-check-circle me-2"></i>
-                {{ mensagem_sucesso }}
+                <i class="bi bi-check-circle-fill me-2"></i>
+                <strong>Sucesso!</strong> {{ mensagem_sucesso }}
                 <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
             </div>
             {% endif %}
@@ -50,8 +54,8 @@
             <!-- Mensagem de Erro -->
             {% if mensagem_erro %}
             <div id="mensagem-erro" class="alert alert-danger alert-dismissible fade show" role="alert">
-                <i class="bi bi-exclamation-triangle me-2"></i>
-                {{ mensagem_erro }}
+                <i class="bi bi-exclamation-triangle-fill me-2"></i>
+                <strong>Erro!</strong> {{ mensagem_erro }}
                 <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
             </div>
             {% endif %}
@@ -59,9 +63,9 @@
             <form id="formCadastral" method="post" action="/aluno/perfil">
             
             <div class="card data-card">
-                <div class="card-header d-flex justify-content-between align-items-center">
+                <div class="card-header">
                     <h5>
-                        <i class="bi bi-person-vcard me-2"></i>
+                        <i class="bi bi-person-circle"></i>
                         Dados Pessoais
                     </h5>
                 </div>
@@ -98,7 +102,7 @@
             <div class="card data-card">
                 <div class="card-header">
                     <h5>
-                        <i class="bi bi-mortarboard me-2"></i>
+                        <i class="bi bi-mortarboard-fill"></i>
                         Dados Acadêmicos
                     </h5>
                 </div>
@@ -117,9 +121,9 @@
             </div>
 
             <div class="card data-card">
-                <div class="card-header d-flex justify-content-between align-items-center">
+                <div class="card-header">
                     <h5>
-                        <i class="bi bi-geo-alt me-2"></i>
+                        <i class="bi bi-geo-alt-fill"></i>
                         Endereço
                     </h5>
                 </div>
@@ -170,9 +174,9 @@
             </div>
 
             <div class="card data-card">
-                <div class="card-header d-flex justify-content-between align-items-center">
+                <div class="card-header">
                     <h5>
-                        <i class="bi bi-bank me-2"></i>
+                        <i class="bi bi-wallet2"></i>
                         Dados Bancários e Socioeconômicos
                     </h5>
                 </div>
@@ -222,9 +226,9 @@
                 </div>
             </div>
 
-            <div class="text-center mt-4 mb-4">
+            <div class="text-center mt-4 mb-5">
                 <button type="submit" class="btn btn-success btn-lg">
-                    <i class="bi bi-floppy"></i> Salvar Alterações
+                    <i class="bi bi-check-circle-fill me-2"></i>Salvar Alterações
                 </button>
             </div>
             

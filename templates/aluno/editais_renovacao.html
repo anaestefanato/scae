@@ -90,64 +90,73 @@
                     <div class="form-row">
                         <div>
                             <label for="nome" class="form-label required-field">Nome Completo</label>
-                            <input type="text" class="form-control" id="nome" name="nome" value="João Silva Santos" readonly required>
+                            <input type="text" class="form-control" id="nome" name="nome" value="{{aluno.nome}}" readonly required>
                         </div>
                         <div>
                             <label for="cpf" class="form-label required-field">CPF</label>
-                            <input type="text" class="form-control" id="cpf" name="cpf" value="123.456.789-00" readonly required>
+                            <input type="text" class="form-control" id="cpf" name="cpf" value="{{aluno.cpf}}" readonly required>
                         </div>
                     </div>
 
                     <div class="form-row">
                         <div>
                             <label for="data_nascimento" class="form-label required-field">Data de Nascimento</label>
-                            <input type="date" class="form-control" id="data_nascimento" name="data_nascimento" value="2005-03-15" readonly required>
+                            <input type="date" class="form-control" id="data_nascimento" name="data_nascimento" value="{{aluno.data_nascimento}}" readonly required>
                         </div>
                         <div>
                             <label for="telefone" class="form-label required-field">Telefone</label>
-                            <input type="text" class="form-control" id="telefone" name="telefone" value="(27) 98765-4321" readonly required>
+                            <input type="text" class="form-control" id="telefone" name="telefone" value="{{aluno.telefone}}" readonly required>
                         </div>
                     </div>
 
                     <div class="form-row single-column">
                         <div>
                             <label for="email" class="form-label required-field">E-mail</label>
-                            <input type="email" class="form-control" id="email" name="email" value="joao.silva@aluno.ifes.edu.br" readonly required>
+                            <input type="email" class="form-control" id="email" name="email" value="{{aluno.email}}" readonly required>
                         </div>
                     </div>
 
                     <div class="form-row">
                         <div>
                             <label for="logradouro" class="form-label required-field">Logradouro</label>
-                            <input type="text" class="form-control" id="logradouro" name="logradouro" value="Rua das Flores" readonly required>
+                            <input type="text" class="form-control" id="logradouro" name="logradouro" value="{{aluno.rua}}" readonly required>
                         </div>
                         <div>
                             <label for="numero" class="form-label required-field">Número</label>
-                            <input type="text" class="form-control" id="numero" name="numero" value="123" readonly required>
+                            <input type="text" class="form-control" id="numero" name="numero" value="{{aluno.numero}}" readonly required>
                         </div>
                     </div>
 
                     <div class="form-row">
                         <div>
                             <label for="bairro" class="form-label required-field">Bairro</label>
-                            <input type="text" class="form-control" id="bairro" name="bairro" value="Centro" readonly required>
+                            <input type="text" class="form-control" id="bairro" name="bairro" value="{{aluno.bairro}}" readonly required>
                         </div>
                         <div>
                             <label for="cidade" class="form-label required-field">Cidade</label>
-                            <input type="text" class="form-control" id="cidade" name="cidade" value="Cachoeiro de Itapemirim" readonly required>
+                            <input type="text" class="form-control" id="cidade" name="cidade" value="{{aluno.cidade}}" readonly required>
                         </div>
                     </div>
 
                     <div class="form-row">
                         <div>
-                            <label for="estado" class="form-label required-field">Estado</label>
-                            <select class="form-control" id="estado" name="estado" disabled required>
-                                <option value="Espírito Santo" selected>Espírito Santo</option>
-                            </select>
+                            <label for="cep" class="form-label required-field">CEP</label>
+                            <div class="input-group">
+                                <input type="text" class="form-control" id="cep" name="cep" placeholder="00000-000" maxlength="9" value="{{ aluno.cep if aluno and aluno.cep else '' }}" readonly required>
+                                <button class="btn btn-outline-secondary" type="button" id="btn-buscar-cep" disabled>
+                                    <i class="bi bi-search"></i>
+                                </button>
+                            </div>
+                            <div id="cep-loading" class="form-text text-primary" style="display: none;">
+                                <i class="bi bi-hourglass-split"></i> Buscando CEP...
+                            </div>
+                            <div id="cep-error" class="form-text text-danger" style="display: none;">
+                                <i class="bi bi-exclamation-triangle"></i> CEP não encontrado
+                            </div>
                         </div>
                         <div>
-                            <label for="cep" class="form-label required-field">CEP</label>
-                            <input type="text" class="form-control" id="cep" name="cep" value="29300-000" readonly required>
+                            <label for="estado" class="form-label required-field">Estado</label>
+                            <input type="text" class="form-control" id="estado" name="estado" placeholder="Ex: ES" maxlength="2" value="{{ aluno.estado if aluno and aluno.estado else '' }}" readonly required>
                         </div>
                     </div>
                 </div>
@@ -165,22 +174,22 @@
                     <div class="form-row">
                         <div>
                             <label for="curso" class="form-label required-field">Curso</label>
-                            <input type="text" class="form-control" id="curso" name="curso" value="Técnico em Informática Integrado ao Ensino Médio" readonly required>
+                            <input type="text" class="form-control" id="curso" name="curso" value="{{ aluno.curso if aluno and aluno.curso else '' }}" readonly required>
                         </div>
                         <div>
                             <label for="matricula" class="form-label required-field">Matrícula</label>
-                            <input type="text" class="form-control" id="matricula" name="matricula" value="20231234567" readonly required>
+                            <input type="text" class="form-control" id="matricula" name="matricula" value="{{ aluno.matricula if aluno and aluno.matricula else '' }}" readonly required>
                         </div>
                     </div>
 
                     <div class="form-row">
                         <div>
                             <label for="ano_ingresso" class="form-label required-field">Ano de Ingresso</label>
-                            <input type="number" class="form-control" id="ano_ingresso" name="ano_ingresso" value="2023" readonly required>
+                            <input type="number" class="form-control" id="ano_ingresso" name="ano_ingresso" value="{{ aluno.ano_ingresso if aluno and aluno.ano_ingresso else 2023 }}" readonly required>
                         </div>
                         <div>
                             <label for="ano_conclusao_previsto" class="form-label required-field">Ano Previsto para Conclusão</label>
-                            <input type="number" class="form-control" id="ano_conclusao_previsto" name="ano_conclusao_previsto" value="2026" readonly required>
+                            <input type="number" class="form-control" id="ano_conclusao_previsto" name="ano_conclusao_previsto" value="{{ aluno.ano_conclusao_previsto if aluno and aluno.ano_conclusao_previsto else 2026 }}" readonly required>
                         </div>
                     </div>
                 </div>
@@ -198,7 +207,7 @@
                     <div class="form-row">
                         <div>
                             <label for="pessoas_residencia" class="form-label required-field">Pessoas na Residência</label>
-                            <input type="number" class="form-control" id="pessoas_residencia" name="pessoas_residencia" value="4" readonly required>
+                            <input type="number" class="form-control" id="pessoas_residencia" name="pessoas_residencia" value="{{ quantidade_pessoas_residencia }}" readonly required>
                         </div>
                         <div>
                             <label for="renda_percapita" class="form-label required-field">Renda Familiar Per Capita</label>
@@ -602,13 +611,12 @@ function habilitarEdicao(secao) {
     document.getElementById('alert-edit-mode').style.display = 'block';
     
     const campos = {
-        'pessoais': ['nome', 'cpf', 'data_nascimento', 'telefone', 'email', 'logradouro', 'numero', 'bairro', 'cidade', 'cep'],
+        'pessoais': ['nome', 'cpf', 'data_nascimento', 'telefone', 'email', 'logradouro', 'numero', 'bairro', 'cidade', 'cep', 'estado'],
         'academicos': ['curso', 'matricula', 'ano_ingresso', 'ano_conclusao_previsto'],
         'financeiros': ['pessoas_residencia']
     };
     
     const selects = {
-        'pessoais': ['estado'],
         'financeiros': ['renda_percapita', 'bolsa_pesquisa', 'cad_unico']
     };
     
@@ -630,6 +638,15 @@ function habilitarEdicao(secao) {
                 element.classList.add('border-warning');
             }
         });
+    }
+    
+    // Habilitar botão de busca CEP se for seção pessoais
+    if (secao === 'pessoais') {
+        const btnBuscarCep = document.getElementById('btn-buscar-cep');
+        const cepInput = document.getElementById('cep');
+        if (btnBuscarCep && cepInput && cepInput.value.replace(/\D/g, '').length === 8) {
+            btnBuscarCep.disabled = false;
+        }
     }
     
     document.getElementById('btn-editar-' + secao).style.display = 'none';
@@ -701,9 +718,99 @@ function habilitarEnvioDoc(fieldId) {
     }
 }
 
+// Busca de CEP usando ViaCEP
+function buscarCEP() {
+    const cep = document.getElementById('cep').value.replace(/\D/g, '');
+    
+    if (cep.length !== 8) {
+        return;
+    }
+    
+    const btnBuscar = document.getElementById('btn-buscar-cep');
+    const cepLoading = document.getElementById('cep-loading');
+    const cepError = document.getElementById('cep-error');
+    
+    // Mostrar loading
+    btnBuscar.disabled = true;
+    cepLoading.style.display = 'block';
+    cepError.style.display = 'none';
+    
+    // Buscar CEP na API ViaCEP
+    fetch(`https://viacep.com.br/ws/${cep}/json/`)
+        .then(response => response.json())
+        .then(data => {
+            cepLoading.style.display = 'none';
+            btnBuscar.disabled = false;
+            
+            if (data.erro) {
+                cepError.style.display = 'block';
+                return;
+            }
+            
+            // Preencher campos automaticamente
+            document.getElementById('logradouro').value = data.logradouro || '';
+            document.getElementById('bairro').value = data.bairro || '';
+            document.getElementById('cidade').value = data.localidade || '';
+            document.getElementById('estado').value = data.uf || '';
+            
+            // Focar no campo número
+            document.getElementById('numero').focus();
+        })
+        .catch(error => {
+            console.error('Erro ao buscar CEP:', error);
+            cepLoading.style.display = 'none';
+            cepError.style.display = 'block';
+            btnBuscar.disabled = false;
+        });
+}
+
+// Formatar CEP enquanto digita
+function formatarCEP(input) {
+    let valor = input.value.replace(/\D/g, '');
+    
+    if (valor.length > 8) {
+        valor = valor.substring(0, 8);
+    }
+    
+    if (valor.length > 5) {
+        valor = valor.replace(/(\d{5})(\d)/, '$1-$2');
+    }
+    
+    input.value = valor;
+    
+    // Habilitar/desabilitar botão de busca
+    const btnBuscar = document.getElementById('btn-buscar-cep');
+    if (valor.replace(/\D/g, '').length === 8 && !input.hasAttribute('readonly')) {
+        btnBuscar.disabled = false;
+    } else {
+        btnBuscar.disabled = true;
+    }
+}
+
 // Inicializar
 document.addEventListener('DOMContentLoaded', function() {
     atualizarBarraProgresso();
+    
+    // Event listeners para CEP
+    const cepInput = document.getElementById('cep');
+    const btnBuscarCep = document.getElementById('btn-buscar-cep');
+    
+    if (cepInput) {
+        cepInput.addEventListener('input', function() {
+            formatarCEP(this);
+        });
+        
+        cepInput.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                buscarCEP();
+            }
+        });
+    }
+    
+    if (btnBuscarCep) {
+        btnBuscarCep.addEventListener('click', buscarCEP);
+    }
 });
 </script>
 {% endblock %}
