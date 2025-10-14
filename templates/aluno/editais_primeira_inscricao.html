@@ -90,29 +90,29 @@
                 <div class="form-row">
                     <div>
                         <label for="nome" class="form-label required-field">Nome Completo</label>
-                        <input type="text" class="form-control" id="nome" name="nome" value="{{ aluno.nome if aluno else '' }}" required>
+                        <input type="text" class="form-control {% if campo_erro == 'nome' %}is-invalid{% endif %}" id="nome" name="nome" value="{{ aluno.nome if aluno else '' }}" required>
                     </div>
                     <div>
                         <label for="cpf" class="form-label required-field">CPF</label>
-                        <input type="text" class="form-control" id="cpf" name="cpf" placeholder="000.000.000-00" value="{{ aluno.cpf if aluno and aluno.cpf else '' }}" required>
+                        <input type="text" class="form-control {% if campo_erro == 'cpf' %}is-invalid{% endif %}" id="cpf" name="cpf" placeholder="000.000.000-00" value="{{ aluno.cpf if aluno and aluno.cpf else '' }}" required>
                     </div>
                 </div>
 
                 <div class="form-row">
                     <div>
                         <label for="data_nascimento" class="form-label required-field">Data de Nascimento</label>
-                        <input type="date" class="form-control" id="data_nascimento" name="data_nascimento" value="{{ aluno.data_nascimento if aluno and aluno.data_nascimento else '' }}" required>
+                        <input type="date" class="form-control {% if campo_erro == 'data_nascimento' %}is-invalid{% endif %}" id="data_nascimento" name="data_nascimento" value="{{ aluno.data_nascimento if aluno and aluno.data_nascimento else '' }}" required>
                     </div>
                     <div>
                         <label for="telefone" class="form-label required-field">Telefone</label>
-                        <input type="text" class="form-control" id="telefone" name="telefone" placeholder="(00) 00000-0000" value="{{ aluno.telefone if aluno and aluno.telefone else '' }}" required>
+                        <input type="tel" class="form-control {% if campo_erro == 'telefone' %}is-invalid{% endif %}" id="telefone" name="telefone" placeholder="(00) 00000-0000" value="{{ aluno.telefone if aluno and aluno.telefone else '' }}" required>
                     </div>
                 </div>
 
                 <div class="form-row single-column">
                     <div>
                         <label for="email" class="form-label required-field">E-mail</label>
-                        <input type="email" class="form-control" id="email" name="email" value="{{ aluno.email if aluno else '' }}" required>
+                        <input type="email" class="form-control {% if campo_erro == 'email' %}is-invalid{% endif %}" id="email" name="email" value="{{ aluno.email if aluno else '' }}" required>
                         <div class="form-text">Será usado para todas as comunicações do programa</div>
                     </div>
                 </div>
@@ -140,7 +140,7 @@
                     <div>
                         <label for="cep" class="form-label required-field">CEP</label>
                         <div class="input-group">
-                            <input type="text" class="form-control" id="cep" name="cep" placeholder="00000-000" maxlength="9" value="{{ aluno.cep if aluno and aluno.cep else '' }}" required>
+                            <input type="text" class="form-control {% if campo_erro == 'cep' %}is-invalid{% endif %}" id="cep" name="cep" placeholder="00000-000" maxlength="9" value="{{ aluno.cep if aluno and aluno.cep else '' }}" required>
                             <button class="btn btn-outline-secondary" type="button" id="btn-buscar-cep" disabled>
                                 <i class="bi bi-search"></i>
                             </button>
@@ -184,18 +184,18 @@
                     </div>
                     <div>
                         <label for="matricula" class="form-label required-field">Matrícula</label>
-                        <input type="text" class="form-control" id="matricula" name="matricula" value="{{ aluno.matricula if aluno else '' }}" required>
+                        <input type="text" class="form-control {% if campo_erro == 'matricula' %}is-invalid{% endif %}" id="matricula" name="matricula" value="{{ aluno.matricula if aluno else '' }}" required>
                     </div>
                 </div>
 
                 <div class="form-row">
                     <div>
                         <label for="ano_ingresso" class="form-label required-field">Ano de Ingresso</label>
-                        <input type="number" class="form-control" id="ano_ingresso" name="ano_ingresso" placeholder="Ex: 2024" min="2000" max="2030" required>
+                        <input type="number" class="form-control {% if campo_erro == 'ano_ingresso' %}is-invalid{% endif %}" id="ano_ingresso" name="ano_ingresso" placeholder="Ex: 2024" min="2000" max="2030" required>
                     </div>
                     <div>
                         <label for="ano_conclusao_previsto" class="form-label required-field">Ano Previsto para Conclusão</label>
-                        <input type="number" class="form-control" id="ano_conclusao_previsto" name="ano_conclusao_previsto" placeholder="Ex: 2028" min="2024" max="2035" required>
+                        <input type="number" class="form-control {% if campo_erro == 'ano_conclusao_previsto' %}is-invalid{% endif %}" id="ano_conclusao_previsto" name="ano_conclusao_previsto" placeholder="Ex: 2028" min="2024" max="2035" required>
                     </div>
                 </div>
             </div>
@@ -210,11 +210,11 @@
                 <div class="form-row">
                     <div>
                         <label for="pessoas_residencia" class="form-label required-field">Quantas pessoas residem com você?</label>
-                        <input type="number" class="form-control" id="pessoas_residencia" name="pessoas_residencia" min="0" placeholder="Ex: 3" value="{{ aluno.quantidade_pessoas if aluno and aluno.quantidade_pessoas else '' }}" required>
+                        <input type="number" class="form-control {% if campo_erro == 'pessoas_residencia' %}is-invalid{% endif %}" id="pessoas_residencia" name="pessoas_residencia" min="0" placeholder="Ex: 3" value="{{ aluno.quantidade_pessoas if aluno and aluno.quantidade_pessoas else '' }}" required>
                     </div>
                     <div>
                         <label for="renda_percapita" class="form-label required-field">Renda Familiar Per Capita</label>
-                        <select class="form-control" id="renda_percapita" name="renda_percapita" required>
+                        <select class="form-control {% if campo_erro == 'renda_percapita' %}is-invalid{% endif %}" id="renda_percapita" name="renda_percapita" required>
                             <option value="">Selecione...</option>
                             <option value="menor_1" {% if aluno and aluno.renda_per_capita and aluno.renda_per_capita <= 1412 %}selected{% endif %}>Menor ou igual a 1 salário mínimo</option>
                             <option value="ate_1_5" {% if aluno and aluno.renda_per_capita and aluno.renda_per_capita > 1412 and aluno.renda_per_capita <= 2118 %}selected{% endif %}>Até 1,5 salário mínimo</option>
@@ -360,7 +360,7 @@
                             <label for="gasto_passagens_dia" class="form-label required-field">Quanto você gasta com passagens em um dia (ida e volta)?</label>
                             <div class="input-group" style="max-width: 500px; height: 45px;">
                                 <span class="input-group-text" style="min-width: 50px; height: 45px; display: flex; align-items: center; justify-content: center;">R$</span>
-                                <input type="number" class="form-control" id="gasto_passagens_dia" name="gasto_passagens_dia" placeholder="Ex: 12.00" step="0.01" min="0" style="height: 45px;">
+                                <input type="number" class="form-control {% if campo_erro == 'gasto_passagens_dia' %}is-invalid{% endif %}" id="gasto_passagens_dia" name="gasto_passagens_dia" placeholder="Ex: 12.00" step="0.01" min="0" style="height: 45px;">
                             </div>
                             <div class="form-text">Informe o valor total gasto diariamente com passagens (ida + volta)</div>
                         </div>
@@ -372,7 +372,7 @@
                             <label for="gasto_van_mensal" class="form-label required-field">Quanto você gasta mensalmente com a van escolar?</label>
                             <div class="input-group" style="max-width: 500px; height: 45px;">
                                 <span class="input-group-text" style="min-width: 50px; height: 45px; display: flex; align-items: center; justify-content: center;">R$</span>
-                                <input type="number" class="form-control" id="gasto_van_mensal" name="gasto_van_mensal" placeholder="Ex: 300.00" step="0.01" min="0" style="height: 45px;">
+                                <input type="number" class="form-control {% if campo_erro == 'gasto_van_mensal' %}is-invalid{% endif %}" id="gasto_van_mensal" name="gasto_van_mensal" placeholder="Ex: 300.00" step="0.01" min="0" style="height: 45px;">
                             </div>
                             <div class="form-text">Informe o valor mensal pago pelo serviço de van escolar</div>
                         </div>
