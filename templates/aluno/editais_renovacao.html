@@ -75,7 +75,7 @@
             Revise seus dados, selecione os auxílios e atualize os documentos necessários.
         </p>
 
-        <form method="post" enctype="multipart/form-data" id="renovacaoForm">
+        <form action="/aluno/editais/renovacao" method="post" enctype="multipart/form-data" id="renovacaoForm">
             <!-- Etapa 1: Dados Cadastrais -->
             <div class="form-etapa" id="etapa-1" style="display: block;">
                 <!-- Dados Pessoais -->
@@ -262,7 +262,7 @@
                             <div class="checkbox-group">
                                 {% if 'alimentacao' in auxilios_atuais %}
                                 <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" id="renovar_alimentacao" name="renovar_auxilios" value="alimentacao" checked>
+                                    <input class="form-check-input" type="checkbox" id="renovar_alimentacao" name="auxilios_renovacao" value="alimentacao" checked>
                                     <label class="form-check-label" for="renovar_alimentacao">
                                         <i class="bi bi-egg-fried text-warning me-2"></i>
                                         <strong>Auxílio Alimentação</strong> - R$ 600,00/mês
@@ -273,7 +273,7 @@
                                 
                                 {% if 'transporte' in auxilios_atuais %}
                                 <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" id="renovar_transporte" name="renovar_auxilios" value="transporte" checked onchange="toggleDocumentosTransporteRenovacao()">
+                                    <input class="form-check-input" type="checkbox" id="renovar_transporte" name="auxilios_renovacao" value="transporte" checked onchange="toggleDocumentosTransporteRenovacao()">
                                     <label class="form-check-label" for="renovar_transporte">
                                         <i class="bi bi-bus-front text-success me-2"></i>
                                         <strong>Auxílio Transporte</strong> - R$ 300,00/mês
@@ -284,7 +284,7 @@
                                 
                                 {% if 'moradia' in auxilios_atuais %}
                                 <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" id="renovar_moradia" name="renovar_auxilios" value="moradia" checked>
+                                    <input class="form-check-input" type="checkbox" id="renovar_moradia" name="auxilios_renovacao" value="moradia" checked>
                                     <label class="form-check-label" for="renovar_moradia">
                                         <i class="bi bi-house-door text-primary me-2"></i>
                                         <strong>Auxílio Moradia</strong> - R$ 400,00/mês
@@ -295,7 +295,7 @@
                                 
                                 {% if 'material' in auxilios_atuais %}
                                 <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" id="renovar_material" name="renovar_auxilios" value="material" checked>
+                                    <input class="form-check-input" type="checkbox" id="renovar_material" name="auxilios_renovacao" value="material" checked>
                                     <label class="form-check-label" for="renovar_material">
                                         <i class="bi bi-book text-info me-2"></i>
                                         <strong>Auxílio Material Didático</strong> - R$ 200,00/semestre
@@ -327,14 +327,14 @@
                             <label class="form-label required-field">Tipo de transporte atual:</label>
                             <div class="radio-group">
                                 <div class="form-check">
-                                    <input class="form-check-input" type="radio" id="transporte_van_renovacao" name="tipo_transporte_renovacao" value="van" {% if auxilio_transporte and auxilio_transporte.tipo_transporte == 'van' %}checked{% endif %} onchange="toggleTipoTransporteRenovacao()">
+                                    <input class="form-check-input" type="radio" id="transporte_van_renovacao" name="tipo_transporte" value="van" {% if auxilio_transporte and auxilio_transporte.tipo_transporte == 'van' %}checked{% endif %} onchange="toggleTipoTransporteRenovacao()">
                                     <label class="form-check-label" for="transporte_van_renovacao">
                                         <i class="bi bi-minecart text-primary me-2"></i>
                                         <strong>Van Escolar</strong>
                                     </label>
                                 </div>
                                 <div class="form-check">
-                                    <input class="form-check-input" type="radio" id="transporte_onibus_renovacao" name="tipo_transporte_renovacao" value="onibus" {% if not auxilio_transporte or auxilio_transporte.tipo_transporte == 'onibus' %}checked{% endif %} onchange="toggleTipoTransporteRenovacao()">
+                                    <input class="form-check-input" type="radio" id="transporte_onibus_renovacao" name="tipo_transporte" value="onibus" {% if not auxilio_transporte or auxilio_transporte.tipo_transporte == 'onibus' %}checked{% endif %} onchange="toggleTipoTransporteRenovacao()">
                                     <label class="form-check-label" for="transporte_onibus_renovacao">
                                         <i class="bi bi-bus-front text-success me-2"></i>
                                         <strong>Ônibus</strong>
@@ -405,7 +405,7 @@
                             <div class="checkbox-group">
                                 {% if 'alimentacao' not in auxilios_atuais %}
                                 <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" id="novo_alimentacao" name="novos_auxilios" value="alimentacao">
+                                    <input class="form-check-input" type="checkbox" id="novo_alimentacao" name="auxilios_novos" value="alimentacao">
                                     <label class="form-check-label" for="novo_alimentacao">
                                         <i class="bi bi-egg-fried text-warning me-2"></i>
                                         <strong>Auxílio Alimentação</strong> - R$ 600,00/mês
@@ -415,7 +415,7 @@
                                 
                                 {% if 'moradia' not in auxilios_atuais %}
                                 <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" id="novo_moradia" name="novos_auxilios" value="moradia" onchange="toggleDocumentosMoradiaRenovacao()">
+                                    <input class="form-check-input" type="checkbox" id="novo_moradia" name="auxilios_novos" value="moradia" onchange="toggleDocumentosMoradiaRenovacao()">
                                     <label class="form-check-label" for="novo_moradia">
                                         <i class="bi bi-house-door text-primary me-2"></i>
                                         <strong>Auxílio Moradia</strong> - R$ 400,00/mês
@@ -425,7 +425,7 @@
                                 
                                 {% if 'transporte' not in auxilios_atuais %}
                                 <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" id="novo_transporte" name="novos_auxilios" value="transporte" onchange="toggleDocumentosTransporteNovoRenovacao()">
+                                    <input class="form-check-input" type="checkbox" id="novo_transporte" name="auxilios_novos" value="transporte" onchange="toggleDocumentosTransporteNovoRenovacao()">
                                     <label class="form-check-label" for="novo_transporte">
                                         <i class="bi bi-bus-front text-success me-2"></i>
                                         <strong>Auxílio Transporte</strong> - R$ 300,00/mês
@@ -435,7 +435,7 @@
                                 
                                 {% if 'material' not in auxilios_atuais %}
                                 <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" id="novo_material" name="novos_auxilios" value="material">
+                                    <input class="form-check-input" type="checkbox" id="novo_material" name="auxilios_novos" value="material">
                                     <label class="form-check-label" for="novo_material">
                                         <i class="bi bi-book text-info me-2"></i>
                                         <strong>Auxílio Material Didático</strong> - R$ 200,00/semestre
