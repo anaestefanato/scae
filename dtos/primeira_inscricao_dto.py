@@ -42,8 +42,8 @@ class PrimeiraInscricaoDTO(BaseModel):
     # Dados de transporte (opcionais)
     tipo_transporte: Optional[str] 
     tipo_onibus: Optional[List[str]] 
-    gasto_passagens_dia: Optional[float] 
-    gasto_van_mensal: Optional[float] 
+    gasto_passagens_dia: Optional[float] = None
+    gasto_van_mensal: Optional[float] = None 
 
     @field_validator('nome')
     @classmethod
@@ -184,6 +184,14 @@ class PrimeiraInscricaoDTO(BaseModel):
             if auxilio not in auxilios_validos:
                 raise ValueError(f'Auxílio inválido: {auxilio}')
         
+        return v
+    
+    @field_validator('gasto_passagens_dia', 'gasto_van_mensal', mode='before')
+    @classmethod
+    def converter_strings_vazias_em_none(cls, v):
+        """Converte strings vazias em None para campos opcionais de float"""
+        if v == '' or v is None:
+            return None
         return v
     
     @model_validator(mode='after')

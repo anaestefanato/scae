@@ -314,7 +314,7 @@
                             <label class="form-label required-field">Qual tipo de transporte você utiliza para vir até o campus?</label>
                             <div class="radio-group">
                                 <div class="form-check">
-                                    <input class="form-check-input" type="radio" id="transporte_van" name="tipo_transporte" value="van_escolar" onchange="toggleTipoTransporte()">
+                                    <input class="form-check-input" type="radio" id="transporte_van" name="tipo_transporte" value="van" onchange="toggleTipoTransporte()">
                                     <label class="form-check-label" for="transporte_van">
                                         <i class="bi bi-minecart text-primary me-2"></i>
                                         <strong>Van Escolar</strong>
@@ -615,8 +615,16 @@ function atualizarBarraProgresso() {
     progressFill.style.width = porcentagem + '%';
 }
 
-function proximaEtapa() {
+async function proximaEtapa() {
     if (etapaAtual < 3) {
+        // VALIDAR ETAPA 1 COM DTO DO BACKEND
+        if (etapaAtual === 1) {
+            const validacao = await validarEtapa1ComDTO();
+            if (!validacao.valido) {
+                return; // Não avançar se houver erros
+            }
+        }
+        
         // Esconder etapa atual
         document.getElementById('etapa-' + etapaAtual).style.display = 'none';
         document.getElementById('step-' + etapaAtual).classList.remove('active');
@@ -643,6 +651,134 @@ function proximaEtapa() {
         // Scroll para o topo
         window.scrollTo({ top: 0, behavior: 'smooth' });
     }
+}
+
+// Validar Etapa 1 usando DTO do backend
+async function validarEtapa1ComDTO() {
+    // Desabilitar botão durante validação
+    const btnProxima = document.getElementById('btn-proxima');
+    const textoOriginal = btnProxima.innerHTML;
+    btnProxima.disabled = true;
+    btnProxima.innerHTML = '<i class="spinner-border spinner-border-sm me-2"></i>Validando...';
+    
+    try {
+        // Coletar dados do formulário
+        const formData = new FormData(document.querySelector('form'));
+        
+        // Fazer requisição para endpoint de validação
+        const response = await fetch('/aluno/editais/primeira-inscricao/validar', {
+            method: 'POST',
+            body: formData
+        });
+        
+        const resultado = await response.json();
+        
+        if (resultado.valido) {
+            // Dados válidos - limpar todos os erros
+            limparErrosValidacao();
+            return { valido: true };
+        } else {
+            // Dados inválidos - mostrar erros
+            mostrarErrosDTO(resultado.erros);
+            
+            // Mostrar alerta
+            mostrarAlerta(
+                'Erro de Validação',
+                resultado.mensagem || 'Por favor, corrija os campos destacados.',
+                'danger'
+            );
+            
+            return { valido: false, erros: resultado.erros };
+        }
+        
+    } catch (error) {
+        console.error('Erro ao validar dados:', error);
+        mostrarAlerta(
+            'Erro',
+            'Não foi possível validar os dados. Tente novamente.',
+            'danger'
+        );
+        return { valido: false };
+        
+    } finally {
+        // Reabilitar botão
+        btnProxima.disabled = false;
+        btnProxima.innerHTML = textoOriginal;
+    }
+}
+
+// Mostrar erros retornados pelo DTO
+function mostrarErrosDTO(erros) {
+    // Limpar erros anteriores
+    limparErrosValidacao();
+    
+    let primeiroComErro = null;
+    
+    erros.forEach(erro => {
+        const campo = document.querySelector(`[name="${erro.campo}"]`);
+        if (campo) {
+            // Marcar campo como inválido
+            campo.classList.add('is-invalid');
+            campo.classList.remove('is-valid');
+            
+            // Adicionar mensagem de erro
+            const feedback = document.createElement('div');
+            feedback.className = 'invalid-feedback';
+            feedback.textContent = erro.mensagem;
+            campo.parentElement.appendChild(feedback);
+            
+            if (!primeiroComErro) {
+                primeiroComErro = campo;
+            }
+        }
+    });
+    
+    // Focar no primeiro campo com erro
+    if (primeiroComErro) {
+        primeiroComErro.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        setTimeout(() => primeiroComErro.focus(), 500);
+    }
+}
+
+// Limpar todos os erros de validação
+function limparErrosValidacao() {
+    // Remover classes de erro
+    document.querySelectorAll('.is-invalid').forEach(campo => {
+        campo.classList.remove('is-invalid');
+    });
+    
+    // Remover mensagens de erro
+    document.querySelectorAll('.invalid-feedback').forEach(feedback => {
+        feedback.remove();
+    });
+}
+
+
+
+function mostrarAlerta(titulo, mensagem, tipo = 'info') {
+    // Remover alerta anterior se existir
+    const alertaAntigo = document.querySelector('.alert-validacao-etapa');
+    if (alertaAntigo) alertaAntigo.remove();
+    
+    // Criar novo alerta
+    const alerta = document.createElement('div');
+    alerta.className = `alert alert-${tipo} alert-dismissible fade show alert-validacao-etapa`;
+    alerta.style.cssText = 'position: fixed; top: 80px; right: 20px; z-index: 9999; min-width: 350px; max-width: 500px; box-shadow: 0 4px 12px rgba(0,0,0,0.15);';
+    alerta.innerHTML = `
+        <h5 class="alert-heading"><i class="bi bi-exclamation-triangle-fill me-2"></i>${titulo}</h5>
+        <p class="mb-0">${mensagem}</p>
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    `;
+    
+    document.body.appendChild(alerta);
+    
+    // Auto-remover após 6 segundos
+    setTimeout(() => {
+        if (alerta.parentNode) {
+            alerta.classList.remove('show');
+            setTimeout(() => alerta.remove(), 150);
+        }
+    }, 6000);
 }
 
 function voltarEtapa() {
@@ -737,30 +873,14 @@ function toggleTipoTransporte() {
 
 // Validação do formulário antes de enviar
 document.getElementById('inscricaoForm').addEventListener('submit', function(e) {
-    const auxilios = document.querySelectorAll('input[name="auxilios"]:checked');
-    
-    if (auxilios.length === 0) {
-        e.preventDefault();
-        alert('Por favor, selecione pelo menos um auxílio.');
-        return false;
-    }
-    
-    // Validar documentos de transporte se transporte foi selecionado
-    const transporteSelecionado = Array.from(auxilios).some(aux => aux.value === 'transporte');
-    if (transporteSelecionado) {
-        const tipoTransporte = document.querySelector('input[name="tipo_transporte"]:checked');
-        if (!tipoTransporte) {
-            e.preventDefault();
-            alert('Por favor, selecione o tipo de transporte utilizado.');
-            return false;
-        }
-    }
-    
     // Mostrar mensagem de carregamento
     const btnEnviar = document.getElementById('btn-enviar');
-    btnEnviar.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>Enviando...';
-    btnEnviar.disabled = true;
+    if (btnEnviar) {
+        btnEnviar.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>Enviando...';
+        btnEnviar.disabled = true;
+    }
     
+    // Permitir que o formulário seja enviado (validações são feitas no backend)
     return true;
 });
 

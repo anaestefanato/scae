@@ -435,11 +435,11 @@ def obter_por_matricula(matricula: str) -> Optional[Aluno]:
                 quantidade_pessoas=row["quantidade_pessoas"],
                 renda_per_capita=row["renda_per_capita"],
                 situacao_moradia=row["situacao_moradia"],
-                ano_ingresso=row.get("ano_ingresso"),
-                ano_conclusao_previsto=row.get("ano_conclusao_previsto"),
-                bolsa_pesquisa=row.get("bolsa_pesquisa"),
-                cad_unico=row.get("cad_unico"),
-                bolsa_familia=row.get("bolsa_familia")
+                ano_ingresso=row["ano_ingresso"] if "ano_ingresso" in row.keys() else None,
+                ano_conclusao_previsto=row["ano_conclusao_previsto"] if "ano_conclusao_previsto" in row.keys() else None,
+                bolsa_pesquisa=row["bolsa_pesquisa"] if "bolsa_pesquisa" in row.keys() else None,
+                cad_unico=row["cad_unico"] if "cad_unico" in row.keys() else None,
+                bolsa_familia=row["bolsa_familia"] if "bolsa_familia" in row.keys() else None
             )
         return None
 
