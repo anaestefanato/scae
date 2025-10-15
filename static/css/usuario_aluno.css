@@ -161,38 +161,6 @@
     transform: scale(1.005);
 }
 
-/* ===== AUXILIO BADGES ===== */
-.auxilio-badge {
-    display: inline-block;
-    padding: 4px 8px;
-    margin: 2px;
-    border-radius: 12px;
-    font-size: 0.75rem;
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 0.3px;
-}
-
-.auxilio-badge.alimentacao {
-    background: linear-gradient(135deg, #4CAF50, #66BB6A);
-    color: white;
-}
-
-.auxilio-badge.transporte {
-    background: linear-gradient(135deg, #2196F3, #42A5F5);
-    color: white;
-}
-
-.auxilio-badge.moradia {
-    background: linear-gradient(135deg, #9C27B0, #BA68C8);
-    color: white;
-}
-
-.auxilio-badge.material {
-    background: linear-gradient(135deg, #FFB74D, #FFCC80);
-    color: white;
-}
-
 /* ===== ACTION BUTTONS ESPECÍFICOS ===== */
 .action-buttons .btn {
     padding: 0.35rem 0.6rem;
@@ -205,13 +173,6 @@
 .action-buttons .btn:hover {
     transform: translateY(-2px);
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-}
-
-.pending-request-item .action-buttons .btn {
-    padding: 0.4rem 0.8rem;
-    font-size: 0.85rem;
-    border-radius: 8px;
-    margin: 0 3px;
 }
 
 /* ===== PAGINATION PERSONALIZADA ===== */
@@ -268,32 +229,6 @@
     border-radius: 0 0 15px 15px;
 }
 
-/* ===== LOADING STATES ===== */
-.loading {
-    opacity: 0.6;
-    pointer-events: none;
-    position: relative;
-}
-
-.loading::after {
-    content: '';
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    width: 20px;
-    height: 20px;
-    margin: -10px 0 0 -10px;
-    border: 2px solid #f3f3f3;
-    border-top: 2px solid var(--ifes-green);
-    border-radius: 50%;
-    animation: spin 1s linear infinite;
-}
-
-@keyframes spin {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
-}
-
 /* ===== RESPONSIVE DESIGN ===== */
 @media (max-width: 768px) {
     .page-header {
@@ -310,11 +245,6 @@
     
     .students-list-card .table {
         font-size: 0.9rem;
-    }
-    
-    .auxilio-badge {
-        display: block;
-        margin: 1px 0;
     }
     
     .action-buttons {
@@ -362,45 +292,4 @@
 
 .search-result-card {
     animation: fadeInUp 0.6s ease-out;
-}
-
-/* ===== TOASTS PERSONALIZADOS ===== */
-.toast-container {
-    z-index: 9999;
-}
-
-.toast {
-    border: none;
-    border-radius: 10px;
-    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
-}
-
-.toast-header {
-    border-bottom: none;
-    border-radius: 10px 10px 0 0;
-    padding: 15px 20px;
-}
-
-.toast-body {
-    padding: 15px 20px;
-    font-weight: 500;
-}
-
-/* ===== CUSTOM SCROLLBAR PARA TABELAS ===== */
-.table-responsive::-webkit-scrollbar {
-    height: 8px;
-}
-
-.table-responsive::-webkit-scrollbar-track {
-    background: #f1f1f1;
-    border-radius: 10px;
-}
-
-.table-responsive::-webkit-scrollbar-thumb {
-    background: var(--ifes-light-green);
-    border-radius: 10px;
-}
-
-.table-responsive::-webkit-scrollbar-thumb:hover {
-    background: var(--ifes-green);
 }
