@@ -5,7 +5,7 @@
 
 {% block head %}
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="/static/css/editais_primeira_inscricao_aluno.css">
+    <link rel="stylesheet" href="/static/css/editais_primeira_inscricao_aluno.css?v={{ range(1, 10000) | random }}">
 {% endblock %}
 
 {% block content %}
@@ -119,29 +119,10 @@
 
                 <div class="form-row">
                     <div>
-                        <label for="logradouro" class="form-label required-field">Logradouro (Rua/Avenida)</label>
-                        <input type="text" class="form-control" id="logradouro" name="logradouro" placeholder="Ex: Rua das Flores" value="{{ aluno.rua if aluno and aluno.rua else '' }}" required>
-                    </div>
-                    <div>
-                        <label for="numero" class="form-label required-field">Número</label>
-                        <input type="text" class="form-control" id="numero" name="numero" placeholder="Ex: 123" value="{{ aluno.numero if aluno and aluno.numero else '' }}" required>
-                    </div>
-                </div>
-
-                <div class="form-row">
-                    <div>
-                        <label for="complemento" class="form-label">Complemento</label>
-                        <input type="text" class="form-control" id="complemento" name="complemento" placeholder="Ex: Apto 201, Bloco B" value="{{ aluno.complemento if aluno and aluno.complemento else '' }}">
-                    </div>
-                    <div></div>
-                </div>
-
-                <div class="form-row">
-                    <div>
                         <label for="cep" class="form-label required-field">CEP</label>
-                        <div class="input-group" style="height: 38px;">
-                            <input type="text" class="form-control {% if campo_erro == 'cep' %}is-invalid{% endif %}" id="cep" name="cep" placeholder="00000-000" maxlength="9" value="{{ aluno.cep if aluno and aluno.cep else '' }}" required style="height: 38px;">
-                            <button class="btn btn-outline-secondary" type="button" id="btn-buscar-cep" disabled style="height: 38px; padding: 0 12px;">
+                        <div class="input-group">
+                            <input type="text" class="form-control {% if campo_erro == 'cep' %}is-invalid{% endif %}" id="cep" name="cep" placeholder="00000-000" maxlength="9" value="{{ aluno.cep if aluno and aluno.cep else '' }}" required>
+                            <button class="btn btn-outline-secondary" type="button" id="btn-buscar-cep" disabled>
                                 <i class="bi bi-search"></i>
                             </button>
                         </div>
@@ -167,6 +148,25 @@
                         <label for="estado" class="form-label required-field">Estado</label>
                         <input type="text" class="form-control" id="estado" name="estado" placeholder="Ex: ES" maxlength="2" value="{{ aluno.estado if aluno and aluno.estado else '' }}" required>
                     </div>
+                </div>
+
+                <div class="form-row">
+                    <div>
+                        <label for="logradouro" class="form-label required-field">Logradouro (Rua/Avenida)</label>
+                        <input type="text" class="form-control" id="logradouro" name="logradouro" placeholder="Ex: Rua das Flores" value="{{ aluno.rua if aluno and aluno.rua else '' }}" required>
+                    </div>
+                    <div>
+                        <label for="numero" class="form-label required-field">Número</label>
+                        <input type="text" class="form-control" id="numero" name="numero" placeholder="Ex: 123" value="{{ aluno.numero if aluno and aluno.numero else '' }}" required>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div>
+                        <label for="complemento" class="form-label">Complemento</label>
+                        <input type="text" class="form-control" id="complemento" name="complemento" placeholder="Ex: Apto 201, Bloco B" value="{{ aluno.complemento if aluno and aluno.complemento else '' }}">
+                    </div>
+                    <div></div>
                 </div>
             </div>
 

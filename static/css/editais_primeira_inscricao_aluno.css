@@ -220,6 +220,39 @@ body {
     border-color: #66BB6A;
 }
 
+/* Input Group for CEP */
+.input-group {
+    display: flex;
+    align-items: stretch;
+    width: 100%;
+}
+
+.input-group .form-control {
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+    border-right: none;
+    margin-bottom: 0;
+    flex: 1;
+}
+
+.input-group .btn {
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+    border: 2px solid #e0e0e0;
+    padding: 0.75rem 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 48px;
+    flex-shrink: 0;
+    background-color: #fff;
+}
+
+.input-group .btn:hover {
+    background-color: #f5f5f5;
+    border-color: #66BB6A;
+}
+
 /* File Upload Styling */
 .form-control[type="file"] {
     padding: 0.5rem;
