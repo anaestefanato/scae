@@ -2,7 +2,7 @@ from fastapi import APIRouter, Request
 from fastapi.responses import RedirectResponse
 from fastapi.templating import Jinja2Templates
 
-from repo import usuario_repo, aluno_repo
+from repo import usuario_repo, aluno_repo, assistente_social_repo, inscricao_repo, chamado_repo
 from util.auth_decorator import obter_usuario_logado, requer_autenticacao
 from util.date_util import calcular_tempo_relativo, formatar_data_brasileira
 
@@ -34,11 +34,39 @@ async def get_perfil(request: Request, usuario_logado: dict = None):
         }
         possiveis_alunos.append(usuario_dict)
     
+    # Estatísticas para os cartões do dashboard
+    try:
+        total_alunos = aluno_repo.contar_todos()
+    except Exception:
+        total_alunos = 0
+
+    try:
+        # assistente_social_repo não possui contador simples, usar len(obter_todos())
+        total_assistentes = len(assistente_social_repo.obter_todos())
+    except Exception:
+        total_assistentes = 0
+
+    try:
+        estatisticas_inscricoes = inscricao_repo.obter_estatisticas_analise()
+        # Mostrar o número de possíveis alunos como cadastros pendentes
+        total_cadastros_pendentes = len(possiveis_alunos_raw)
+    except Exception:
+        total_cadastros_pendentes = len(possiveis_alunos_raw)
+
+    try:
+        estatisticas_chamados = chamado_repo.obter_estatisticas_gerais()
+        total_chamados_pendentes = estatisticas_chamados.get('abertos', 0) if estatisticas_chamados else 0
+    except Exception:
+        total_chamados_pendentes = 0
+
     context = {
-        "request": request, 
+        "request": request,
         "admin": admin,
         "possiveis_alunos": possiveis_alunos,
-        "total_cadastros_pendentes": len(possiveis_alunos_raw)
+        "total_cadastros_pendentes": total_cadastros_pendentes,
+        "total_alunos": total_alunos,
+        "total_assistentes": total_assistentes,
+        "total_chamados_pendentes": total_chamados_pendentes
     }
     
     response = templates.TemplateResponse("/admin/dashboard_admin.html", context)

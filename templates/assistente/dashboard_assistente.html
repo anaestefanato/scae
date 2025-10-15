@@ -111,28 +111,37 @@
         </div>
 
          <div class="row mb-4">
-            <div class="col-md-3">
-                <div class="stats-card card">
-                    <div class="number">3</div>
-                    <div class="label">Editais Ativos</div>
+            <div class="col-md-4">
+                <div class="stats-card card text-center py-4">
+                    <div class="mb-2">
+                        <span class="rounded-circle d-inline-block" style="background: #1976d2; padding: 12px;">
+                            <i class="bi bi-clipboard-data" style="font-size: 2rem; color: #fff;"></i>
+                        </span>
+                    </div>
+                    <div class="number" style="font-size: 2.5rem; font-weight: bold; color: #1976d2;">{{ estatisticas['inscricoes_pendentes'] }}</div>
+                    <div class="label fw-semibold mt-2">Inscrições Pendentes</div>
                 </div>
             </div>
-            <div class="col-md-3">
-                <div class="stats-card card">
-                    <div class="number">127</div>
-                    <div class="label">Inscrições Pendentes</div>
+            <div class="col-md-4">
+                <div class="stats-card card text-center py-4">
+                    <div class="mb-2">
+                        <span class="rounded-circle d-inline-block" style="background: #ff9800; padding: 12px;">
+                            <i class="bi bi-journal-text" style="font-size: 2rem; color: #fff;"></i>
+                        </span>
+                    </div>
+                    <div class="number" style="font-size: 2.5rem; font-weight: bold; color: #ff9800;">{{ recursos_pendentes }}</div>
+                    <div class="label fw-semibold mt-2">Recursos Pendentes</div>
                 </div>
             </div>
-            <div class="col-md-3">
-                <div class="stats-card card">
-                    <div class="number">342</div>
-                    <div class="label">Alunos Beneficiados</div>
-                </div>
-            </div>
-            <div class="col-md-3">
-                <div class="stats-card card">
-                    <div class="number">R$ 68.400</div>
-                    <div class="label">Valor Total Mensal</div>
+            <div class="col-md-4">
+                <div class="stats-card card text-center py-4">
+                    <div class="mb-2">
+                        <span class="rounded-circle d-inline-block" style="background: #388e3c; padding: 12px;">
+                            <i class="bi bi-people-fill" style="font-size: 2rem; color: #fff;"></i>
+                        </span>
+                    </div>
+                    <div class="number" style="font-size: 2.5rem; font-weight: bold; color: #388e3c;">{{ estatisticas['alunos_beneficiados'] }}</div>
+                    <div class="label fw-semibold mt-2">Alunos Beneficiados</div>
                 </div>
             </div>
         </div>
@@ -156,38 +165,22 @@
                                     </tr>
                                 </thead>
                                 <tbody>
+                                    {% for inscricao in inscricoes_analise %}
                                     <tr>
-                                        <td>João Silva</td>
-                                        <td>Edital 01/2025</td>
-                                        <td>01/04/2025</td>
+                                        <td>{{ inscricao.aluno_nome }}</td>
+                                        <td>{{ inscricao.edital_titulo }}</td>
+                                        <td>{{ inscricao.data_inscricao|default('Data não informada') }}</td>
                                         <td class="text-center">
-                                            <button class="btn btn-sm btn-outline-primary"><i class="bi bi-eye"></i> Analisar</button>
+                                            <a href="/assistente/analise-inscricoes/{{ inscricao.id_inscricao }}" class="btn btn-sm btn-outline-primary">
+                                                <i class="bi bi-eye"></i> Analisar
+                                            </a>
                                         </td>
                                     </tr>
+                                    {% else %}
                                     <tr>
-                                        <td>Maria Santos</td>
-                                        <td>Edital 02/2025</td>
-                                        <td>20/04/2025</td>
-                                        <td class="text-center">
-                                            <button class="btn btn-sm btn-outline-primary"><i class="bi bi-eye"></i> Analisar</button>
-                                        </td>
+                                        <td colspan="4" class="text-center text-muted">Nenhuma inscrição pendente para análise.</td>
                                     </tr>
-                                    <tr>
-                                        <td>Pedro Oliveira</td>
-                                        <td>Edital 01/2025</td>
-                                        <td>15/03/2025</td>
-                                        <td class="text-center">
-                                            <button class="btn btn-sm btn-outline-primary"><i class="bi bi-eye"></i> Analisar</button>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>Carla Mendes</td>
-                                        <td>Edital 02/2025</td>
-                                        <td>28/03/2025</td>
-                                        <td class="text-center">
-                                            <button class="btn btn-sm btn-outline-primary"><i class="bi bi-eye"></i> Analisar</button>
-                                        </td>
-                                    </tr>
+                                    {% endfor %}
                                 </tbody>
                             </table>
                         </div>

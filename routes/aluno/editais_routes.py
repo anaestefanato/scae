@@ -817,6 +817,55 @@ async def validar_dados_renovacao(
         )
 
 
+@router.post("/editais/renovacao/validar-etapa2")
+@requer_autenticacao(["aluno"])
+async def validar_auxilios_renovacao(
+    request: Request,
+    usuario_logado: dict = None,
+    auxilios_renovacao: List[str] = Form([]),
+    auxilios_novos: List[str] = Form([])
+):
+    """
+    Endpoint para validar dados da Etapa 2 de Renovação (Auxílios).
+    Verifica se pelo menos um auxílio foi selecionado (renovação ou novo).
+    """
+    from fastapi.responses import JSONResponse
+    
+    try:
+        # Verificar se pelo menos um auxílio foi selecionado
+        total_auxilios = len(auxilios_renovacao) + len(auxilios_novos)
+        
+        if total_auxilios == 0:
+            return JSONResponse(
+                content={
+                    "valido": False,
+                    "mensagem": "Você precisa selecionar pelo menos um auxílio para continuar com a renovação."
+                },
+                status_code=400
+            )
+        
+        # Validação bem-sucedida
+        return JSONResponse(
+            content={
+                "valido": True,
+                "mensagem": "Auxílios validados com sucesso!",
+                "total_selecionados": total_auxilios,
+                "auxilios_renovacao": auxilios_renovacao,
+                "auxilios_novos": auxilios_novos
+            },
+            status_code=200
+        )
+        
+    except Exception as e:
+        return JSONResponse(
+            content={
+                "valido": False,
+                "mensagem": f"Erro ao validar auxílios: {str(e)}"
+            },
+            status_code=500
+        )
+
+
 @router.post("/editais/renovacao")
 @requer_autenticacao(["aluno"])
 async def post_editais_renovacao(

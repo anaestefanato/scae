@@ -5,7 +5,7 @@
 
 {% block head %}
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="/static/css/editais_primeira_inscricao_aluno.css">
+    <link rel="stylesheet" href="/static/css/editais_primeira_inscricao_aluno.css?v={{ range(1, 10000) | random }}">
 {% endblock %}
 
 {% block content %}
@@ -116,32 +116,10 @@
 
                     <div class="form-row">
                         <div>
-                            <label for="logradouro" class="form-label required-field">Logradouro</label>
-                            <input type="text" class="form-control" id="logradouro" name="logradouro" value="{{aluno.rua}}" required>
-                        </div>
-                        <div>
-                            <label for="numero" class="form-label required-field">Número</label>
-                            <input type="text" class="form-control" id="numero" name="numero" value="{{aluno.numero}}" required>
-                        </div>
-                    </div>
-
-                    <div class="form-row">
-                        <div>
-                            <label for="bairro" class="form-label required-field">Bairro</label>
-                            <input type="text" class="form-control" id="bairro" name="bairro" value="{{aluno.bairro}}" required>
-                        </div>
-                        <div>
-                            <label for="cidade" class="form-label required-field">Cidade</label>
-                            <input type="text" class="form-control" id="cidade" name="cidade" value="{{aluno.cidade}}" required>
-                        </div>
-                    </div>
-
-                    <div class="form-row">
-                        <div>
                             <label for="cep" class="form-label required-field">CEP</label>
-                            <div class="input-group" style="height: 38px;">
-                                <input type="text" class="form-control" id="cep" name="cep" placeholder="00000-000" maxlength="9" value="{{ aluno.cep if aluno and aluno.cep else '' }}" required style="height: 38px;">
-                                <button class="btn btn-outline-secondary" type="button" id="btn-buscar-cep" style="height: 38px; padding: 0 12px;">
+                            <div class="input-group">
+                                <input type="text" class="form-control" id="cep" name="cep" placeholder="00000-000" maxlength="9" value="{{ aluno.cep if aluno and aluno.cep else '' }}" required>
+                                <button class="btn btn-outline-secondary" type="button" id="btn-buscar-cep">
                                     <i class="bi bi-search"></i>
                                 </button>
                             </div>
@@ -153,9 +131,39 @@
                             </div>
                         </div>
                         <div>
+                            <label for="cidade" class="form-label required-field">Cidade</label>
+                            <input type="text" class="form-control" id="cidade" name="cidade" value="{{aluno.cidade}}" required>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div>
+                            <label for="bairro" class="form-label required-field">Bairro</label>
+                            <input type="text" class="form-control" id="bairro" name="bairro" value="{{aluno.bairro}}" required>
+                        </div>
+                        <div>
                             <label for="estado" class="form-label required-field">Estado</label>
                             <input type="text" class="form-control" id="estado" name="estado" placeholder="Ex: ES" maxlength="2" value="{{ aluno.estado if aluno and aluno.estado else '' }}" readonly required>
                         </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div>
+                            <label for="logradouro" class="form-label required-field">Logradouro</label>
+                            <input type="text" class="form-control" id="logradouro" name="logradouro" value="{{aluno.rua}}" required>
+                        </div>
+                        <div>
+                            <label for="numero" class="form-label required-field">Número</label>
+                            <input type="text" class="form-control" id="numero" name="numero" value="{{aluno.numero}}" required>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div>
+                            <label for="complemento" class="form-label">Complemento</label>
+                            <input type="text" class="form-control" id="complemento" name="complemento" value="{{aluno.complemento if aluno and aluno.complemento else ''}}" placeholder="Ex: Apto 201, Bloco B">
+                        </div>
+                        <div></div>
                     </div>
                 </div>
 
@@ -799,6 +807,14 @@ async function proximaEtapa() {
             }
         }
         
+        // VALIDAR ETAPA 2 (AUXÍLIOS) COM BACKEND
+        if (etapaAtual === 2) {
+            const validacao = await validarEtapa2();
+            if (!validacao.valido) {
+                return; // Não avança se nenhum auxílio foi selecionado
+            }
+        }
+        
         document.getElementById('etapa-' + etapaAtual).style.display = 'none';
         document.getElementById('step-' + etapaAtual).classList.remove('active');
         document.getElementById('step-' + etapaAtual).classList.add('completed');
@@ -889,6 +905,55 @@ async function validarEtapa1ComDTO() {
         mostrarAlerta(
             'Erro',
             'Não foi possível validar os dados. Tente novamente.',
+            'danger'
+        );
+        return { valido: false };
+        
+    } finally {
+        // Reabilitar botão
+        btnProxima.disabled = false;
+        btnProxima.innerHTML = textoOriginal;
+    }
+}
+
+// Validar Etapa 2 (Auxílios) com Backend
+async function validarEtapa2() {
+    // Desabilitar botão durante validação
+    const btnProxima = document.getElementById('btn-proxima');
+    const textoOriginal = btnProxima.innerHTML;
+    btnProxima.disabled = true;
+    btnProxima.innerHTML = '<i class="spinner-border spinner-border-sm me-2"></i>Validando...';
+    
+    try {
+        // Coletar dados do formulário
+        const formData = new FormData(document.querySelector('form'));
+        
+        // Fazer requisição para endpoint de validação da etapa 2
+        const response = await fetch('/aluno/editais/renovacao/validar-etapa2', {
+            method: 'POST',
+            body: formData
+        });
+        
+        const resultado = await response.json();
+        
+        if (resultado.valido) {
+            // Auxílios válidos
+            return { valido: true };
+        } else {
+            // Nenhum auxílio selecionado
+            mostrarAlerta(
+                'Nenhum Auxílio Selecionado',
+                resultado.mensagem || 'Você precisa selecionar pelo menos um auxílio para continuar com a renovação.',
+                'danger'
+            );
+            return { valido: false };
+        }
+        
+    } catch (error) {
+        console.error('Erro ao validar auxílios:', error);
+        mostrarAlerta(
+            'Erro',
+            'Não foi possível validar os auxílios. Tente novamente.',
             'danger'
         );
         return { valido: false };
