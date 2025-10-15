@@ -165,38 +165,22 @@
                                     </tr>
                                 </thead>
                                 <tbody>
+                                    {% for inscricao in inscricoes_analise %}
                                     <tr>
-                                        <td>João Silva</td>
-                                        <td>Edital 01/2025</td>
-                                        <td>01/04/2025</td>
+                                        <td>{{ inscricao.aluno_nome }}</td>
+                                        <td>{{ inscricao.edital_titulo }}</td>
+                                        <td>{{ inscricao.data_inscricao|default('Data não informada') }}</td>
                                         <td class="text-center">
-                                            <button class="btn btn-sm btn-outline-primary"><i class="bi bi-eye"></i> Analisar</button>
+                                            <a href="/assistente/analise-inscricoes/{{ inscricao.id_inscricao }}" class="btn btn-sm btn-outline-primary">
+                                                <i class="bi bi-eye"></i> Analisar
+                                            </a>
                                         </td>
                                     </tr>
+                                    {% else %}
                                     <tr>
-                                        <td>Maria Santos</td>
-                                        <td>Edital 02/2025</td>
-                                        <td>20/04/2025</td>
-                                        <td class="text-center">
-                                            <button class="btn btn-sm btn-outline-primary"><i class="bi bi-eye"></i> Analisar</button>
-                                        </td>
+                                        <td colspan="4" class="text-center text-muted">Nenhuma inscrição pendente para análise.</td>
                                     </tr>
-                                    <tr>
-                                        <td>Pedro Oliveira</td>
-                                        <td>Edital 01/2025</td>
-                                        <td>15/03/2025</td>
-                                        <td class="text-center">
-                                            <button class="btn btn-sm btn-outline-primary"><i class="bi bi-eye"></i> Analisar</button>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>Carla Mendes</td>
-                                        <td>Edital 02/2025</td>
-                                        <td>28/03/2025</td>
-                                        <td class="text-center">
-                                            <button class="btn btn-sm btn-outline-primary"><i class="bi bi-eye"></i> Analisar</button>
-                                        </td>
-                                    </tr>
+                                    {% endfor %}
                                 </tbody>
                             </table>
                         </div>
