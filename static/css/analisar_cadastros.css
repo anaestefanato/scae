@@ -107,19 +107,3 @@
 #batchActions {
     transition: all 0.3s ease;
 }
-
-/* Layout para manter o footer no final */
-body {
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-}
-
-.main-content {
-    flex: 1;
-    margin-bottom: 20px;
-}
-
-.footer {
-    margin-top: auto;
-}
