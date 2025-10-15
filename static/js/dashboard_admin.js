@@ -515,3 +515,164 @@ function exportarRelatorio(tipo) {
     // Implementar lógica de exportação
     // window.open(`/admin/relatorio/${tipo}/export`, '_blank');
 }
+
+// ===== DADOS DOS ALUNOS PARA O MODAL =====
+const alunosData = {
+    'joao-silva': {
+        nome: 'João Silva Santos',
+        matricula: '2025001234',
+        email: 'joao.silva@aluno.ifes.edu.br',
+        dataSolicitacao: '13/09/2025 às 14:30'
+    },
+    'maria-costa': {
+        nome: 'Maria Fernanda Costa',
+        matricula: '2025001235',
+        email: 'maria.costa@aluno.ifes.edu.br',
+        dataSolicitacao: '13/09/2025 às 11:30'
+    },
+    'pedro-oliveira': {
+        nome: 'Pedro Henrique Oliveira',
+        matricula: '2025001236',
+        email: 'pedro.oliveira@aluno.ifes.edu.br',
+        dataSolicitacao: '12/09/2025 às 16:45'
+    }
+};
+
+// ===== FUNÇÃO PARA VISUALIZAR CADASTRO =====
+function visualizarCadastro(alunoId) {
+    const aluno = alunosData[alunoId];
+    if (aluno) {
+        document.getElementById('modalNomeCompleto').textContent = aluno.nome;
+        document.getElementById('modalMatricula').textContent = aluno.matricula;
+        document.getElementById('modalEmail').textContent = aluno.email;
+        document.getElementById('modalDataSolicitacao').textContent = aluno.dataSolicitacao;
+        
+        // Resetar seção de motivo de recusa
+        document.getElementById('motivoRecusaSection').classList.add('d-none');
+        document.getElementById('motivoRecusa').value = '';
+        
+        // Mostrar modal
+        const modal = new bootstrap.Modal(document.getElementById('detalhesAlunoModal'));
+        modal.show();
+    }
+}
+
+// ===== INICIALIZAR FUNCIONALIDADES ESPECÍFICAS DO DASHBOARD ADMIN =====
+document.addEventListener('DOMContentLoaded', function() {
+    // Event listeners para os botões do modal de detalhes do aluno
+    const confirmarBtn = document.getElementById('confirmarCadastro');
+    const recusarBtn = document.getElementById('recusarCadastro');
+    const motivoSection = document.getElementById('motivoRecusaSection');
+
+    if (confirmarBtn) {
+        // Botão confirmar cadastro
+        confirmarBtn.addEventListener('click', function() {
+            if (confirm('Deseja confirmar o cadastro deste aluno?')) {
+                alert('Cadastro confirmado com sucesso! O aluno receberá um e-mail de confirmação.');
+                bootstrap.Modal.getInstance(document.getElementById('detalhesAlunoModal')).hide();
+                // Aqui você faria a requisição para o backend
+            }
+        });
+    }
+
+    if (recusarBtn && motivoSection) {
+        // Botão recusar - mostrar campo de motivo
+        recusarBtn.addEventListener('click', function() {
+            if (motivoSection.classList.contains('d-none')) {
+                motivoSection.classList.remove('d-none');
+                recusarBtn.innerHTML = '<i class="bi bi-send me-2"></i>Enviar Recusa';
+                recusarBtn.classList.remove('btn-danger');
+                recusarBtn.classList.add('btn-warning');
+            } else {
+                const motivo = document.getElementById('motivoRecusa').value.trim();
+                if (motivo === '') {
+                    alert('Por favor, digite o motivo da recusa.');
+                    return;
+                }
+                
+                if (confirm('Deseja recusar o cadastro deste aluno? O motivo será enviado por e-mail.')) {
+                    alert('Cadastro recusado. O aluno receberá um e-mail com o motivo da recusa.');
+                    bootstrap.Modal.getInstance(document.getElementById('detalhesAlunoModal')).hide();
+                    // Aqui você faria a requisição para o backend
+                }
+            }
+        });
+
+        // Reset do botão recusar quando modal fechar
+        const detalhesAlunoModal = document.getElementById('detalhesAlunoModal');
+        if (detalhesAlunoModal) {
+            detalhesAlunoModal.addEventListener('hidden.bs.modal', function() {
+                recusarBtn.innerHTML = '<i class="bi bi-x-lg me-2"></i>Recusar';
+                recusarBtn.classList.remove('btn-warning');
+                recusarBtn.classList.add('btn-danger');
+            });
+        }
+    }
+
+    // Funcionalidade para marcar notificações como lidas
+    const marcarTodasLidasBtn = document.getElementById('marcarTodasLidas');
+    const notificationBadge = document.querySelector('.notification-badge');
+    
+    if (marcarTodasLidasBtn) {
+        marcarTodasLidasBtn.addEventListener('click', function() {
+            // Marcar todas as notificações como lidas
+            const unreadNotifications = document.querySelectorAll('.notification-item.unread');
+            
+            unreadNotifications.forEach(function(notification) {
+                // Remover classe unread e adicionar read
+                notification.classList.remove('unread');
+                notification.classList.add('read');
+                
+                // Remover indicador visual de não lida
+                const indicator = notification.querySelector('.unread-indicator');
+                if (indicator) {
+                    indicator.remove();
+                }
+                
+                // Adicionar opacidade para indicar que foi lida
+                notification.style.opacity = '0.7';
+            });
+            
+            // Esconder badge de notificação
+            if (notificationBadge) {
+                notificationBadge.style.display = 'none';
+            }
+            
+            // Atualizar badge da sidebar
+            const sidebarBadge = document.getElementById('mensagensBadge');
+            if (sidebarBadge) {
+                sidebarBadge.style.display = 'none';
+            }
+            
+            // Mostrar mensagem de confirmação
+            marcarTodasLidasBtn.innerHTML = '<i class="bi bi-check-lg me-2"></i>Marcadas como lidas';
+            marcarTodasLidasBtn.classList.remove('btn-outline-primary');
+            marcarTodasLidasBtn.classList.add('btn-success');
+            marcarTodasLidasBtn.disabled = true;
+            
+            // Fechar modal após 1 segundo
+            setTimeout(function() {
+                bootstrap.Modal.getInstance(document.getElementById('notificacoesModal')).hide();
+            }, 1000);
+        });
+    }
+    
+    // Reset do botão quando modal de notificações abrir novamente
+    const notificacoesModal = document.getElementById('notificacoesModal');
+    if (notificacoesModal && marcarTodasLidasBtn) {
+        notificacoesModal.addEventListener('show.bs.modal', function() {
+            const unreadCount = document.querySelectorAll('.notification-item.unread').length;
+            if (unreadCount === 0) {
+                marcarTodasLidasBtn.innerHTML = 'Todas as notificações foram lidas';
+                marcarTodasLidasBtn.classList.remove('btn-outline-primary');
+                marcarTodasLidasBtn.classList.add('btn-secondary');
+                marcarTodasLidasBtn.disabled = true;
+            } else {
+                marcarTodasLidasBtn.innerHTML = 'Marcar todas como lidas';
+                marcarTodasLidasBtn.classList.remove('btn-success', 'btn-secondary');
+                marcarTodasLidasBtn.classList.add('btn-outline-primary');
+                marcarTodasLidasBtn.disabled = false;
+            }
+        });
+    }
+});
