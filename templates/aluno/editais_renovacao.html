@@ -99,40 +99,40 @@
                     <div class="form-row">
                         <div>
                             <label for="data_nascimento" class="form-label required-field">Data de Nascimento</label>
-                            <input type="date" class="form-control" id="data_nascimento" name="data_nascimento" value="{{aluno.data_nascimento}}" readonly required>
+                            <input type="date" class="form-control" id="data_nascimento" name="data_nascimento" value="{{aluno.data_nascimento}}" required>
                         </div>
                         <div>
                             <label for="telefone" class="form-label required-field">Telefone</label>
-                            <input type="text" class="form-control" id="telefone" name="telefone" value="{{aluno.telefone}}" readonly required>
+                            <input type="text" class="form-control" id="telefone" name="telefone" value="{{aluno.telefone}}" required>
                         </div>
                     </div>
 
                     <div class="form-row single-column">
                         <div>
                             <label for="email" class="form-label required-field">E-mail</label>
-                            <input type="email" class="form-control" id="email" name="email" value="{{aluno.email}}" readonly required>
+                            <input type="email" class="form-control" id="email" name="email" value="{{aluno.email}}" required>
                         </div>
                     </div>
 
                     <div class="form-row">
                         <div>
                             <label for="logradouro" class="form-label required-field">Logradouro</label>
-                            <input type="text" class="form-control" id="logradouro" name="logradouro" value="{{aluno.rua}}" readonly required>
+                            <input type="text" class="form-control" id="logradouro" name="logradouro" value="{{aluno.rua}}" required>
                         </div>
                         <div>
                             <label for="numero" class="form-label required-field">Número</label>
-                            <input type="text" class="form-control" id="numero" name="numero" value="{{aluno.numero}}" readonly required>
+                            <input type="text" class="form-control" id="numero" name="numero" value="{{aluno.numero}}" required>
                         </div>
                     </div>
 
                     <div class="form-row">
                         <div>
                             <label for="bairro" class="form-label required-field">Bairro</label>
-                            <input type="text" class="form-control" id="bairro" name="bairro" value="{{aluno.bairro}}" readonly required>
+                            <input type="text" class="form-control" id="bairro" name="bairro" value="{{aluno.bairro}}" required>
                         </div>
                         <div>
                             <label for="cidade" class="form-label required-field">Cidade</label>
-                            <input type="text" class="form-control" id="cidade" name="cidade" value="{{aluno.cidade}}" readonly required>
+                            <input type="text" class="form-control" id="cidade" name="cidade" value="{{aluno.cidade}}" required>
                         </div>
                     </div>
 
@@ -140,8 +140,8 @@
                         <div>
                             <label for="cep" class="form-label required-field">CEP</label>
                             <div class="input-group" style="height: 38px;">
-                                <input type="text" class="form-control" id="cep" name="cep" placeholder="00000-000" maxlength="9" value="{{ aluno.cep if aluno and aluno.cep else '' }}" readonly required style="height: 38px;">
-                                <button class="btn btn-outline-secondary" type="button" id="btn-buscar-cep" disabled style="height: 38px; padding: 0 12px;">
+                                <input type="text" class="form-control" id="cep" name="cep" placeholder="00000-000" maxlength="9" value="{{ aluno.cep if aluno and aluno.cep else '' }}" required style="height: 38px;">
+                                <button class="btn btn-outline-secondary" type="button" id="btn-buscar-cep" style="height: 38px; padding: 0 12px;">
                                     <i class="bi bi-search"></i>
                                 </button>
                             </div>
@@ -180,11 +180,11 @@
                     <div class="form-row">
                         <div>
                             <label for="ano_ingresso" class="form-label required-field">Ano de Ingresso</label>
-                            <input type="number" class="form-control" id="ano_ingresso" name="ano_ingresso" value="{{ aluno.ano_ingresso if aluno and aluno.ano_ingresso else '' }}" min="2000" max="2030" readonly required>
+                            <input type="number" class="form-control" id="ano_ingresso" name="ano_ingresso" value="{{ aluno.ano_ingresso if aluno and aluno.ano_ingresso else '' }}" min="2000" max="2030" required>
                         </div>
                         <div>
                             <label for="ano_conclusao_previsto" class="form-label required-field">Ano Previsto para Conclusão</label>
-                            <input type="number" class="form-control" id="ano_conclusao_previsto" name="ano_conclusao_previsto" value="{{ aluno.ano_conclusao_previsto if aluno and aluno.ano_conclusao_previsto else '' }}" min="2024" max="2035" readonly required>
+                            <input type="number" class="form-control" id="ano_conclusao_previsto" name="ano_conclusao_previsto" value="{{ aluno.ano_conclusao_previsto if aluno and aluno.ano_conclusao_previsto else '' }}" min="2024" max="2035" required>
                         </div>
                     </div>
                 </div>
@@ -199,11 +199,11 @@
                     <div class="form-row">
                         <div>
                             <label for="pessoas_residencia" class="form-label required-field">Pessoas na Residência</label>
-                            <input type="number" class="form-control" id="pessoas_residencia" name="pessoas_residencia" value="{{ aluno.quantidade_pessoas if aluno and aluno.quantidade_pessoas else '' }}" readonly required>
+                            <input type="number" class="form-control" id="pessoas_residencia" name="pessoas_residencia" value="{{ aluno.quantidade_pessoas if aluno and aluno.quantidade_pessoas else '' }}" required>
                         </div>
                         <div>
                             <label for="renda_percapita" class="form-label required-field">Renda Familiar Per Capita</label>
-                            <select class="form-control" id="renda_percapita" name="renda_percapita" disabled required>
+                            <select class="form-control" id="renda_percapita" name="renda_percapita" required>
                                 <option value="menor_1" {% if aluno and aluno.renda_per_capita and aluno.renda_per_capita <= 1412 %}selected{% endif %}>Menor ou igual a 1 salário mínimo</option>
                                 <option value="ate_1_5" {% if aluno and aluno.renda_per_capita and aluno.renda_per_capita > 1412 and aluno.renda_per_capita <= 2118 %}selected{% endif %}>Até 1,5 salário mínimo</option>
                                 <option value="maior_1_5" {% if aluno and aluno.renda_per_capita and aluno.renda_per_capita > 2118 %}selected{% endif %}>Maior que 1,5 salário mínimo</option>
@@ -214,14 +214,14 @@
                     <div class="form-row">
                         <div>
                             <label for="bolsa_pesquisa" class="form-label required-field">Recebe Bolsa de Pesquisa?</label>
-                            <select class="form-control" id="bolsa_pesquisa" name="bolsa_pesquisa" disabled required>
+                            <select class="form-control" id="bolsa_pesquisa" name="bolsa_pesquisa" required>
                                 <option value="nao" {% if not aluno or not aluno.bolsa_pesquisa or aluno.bolsa_pesquisa == 'nao' %}selected{% endif %}>Não</option>
                                 <option value="sim" {% if aluno and aluno.bolsa_pesquisa == 'sim' %}selected{% endif %}>Sim</option>
                             </select>
                         </div>
                         <div>
                             <label for="cad_unico" class="form-label required-field">Inscrito no CAD Único?</label>
-                            <select class="form-control" id="cad_unico" name="cad_unico" disabled required>
+                            <select class="form-control" id="cad_unico" name="cad_unico" required>
                                 <option value="sim" {% if aluno and aluno.cad_unico == 'sim' %}selected{% endif %}>Sim</option>
                                 <option value="nao" {% if not aluno or not aluno.cad_unico or aluno.cad_unico == 'nao' %}selected{% endif %}>Não</option>
                             </select>
@@ -231,7 +231,7 @@
                     <div class="form-row">
                         <div>
                             <label for="bolsa_familia" class="form-label required-field">Recebe Bolsa Família?</label>
-                            <select class="form-control" id="bolsa_familia" name="bolsa_familia" disabled required>
+                            <select class="form-control" id="bolsa_familia" name="bolsa_familia" required>
                                 <option value="nao" {% if not aluno or not aluno.bolsa_familia or aluno.bolsa_familia == 'nao' %}selected{% endif %}>Não</option>
                                 <option value="sim" {% if aluno and aluno.bolsa_familia == 'sim' %}selected{% endif %}>Sim</option>
                             </select>
@@ -316,7 +316,7 @@
                 </div>
 
                 <!-- Perguntas de Transporte (se renovado) -->
-                <div class="form-section" id="perguntas-transporte-renovacao" style="{% if 'transporte' in auxilios_atuais %}display: block;{% else %}display: none;{% endif %}">
+                <div class="form-section" id="perguntas-transporte-renovacao" style="display: none;">
                     <div class="section-title">
                         <i class="bi bi-question-circle"></i>
                         Informações sobre Transporte
@@ -447,6 +447,203 @@
                     </div>
                 </div>
 
+                <!-- Perguntas sobre Transporte (Novo Auxílio) -->
+                <div class="form-section" id="perguntas-transporte-novo" style="display: none;">
+                    <div class="section-title">
+                        <i class="bi bi-question-circle"></i>
+                        Informações sobre Transporte
+                    </div>
+                    
+                    <div class="form-row single-column">
+                        <div>
+                            <label class="form-label required-field">Qual tipo de transporte você utiliza para vir até o campus?</label>
+                            <div class="radio-group">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" id="transporte_van_novo" name="tipo_transporte_novo" value="van" onchange="toggleTipoTransporteNovo()">
+                                    <label class="form-check-label" for="transporte_van_novo">
+                                        <i class="bi bi-minecart text-primary me-2"></i>
+                                        <strong>Van Escolar</strong>
+                                    </label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" id="transporte_onibus_novo" name="tipo_transporte_novo" value="onibus" onchange="toggleTipoTransporteNovo()">
+                                    <label class="form-check-label" for="transporte_onibus_novo">
+                                        <i class="bi bi-bus-front text-success me-2"></i>
+                                        <strong>Ônibus</strong>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Opções de Ônibus -->
+                    <div class="form-row single-column" id="opcoes-onibus-novo" style="display: none;">
+                        <div>
+                            <label class="form-label required-field">Tipo de ônibus (pode selecionar mais de um):</label>
+                            <div class="checkbox-group">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="onibus_municipal_novo" name="tipo_onibus_novo" value="municipal">
+                                    <label class="form-check-label" for="onibus_municipal_novo">
+                                        <i class="bi bi-building text-info me-2"></i>
+                                        <strong>Ônibus Municipal</strong>
+                                    </label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="onibus_intermunicipal_novo" name="tipo_onibus_novo" value="intermunicipal">
+                                    <label class="form-check-label" for="onibus_intermunicipal_novo">
+                                        <i class="bi bi-signpost-2 text-warning me-2"></i>
+                                        <strong>Ônibus Intermunicipal</strong>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Gasto com Ônibus (Diário) -->
+                    <div class="form-row single-column" id="gasto-onibus-novo" style="display: none;">
+                        <div>
+                            <label for="gasto_passagens_dia_novo" class="form-label required-field">Quanto você gasta com passagens em um dia (ida e volta)?</label>
+                            <div class="input-group" style="max-width: 500px; height: 45px;">
+                                <span class="input-group-text" style="min-width: 50px; height: 45px; display: flex; align-items: center; justify-content: center;">R$</span>
+                                <input type="number" class="form-control" id="gasto_passagens_dia_novo" name="gasto_passagens_dia_novo" placeholder="Ex: 12.00" step="0.01" min="0" style="height: 45px;">
+                            </div>
+                            <div class="form-text">Informe o valor total gasto diariamente com passagens (ida + volta)</div>
+                        </div>
+                    </div>
+
+                    <!-- Gasto com Van Escolar (Mensal) -->
+                    <div class="form-row single-column" id="gasto-van-novo" style="display: none;">
+                        <div>
+                            <label for="gasto_van_mensal_novo" class="form-label required-field">Quanto você gasta mensalmente com a van escolar?</label>
+                            <div class="input-group" style="max-width: 500px; height: 45px;">
+                                <span class="input-group-text" style="min-width: 50px; height: 45px; display: flex; align-items: center; justify-content: center;">R$</span>
+                                <input type="number" class="form-control" id="gasto_van_mensal_novo" name="gasto_van_mensal_novo" placeholder="Ex: 300.00" step="0.01" min="0" style="height: 45px;">
+                            </div>
+                            <div class="form-text">Informe o valor mensal pago pelo serviço de van escolar</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Documentação Específica para Transporte (Novo Auxílio) -->
+                <div class="form-section" id="docs-transporte-novo" style="display: none;">
+                    <div class="section-title">
+                        <i class="bi bi-file-earmark-text"></i>
+                        Documentação Específica - Auxílio Transporte
+                    </div>
+                    
+                    <div class="alert alert-info">
+                        <i class="bi bi-info-circle me-2"></i>
+                        <strong>Escolha UMA das opções abaixo:</strong>
+                    </div>
+
+                    <div class="form-row">
+                        <div>
+                            <label for="comprovante_residencia_transporte_novo" class="form-label required-field">Comprovante de Residência Recente</label>
+                            <input type="file" class="form-control" id="comprovante_residencia_transporte_novo" name="comprovante_residencia_transporte_novo" accept="application/pdf">
+                            <div class="form-text">Documento atualizado</div>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div>
+                            <label for="passe_escolar_frente_novo" class="form-label">Foto Cartão Passe Escolar (Frente)</label>
+                            <input type="file" class="form-control" id="passe_escolar_frente_novo" name="passe_escolar_frente_novo" accept="image/*,application/pdf">
+                        </div>
+                        <div>
+                            <label for="passe_escolar_verso_novo" class="form-label">Foto Cartão Passe Escolar (Verso)</label>
+                            <input type="file" class="form-control" id="passe_escolar_verso_novo" name="passe_escolar_verso_novo" accept="image/*,application/pdf">
+                        </div>
+                    </div>
+
+                    <div class="form-row single-column">
+                        <div>
+                            <label for="comprovante_recarga_novo" class="form-label">Último Comprovante de Recarga do Cartão</label>
+                            <input type="file" class="form-control" id="comprovante_recarga_novo" name="comprovante_recarga_novo" accept="image/*,application/pdf">
+                            <div class="form-text">Com menos de 2 meses</div>
+                        </div>
+                    </div>
+
+                    <div class="separator-ou">OU</div>
+
+                    <div class="form-row single-column">
+                        <div>
+                            <label for="comprovante_passagens_novo" class="form-label">Comprovante de Pagamento de Passagens</label>
+                            <input type="file" class="form-control" id="comprovante_passagens_novo" name="comprovante_passagens_novo" accept="application/pdf">
+                            <div class="form-text">2 viagens de ida e 2 de volta, com data a partir do início das aulas</div>
+                        </div>
+                    </div>
+
+                    <div class="separator-ou">OU</div>
+
+                    <div class="form-row single-column">
+                        <div>
+                            <label for="contrato_transporte_novo" class="form-label">Contrato de Transporte Escolar</label>
+                            <input type="file" class="form-control" id="contrato_transporte_novo" name="contrato_transporte_novo" accept="application/pdf">
+                            <div class="form-text">Cópia do contrato atual de serviço</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Documentação Específica para Transporte (Renovação) -->
+                <div class="form-section" id="docs-transporte-renovacao" style="display: none;">
+                    <div class="section-title">
+                        <i class="bi bi-file-earmark-text"></i>
+                        Documentação Específica - Auxílio Transporte (Renovação)
+                    </div>
+                    
+                    <div class="alert alert-info">
+                        <i class="bi bi-info-circle me-2"></i>
+                        <strong>Escolha UMA das opções abaixo:</strong>
+                    </div>
+
+                    <div class="form-row">
+                        <div>
+                            <label for="comprovante_residencia_transporte_renovacao" class="form-label required-field">Comprovante de Residência Recente</label>
+                            <input type="file" class="form-control" id="comprovante_residencia_transporte_renovacao" name="comprovante_residencia_transporte_renovacao" accept="application/pdf">
+                            <div class="form-text">Documento atualizado</div>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div>
+                            <label for="passe_escolar_frente_renovacao" class="form-label">Foto Cartão Passe Escolar (Frente)</label>
+                            <input type="file" class="form-control" id="passe_escolar_frente_renovacao" name="passe_escolar_frente_renovacao" accept="image/*,application/pdf">
+                        </div>
+                        <div>
+                            <label for="passe_escolar_verso_renovacao" class="form-label">Foto Cartão Passe Escolar (Verso)</label>
+                            <input type="file" class="form-control" id="passe_escolar_verso_renovacao" name="passe_escolar_verso_renovacao" accept="image/*,application/pdf">
+                        </div>
+                    </div>
+
+                    <div class="form-row single-column">
+                        <div>
+                            <label for="comprovante_recarga_renovacao" class="form-label">Último Comprovante de Recarga do Cartão</label>
+                            <input type="file" class="form-control" id="comprovante_recarga_renovacao" name="comprovante_recarga_renovacao" accept="image/*,application/pdf">
+                            <div class="form-text">Com menos de 2 meses</div>
+                        </div>
+                    </div>
+
+                    <div class="separator-ou">OU</div>
+
+                    <div class="form-row single-column">
+                        <div>
+                            <label for="comprovante_passagens_renovacao" class="form-label">Comprovante de Pagamento de Passagens</label>
+                            <input type="file" class="form-control" id="comprovante_passagens_renovacao" name="comprovante_passagens_renovacao" accept="application/pdf">
+                            <div class="form-text">2 viagens de ida e 2 de volta, com data a partir do início das aulas</div>
+                        </div>
+                    </div>
+
+                    <div class="separator-ou">OU</div>
+
+                    <div class="form-row single-column">
+                        <div>
+                            <label for="contrato_transporte_renovacao" class="form-label">Contrato de Transporte Escolar</label>
+                            <input type="file" class="form-control" id="contrato_transporte_renovacao" name="contrato_transporte_renovacao" accept="application/pdf">
+                            <div class="form-text">Cópia do contrato atual de serviço</div>
+                        </div>
+                    </div>
+                </div>
+
                 <!-- Documentação para Novo Auxílio Moradia -->
                 <div class="form-section" id="docs-moradia-novo" style="display: none;">
                     <div class="section-title">
@@ -484,64 +681,37 @@
                         Documentos Obrigatórios
                     </div>
 
-                    <div class="alert alert-warning">
-                        <i class="bi bi-exclamation-triangle me-2"></i>
-                        <strong>Atenção:</strong> Os documentos abaixo já foram enviados anteriormente. Você pode mantê-los ou enviar versões atualizadas.
+                    <div class="alert alert-info">
+                        <i class="bi bi-info-circle me-2"></i>
+                        <strong>Atenção:</strong> Por favor, envie novamente todos os documentos obrigatórios para a renovação.
                     </div>
 
                     <div class="form-row single-column">
                         <div>
-                            <label for="anexo_documentos_renovacao" class="form-label">Documento de Identificação</label>
-                            <div class="mb-2">
-                                <span class="badge bg-success"><i class="bi bi-check-circle me-1"></i>Arquivo enviado: documento_identidade.pdf</span>
-                                <button type="button" class="btn btn-sm btn-outline-secondary ms-2" onclick="habilitarEnvioDoc('anexo_documentos_renovacao')">
-                                    <i class="bi bi-pencil me-1"></i>Atualizar
-                                </button>
-                            </div>
-                            <input type="file" class="form-control" id="anexo_documentos_renovacao" name="anexo_documentos_renovacao" accept="application/pdf" disabled>
+                            <label for="anexo_documentos" class="form-label required-field">Documento de Identificação</label>
+                            <input type="file" class="form-control" id="anexo_documentos" name="anexo_documentos" accept=".pdf,image/*" required>
                             <div class="file-upload-helper">
                                 <i class="bi bi-info-circle"></i>
-                                Documento de identificação (PDF, máx. 10MB)
+                                Documento de identificação (PDF ou imagem, máx. 10MB)
                             </div>
                         </div>
                     </div>
 
                     <div class="form-row">
                         <div>
-                            <label for="anexo_1_renovacao" class="form-label">Anexo I - Declaração de Renda</label>
-                            <div class="mb-2">
-                                <span class="badge bg-success"><i class="bi bi-check-circle me-1"></i>Arquivo enviado: anexo_1.pdf</span>
-                                <button type="button" class="btn btn-sm btn-outline-secondary ms-2" onclick="habilitarEnvioDoc('anexo_1_renovacao')">
-                                    <i class="bi bi-pencil me-1"></i>Atualizar
-                                </button>
+                            <label for="anexo_1" class="form-label required-field">Anexo I - Declaração de Renda</label>
+                            <input type="file" class="form-control" id="anexo_1" name="anexo_1" accept=".pdf,image/*" required>
+                            <div class="file-upload-helper">
+                                <i class="bi bi-info-circle"></i>
+                                Termo comprobatório de declaração de renda (PDF ou imagem, máx. 10MB)
                             </div>
-                            <input type="file" class="form-control" id="anexo_1_renovacao" name="anexo_1_renovacao" accept="application/pdf" disabled>
                         </div>
                         <div>
-                            <label for="anexo_3_renovacao" class="form-label">Anexo III - Termo de Responsabilidade</label>
-                            <div class="mb-2">
-                                <span class="badge bg-success"><i class="bi bi-check-circle me-1"></i>Arquivo enviado: anexo_3.pdf</span>
-                                <button type="button" class="btn btn-sm btn-outline-secondary ms-2" onclick="habilitarEnvioDoc('anexo_3_renovacao')">
-                                    <i class="bi bi-pencil me-1"></i>Atualizar
-                                </button>
-                            </div>
-                            <input type="file" class="form-control" id="anexo_3_renovacao" name="anexo_3_renovacao" accept="application/pdf" disabled>
-                        </div>
-                    </div>
-
-                    <!-- Documentos específicos de transporte -->
-                    <div id="docs-transporte-existente">
-                        <h6 class="mt-4 mb-3"><i class="bi bi-bus-front me-2"></i>Documentos do Auxílio Transporte</h6>
-                        <div class="form-row single-column">
-                            <div>
-                                <label for="comprovante_residencia_transporte_renovacao" class="form-label">Comprovante de Residência (Transporte)</label>
-                                <div class="mb-2">
-                                    <span class="badge bg-success"><i class="bi bi-check-circle me-1"></i>Arquivo enviado: comprovante_residencia_transp.pdf</span>
-                                    <button type="button" class="btn btn-sm btn-outline-secondary ms-2" onclick="habilitarEnvioDoc('comprovante_residencia_transporte_renovacao')">
-                                        <i class="bi bi-pencil me-1"></i>Atualizar
-                                    </button>
-                                </div>
-                                <input type="file" class="form-control" id="comprovante_residencia_transporte_renovacao" name="comprovante_residencia_transporte_renovacao" accept="application/pdf" disabled>
+                            <label for="anexo_3" class="form-label required-field">Anexo III - Termo de Responsabilidade</label>
+                            <input type="file" class="form-control" id="anexo_3" name="anexo_3" accept=".pdf,image/*" required>
+                            <div class="file-upload-helper">
+                                <i class="bi bi-info-circle"></i>
+                                Termo de responsabilidade (PDF ou imagem, máx. 10MB)
                             </div>
                         </div>
                     </div>
@@ -619,8 +789,16 @@ function atualizarBarraProgresso() {
     progressFill.style.width = porcentagem + '%';
 }
 
-function proximaEtapa() {
+async function proximaEtapa() {
     if (etapaAtual < 3) {
+        // VALIDAR ETAPA 1 COM DTO DO BACKEND
+        if (etapaAtual === 1) {
+            const validacao = await validarEtapa1ComDTO();
+            if (!validacao.valido) {
+                return; // Não avança se houver erros
+            }
+        }
+        
         document.getElementById('etapa-' + etapaAtual).style.display = 'none';
         document.getElementById('step-' + etapaAtual).classList.remove('active');
         document.getElementById('step-' + etapaAtual).classList.add('completed');
@@ -666,6 +844,130 @@ function voltarEtapa() {
         
         window.scrollTo({ top: 0, behavior: 'smooth' });
     }
+}
+
+// Validar Etapa 1 usando DTO do backend
+async function validarEtapa1ComDTO() {
+    // Desabilitar botão durante validação
+    const btnProxima = document.getElementById('btn-proxima');
+    const textoOriginal = btnProxima.innerHTML;
+    btnProxima.disabled = true;
+    btnProxima.innerHTML = '<i class="spinner-border spinner-border-sm me-2"></i>Validando...';
+    
+    try {
+        // Coletar dados do formulário
+        const formData = new FormData(document.querySelector('form'));
+        
+        // Fazer requisição para endpoint de validação
+        const response = await fetch('/aluno/editais/renovacao/validar', {
+            method: 'POST',
+            body: formData
+        });
+        
+        const resultado = await response.json();
+        
+        if (resultado.valido) {
+            // Dados válidos - limpar todos os erros
+            limparErrosValidacao();
+            return { valido: true };
+        } else {
+            // Dados inválidos - mostrar erros
+            mostrarErrosDTO(resultado.erros);
+            
+            // Mostrar alerta
+            mostrarAlerta(
+                'Erro de Validação',
+                resultado.mensagem || 'Por favor, corrija os campos destacados.',
+                'danger'
+            );
+            
+            return { valido: false, erros: resultado.erros };
+        }
+        
+    } catch (error) {
+        console.error('Erro ao validar dados:', error);
+        mostrarAlerta(
+            'Erro',
+            'Não foi possível validar os dados. Tente novamente.',
+            'danger'
+        );
+        return { valido: false };
+        
+    } finally {
+        // Reabilitar botão
+        btnProxima.disabled = false;
+        btnProxima.innerHTML = textoOriginal;
+    }
+}
+
+// Mostrar erros retornados pelo DTO
+function mostrarErrosDTO(erros) {
+    // Limpar erros anteriores
+    limparErrosValidacao();
+    
+    let primeiroComErro = null;
+    
+    erros.forEach(erro => {
+        const campo = document.querySelector(`[name="${erro.campo}"]`);
+        if (campo) {
+            // Marcar campo como inválido
+            campo.classList.add('is-invalid');
+            campo.classList.remove('is-valid');
+            
+            // Adicionar mensagem de erro
+            const feedback = document.createElement('div');
+            feedback.className = 'invalid-feedback';
+            feedback.textContent = erro.mensagem;
+            campo.parentElement.appendChild(feedback);
+            
+            if (!primeiroComErro) {
+                primeiroComErro = campo;
+            }
+        }
+    });
+    
+    // Focar no primeiro campo com erro
+    if (primeiroComErro) {
+        primeiroComErro.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        setTimeout(() => primeiroComErro.focus(), 500);
+    }
+}
+
+// Limpar todos os erros de validação
+function limparErrosValidacao() {
+    // Remover classes de erro
+    document.querySelectorAll('.is-invalid').forEach(campo => {
+        campo.classList.remove('is-invalid');
+    });
+    
+    // Remover mensagens de erro
+    document.querySelectorAll('.invalid-feedback').forEach(mensagem => {
+        mensagem.remove();
+    });
+}
+
+// Mostrar alerta
+function mostrarAlerta(titulo, mensagem, tipo) {
+    // Criar alerta Bootstrap
+    const alertaDiv = document.createElement('div');
+    alertaDiv.className = `alert alert-${tipo} alert-dismissible fade show`;
+    alertaDiv.setAttribute('role', 'alert');
+    alertaDiv.innerHTML = `
+        <strong>${titulo}:</strong> ${mensagem}
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    `;
+    
+    // Inserir no início do formulário
+    const formContainer = document.querySelector('.form-container');
+    formContainer.insertBefore(alertaDiv, formContainer.firstChild);
+    
+    // Auto-remover após 5 segundos
+    setTimeout(() => {
+        alertaDiv.remove();
+    }, 5000);
+    
+    // Scroll para o topo
+    window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
 function habilitarEdicao(secao) {
@@ -732,11 +1034,14 @@ function cancelarEdicao() {
 function toggleDocumentosTransporteRenovacao() {
     const checkbox = document.getElementById('renovar_transporte');
     const perguntasSection = document.getElementById('perguntas-transporte-renovacao');
+    const docsSection = document.getElementById('docs-transporte-renovacao');
     
-    if (checkbox.checked) {
+    if (checkbox && checkbox.checked) {
         perguntasSection.style.display = 'block';
+        docsSection.style.display = 'block';
     } else {
         perguntasSection.style.display = 'none';
+        docsSection.style.display = 'none';
     }
 }
 
@@ -767,6 +1072,49 @@ function toggleDocumentosMoradiaRenovacao() {
         docsSection.style.display = 'block';
     } else {
         docsSection.style.display = 'none';
+    }
+}
+
+function toggleDocumentosTransporteNovoRenovacao() {
+    const checkbox = document.getElementById('novo_transporte');
+    const perguntasSection = document.getElementById('perguntas-transporte-novo');
+    const docsSection = document.getElementById('docs-transporte-novo');
+    
+    if (checkbox && checkbox.checked) {
+        perguntasSection.style.display = 'block';
+        docsSection.style.display = 'block';
+    } else {
+        perguntasSection.style.display = 'none';
+        docsSection.style.display = 'none';
+        // Limpar seleções
+        document.querySelectorAll('input[name="tipo_transporte_novo"]').forEach(radio => radio.checked = false);
+        document.getElementById('opcoes-onibus-novo').style.display = 'none';
+        document.getElementById('gasto-onibus-novo').style.display = 'none';
+        document.getElementById('gasto-van-novo').style.display = 'none';
+    }
+}
+
+function toggleTipoTransporteNovo() {
+    const vanRadio = document.getElementById('transporte_van_novo');
+    const onibusRadio = document.getElementById('transporte_onibus_novo');
+    const opcoesOnibus = document.getElementById('opcoes-onibus-novo');
+    const gastoOnibus = document.getElementById('gasto-onibus-novo');
+    const gastoVan = document.getElementById('gasto-van-novo');
+    
+    if (vanRadio.checked) {
+        // Mostrar campo de gasto com van
+        gastoVan.style.display = 'block';
+        // Ocultar opções de ônibus
+        opcoesOnibus.style.display = 'none';
+        gastoOnibus.style.display = 'none';
+        // Limpar seleções de ônibus (checkboxes)
+        document.querySelectorAll('input[name="tipo_onibus_novo"]').forEach(checkbox => checkbox.checked = false);
+    } else if (onibusRadio.checked) {
+        // Mostrar opções de ônibus
+        opcoesOnibus.style.display = 'block';
+        gastoOnibus.style.display = 'block';
+        // Ocultar campo de van
+        gastoVan.style.display = 'none';
     }
 }
 
@@ -872,6 +1220,14 @@ document.addEventListener('DOMContentLoaded', function() {
     
     if (btnBuscarCep) {
         btnBuscarCep.addEventListener('click', buscarCEP);
+    }
+    
+    // Inicializar visibilidade dos campos de transporte se o checkbox já vier marcado
+    const checkboxTransporte = document.getElementById('renovar_transporte');
+    if (checkboxTransporte && checkboxTransporte.checked) {
+        toggleDocumentosTransporteRenovacao();
+        // Também inicializar o tipo de transporte selecionado
+        toggleTipoTransporteRenovacao();
     }
 });
 </script>
