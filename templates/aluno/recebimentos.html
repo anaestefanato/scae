@@ -10,72 +10,47 @@
 
 {% block content %}
 <div class="main-content" id="mainContent">
-    <!-- Welcome Banner similar to dashboard -->
+    <!-- Welcome Banner -->
     <div class="welcome-banner mb-4">
         <div class="row align-items-center">
             <div class="col-12">
                 <div class="d-flex align-items-center mb-3">
                     <h4 class="mb-0">Histórico de Recebimentos</h4>
                 </div>
-                <p>Acompanhe todos os seus recebimentos de auxílios estudantis e tenha controle total sobre suas finanças.</p>
+                <p>Acompanhe todos os seus recebimentos de auxílios estudantis e confirme o recebimento quando necessário.</p>
             </div>
         </div>
     </div>
 
-    <!-- Cards de Estatísticas -->
-    <div class="row mb-4">
-        <div class="col-md-4">
-            <div class="card stats-card">
-                <div class="number">R$ {{ "%.2f"|format(estatisticas.total_valor or '0') }}</div>
-                <div class="label">Total Recebido</div>
-            </div>
-        </div>
-        <div class="col-md-4">
-            <div class="card stats-card">
-                <div class="number">{{ estatisticas.total_recebimentos or '0' }}</div>
-                <div class="label">Recebimentos Confirmados</div>
-            </div>
-        </div>
-        <div class="col-md-4">
-            <div class="card stats-card">
-                <div class="number">{{ estatisticas.tipos_auxilio or '0' }}</div>
-                <div class="label">Tipos de Auxílio</div>
-            </div>
-        </div>
+    <!-- Mensagens de feedback -->
+    {% if request.session.get('sucesso') %}
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+        <i class="bi bi-check-circle me-2"></i>{{ request.session.pop('sucesso') }}
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
     </div>
+    {% endif %}
+    
+    {% if request.session.get('erro') %}
+    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        <i class="bi bi-exclamation-triangle me-2"></i>{{ request.session.pop('erro') }}
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+    {% endif %}
 
-    <!-- Conteúdo Principal -->
-    <div class="row align-items-stretch">
-        <div class="col-md-8 d-flex flex-column">
-            <div class="card flex-grow-1">
+    <!-- Histórico de Pagamentos -->
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
                 <div class="card-header d-flex justify-content-between align-items-center">
                     <span><i class="bi bi-cash-coin me-2"></i>Histórico de Pagamentos</span>
-                    <select class="form-select w-auto" style="font-size:0.95rem;" onchange="filtrarAuxilio(this.value)">
-                        <option value="todos">Todos os Auxílios</option>
-                        {% set tipos_vistos = [] %}
-                        {% for recebimento in recebimentos %}
-                            {% set tipo_normalizado = recebimento.tipo_auxilio.replace(' ', '_').replace('auxilio_', '') %}
-                            {% if tipo_normalizado not in tipos_vistos %}
-                                {% set _ = tipos_vistos.append(tipo_normalizado) %}
-                                <option value="{{ tipo_normalizado }}">
-                                    {% if recebimento.tipo_auxilio == 'auxilio alimentacao' %}Auxílio Alimentação
-                                    {% elif recebimento.tipo_auxilio == 'auxilio transporte' %}Auxílio Transporte
-                                    {% elif recebimento.tipo_auxilio == 'auxilio moradia' %}Auxílio Moradia
-                                    {% elif recebimento.tipo_auxilio == 'auxilio material' %}Auxílio Material Didático
-                                    {% else %}{{ recebimento.tipo_auxilio|title }}{% endif %}
-                                </option>
-                            {% endif %}
-                        {% endfor %}
-                    </select>
                 </div>
                 <div class="card-body p-0">
                     <div class="table-responsive">
                         <table class="table table-striped mb-0" id="tabelaRecebimentos">
                             <thead>
                                 <tr>
-                                    <th>Auxílio</th>
                                     <th>Referente ao Mês</th>
-                                    <th>Valor</th>
+                                    <th>Valor Total</th>
                                     <th>Status</th>
                                     <th>Data de Recebimento</th>
                                     <th>Ações</th>
@@ -84,22 +59,9 @@
                             <tbody>
                                 {% if recebimentos %}
                                     {% for recebimento in recebimentos %}
-                                    <tr data-auxilio="{{ recebimento.tipo_auxilio.replace(' ', '_').replace('auxilio_', '') }}">
-                                        <td>
-                                            {% if recebimento.tipo_auxilio == 'auxilio alimentacao' %}
-                                                <i class="bi bi-cup-hot me-2 text-success"></i>Alimentação
-                                            {% elif recebimento.tipo_auxilio == 'auxilio transporte' %}
-                                                <i class="bi bi-bus-front me-2 text-success"></i>Transporte
-                                            {% elif recebimento.tipo_auxilio == 'auxilio moradia' %}
-                                                <i class="bi bi-house me-2 text-success"></i>Moradia
-                                            {% elif recebimento.tipo_auxilio == 'auxilio material' %}
-                                                <i class="bi bi-book me-2 text-success"></i>Material Didático
-                                            {% else %}
-                                                <i class="bi bi-gift me-2 text-success"></i>{{ recebimento.tipo_auxilio|title }}
-                                            {% endif %}
-                                        </td>
+                                    <tr>
                                         <td>{{ recebimento.mes_referencia }}/{{ recebimento.ano_referencia }}</td>
-                                        <td class="fw-bold text-success">R$ {{ "%.2f"|format(recebimento.valor) }}</td>
+                                        <td class="fw-bold text-success">R$ {{ "%.2f"|format(recebimento.valor_total) }}</td>
                                         <td>
                                             <span class="status-badge 
                                                 {% if recebimento.status == 'confirmado' %}status-deferido
@@ -112,15 +74,30 @@
                                         </td>
                                         <td>{{ recebimento.data_recebimento }}</td>
                                         <td>
-                                            <button class="btn btn-sm btn-outline-info" onclick="mostrarDetalhes('{{ recebimento.id_recebimento }}')">
-                                                <i class="bi bi-eye me-1"></i>Ver
-                                            </button>
+                                            {% if recebimento.status == 'pendente' %}
+                                                <button class="btn btn-sm btn-success" 
+                                                    data-mes="{{ recebimento.mes_referencia }}"
+                                                    data-ano="{{ recebimento.ano_referencia }}"
+                                                    data-valor="{{ recebimento.valor_total }}"
+                                                    data-auxilios='{{ recebimento.auxilios|tojson }}'
+                                                    onclick="abrirModalConfirmacao(this.dataset.mes, this.dataset.ano, parseFloat(this.dataset.valor), JSON.parse(this.dataset.auxilios))">
+                                                    <i class="bi bi-check-circle me-1"></i>Confirmar
+                                                </button>
+                                            {% else %}
+                                                <button class="btn btn-sm btn-outline-info" 
+                                                    data-mes="{{ recebimento.mes_referencia }}"
+                                                    data-ano="{{ recebimento.ano_referencia }}"
+                                                    data-auxilios='{{ recebimento.auxilios|tojson }}'
+                                                    onclick="mostrarDetalhes(this.dataset.mes, this.dataset.ano, JSON.parse(this.dataset.auxilios))">
+                                                    <i class="bi bi-eye me-1"></i>Ver
+                                                </button>
+                                            {% endif %}
                                         </td>
                                     </tr>
                                     {% endfor %}
                                 {% else %}
                                     <tr>
-                                        <td colspan="6" class="text-center py-5">
+                                        <td colspan="5" class="text-center py-5">
                                             <i class="bi bi-inbox text-muted" style="font-size: 2rem;"></i>
                                             <div class="mt-2 text-muted">Nenhum recebimento encontrado</div>
                                             <small class="text-muted">Você ainda não possui histórico de recebimentos.</small>
@@ -133,48 +110,75 @@
                 </div>
             </div>
         </div>
-
-        <div class="col-md-4 d-flex flex-column">
-            <div class="card chart-card flex-grow-1">
-                <div class="card-header">
-                    <i class="bi bi-graph-up me-2"></i>Recebimentos por Mês
-                </div>
-                <div class="card-body">
-                    <canvas id="graficoRecebimentos" style="width:100%;max-width:350px;height:250px;"></canvas>
-                </div>
-            </div>
-            
-            <!-- Card de Resumo -->
-            <div class="card mt-3">
-                <div class="card-header">
-                    <i class="bi bi-info-circle me-2"></i>Resumo Mensal
-                </div>
-                <div class="card-body">
-                    {% if recebimentos %}
-                        {% set ultimo_recebimento = recebimentos[0] %}
-                        <div class="d-flex justify-content-between align-items-center mb-2">
-                            <span class="text-muted">Último Recebimento:</span>
-                            <span class="fw-bold text-success">R$ {{ "%.2f"|format(ultimo_recebimento.valor) }}</span>
-                        </div>
-                        <div class="d-flex justify-content-between align-items-center mb-2">
-                            <span class="text-muted">Último Mês:</span>
-                            <span class="fw-bold">{{ ultimo_recebimento.mes_referencia }}/{{ ultimo_recebimento.ano_referencia }}</span>
-                        </div>
-                        <div class="d-flex justify-content-between align-items-center">
-                            <span class="text-muted">Média por Recebimento:</span>
-                            <span class="fw-bold">R$ {{ "%.2f"|format(estatisticas.valor_medio) }}</span>
-                        </div>
-                    {% else %}
-                        <div class="text-center py-3">
-                            <i class="bi bi-info-circle text-muted"></i>
-                            <p class="text-muted mb-0">Nenhum dados disponível</p>
-                        </div>
-                    {% endif %}
-                </div>
-            </div>
-        </div>
     </div>
 </div>
+
+<!-- Modal Confirmação de Recebimento -->
+<div id="modalConfirmacao" class="modal fade" tabindex="-1" role="dialog" aria-modal="true" style="display:none; background: rgba(0,0,0,0.4);">
+    <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <form id="formConfirmacao" method="POST" enctype="multipart/form-data">
+                <div class="modal-header">
+                    <h5 class="modal-title">
+                        <i class="bi bi-check-circle me-2"></i>Confirmar Recebimento
+                    </h5>
+                    <button type="button" class="btn-close btn-close-white" aria-label="Fechar" onclick="fecharModalConfirmacao()"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="alert alert-info">
+                        <i class="bi bi-info-circle me-2"></i>
+                        <strong>Atenção:</strong> Ao confirmar o recebimento, você declara que recebeu o valor informado.
+                        Para auxílios de Transporte e Moradia, é necessário anexar os comprovantes de gastos.
+                    </div>
+                    
+                    <div class="mb-3">
+                        <h6>Detalhes do Recebimento</h6>
+                        <p><strong>Mês de Referência:</strong> <span id="detalheMes"></span></p>
+                        <p><strong>Valor Total:</strong> <span id="detalheValor" class="text-success fw-bold"></span></p>
+                        
+                        <div class="mt-3">
+                            <strong>Auxílios Recebidos:</strong>
+                            <ul id="listaAuxilios" class="list-unstyled mt-2">
+                                <!-- Lista de auxílios será preenchida via JavaScript -->
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div id="divComprovantes" style="display:none;">
+                        <hr>
+                        <h6 class="mb-3">Comprovantes de Gastos</h6>
+                        
+                        <div id="divComprovanteTransporte" style="display:none;" class="mb-3">
+                            <label for="comprovante_transporte" class="form-label">
+                                <i class="bi bi-bus-front me-2"></i>Comprovante de Gastos com Transporte
+                                <span class="text-danger">*</span>
+                            </label>
+                            <input type="file" class="form-control" id="comprovante_transporte" 
+                                name="comprovante_transporte" accept=".pdf,.jpg,.jpeg,.png">
+                            <small class="text-muted">Formatos aceitos: PDF, JPG, PNG</small>
+                        </div>
+
+                        <div id="divComprovanteMoradia" style="display:none;" class="mb-3">
+                            <label for="comprovante_moradia" class="form-label">
+                                <i class="bi bi-house me-2"></i>Comprovante de Gastos com Moradia
+                                <span class="text-danger">*</span>
+                            </label>
+                            <input type="file" class="form-control" id="comprovante_moradia" 
+                                name="comprovante_moradia" accept=".pdf,.jpg,.jpeg,.png">
+                            <small class="text-muted">Formatos aceitos: PDF, JPG, PNG (ex: recibo de aluguel, contas)</small>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" onclick="fecharModalConfirmacao()">
+                        <i class="bi bi-x-circle me-1"></i>Cancelar
+                    </button>
+                    <button type="submit" class="btn btn-success">
+                        <i class="bi bi-check-circle me-1"></i>Confirmar Recebimento
+                    </button>
+                </div>
+            </form>
+        </div>
     </div>
 </div>
 
@@ -194,90 +198,6 @@
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" onclick="fecharModalDetalhesRecebimento()">
                     <i class="bi bi-x-circle me-1"></i>Fechar
-                </button>
-                <button type="button" class="btn btn-success" onclick="baixarComprovante()">
-                    <i class="bi bi-download me-1"></i>Baixar Comprovante
-                </button>
-            </div>
-        </div>
-    </div>
-</div>
 
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-<script src="/static/js/recebimentos_aluno.js"></script>
-<script>
-// Gráfico de recebimentos - apenas esta função fica aqui
-document.addEventListener('DOMContentLoaded', function() {
-    // Aguarda um pouco para garantir que o DOM esteja totalmente carregado
-    setTimeout(function() {
-        var ctx = document.getElementById('graficoRecebimentos');
-        if (ctx) {
-            ctx = ctx.getContext('2d');
-            new Chart(ctx, {
-                type: 'bar',
-                data: {
-                    labels: ['Abril', 'Maio', 'Junho', 'Julho', 'Agosto'],
-                    datasets: [
-                        {
-                            label: 'Alimentação',
-                            data: [200, 200, 200, 200, 0],
-                            backgroundColor: '#2E7D32',
-                            borderRadius: 8,
-                        },
-                        {
-                            label: 'Transporte',
-                            data: [150, 150, 150, 150, 0],
-                            backgroundColor: '#4CAF50',
-                            borderRadius: 8,
-                        }
-                    ]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: { 
-                        legend: { 
-                            position: 'bottom',
-                            labels: {
-                                padding: 20,
-                                usePointStyle: true,
-                                font: {
-                                    family: 'Poppins'
-                                }
-                            }
-                        }
-                    },
-                    scales: { 
-                        y: { 
-                            beginAtZero: true,
-                            grid: {
-                                color: 'rgba(0,0,0,0.1)'
-                            },
-                            ticks: {
-                                font: {
-                                    family: 'Poppins'
-                                }
-                            }
-                        },
-                        x: {
-                            grid: {
-                                display: false
-                            },
-                            ticks: {
-                                font: {
-                                    family: 'Poppins'
-                                }
-                            }
-                        }
-                    },
-                    animation: {
-                        duration: 1000,
-                        easing: 'easeInOutQuart'
-                    }
-                }
-            });
-        }
-    }, 100);
-});
-</script>
+<script src="/static/js/recebimentos_aluno.js?v={{ range(1, 10000) | random }}"></script>
 {% endblock %}

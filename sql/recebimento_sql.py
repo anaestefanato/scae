@@ -8,6 +8,9 @@ CREATE TABLE IF NOT EXISTS recebimento (
     data_recebimento DATE NOT NULL,
     status TEXT NOT NULL CHECK (status IN ('confirmado', 'pendente', 'cancelado')),
     observacoes TEXT DEFAULT '',
+    data_confirmacao DATE,
+    comprovante_transporte TEXT,
+    comprovante_moradia TEXT,
     FOREIGN KEY (id_auxilio) REFERENCES auxilio(id_auxilio) ON DELETE CASCADE
 )
 """
@@ -63,23 +66,77 @@ DELETE FROM recebimento
 WHERE id_recebimento = ?
 """
 
+CONFIRMAR_RECEBIMENTO = """
+UPDATE recebimento
+SET status = 'confirmado',
+    data_confirmacao = datetime('now'),
+    comprovante_transporte = ?,
+    comprovante_moradia = ?
+WHERE id_recebimento = ?
+"""
+
+CONFIRMAR_RECEBIMENTOS_MES = """
+UPDATE recebimento
+SET status = 'confirmado',
+    data_confirmacao = datetime('now')
+WHERE id_recebimento IN (
+    SELECT r.id_recebimento
+    FROM recebimento r
+    INNER JOIN auxilio a ON r.id_auxilio = a.id_auxilio
+    INNER JOIN inscricao i ON a.id_inscricao = i.id_inscricao
+    WHERE i.id_aluno = ?
+    AND r.mes_referencia = ?
+    AND r.ano_referencia = ?
+)
+"""
+
+ATUALIZAR_COMPROVANTE_TRANSPORTE = """
+UPDATE recebimento
+SET comprovante_transporte = ?
+WHERE id_recebimento IN (
+    SELECT r.id_recebimento
+    FROM recebimento r
+    INNER JOIN auxilio a ON r.id_auxilio = a.id_auxilio
+    INNER JOIN inscricao i ON a.id_inscricao = i.id_inscricao
+    WHERE i.id_aluno = ?
+    AND r.mes_referencia = ?
+    AND r.ano_referencia = ?
+    AND a.tipo_auxilio = 'auxilio transporte'
+)
+"""
+
+ATUALIZAR_COMPROVANTE_MORADIA = """
+UPDATE recebimento
+SET comprovante_moradia = ?
+WHERE id_recebimento IN (
+    SELECT r.id_recebimento
+    FROM recebimento r
+    INNER JOIN auxilio a ON r.id_auxilio = a.id_auxilio
+    INNER JOIN inscricao i ON a.id_inscricao = i.id_inscricao
+    WHERE i.id_aluno = ?
+    AND r.mes_referencia = ?
+    AND r.ano_referencia = ?
+    AND a.tipo_auxilio = 'auxilio moradia'
+)
+"""
+
 OBTER_POR_ALUNO = """
 SELECT
-    r.id_recebimento,
-    r.id_auxilio,
     r.mes_referencia,
     r.ano_referencia,
-    r.valor,
-    r.data_recebimento,
-    r.status,
-    r.observacoes,
-    a.tipo_auxilio,
-    e.titulo as edital_titulo
+    SUM(r.valor) as valor_total,
+    MIN(r.data_recebimento) as data_recebimento,
+    CASE 
+        WHEN COUNT(CASE WHEN r.status = 'pendente' THEN 1 END) > 0 THEN 'pendente'
+        ELSE 'confirmado'
+    END as status,
+    GROUP_CONCAT(a.tipo_auxilio || ':' || r.valor || ':' || r.id_recebimento, '|') as auxilios_detalhes
 FROM recebimento r
 INNER JOIN auxilio a ON r.id_auxilio = a.id_auxilio
 INNER JOIN inscricao i ON a.id_inscricao = i.id_inscricao
 INNER JOIN edital e ON a.id_edital = e.id_edital
 WHERE i.id_aluno = ?
+GROUP BY r.mes_referencia, r.ano_referencia
 ORDER BY r.ano_referencia DESC, 
     CASE r.mes_referencia
         WHEN 'Janeiro' THEN 1

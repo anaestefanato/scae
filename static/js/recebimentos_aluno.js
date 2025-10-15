@@ -73,43 +73,58 @@ document.addEventListener('DOMContentLoaded', function() {
     initializeSidebar();
 });
 
-// Filtro de auxílio
-function filtrarAuxilio(tipo) {
-    var linhas = document.querySelectorAll('#tabelaRecebimentos tbody tr');
-    linhas.forEach(function(linha) {
-        if (tipo === 'todos' || linha.getAttribute('data-auxilio') === tipo) {
-            linha.style.display = '';
-        } else {
-            linha.style.display = 'none';
-        }
-    });
-}
-
 // Modal detalhes
-function mostrarDetalhes(auxilio, mes, valor, data) {
-    var body = document.getElementById('detalhesRecebimentoBody');
+function mostrarDetalhes(mes, ano, auxilios) {
+    const body = document.getElementById('detalhesRecebimentoBody');
+    
+    // Calcular valor total
+    let valorTotal = 0;
+    auxilios.forEach(aux => valorTotal += aux.valor);
+    
+    // Montar lista de auxílios
+    let listaAuxilios = '<ul class="list-unstyled">';
+    auxilios.forEach(function(auxilio) {
+        let icone = '';
+        let nome = '';
+        
+        if (auxilio.tipo_auxilio.includes('alimentacao')) {
+            icone = '<i class="bi bi-cup-hot me-2 text-success"></i>';
+            nome = 'Auxílio Alimentação';
+        } else if (auxilio.tipo_auxilio.includes('transporte')) {
+            icone = '<i class="bi bi-bus-front me-2 text-success"></i>';
+            nome = 'Auxílio Transporte';
+        } else if (auxilio.tipo_auxilio.includes('moradia')) {
+            icone = '<i class="bi bi-house me-2 text-success"></i>';
+            nome = 'Auxílio Moradia';
+        } else if (auxilio.tipo_auxilio.includes('material')) {
+            icone = '<i class="bi bi-book me-2 text-success"></i>';
+            nome = 'Auxílio Material Didático';
+        } else {
+            icone = '<i class="bi bi-gift me-2 text-success"></i>';
+            nome = auxilio.tipo_auxilio.replace('auxilio', 'Auxílio').replace(/_/g, ' ');
+        }
+        
+        listaAuxilios += '<li class="mb-2">' + icone + nome + ' - <span class="text-success fw-bold">R$ ' + auxilio.valor.toFixed(2) + '</span></li>';
+    });
+    listaAuxilios += '</ul>';
+    
     body.innerHTML = `
         <div class="row">
-            <div class="col-md-6">
+            <div class="col-12">
                 <h6 class="mb-3">Informações do Pagamento</h6>
-                <p><strong>Tipo de Auxílio:</strong> ${auxilio}</p>
-                <p><strong>Mês de Referência:</strong> ${mes}</p>
-                <p><strong>Valor Recebido:</strong> <span class="text-success fw-bold">${valor}</span></p>
-                <p><strong>Data do Recebimento:</strong> ${data}</p>
+                <p><strong>Mês de Referência:</strong> ${mes}/${ano}</p>
+                <p><strong>Valor Total:</strong> <span class='text-success fw-bold'>R$ ${valorTotal.toFixed(2)}</span></p>
                 <p><strong>Status:</strong> <span class='status-badge status-deferido'>Confirmado</span></p>
-            </div>
-            <div class="col-md-6">
-                <h6 class="mb-3">Dados Bancários</h6>
-                <p><strong>Banco:</strong> Banco do Brasil</p>
-                <p><strong>Agência:</strong> 1234-5</p>
-                <p><strong>Conta:</strong> 12345-6</p>
-                <p><strong>Forma de Pagamento:</strong> Transferência Eletrônica</p>
-                <p><strong>Comprovante:</strong> Disponível para download</p>
             </div>
         </div>
         <div class="row mt-3">
             <div class="col-12">
-                <h6 class="mb-3">Observações</h6>
+                <h6 class="mb-3">Auxílios Recebidos</h6>
+                ${listaAuxilios}
+            </div>
+        </div>
+        <div class="row mt-3">
+            <div class="col-12">
                 <div class="alert alert-success">
                     <i class="bi bi-check-circle me-2"></i>
                     Recebimento processado com sucesso. Para dúvidas sobre valores ou datas, entre em contato com a assistência social.
@@ -124,6 +139,105 @@ function mostrarDetalhes(auxilio, mes, valor, data) {
 function fecharModalDetalhesRecebimento() {
     document.getElementById('modalDetalhesRecebimento').style.display = 'none';
     document.getElementById('modalDetalhesRecebimento').classList.remove('show');
+}
+
+// Modal de confirmação
+let mesAtual = null;
+let anoAtual = null;
+let auxiliosAtual = [];
+
+function abrirModalConfirmacao(mes, ano, valorTotal, auxilios) {
+    mesAtual = mes;
+    anoAtual = ano;
+    auxiliosAtual = auxilios;
+    
+    // Preencher detalhes
+    document.getElementById('detalheMes').textContent = mes + '/' + ano;
+    document.getElementById('detalheValor').textContent = 'R$ ' + valorTotal.toFixed(2);
+    
+    // Preencher lista de auxílios
+    const listaAuxilios = document.getElementById('listaAuxilios');
+    listaAuxilios.innerHTML = '';
+    
+    let temTransporte = false;
+    let temMoradia = false;
+    
+    auxilios.forEach(function(auxilio) {
+        const li = document.createElement('li');
+        li.className = 'mb-2';
+        
+        let icone = '';
+        let nome = '';
+        
+        if (auxilio.tipo_auxilio.includes('alimentacao')) {
+            icone = '<i class="bi bi-cup-hot me-2 text-success"></i>';
+            nome = 'Auxílio Alimentação';
+        } else if (auxilio.tipo_auxilio.includes('transporte')) {
+            icone = '<i class="bi bi-bus-front me-2 text-success"></i>';
+            nome = 'Auxílio Transporte';
+            temTransporte = true;
+        } else if (auxilio.tipo_auxilio.includes('moradia')) {
+            icone = '<i class="bi bi-house me-2 text-success"></i>';
+            nome = 'Auxílio Moradia';
+            temMoradia = true;
+        } else if (auxilio.tipo_auxilio.includes('material')) {
+            icone = '<i class="bi bi-book me-2 text-success"></i>';
+            nome = 'Auxílio Material Didático';
+        } else {
+            icone = '<i class="bi bi-gift me-2 text-success"></i>';
+            nome = auxilio.tipo_auxilio.replace('auxilio', 'Auxílio').replace(/_/g, ' ');
+        }
+        
+        li.innerHTML = icone + nome + ' - <span class="text-success fw-bold">R$ ' + auxilio.valor.toFixed(2) + '</span>';
+        listaAuxilios.appendChild(li);
+    });
+    
+    // Definir ação do formulário
+    document.getElementById('formConfirmacao').action = `/aluno/recebimentos/confirmar/${mes}/${ano}`;
+    
+    // Mostrar/ocultar campos de comprovante baseado nos tipos de auxílio
+    const divComprovantes = document.getElementById('divComprovantes');
+    const divTransporte = document.getElementById('divComprovanteTransporte');
+    const divMoradia = document.getElementById('divComprovanteMoradia');
+    const inputTransporte = document.getElementById('comprovante_transporte');
+    const inputMoradia = document.getElementById('comprovante_moradia');
+    
+    // Resetar campos
+    divTransporte.style.display = 'none';
+    divMoradia.style.display = 'none';
+    inputTransporte.required = false;
+    inputMoradia.required = false;
+    inputTransporte.value = '';
+    inputMoradia.value = '';
+    
+    // Mostrar campos necessários
+    if (temTransporte || temMoradia) {
+        divComprovantes.style.display = 'block';
+        
+        if (temTransporte) {
+            divTransporte.style.display = 'block';
+            inputTransporte.required = true;
+        }
+        
+        if (temMoradia) {
+            divMoradia.style.display = 'block';
+            inputMoradia.required = true;
+        }
+    } else {
+        divComprovantes.style.display = 'none';
+    }
+    
+    // Mostrar modal
+    document.getElementById('modalConfirmacao').style.display = 'block';
+    document.getElementById('modalConfirmacao').classList.add('show');
+}
+
+function fecharModalConfirmacao() {
+    document.getElementById('modalConfirmacao').style.display = 'none';
+    document.getElementById('modalConfirmacao').classList.remove('show');
+    mesAtual = null;
+    anoAtual = null;
+    auxiliosAtual = [];
 }
 
 function baixarComprovante() {
