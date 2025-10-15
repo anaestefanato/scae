@@ -49,8 +49,8 @@
                     <div class="icon">
                         <i class="bi bi-people"></i>
                     </div>
-                    <div class="number">342</div>
-                    <div class="label">Alunos Beneficiados</div>
+                    <div class="number">{{ total_alunos or '0'}}</div>
+                    <div class="label">Alunos Cadastrados</div>
                 </div>
             </div>
             <div class="col-md-3">
@@ -58,7 +58,7 @@
                     <div class="icon">
                         <i class="bi bi-person-gear"></i>
                     </div>
-                    <div class="number">8</div>
+                    <div class="number">{{ total_assistentes or '0'}}</div>
                     <div class="label">Assistentes Cadastrados</div>
                 </div>
             </div>
@@ -67,8 +67,8 @@
                     <div class="icon">
                         <i class="bi bi-file-earmark-bar-graph"></i>
                     </div>
-                    <div class="number">127</div>
-                    <div class="label">Relatórios Emitidos</div>
+                    <div class="number">{{ total_cadastros_pendentes or '0' }}</div>
+                    <div class="label">Solicitações Pendentes</div>
                 </div>
             </div>
             <div class="col-md-3">
@@ -76,8 +76,8 @@
                     <div class="icon">
                         <i class="bi bi-chat-square-dots"></i>
                     </div>
-                    <div class="number">89</div>
-                    <div class="label">Chamados Respondidos</div>
+                    <div class="number">{{ total_chamados_pendentes or "0" }}</div>
+                    <div class="label">Chamados Abertos</div>
                 </div>
             </div>
         </div>

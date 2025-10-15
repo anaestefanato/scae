@@ -4,6 +4,7 @@ from fastapi.templating import Jinja2Templates
 
 from repo import usuario_repo
 from repo.inscricao_repo import obter_estatisticas_dashboard, obter_inscricoes_recentes_dashboard
+from repo.recurso_repo import contar_pendentes
 from util.auth_decorator import obter_usuario_logado, requer_autenticacao
 from util.security import criar_hash_senha, verificar_senha
 
@@ -25,17 +26,21 @@ async def get_inicio(request: Request, usuario_logado: dict = None):
             'alunos_beneficiados': 0,
             'valor_total_mensal': 0.0
         }
-    
+
+    # Buscar quantidade de recursos pendentes
+    recursos_pendentes = contar_pendentes()
+
     # Buscar inscrições recentes com prioridade
     inscricoes_recentes = obter_inscricoes_recentes_dashboard()
-    
+
     context = {
         "request": request,
         "assistente": assistente,
         "estatisticas": estatisticas,
+        "recursos_pendentes": recursos_pendentes,
         "inscricoes_recentes": inscricoes_recentes
     }
-    
+
     response = templates.TemplateResponse("/assistente/dashboard_assistente.html", context)
     return response
 
