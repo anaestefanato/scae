@@ -133,53 +133,6 @@ body {
     margin-top: 5px;
 }
 
-/* ===== FORM CHECKS (CHECKBOXES) ===== */
-.form-check {
-    padding: 15px;
-    background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%);
-    border-radius: 10px;
-    border: 1px solid #e9ecef;
-    transition: all 0.3s ease;
-}
-
-.form-check:hover {
-    background: linear-gradient(135deg, var(--ifes-light-green) 0%, #ffffff 100%);
-    border-color: var(--ifes-green);
-    transform: translateY(-2px);
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-}
-
-.form-check-input {
-    width: 1.2em;
-    height: 1.2em;
-    margin-right: 10px;
-}
-
-.form-check-input:checked {
-    background-color: var(--ifes-green);
-    border-color: var(--ifes-green);
-}
-
-.form-check-input:focus {
-    box-shadow: 0 0 0 0.2rem rgba(46, 125, 50, 0.25);
-}
-
-.form-check-label {
-    cursor: pointer;
-    user-select: none;
-}
-
-.form-check-label strong {
-    color: var(--ifes-dark-gray);
-    font-size: 0.95rem;
-}
-
-.form-check-label small {
-    display: block;
-    margin-top: 2px;
-    line-height: 1.3;
-}
-
 /* ===== FORM ACTIONS ===== */
 .form-actions {
     background: linear-gradient(135deg, var(--ifes-light-green) 0%, #ffffff 100%);
@@ -263,45 +216,6 @@ body {
     border-radius: 0 0 15px 15px;
 }
 
-/* ===== PREVIEW STYLES ===== */
-.preview-section {
-    margin-bottom: 20px;
-    padding: 15px 20px;
-    background: linear-gradient(135deg, var(--ifes-light-green) 0%, #ffffff 100%);
-    border-radius: 10px;
-    border-left: 4px solid var(--ifes-green);
-}
-
-.preview-section h6 {
-    color: var(--ifes-green);
-    font-weight: 700;
-    margin-bottom: 10px;
-    text-transform: uppercase;
-    font-size: 0.9rem;
-    letter-spacing: 0.5px;
-}
-
-.preview-item {
-    display: flex;
-    justify-content: space-between;
-    padding: 5px 0;
-    border-bottom: 1px solid #f0f0f0;
-}
-
-.preview-item:last-child {
-    border-bottom: none;
-}
-
-.preview-item .label {
-    font-weight: 600;
-    color: #666;
-}
-
-.preview-item .value {
-    color: var(--ifes-dark-gray);
-    font-weight: 500;
-}
-
 /* ===== ALERTAS CUSTOMIZADOS ===== */
 .alert {
     border-radius: 10px;
@@ -331,32 +245,6 @@ body {
     background: linear-gradient(135deg, var(--light-danger) 0%, #ffffff 100%);
     color: #D32F2F;
     border-left: 4px solid var(--admin-danger);
-}
-
-/* ===== LOADING STATES ===== */
-.loading {
-    position: relative;
-    pointer-events: none;
-}
-
-.loading::after {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: rgba(255, 255, 255, 0.8);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: 10px;
-    z-index: 10;
-}
-
-.spinner-border-sm {
-    width: 1.5rem;
-    height: 1.5rem;
 }
 
 /* ===== RESPONSIVIDADE ===== */
@@ -432,90 +320,4 @@ body {
 
 .form-section:nth-child(6) {
     animation-delay: 0.5s;
-}
-
-/* ===== VALIDAÇÃO VISUAL ===== */
-.password-strength {
-    margin-top: 8px;
-}
-
-.password-strength-bar {
-    height: 4px;
-    border-radius: 2px;
-    background-color: #e9ecef;
-    overflow: hidden;
-    margin-bottom: 5px;
-}
-
-.password-strength-fill {
-    height: 100%;
-    transition: width 0.3s ease, background-color 0.3s ease;
-    border-radius: 2px;
-}
-
-.password-strength-fill.weak {
-    background-color: var(--admin-danger);
-}
-
-.password-strength-fill.medium {
-    background-color: var(--admin-warning);
-}
-
-.password-strength-fill.strong {
-    background-color: var(--admin-success);
-}
-
-.password-strength-text {
-    font-size: 0.8rem;
-    font-weight: 500;
-}
-
-/* ===== TOOLTIPS PERSONALIZADOS ===== */
-.tooltip-inner {
-    background-color: var(--ifes-dark-gray);
-    border-radius: 8px;
-    font-size: 0.8rem;
-}
-
-.bs-tooltip-top .tooltip-arrow::before {
-    border-top-color: var(--ifes-dark-gray);
-}
-
-.bs-tooltip-bottom .tooltip-arrow::before {
-    border-bottom-color: var(--ifes-dark-gray);
-}
-
-/* ===== PROGRESS INDICATOR ===== */
-.progress-indicator {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    height: 4px;
-    background: var(--ifes-green);
-    z-index: 1000;
-    transform: scaleX(0);
-    transform-origin: left;
-    transition: transform 0.3s ease;
-}
-
-.progress-indicator.active {
-    transform: scaleX(1);
-}
-
-/* ===== BADGES CUSTOMIZADOS ===== */
-.permission-badge {
-    display: inline-block;
-    padding: 4px 8px;
-    background: var(--ifes-light-green);
-    color: var(--ifes-green);
-    border-radius: 6px;
-    font-size: 0.8rem;
-    font-weight: 500;
-    margin: 2px;
-}
-
-.permission-badge.active {
-    background: var(--ifes-green);
-    color: white;
 }
