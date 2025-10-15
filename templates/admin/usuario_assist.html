@@ -368,13 +368,7 @@
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
     <script src="/static/js/dashboard_admin.js"></script>
-
-    <script>
-        // Dados dos assistentes do backend
-        const assistentes = {{ (assistentes | default([])) | tojson | safe }};
-    </script>
-    
-    <script src="/static/js/usuario_assist.js"></script>
+    <script src="/static/js/usuario_assist.js" data-assistentes='{{ (assistentes | default([])) | tojson }}'></script>
 
     <footer class="footer bg-success text-white py-4">
         <div class="container">

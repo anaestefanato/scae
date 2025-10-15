@@ -2,9 +2,23 @@
 // GERENCIAR ASSISTENTES - JAVASCRIPT
 // =========================
 
-// ===== DADOS DOS ASSISTENTES (INJETADOS DO BACKEND) =====
-// A variável 'assistentes' é injetada pelo template Jinja2 no HTML
-// e está disponível globalmente
+// ===== OBTER DADOS DOS ASSISTENTES DO ATRIBUTO DATA =====
+// Buscar o script atual e extrair os dados do atributo data-assistentes
+const currentScript = document.currentScript || document.querySelector('script[data-assistentes]');
+let assistentes = [];
+
+if (currentScript && currentScript.hasAttribute('data-assistentes')) {
+    try {
+        const assistentesData = currentScript.getAttribute('data-assistentes');
+        assistentes = JSON.parse(assistentesData);
+        console.log('Assistentes carregados:', assistentes.length);
+    } catch (error) {
+        console.error('Erro ao parsear dados dos assistentes:', error);
+        assistentes = [];
+    }
+} else {
+    console.warn('Nenhum dado de assistentes encontrado');
+}
 
 // ===== FUNÇÕES DE INICIALIZAÇÃO =====
 document.addEventListener('DOMContentLoaded', function() {
