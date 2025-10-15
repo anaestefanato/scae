@@ -12,23 +12,39 @@ function initializeAnaliseInscricoes() {
     setupFilters();
     
     // Event listeners para ações em lote
-    setupBatchActions();
+    try {
+        setupBatchActions();
+    } catch(e) {
+        console.log('Batch actions not available');
+    }
     
     // Event listeners para checkboxes
-    setupCheckboxes();
+    try {
+        setupCheckboxes();
+    } catch(e) {
+        console.log('Checkboxes not available');
+    }
     
     // Event listeners para modais
-    setupModals();
+    try {
+        setupModals();
+    } catch(e) {
+        console.log('Modals not available');
+    }
     
     // Inicializar tooltips
-    initializeTooltips();
+    try {
+        initializeTooltips();
+    } catch(e) {
+        console.log('Tooltips not available');
+    }
 }
 
 // ===== FILTROS =====
 function setupFilters() {
     const filtroEdital = document.getElementById('filtroEdital');
     const filtroStatus = document.getElementById('filtroStatus');
-    const filtroPrioridade = document.getElementById('filtroPrioridade');
+    const filtroOrdenacao = document.getElementById('filtroOrdenacao');
     const buscarAluno = document.getElementById('buscarAluno');
     const limparFiltros = document.getElementById('limparFiltros');
 
@@ -40,8 +56,8 @@ function setupFilters() {
         filtroStatus.addEventListener('change', aplicarFiltros);
     }
     
-    if (filtroPrioridade) {
-        filtroPrioridade.addEventListener('change', aplicarFiltros);
+    if (filtroOrdenacao) {
+        filtroOrdenacao.addEventListener('change', aplicarFiltros);
     }
     
     if (buscarAluno) {
@@ -54,62 +70,27 @@ function setupFilters() {
     
     if (limparFiltros) {
         limparFiltros.addEventListener('click', function() {
-            document.getElementById('filtroEdital').value = '';
-            document.getElementById('filtroStatus').value = '';
-            document.getElementById('filtroPrioridade').value = '';
-            document.getElementById('buscarAluno').value = '';
-            aplicarFiltros();
+            // Redirecionar para página sem parâmetros
+            window.location.href = '/assistente/analise-inscricoes';
         });
     }
 }
 
 function aplicarFiltros() {
-    const edital = document.getElementById('filtroEdital').value;
-    const status = document.getElementById('filtroStatus').value;
-    const prioridade = document.getElementById('filtroPrioridade').value;
-    const busca = document.getElementById('buscarAluno').value.toLowerCase();
+    const edital = document.getElementById('filtroEdital')?.value || '';
+    const status = document.getElementById('filtroStatus')?.value || '';
+    const ordenacao = document.getElementById('filtroOrdenacao')?.value || '';
+    const busca = document.getElementById('buscarAluno')?.value || '';
     
-    const linhas = document.querySelectorAll('#tabelaInscricoes tr');
-    let inscricoesVisiveis = 0;
+    // Construir URL com parâmetros de filtro
+    const params = new URLSearchParams();
+    if (edital) params.append('edital', edital);
+    if (status) params.append('status', status);
+    if (ordenacao) params.append('ordenacao', ordenacao);
+    if (busca) params.append('busca', busca);
     
-    linhas.forEach(linha => {
-        let mostrar = true;
-        
-        // Filtro por edital
-        if (edital && !linha.querySelector('.edital-badge').textContent.includes(edital)) {
-            mostrar = false;
-        }
-        
-        // Filtro por status
-        if (status) {
-            const statusElemento = linha.querySelector('.status-badge');
-            if (!statusElemento.classList.contains(`status-${status}`)) {
-                mostrar = false;
-            }
-        }
-        
-        // Filtro por prioridade
-        if (prioridade) {
-            const prioridadeElemento = linha.querySelector('.priority-high, .priority-medium, .priority-low');
-            if (!prioridadeElemento.classList.contains(`priority-${prioridade}`)) {
-                mostrar = false;
-            }
-        }
-        
-        // Filtro por busca de nome
-        if (busca) {
-            const nomeAluno = linha.querySelector('.aluno-nome').textContent.toLowerCase();
-            if (!nomeAluno.includes(busca)) {
-                mostrar = false;
-            }
-        }
-        
-        linha.style.display = mostrar ? '' : 'none';
-        if (mostrar) inscricoesVisiveis++;
-    });
-    
-    // Atualizar contador
-    atualizarContador(inscricoesVisiveis);
+    // Redirecionar com filtros
+    window.location.href = `/assistente/analise-inscricoes?${params.toString()}`;
 }
 
 function atualizarContador(visiveis) {

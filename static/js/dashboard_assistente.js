@@ -50,25 +50,29 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Set minimum date to today
     const dataEntrevista = document.getElementById('dataEntrevista');
-    const today = new Date().toISOString().split('T')[0];
-    dataEntrevista.setAttribute('min', today);
+    if (dataEntrevista) {
+        const today = new Date().toISOString().split('T')[0];
+        dataEntrevista.setAttribute('min', today);
+    }
     
     // Modalidade change handler
     const modalidadeSelect = document.getElementById('modalidade');
     const localInput = document.getElementById('local');
     
-    modalidadeSelect.addEventListener('change', function() {
-        if (this.value === 'online') {
-            localInput.placeholder = 'Ex: https://meet.google.com/abc-defg-hij';
-            localInput.value = '';
-        } else if (this.value === 'presencial') {
-            localInput.placeholder = 'Ex: Sala 201 - Bloco A';
-            localInput.value = '';
-        } else if (this.value === 'hibrido') {
-            localInput.placeholder = 'Ex: Sala 201 + https://meet.google.com/...';
-            localInput.value = '';
-        }
-    });
+    if (modalidadeSelect && localInput) {
+        modalidadeSelect.addEventListener('change', function() {
+            if (this.value === 'online') {
+                localInput.placeholder = 'Ex: https://meet.google.com/abc-defg-hij';
+                localInput.value = '';
+            } else if (this.value === 'presencial') {
+                localInput.placeholder = 'Ex: Sala 201 - Bloco A';
+                localInput.value = '';
+            } else if (this.value === 'hibrido') {
+                localInput.placeholder = 'Ex: Sala 201 + https://meet.google.com/...';
+                localInput.value = '';
+            }
+        });
+    }
     
     // Agendar entrevista
     agendarBtn.addEventListener('click', function() {

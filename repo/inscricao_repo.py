@@ -139,19 +139,93 @@ def obter_estatisticas_analise() -> dict:
         }
 
 
-def obter_inscricoes_para_analise(pagina: int = 1, limite: int = 10) -> tuple[list[dict], int]:
-    """Obtém inscrições pendentes para análise com paginação"""
+def obter_inscricoes_para_analise(pagina: int = 1, limite: int = 10, filtro_edital: str = None, filtro_status: str = None, filtro_busca: str = None, ordenacao: str = None) -> tuple[list[dict], int]:
+    """Obtém inscrições para análise com paginação e filtros"""
     offset = (pagina - 1) * limite
     
     with get_connection() as conn:
         cursor = conn.cursor()
         
-        # Buscar total de registros
-        cursor.execute(CONTAR_INSCRICOES_PARA_ANALISE)
+        # Construir WHERE clause dinâmica
+        where_clauses = []
+        params_count = []
+        params_list = []
+        
+        # Filtro de status (padrão é pendente se não especificado)
+        if filtro_status:
+            where_clauses.append("i.status = ?")
+            params_count.append(filtro_status)
+            params_list.append(filtro_status)
+        else:
+            where_clauses.append("i.status = ?")
+            params_count.append('pendente')
+            params_list.append('pendente')
+        
+        # Filtro de edital
+        if filtro_edital:
+            where_clauses.append("i.id_edital = ?")
+            params_count.append(filtro_edital)
+            params_list.append(filtro_edital)
+        
+        # Filtro de busca por nome
+        if filtro_busca:
+            where_clauses.append("LOWER(u.nome) LIKE ?")
+            params_count.append(f"%{filtro_busca.lower()}%")
+            params_list.append(f"%{filtro_busca.lower()}%")
+        
+        where_sql = " AND ".join(where_clauses)
+        
+        # Query de contagem
+        sql_count = f"""
+        SELECT COUNT(*) as total
+        FROM inscricao i
+        INNER JOIN edital e ON i.id_edital = e.id_edital
+        INNER JOIN usuario u ON i.id_aluno = u.id_usuario
+        WHERE {where_sql}
+        """
+        
+        cursor.execute(sql_count, params_count)
         total = cursor.fetchone()["total"]
         
-        # Buscar registros da página
-        cursor.execute(OBTER_INSCRICOES_PARA_ANALISE, (limite, offset))
+        # Ordenação
+        if ordenacao == 'mais-antigas':
+            order_sql = "i.data_inscricao ASC"
+        else:
+            order_sql = "i.data_inscricao DESC"
+        
+        # Query principal
+        sql_list = f"""
+        SELECT 
+            i.id_inscricao,
+            i.id_aluno,
+            i.id_edital,
+            i.data_inscricao,
+            i.status,
+            i.urlDocumentoIdentificacao,
+            i.urlDeclaracaoRenda,
+            i.urlTermoResponsabilidade,
+            e.titulo as edital_titulo,
+            e.data_encerramento,
+            u.nome as aluno_nome,
+            u.matricula as aluno_matricula,
+            a.tipo_auxilio,
+            a.valor_mensal,
+            CASE 
+                WHEN DATE(e.data_encerramento) <= DATE('now', '+7 days') THEN 'Alta'
+                WHEN DATE(e.data_encerramento) <= DATE('now', '+15 days') THEN 'Média'
+                ELSE 'Baixa'
+            END as prioridade
+        FROM inscricao i
+        INNER JOIN edital e ON i.id_edital = e.id_edital
+        INNER JOIN usuario u ON i.id_aluno = u.id_usuario
+        LEFT JOIN auxilio a ON i.id_inscricao = a.id_inscricao
+        WHERE {where_sql}
+        ORDER BY {order_sql}
+        LIMIT ? OFFSET ?
+        """
+        
+        params_list.extend([limite, offset])
+        cursor.execute(sql_list, params_list)
         rows = cursor.fetchall()
         
         inscricoes = []

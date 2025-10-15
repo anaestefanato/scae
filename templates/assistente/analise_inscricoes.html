@@ -111,30 +111,29 @@
                 <div class="col-md-3">
                     <select class="form-select" id="filtroEdital">
                         <option value="">Todos os Editais</option>
-                        <option value="1">Edital 001/2025 - Auxílio Transporte</option>
-                        <option value="2">Edital 002/2025 - Auxílio Material Didático</option>
-                        <option value="3">Edital 003/2025 - Auxílio Transporte</option>
+                        <option value="1" {% if filtro_edital == '1' %}selected{% endif %}>Edital 001/2025</option>
+                        <option value="2" {% if filtro_edital == '2' %}selected{% endif %}>Edital 002/2025</option>
+                        <option value="3" {% if filtro_edital == '3' %}selected{% endif %}>Edital 003/2025</option>
                     </select>
                 </div>
                 <div class="col-md-2">
                     <select class="form-select" id="filtroStatus">
                         <option value="">Todos os Status</option>
-                        <option value="pendente">Pendentes</option>
-                        <option value="deferido">Deferidas</option>
-                        <option value="indeferido">Indeferidas</option>
-                        <option value="entrevista">Aguardando Entrevista</option>
+                        <option value="pendente" {% if filtro_status == 'pendente' %}selected{% endif %}>Pendentes</option>
+                        <option value="deferido" {% if filtro_status == 'deferido' %}selected{% endif %}>Deferidos</option>
+                        <option value="indeferido" {% if filtro_status == 'indeferido' %}selected{% endif %}>Indeferidos</option>
                     </select>
                 </div>
                 <div class="col-md-2">
                     <select class="form-select" id="filtroOrdenacao">
-                        <option value="mais-recentes">Mais Recentes</option>
-                        <option value="mais-antigas">Mais Antigas</option>
+                        <option value="mais-recentes" {% if not filtro_ordenacao or filtro_ordenacao == 'mais-recentes' %}selected{% endif %}>Mais Recentes</option>
+                        <option value="mais-antigas" {% if filtro_ordenacao == 'mais-antigas' %}selected{% endif %}>Mais Antigas</option>
                     </select>
                 </div>
                 <div class="col-md-3">
                     <div class="input-group">
                         <span class="input-group-text"><i class="bi bi-search"></i></span>
-                        <input type="text" class="form-control" id="buscarAluno" placeholder="Buscar por nome do aluno...">
+                        <input type="text" class="form-control" id="buscarAluno" placeholder="Buscar por nome do aluno..." value="{{ filtro_busca or '' }}">
                     </div>
                 </div>
                 <div class="col-md-2">
@@ -149,11 +148,6 @@
         <div class="inscricoes-table card">
             <div class="card-header d-flex justify-content-between align-items-center">
                 <span><i class="bi bi-list-ul me-2"></i>Lista de Inscrições</span>
-                <div class="table-actions">
-                    <button class="btn btn-sm btn-success" data-bs-toggle="modal" data-bs-target="#filtrosModal">
-                        <i class="bi bi-funnel me-1"></i>Filtros Avançados
-                    </button>
-                </div>
             </div>
             <div class="table-responsive">
                 <table class="table table-hover">
@@ -176,7 +170,7 @@
                             <td class="text-center">
                                 <span class="edital-badge">{{ inscricao.edital_titulo }}</span>
                             </td>
-                            <td class="text-center">{{ inscricao.data_inscricao if inscricao.data_inscricao else 'N/A' }}</td>
+                            <td class="text-center">{{ inscricao.data_inscricao|formatar_data }}</td>
                             <td class="text-center">
                                 {% if inscricao.status == 'pendente' %}
                                 <span class="status-badge status-pendente">

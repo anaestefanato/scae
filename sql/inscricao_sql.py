@@ -4,7 +4,7 @@ CREATE TABLE IF NOT EXISTS inscricao (
     id_aluno INTEGER,
     id_edital INTEGER,
     data_inscricao DATE NOT NULL,
-    status TEXT NOT NULL CHECK (status IN ('pendente', 'em_analise', 'deferido', 'indeferido')),
+    status TEXT NOT NULL CHECK (status IN ('pendente', 'deferido', 'indeferido')),
     urlDocumentoIdentificacao TEXT NOT NULL,
     urlDeclaracaoRenda TEXT NOT NULL,
     urlTermoResponsabilidade TEXT NOT NULL,
@@ -130,7 +130,7 @@ FROM inscricao i
 INNER JOIN edital e ON i.id_edital = e.id_edital
 INNER JOIN usuario u ON i.id_aluno = u.id_usuario
 LEFT JOIN auxilio a ON i.id_inscricao = a.id_inscricao
-WHERE i.status IN ('pendente', 'em_analise')
+WHERE i.status = 'pendente'
 ORDER BY 
     CASE 
         WHEN DATE(e.data_encerramento) <= DATE('now', '+7 days') THEN 1
@@ -145,7 +145,7 @@ CONTAR_INSCRICOES_PARA_ANALISE = """
 SELECT COUNT(*) as total
 FROM inscricao i
 INNER JOIN edital e ON i.id_edital = e.id_edital
-WHERE i.status IN ('pendente', 'em_analise')
+WHERE i.status = 'pendente'
 """
 
 OBTER_ESTATISTICAS_DASHBOARD = """
