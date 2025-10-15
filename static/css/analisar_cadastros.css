@@ -10,6 +10,19 @@
     color: white !important;
 }
 
+/* Card de Importante - texto e ícone em branco */
+.card-header.bg-warning.text-dark {
+    color: white !important;
+}
+
+.card-header.bg-warning.text-dark h6 {
+    color: white !important;
+}
+
+.card-header.bg-warning.text-dark i {
+    color: white !important;
+}
+
 /* Botão Atualizar com azul claro */
 .card-header .btn-outline-primary {
     color: #66d9ff !important;
