@@ -1,3 +1,9 @@
+def contar_pendentes() -> int:
+    with get_connection() as conn:
+        cursor = conn.cursor()
+        cursor.execute("SELECT COUNT(*) as total FROM recurso WHERE status = 'pendente'")
+        row = cursor.fetchone()
+        return row["total"] if row else 0
 from typing import Optional
 from model.recurso_model import Recurso
 from sql.recurso_sql import *
