@@ -15,44 +15,6 @@
     --light-purple: #F3E5F5;
 }
 
-/* ===== PAGE HEADER ===== */
-.page-header {
-    background: linear-gradient(135deg, white 0%, #f8fffe 100%);
-    border-radius: 15px;
-    padding: 25px 30px;
-    margin-bottom: 30px;
-    border-left: 5px solid var(--ifes-green);
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.06);
-}
-
-.breadcrumb {
-    background: none;
-    padding: 0;
-    margin-bottom: 15px;
-}
-
-.breadcrumb-item a {
-    color: var(--ifes-green);
-    text-decoration: none;
-}
-
-.breadcrumb-item a:hover {
-    color: var(--ifes-light-green);
-}
-
-.page-title {
-    color: var(--ifes-dark-gray);
-    font-weight: 700;
-    font-size: 2rem;
-    margin-bottom: 5px;
-}
-
-.page-subtitle {
-    color: #666;
-    font-size: 1.1rem;
-    margin-bottom: 0;
-}
-
 /* ===== FORM CONTAINER ===== */
 .form-container {
     max-width: 1200px;
@@ -225,45 +187,6 @@
     border-radius: 0 0 15px 15px;
 }
 
-/* ===== PREVIEW STYLES ===== */
-.preview-section {
-    margin-bottom: 20px;
-    padding: 15px 20px;
-    background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%);
-    border-radius: 10px;
-    border-left: 4px solid var(--ifes-green);
-}
-
-.preview-section h6 {
-    color: var(--ifes-green);
-    font-weight: 700;
-    margin-bottom: 10px;
-    text-transform: uppercase;
-    font-size: 0.9rem;
-    letter-spacing: 0.5px;
-}
-
-.preview-item {
-    display: flex;
-    justify-content: space-between;
-    padding: 5px 0;
-    border-bottom: 1px solid #f0f0f0;
-}
-
-.preview-item:last-child {
-    border-bottom: none;
-}
-
-.preview-item .label {
-    font-weight: 600;
-    color: #666;
-}
-
-.preview-item .value {
-    color: var(--ifes-dark-gray);
-    font-weight: 500;
-}
-
 /* ===== ALERTAS CUSTOMIZADOS ===== */
 .alert-info {
     background: linear-gradient(135deg, var(--light-blue) 0%, #ffffff 100%);
@@ -286,46 +209,8 @@
     border-radius: 10px;
 }
 
-/* ===== LOADING STATES ===== */
-.loading {
-    position: relative;
-    pointer-events: none;
-}
-
-.loading::after {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: rgba(255, 255, 255, 0.8);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: 10px;
-}
-
-.spinner-border-sm {
-    width: 1.5rem;
-    height: 1.5rem;
-}
-
 /* ===== RESPONSIVIDADE ===== */
 @media (max-width: 768px) {
-    .page-header {
-        padding: 20px;
-        margin-bottom: 20px;
-    }
-    
-    .page-title {
-        font-size: 1.5rem;
-    }
-    
-    .page-subtitle {
-        font-size: 1rem;
-    }
-    
     .form-container .card-body {
         padding: 20px;
     }
@@ -366,8 +251,7 @@
 }
 
 .form-section,
-.form-container .card,
-.page-header {
+.form-container .card {
     animation: fadeInUp 0.6s ease-out;
 }
 
@@ -385,62 +269,4 @@
 
 .form-section:nth-child(5) {
     animation-delay: 0.4s;
-}
-
-/* ===== VALIDAÇÃO VISUAL ===== */
-.field-group {
-    position: relative;
-}
-
-.field-group .form-control:valid,
-.field-group .form-select:valid {
-    border-color: var(--assist-green);
-}
-
-.field-group .form-control:valid + .validation-icon,
-.field-group .form-select:valid + .validation-icon {
-    color: var(--assist-green);
-    opacity: 1;
-}
-
-.validation-icon {
-    position: absolute;
-    right: 15px;
-    top: 50%;
-    transform: translateY(-50%);
-    opacity: 0;
-    transition: opacity 0.3s ease;
-}
-
-/* ===== TOOLTIPS PERSONALIZADOS ===== */
-.tooltip-inner {
-    background-color: var(--ifes-dark-gray);
-    border-radius: 8px;
-    font-size: 0.8rem;
-}
-
-.bs-tooltip-top .tooltip-arrow::before {
-    border-top-color: var(--ifes-dark-gray);
-}
-
-.bs-tooltip-bottom .tooltip-arrow::before {
-    border-bottom-color: var(--ifes-dark-gray);
-}
-
-/* ===== PROGRESS INDICATOR ===== */
-.progress-indicator {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    height: 4px;
-    background: var(--ifes-light-green);
-    z-index: 1000;
-    transform: scaleX(0);
-    transform-origin: left;
-    transition: transform 0.3s ease;
-}
-
-.progress-indicator.active {
-    transform: scaleX(1);
 }

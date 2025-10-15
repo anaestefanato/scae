@@ -46,14 +46,25 @@
 }
 
 .card-header {
-    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+    background-color: #f8f9fa;
     border-bottom: 1px solid #dee2e6;
     font-weight: 600;
-    color: var(--ifes-green);
+    color: white;
+    padding: 1.25rem 1.5rem;
+}
+
+.card-header h5 {
+    color: white;
+    margin-bottom: 0.25rem;
+}
+
+.card-header small,
+.card-header .text-muted {
+    color: white !important;
 }
 
 .card-header.bg-success {
-    background: #198754 !important;
+    background: linear-gradient(135deg, #2E7D32 0%, #4CAF50 100%) !important;
     color: white !important;
 }
 
@@ -99,49 +110,6 @@
 .table tbody td {
     padding: 1rem 0.75rem;
     vertical-align: middle;
-}
-
-/* ===== BADGES DE PRIORIDADE ===== */
-.priority-badge {
-    display: inline-block;
-    padding: 0.25rem 0.5rem;
-    font-size: 0.75rem;
-    font-weight: 600;
-    border-radius: 4px;
-    text-transform: uppercase;
-}
-
-.priority-badge.baixa {
-    background-color: #d4edda;
-    color: #155724;
-}
-
-.priority-badge.media {
-    background-color: #fff3cd;
-    color: #856404;
-}
-
-.priority-badge.alta {
-    background-color: #f8d7da;
-    color: #721c24;
-}
-
-.priority-badge.urgente {
-    background-color: #f5c6cb;
-    color: #721c24;
-    animation: pulse 2s infinite;
-}
-
-@keyframes pulse {
-    0% {
-        box-shadow: 0 0 0 0 rgba(220, 53, 69, 0.7);
-    }
-    70% {
-        box-shadow: 0 0 0 10px rgba(220, 53, 69, 0);
-    }
-    100% {
-        box-shadow: 0 0 0 0 rgba(220, 53, 69, 0);
-    }
 }
 
 /* ===== BOTÕES DE AÇÃO ===== */
@@ -244,15 +212,18 @@ textarea.form-control {
 }
 
 .btn-outline-light {
-    border-color: rgba(255, 255, 255, 0.5);
-    color: rgba(255, 255, 255, 0.8);
+    border-color: #dee2e6;
+    color: #495057;
     transition: all 0.3s ease;
+    background: white;
 }
 
 .btn-outline-light:hover {
-    background-color: rgba(255, 255, 255, 0.1);
-    border-color: rgba(255, 255, 255, 0.8);
-    color: white;
+    background-color: #e9ecef;
+    border-color: #ced4da;
+    color: #212529;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
 .btn-outline-success {
@@ -330,49 +301,4 @@ textarea.form-control {
 
 .card {
     animation: fadeInUp 0.6s ease forwards;
-}
-
-/* ===== LOADING STATES ===== */
-.loading {
-    opacity: 0.6;
-    pointer-events: none;
-    position: relative;
-}
-
-.loading::after {
-    content: '';
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    width: 20px;
-    height: 20px;
-    margin: -10px 0 0 -10px;
-    border: 2px solid #f3f3f3;
-    border-top: 2px solid var(--ifes-green);
-    border-radius: 50%;
-    animation: spin 1s linear infinite;
-}
-
-@keyframes spin {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
-}
-
-/* ===== SCROLLBAR PERSONALIZADA ===== */
-.table-responsive::-webkit-scrollbar {
-    height: 8px;
-}
-
-.table-responsive::-webkit-scrollbar-track {
-    background: #f1f1f1;
-    border-radius: 10px;
-}
-
-.table-responsive::-webkit-scrollbar-thumb {
-    background: var(--ifes-light-green);
-    border-radius: 10px;
-}
-
-.table-responsive::-webkit-scrollbar-thumb:hover {
-    background: var(--ifes-green);
 }

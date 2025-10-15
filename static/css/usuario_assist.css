@@ -101,8 +101,7 @@
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.06);
 }
 
-.search-box .form-label,
-.filter-section .form-label {
+.search-box .form-label {
     color: var(--ifes-dark-gray);
     font-weight: 600;
     margin-bottom: 10px;
@@ -131,18 +130,6 @@
 .search-box .btn:hover {
     background: var(--ifes-light-green);
     border-color: var(--ifes-light-green);
-}
-
-.filter-section .form-select {
-    border: 1px solid #e1e5e9;
-    border-radius: 10px;
-    padding: 12px 15px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
-}
-
-.filter-section .form-select:focus {
-    border-color: var(--ifes-green);
-    box-shadow: 0 0 0 0.2rem rgba(46, 125, 50, 0.25);
 }
 
 /* ===== SEARCH RESULT CARD ===== */
@@ -198,42 +185,6 @@
 .assistants-list-card .table tbody tr:hover {
     background-color: var(--ifes-hover-bg);
     transform: scale(1.005);
-}
-
-/* ===== AREA BADGES ===== */
-.area-badge {
-    display: inline-block;
-    padding: 6px 12px;
-    border-radius: 15px;
-    font-size: 0.8rem;
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 0.3px;
-}
-
-.area-badge.psicologia {
-    background: linear-gradient(135deg, #9C27B0, #BA68C8);
-    color: white;
-}
-
-.area-badge.servico-social {
-    background: linear-gradient(135deg, #2196F3, #42A5F5);
-    color: white;
-}
-
-.area-badge.pedagogia {
-    background: linear-gradient(135deg, #FF9800, #FFB74D);
-    color: white;
-}
-
-.area-badge.nutricao {
-    background: linear-gradient(135deg, #4CAF50, #66BB6A);
-    color: white;
-}
-
-.area-badge.coordenacao {
-    background: linear-gradient(135deg, #607D8B, #78909C);
-    color: white;
 }
 
 /* ===== ACTION BUTTONS ESPECÍFICOS ===== */
@@ -309,49 +260,6 @@
     border-radius: 0 0 15px 15px;
 }
 
-/* ===== FORM STYLES ===== */
-.form-floating .form-control {
-    border: 1px solid #e1e5e9;
-    border-radius: 10px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
-}
-
-.form-floating .form-control:focus {
-    border-color: var(--ifes-green);
-    box-shadow: 0 0 0 0.2rem rgba(46, 125, 50, 0.25);
-}
-
-.form-floating label {
-    color: #6c757d;
-    font-weight: 500;
-}
-
-/* ===== LOADING STATES ===== */
-.loading {
-    opacity: 0.6;
-    pointer-events: none;
-    position: relative;
-}
-
-.loading::after {
-    content: '';
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    width: 20px;
-    height: 20px;
-    margin: -10px 0 0 -10px;
-    border: 2px solid #f3f3f3;
-    border-top: 2px solid var(--ifes-green);
-    border-radius: 50%;
-    animation: spin 1s linear infinite;
-}
-
-@keyframes spin {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
-}
-
 /* ===== RESPONSIVE DESIGN ===== */
 @media (max-width: 768px) {
     .page-header {
@@ -378,12 +286,6 @@
     
     .assistants-list-card .table {
         font-size: 0.9rem;
-    }
-    
-    .area-badge {
-        display: block;
-        margin: 2px 0;
-        text-align: center;
     }
     
     .action-buttons {
@@ -456,48 +358,6 @@
     animation: fadeInUp 0.6s ease-out;
 }
 
-/* ===== TOASTS PERSONALIZADOS ===== */
-.toast-container {
-    z-index: 9999;
-}
-
-.toast {
-    border: none;
-    border-radius: 10px;
-    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
-}
-
-.toast-header {
-    border-bottom: none;
-    border-radius: 10px 10px 0 0;
-    padding: 15px 20px;
-}
-
-.toast-body {
-    padding: 15px 20px;
-    font-weight: 500;
-}
-
-/* ===== CUSTOM SCROLLBAR PARA TABELAS ===== */
-.table-responsive::-webkit-scrollbar {
-    height: 8px;
-}
-
-.table-responsive::-webkit-scrollbar-track {
-    background: #f1f1f1;
-    border-radius: 10px;
-}
-
-.table-responsive::-webkit-scrollbar-thumb {
-    background: var(--ifes-light-green);
-    border-radius: 10px;
-}
-
-.table-responsive::-webkit-scrollbar-thumb:hover {
-    background: var(--ifes-green);
-}
-
-/* ===== STATUS BADGES ESPECÍFICOS ===== */
 .badge.bg-success {
     background: linear-gradient(135deg, #4CAF50, #66BB6A) !important;
 }
@@ -512,37 +372,4 @@
 
 .badge.bg-info {
     background: linear-gradient(135deg, #2196F3, #42A5F5) !important;
-}
-
-/* ===== CARDS DE DETALHES DO ASSISTENTE ===== */
-.assistant-detail-card {
-    background: linear-gradient(135deg, white 0%, #f8fff8 100%);
-    border-radius: 15px;
-    padding: 25px;
-    border: 1px solid rgba(46, 125, 50, 0.1);
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.06);
-    margin-bottom: 20px;
-}
-
-.assistant-detail-card h6 {
-    color: var(--ifes-dark-gray);
-    font-weight: 700;
-    margin-bottom: 15px;
-    border-bottom: 2px solid var(--ifes-light-green);
-    padding-bottom: 8px;
-}
-
-.info-row {
-    margin-bottom: 15px;
-}
-
-.info-label {
-    font-weight: 600;
-    color: var(--ifes-dark-gray);
-    margin-bottom: 5px;
-}
-
-.info-value {
-    color: #666;
-    font-size: 1rem;
 }

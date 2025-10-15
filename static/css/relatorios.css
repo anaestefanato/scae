@@ -156,37 +156,6 @@
     border-radius: 6px;
 }
 
-/* ===== BADGES AUXILIOS ===== */
-.auxilio-badge {
-    display: inline-block;
-    padding: 0.25rem 0.5rem;
-    font-size: 0.75rem;
-    font-weight: 500;
-    border-radius: 4px;
-    margin-right: 0.25rem;
-    margin-bottom: 0.25rem;
-}
-
-.auxilio-badge.alimentacao {
-    background-color: #e8f5e9;
-    color: #2e7d32;
-}
-
-.auxilio-badge.transporte {
-    background-color: #e3f2fd;
-    color: #1976d2;
-}
-
-.auxilio-badge.moradia {
-    background-color: #fff3e0;
-    color: #f57c00;
-}
-
-.auxilio-badge.material {
-    background-color: #f3e5f5;
-    color: #7b1fa2;
-}
-
 /* ===== BOTÕES CUSTOMIZADOS ===== */
 .btn-primary {
     background: linear-gradient(135deg, var(--ifes-green), var(--ifes-light-green));

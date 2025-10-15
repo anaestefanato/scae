@@ -17,7 +17,8 @@
 }
 
 /* ===== BODY E FONT ===== */
-html, body, .body-cadastro-login {
+h/* ===== BOTÕES ESPECÍFICOS ===== */
+/* Botão redondo de notificação */astro-login {
     font-family: 'Poppins', Arial, Helvetica, sans-serif !important;
     background-color: #f0f7f0 !important;
 }
@@ -189,25 +190,6 @@ html, body, .body-cadastro-login {
     opacity: 0;
     transform: scale(0.8);
     pointer-events: none;
-}
-
-/* Backdrop para o overlay da sidebar */
-.sidebar-backdrop {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.5);
-    z-index: 1040;
-    opacity: 0;
-    visibility: hidden;
-    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-.sidebar-backdrop.visible {
-    opacity: 1;
-    visibility: visible;
 }
 
 /* ===== MAIN CONTENT ===== */
@@ -507,41 +489,6 @@ html, body, .body-cadastro-login {
 }
 
 /* ===== SECTION ESPECÍFICA - PRÓXIMOS PAGAMENTOS ===== */
-.pagamentos-card {
-    background: linear-gradient(135deg, #fff 0%, #f8fff8 100%);
-    border: 1px solid rgba(46, 125, 50, 0.1);
-}
-
-.pagamentos-card .card-header {
-    background: linear-gradient(135deg, var(--ifes-green), #1b5e20);
-}
-
-.pagamento-item {
-    background: rgba(46, 125, 50, 0.05);
-    border-radius: 10px;
-    padding: 15px;
-    margin-bottom: 15px;
-    border-left: 4px solid var(--ifes-green);
-    transition: all 0.3s ease;
-}
-
-.pagamento-item:hover {
-    background: rgba(46, 125, 50, 0.1);
-    transform: translateX(5px);
-}
-
-.pagamento-item h6 {
-    color: var(--ifes-dark-gray);
-    font-weight: 700;
-    margin-bottom: 5px;
-}
-
-.pagamento-item small {
-    color: #666;
-    font-weight: 500;
-}
-
-/* ===== BOTÕES ESPECÍFICOS ===== */
 .btn-criar-edital {
     background: linear-gradient(135deg, var(--ifes-green), var(--ifes-light-green));
     border: none;
@@ -594,22 +541,6 @@ html, body, .body-cadastro-login {
     padding: 0.25em 0.4em;
     margin-left: -8px;
     margin-top: -2px;
-}
-
-.btn-processar-pagamentos {
-    background: linear-gradient(135deg, var(--ifes-blue), #1565C0);
-    border: none;
-    color: white;
-    padding: 10px 20px;
-    border-radius: 20px;
-    font-weight: 600;
-    transition: all 0.3s ease;
-}
-
-.btn-processar-pagamentos:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 6px 12px rgba(25, 118, 210, 0.4);
-    color: white;
 }
 
 /* ===== MODAL STYLES PARA CRIAÇÃO DE EDITAL ===== */
@@ -854,17 +785,6 @@ html, body, .body-cadastro-login {
     border-left: 3px solid var(--ifes-green);
 }
 
-/* Notificações lidas */
-.notification-item.read {
-    opacity: 0.7;
-    background-color: #f8f9fa;
-}
-
-/* Estilos para o modal de detalhes */
-.modal-lg {
-    max-width: 800px;
-}
-
 /* Cards dentro do modal */
 .modal-body .card {
     border: 1px solid #dee2e6;
@@ -880,24 +800,6 @@ html, body, .body-cadastro-login {
 
 .modal-body .card-body {
     padding: 15px;
-}
-
-/* Seção de motivo de recusa */
-#motivoRecusaSection .card {
-    border-color: #dc3545 !important;
-}
-
-#motivoRecusaSection .card-header {
-    background-color: #dc3545 !important;
-    color: white !important;
-}
-
-/* Botão com badge de notificação */
-.btn-criar-edital .badge {
-    font-size: 0.6rem;
-    padding: 0.25em 0.4em;
-    margin-left: -10px;
-    margin-top: -5px;
 }
 
 /* Responsividade para os modais */
