@@ -223,5 +223,28 @@
     </div>
 </div>
 
+<script src="/static/js/toast-manager.js"></script>
 <script src="/static/js/editais_aluno.js"></script>
+<script>
+    // Handler para mensagens de sucesso/erro via URL params
+    document.addEventListener('DOMContentLoaded', function() {
+        const urlParams = new URLSearchParams(window.location.search);
+        
+        // Mensagem de sucesso
+        const msgSucesso = urlParams.get('msg');
+        if (msgSucesso) {
+            showSuccess(decodeURIComponent(msgSucesso));
+            // Limpar a URL sem recarregar a página
+            window.history.replaceState({}, document.title, window.location.pathname);
+        }
+        
+        // Mensagem de erro
+        const msgErro = urlParams.get('erro');
+        if (msgErro) {
+            showError(decodeURIComponent(msgErro));
+            // Limpar a URL sem recarregar a página
+            window.history.replaceState({}, document.title, window.location.pathname);
+        }
+    });
+</script>
 {% endblock %}

@@ -3,6 +3,11 @@
    Dados dinâmicos carregados via Jinja2
    ========================================== */
 
+// ===== CARREGAR DADOS DO HTML =====
+// Buscar dados dos administradores do atributo data-administradores
+const mainContent = document.getElementById('mainContent');
+const administradores = mainContent ? JSON.parse(mainContent.getAttribute('data-administradores') || '[]') : [];
+
 document.addEventListener('DOMContentLoaded', function() {
     // ===== INICIALIZAÇÃO =====
     initializeAdminManagement();

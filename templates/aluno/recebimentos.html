@@ -43,32 +43,14 @@
             <div class="card">
                 <div class="card-header d-flex justify-content-between align-items-center">
                     <span><i class="bi bi-cash-coin me-2"></i>Histórico de Pagamentos</span>
-                    <select class="form-select w-auto" style="font-size:0.95rem;" onchange="filtrarAuxilio(this.value)">
-                        <option value="todos">Todos os Auxílios</option>
-                        {% set tipos_vistos = [] %}
-                        {% for recebimento in recebimentos %}
-                            {% set tipo_normalizado = recebimento.tipo_auxilio.replace(' ', '_').replace('auxilio_', '') %}
-                            {% if tipo_normalizado not in tipos_vistos %}
-                                {% set _ = tipos_vistos.append(tipo_normalizado) %}
-                                <option value="{{ tipo_normalizado }}">
-                                    {% if recebimento.tipo_auxilio == 'auxilio alimentacao' %}Auxílio Alimentação
-                                    {% elif recebimento.tipo_auxilio == 'auxilio transporte' %}Auxílio Transporte
-                                    {% elif recebimento.tipo_auxilio == 'auxilio moradia' %}Auxílio Moradia
-                                    {% elif recebimento.tipo_auxilio == 'auxilio material' %}Auxílio Material Didático
-                                    {% else %}{{ recebimento.tipo_auxilio|title }}{% endif %}
-                                </option>
-                            {% endif %}
-                        {% endfor %}
-                    </select>
                 </div>
                 <div class="card-body p-0">
                     <div class="table-responsive">
                         <table class="table table-striped mb-0" id="tabelaRecebimentos">
                             <thead>
                                 <tr>
-                                    <th>Auxílio</th>
                                     <th>Referente ao Mês</th>
-                                    <th>Valor</th>
+                                    <th>Valor Total</th>
                                     <th>Status</th>
                                     <th>Data de Recebimento</th>
                                     <th>Ações</th>
@@ -77,22 +59,9 @@
                             <tbody>
                                 {% if recebimentos %}
                                     {% for recebimento in recebimentos %}
-                                    <tr data-auxilio="{{ recebimento.tipo_auxilio.replace(' ', '_').replace('auxilio_', '') }}">
-                                        <td>
-                                            {% if recebimento.tipo_auxilio == 'auxilio alimentacao' %}
-                                                <i class="bi bi-cup-hot me-2 text-success"></i>Alimentação
-                                            {% elif recebimento.tipo_auxilio == 'auxilio transporte' %}
-                                                <i class="bi bi-bus-front me-2 text-success"></i>Transporte
-                                            {% elif recebimento.tipo_auxilio == 'auxilio moradia' %}
-                                                <i class="bi bi-house me-2 text-success"></i>Moradia
-                                            {% elif recebimento.tipo_auxilio == 'auxilio material' %}
-                                                <i class="bi bi-book me-2 text-success"></i>Material Didático
-                                            {% else %}
-                                                <i class="bi bi-gift me-2 text-success"></i>{{ recebimento.tipo_auxilio|title }}
-                                            {% endif %}
-                                        </td>
+                                    <tr>
                                         <td>{{ recebimento.mes_referencia }}/{{ recebimento.ano_referencia }}</td>
-                                        <td class="fw-bold text-success">R$ {{ "%.2f"|format(recebimento.valor) }}</td>
+                                        <td class="fw-bold text-success">R$ {{ "%.2f"|format(recebimento.valor_total) }}</td>
                                         <td>
                                             <span class="status-badge 
                                                 {% if recebimento.status == 'confirmado' %}status-deferido
@@ -107,11 +76,19 @@
                                         <td>
                                             {% if recebimento.status == 'pendente' %}
                                                 <button class="btn btn-sm btn-success" 
-                                                    onclick="abrirModalConfirmacao({{ recebimento.id_recebimento }}, '{{ recebimento.tipo_auxilio }}', '{{ recebimento.mes_referencia }}/{{ recebimento.ano_referencia }}', {{ recebimento.valor }})">
+                                                    data-mes="{{ recebimento.mes_referencia }}"
+                                                    data-ano="{{ recebimento.ano_referencia }}"
+                                                    data-valor="{{ recebimento.valor_total }}"
+                                                    data-auxilios='{{ recebimento.auxilios|tojson }}'
+                                                    onclick="abrirModalConfirmacao(this.dataset.mes, this.dataset.ano, parseFloat(this.dataset.valor), JSON.parse(this.dataset.auxilios))">
                                                     <i class="bi bi-check-circle me-1"></i>Confirmar
                                                 </button>
                                             {% else %}
-                                                <button class="btn btn-sm btn-outline-info" onclick="mostrarDetalhes({{ recebimento.id_recebimento }})">
+                                                <button class="btn btn-sm btn-outline-info" 
+                                                    data-mes="{{ recebimento.mes_referencia }}"
+                                                    data-ano="{{ recebimento.ano_referencia }}"
+                                                    data-auxilios='{{ recebimento.auxilios|tojson }}'
+                                                    onclick="mostrarDetalhes(this.dataset.mes, this.dataset.ano, JSON.parse(this.dataset.auxilios))">
                                                     <i class="bi bi-eye me-1"></i>Ver
                                                 </button>
                                             {% endif %}
@@ -120,7 +97,7 @@
                                     {% endfor %}
                                 {% else %}
                                     <tr>
-                                        <td colspan="6" class="text-center py-5">
+                                        <td colspan="5" class="text-center py-5">
                                             <i class="bi bi-inbox text-muted" style="font-size: 2rem;"></i>
                                             <div class="mt-2 text-muted">Nenhum recebimento encontrado</div>
                                             <small class="text-muted">Você ainda não possui histórico de recebimentos.</small>
@@ -156,9 +133,15 @@
                     
                     <div class="mb-3">
                         <h6>Detalhes do Recebimento</h6>
-                        <p><strong>Auxílio:</strong> <span id="detalheAuxilio"></span></p>
                         <p><strong>Mês de Referência:</strong> <span id="detalheMes"></span></p>
-                        <p><strong>Valor:</strong> <span id="detalheValor" class="text-success fw-bold"></span></p>
+                        <p><strong>Valor Total:</strong> <span id="detalheValor" class="text-success fw-bold"></span></p>
+                        
+                        <div class="mt-3">
+                            <strong>Auxílios Recebidos:</strong>
+                            <ul id="listaAuxilios" class="list-unstyled mt-2">
+                                <!-- Lista de auxílios será preenchida via JavaScript -->
+                            </ul>
+                        </div>
                     </div>
 
                     <div id="divComprovantes" style="display:none;">
@@ -216,5 +199,5 @@
                 <button type="button" class="btn btn-secondary" onclick="fecharModalDetalhesRecebimento()">
                     <i class="bi bi-x-circle me-1"></i>Fechar
 
-<script src="/static/js/recebimentos_aluno.js"></script>
+<script src="/static/js/recebimentos_aluno.js?v={{ range(1, 10000) | random }}"></script>
 {% endblock %}

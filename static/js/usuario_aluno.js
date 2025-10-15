@@ -2,6 +2,28 @@
    GERENCIAR ALUNOS - JAVASCRIPT
    ========================================== */
 
+// ===== CARREGAR DADOS DO HTML =====
+// Buscar dados dos alunos do atributo data-alunos
+const mainContent = document.getElementById('mainContent');
+const alunosData = mainContent ? JSON.parse(mainContent.getAttribute('data-alunos') || '[]') : [];
+const paginaAtualData = mainContent ? parseInt(mainContent.getAttribute('data-pagina-atual') || '1') : 1;
+const totalPaginasData = mainContent ? parseInt(mainContent.getAttribute('data-total-paginas') || '1') : 1;
+const totalAlunosData = mainContent ? parseInt(mainContent.getAttribute('data-total-alunos') || '0') : 0;
+
+// Disponibilizar globalmente para compatibilidade
+window.alunos = alunosData;
+window.paginaAtual = paginaAtualData;
+window.totalPaginas = totalPaginasData;
+window.totalAlunos = totalAlunosData;
+
+// ===== FUNÇÕES ALIAS (chamadas pelos botões do HTML) =====
+function viewStudent(id) { viewStudentReal(id); }
+function editStudent(id) { editStudentReal(id); }
+function deleteStudent(id) { deleteStudentReal(id); }
+function searchStudent() { searchStudentReal(); }
+function clearSearch() { clearSearchReal(); }
+function filterStudents() { filterStudentsReal(); }
+
 document.addEventListener('DOMContentLoaded', function() {
     console.log('Inicializando gerenciamento de alunos...');
     console.log('Total de alunos carregados:', window.alunos ? window.alunos.length : 0);

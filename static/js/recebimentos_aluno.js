@@ -73,32 +73,58 @@ document.addEventListener('DOMContentLoaded', function() {
     initializeSidebar();
 });
 
-// Filtro de auxílio
-function filtrarAuxilio(tipo) {
-    var linhas = document.querySelectorAll('#tabelaRecebimentos tbody tr');
-    linhas.forEach(function(linha) {
-        if (tipo === 'todos' || linha.getAttribute('data-auxilio') === tipo) {
-            linha.style.display = '';
-        } else {
-            linha.style.display = 'none';
-        }
-    });
-}
-
 // Modal detalhes
-function mostrarDetalhes(idRecebimento) {
-    var body = document.getElementById('detalhesRecebimentoBody');
+function mostrarDetalhes(mes, ano, auxilios) {
+    const body = document.getElementById('detalhesRecebimentoBody');
+    
+    // Calcular valor total
+    let valorTotal = 0;
+    auxilios.forEach(aux => valorTotal += aux.valor);
+    
+    // Montar lista de auxílios
+    let listaAuxilios = '<ul class="list-unstyled">';
+    auxilios.forEach(function(auxilio) {
+        let icone = '';
+        let nome = '';
+        
+        if (auxilio.tipo_auxilio.includes('alimentacao')) {
+            icone = '<i class="bi bi-cup-hot me-2 text-success"></i>';
+            nome = 'Auxílio Alimentação';
+        } else if (auxilio.tipo_auxilio.includes('transporte')) {
+            icone = '<i class="bi bi-bus-front me-2 text-success"></i>';
+            nome = 'Auxílio Transporte';
+        } else if (auxilio.tipo_auxilio.includes('moradia')) {
+            icone = '<i class="bi bi-house me-2 text-success"></i>';
+            nome = 'Auxílio Moradia';
+        } else if (auxilio.tipo_auxilio.includes('material')) {
+            icone = '<i class="bi bi-book me-2 text-success"></i>';
+            nome = 'Auxílio Material Didático';
+        } else {
+            icone = '<i class="bi bi-gift me-2 text-success"></i>';
+            nome = auxilio.tipo_auxilio.replace('auxilio', 'Auxílio').replace(/_/g, ' ');
+        }
+        
+        listaAuxilios += '<li class="mb-2">' + icone + nome + ' - <span class="text-success fw-bold">R$ ' + auxilio.valor.toFixed(2) + '</span></li>';
+    });
+    listaAuxilios += '</ul>';
+    
     body.innerHTML = `
         <div class="row">
             <div class="col-12">
                 <h6 class="mb-3">Informações do Pagamento</h6>
-                <p><strong>ID do Recebimento:</strong> ${idRecebimento}</p>
+                <p><strong>Mês de Referência:</strong> ${mes}/${ano}</p>
+                <p><strong>Valor Total:</strong> <span class='text-success fw-bold'>R$ ${valorTotal.toFixed(2)}</span></p>
                 <p><strong>Status:</strong> <span class='status-badge status-deferido'>Confirmado</span></p>
             </div>
         </div>
         <div class="row mt-3">
             <div class="col-12">
-                <h6 class="mb-3">Observações</h6>
+                <h6 class="mb-3">Auxílios Recebidos</h6>
+                ${listaAuxilios}
+            </div>
+        </div>
+        <div class="row mt-3">
+            <div class="col-12">
                 <div class="alert alert-success">
                     <i class="bi bi-check-circle me-2"></i>
                     Recebimento processado com sucesso. Para dúvidas sobre valores ou datas, entre em contato com a assistência social.
@@ -116,22 +142,60 @@ function fecharModalDetalhesRecebimento() {
 }
 
 // Modal de confirmação
-let idRecebimentoAtual = null;
-let tipoAuxilioAtual = null;
+let mesAtual = null;
+let anoAtual = null;
+let auxiliosAtual = [];
 
-function abrirModalConfirmacao(idRecebimento, tipoAuxilio, mes, valor) {
-    idRecebimentoAtual = idRecebimento;
-    tipoAuxilioAtual = tipoAuxilio;
+function abrirModalConfirmacao(mes, ano, valorTotal, auxilios) {
+    mesAtual = mes;
+    anoAtual = ano;
+    auxiliosAtual = auxilios;
     
     // Preencher detalhes
-    document.getElementById('detalheAuxilio').textContent = formatarTipoAuxilio(tipoAuxilio);
-    document.getElementById('detalheMes').textContent = mes;
-    document.getElementById('detalheValor').textContent = 'R$ ' + valor.toFixed(2);
+    document.getElementById('detalheMes').textContent = mes + '/' + ano;
+    document.getElementById('detalheValor').textContent = 'R$ ' + valorTotal.toFixed(2);
+    
+    // Preencher lista de auxílios
+    const listaAuxilios = document.getElementById('listaAuxilios');
+    listaAuxilios.innerHTML = '';
+    
+    let temTransporte = false;
+    let temMoradia = false;
+    
+    auxilios.forEach(function(auxilio) {
+        const li = document.createElement('li');
+        li.className = 'mb-2';
+        
+        let icone = '';
+        let nome = '';
+        
+        if (auxilio.tipo_auxilio.includes('alimentacao')) {
+            icone = '<i class="bi bi-cup-hot me-2 text-success"></i>';
+            nome = 'Auxílio Alimentação';
+        } else if (auxilio.tipo_auxilio.includes('transporte')) {
+            icone = '<i class="bi bi-bus-front me-2 text-success"></i>';
+            nome = 'Auxílio Transporte';
+            temTransporte = true;
+        } else if (auxilio.tipo_auxilio.includes('moradia')) {
+            icone = '<i class="bi bi-house me-2 text-success"></i>';
+            nome = 'Auxílio Moradia';
+            temMoradia = true;
+        } else if (auxilio.tipo_auxilio.includes('material')) {
+            icone = '<i class="bi bi-book me-2 text-success"></i>';
+            nome = 'Auxílio Material Didático';
+        } else {
+            icone = '<i class="bi bi-gift me-2 text-success"></i>';
+            nome = auxilio.tipo_auxilio.replace('auxilio', 'Auxílio').replace(/_/g, ' ');
+        }
+        
+        li.innerHTML = icone + nome + ' - <span class="text-success fw-bold">R$ ' + auxilio.valor.toFixed(2) + '</span>';
+        listaAuxilios.appendChild(li);
+    });
     
     // Definir ação do formulário
-    document.getElementById('formConfirmacao').action = `/aluno/recebimentos/confirmar/${idRecebimento}`;
+    document.getElementById('formConfirmacao').action = `/aluno/recebimentos/confirmar/${mes}/${ano}`;
     
-    // Mostrar/ocultar campos de comprovante baseado no tipo de auxílio
+    // Mostrar/ocultar campos de comprovante baseado nos tipos de auxílio
     const divComprovantes = document.getElementById('divComprovantes');
     const divTransporte = document.getElementById('divComprovanteTransporte');
     const divMoradia = document.getElementById('divComprovanteMoradia');
@@ -147,14 +211,18 @@ function abrirModalConfirmacao(idRecebimento, tipoAuxilio, mes, valor) {
     inputMoradia.value = '';
     
     // Mostrar campos necessários
-    if (tipoAuxilio.includes('transporte')) {
+    if (temTransporte || temMoradia) {
         divComprovantes.style.display = 'block';
-        divTransporte.style.display = 'block';
-        inputTransporte.required = true;
-    } else if (tipoAuxilio.includes('moradia')) {
-        divComprovantes.style.display = 'block';
-        divMoradia.style.display = 'block';
-        inputMoradia.required = true;
+        
+        if (temTransporte) {
+            divTransporte.style.display = 'block';
+            inputTransporte.required = true;
+        }
+        
+        if (temMoradia) {
+            divMoradia.style.display = 'block';
+            inputMoradia.required = true;
+        }
     } else {
         divComprovantes.style.display = 'none';
     }
@@ -167,16 +235,9 @@ function abrirModalConfirmacao(idRecebimento, tipoAuxilio, mes, valor) {
 function fecharModalConfirmacao() {
     document.getElementById('modalConfirmacao').style.display = 'none';
     document.getElementById('modalConfirmacao').classList.remove('show');
-    idRecebimentoAtual = null;
-    tipoAuxilioAtual = null;
-}
-
-function formatarTipoAuxilio(tipo) {
-    if (tipo.includes('alimentacao')) return 'Auxílio Alimentação';
-    if (tipo.includes('transporte')) return 'Auxílio Transporte';
-    if (tipo.includes('moradia')) return 'Auxílio Moradia';
-    if (tipo.includes('material')) return 'Auxílio Material Didático';
-    return tipo.replace('auxilio', 'Auxílio').replace(/_/g, ' ');
+    mesAtual = null;
+    anoAtual = null;
+    auxiliosAtual = [];
 }
 
 function baixarComprovante() {

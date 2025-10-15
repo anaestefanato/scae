@@ -87,7 +87,11 @@
     </div>
 
     <!-- Main Content -->
-    <div class="main-content" id="mainContent">
+    <div class="main-content" id="mainContent" 
+         data-alunos='{{ alunos | tojson | safe }}'
+         data-pagina-atual="{{ pagina_atual }}"
+         data-total-paginas="{{ total_paginas }}"
+         data-total-alunos="{{ total_alunos }}">
         <!-- Header com Breadcrumb -->
         <div class="page-header mb-4">
             <nav aria-label="breadcrumb">
@@ -441,26 +445,7 @@
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
     <script src="/static/js/dashboard_admin.js"></script>
-    
-    <!-- Script para manipular dados dos alunos -->
-    <script>
-        // Dados dos alunos vindos do servidor (disponível para o JS externo)
-        window.alunos = {{ alunos | tojson }};
-
-        // Variáveis de paginação para o arquivo JS externo
-        window.paginaAtual = {{ pagina_atual }};
-        window.totalPaginas = {{ total_paginas }};
-        window.totalAlunos = {{ total_alunos }};
-
-        // Aliases para manter compatibilidade com o HTML (os botões chamam essas funções)
-        function viewStudent(id) { viewStudentReal(id); }
-        function editStudent(id) { editStudentReal(id); }
-        function deleteStudent(id) { deleteStudentReal(id); }
-        function searchStudent() { searchStudentReal(); }
-        function clearSearch() { clearSearchReal(); }
-        function filterStudents() { filterStudentsReal(); }
-    </script>
-    <script src="/static/js/usuario_aluno.js"></script>
+    <script src="/static/js/usuario_aluno.js?v=2"></script>
 
     <footer class="footer bg-success text-white py-4">
         <div class="container">
