@@ -302,3 +302,16 @@ textarea.form-control {
 .card {
     animation: fadeInUp 0.6s ease forwards;
 }
+
+/* ===== BOTÕES TRANSPARENTES ===== */
+.card-header .btn-outline-light {
+    background-color: transparent !important;
+    border-color: rgba(255, 255, 255, 0.5) !important;
+    color: white !important;
+}
+
+.card-header .btn-outline-light:hover {
+    background-color: rgba(255, 255, 255, 0.15) !important;
+    border-color: white !important;
+    color: white !important;
+}
