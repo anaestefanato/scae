@@ -157,11 +157,22 @@ class RenovacaoDTO(BaseModel):
     @field_validator('renda_percapita')
     @classmethod
     def validar_renda_percapita(cls, v):
+        # Mapear códigos de renda para valores numéricos (médios da faixa)
+        RENDA_MAPPING = {
+            'menor_1': 706.0,      # Média até 1 salário mínimo (0 a 1412)
+            'ate_1_5': 1765.0,     # Média de 1 a 1,5 salários (1412 a 2118)
+            'maior_1_5': 2824.0    # Média acima de 1,5 salários (2118+)
+        }
+        
         if isinstance(v, str):
-            try:
-                v = float(v)
-            except (ValueError, TypeError):
-                raise ValueError('Renda per capita deve ser um valor numérico válido')
+            # Verificar se é um código de renda
+            if v in RENDA_MAPPING:
+                v = RENDA_MAPPING[v]
+            else:
+                try:
+                    v = float(v)
+                except (ValueError, TypeError):
+                    raise ValueError('Renda per capita deve ser um valor numérico válido ou uma faixa selecionada')
         
         if v < 0:
             raise ValueError('Renda per capita não pode ser negativa')
@@ -175,14 +186,17 @@ class RenovacaoDTO(BaseModel):
     @field_validator('auxilios')
     @classmethod
     def validar_auxilios(cls, v):
-        if not v or len(v) == 0:
-            raise ValueError('Selecione pelo menos um tipo de auxílio')
+        # Permitir lista vazia durante validação parcial (Etapa 1)
+        # A validação completa será feita apenas no envio final
+        if v is None:
+            return []
         
-        # Validar se os auxílios são válidos
-        auxilios_validos = ['transporte', 'moradia', 'alimentacao', 'material']
-        for auxilio in v:
-            if auxilio not in auxilios_validos:
-                raise ValueError(f'Auxílio inválido: {auxilio}')
+        # Se houver auxílios, validar se são válidos
+        if v and len(v) > 0:
+            auxilios_validos = ['transporte', 'moradia', 'alimentacao', 'material']
+            for auxilio in v:
+                if auxilio not in auxilios_validos:
+                    raise ValueError(f'Auxílio inválido: {auxilio}')
         
         return v
     

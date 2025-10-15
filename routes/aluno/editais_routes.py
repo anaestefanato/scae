@@ -14,6 +14,7 @@ from model.aluno_model import Aluno
 from model.auxilio_transporte_model import AuxilioTransporte
 from model.auxilio_moradia_model import AuxilioMoradia
 from dtos.primeira_inscricao_dto import PrimeiraInscricaoDTO
+from dtos.renovação_dto import RenovacaoDTO
 from util.auth_decorator import obter_usuario_logado, requer_autenticacao
 
 
@@ -582,7 +583,7 @@ async def post_editais_primeira_inscricao(
         
         # 11. Redirecionar com mensagem de sucesso
         return RedirectResponse(
-            "/aluno/editais?msg=Inscrição enviada com sucesso!", 
+            "/aluno/editais?msg=✓ Primeira inscrição enviada com sucesso! Sua solicitação foi registrada e está em análise. Acompanhe as atualizações no sistema.", 
             status_code=303
         )
         
@@ -659,6 +660,161 @@ async def get_editais_renovacao(request: Request, usuario_logado: dict = None):
         }
     )
     return response
+
+
+@router.post("/editais/renovacao/validar")
+@requer_autenticacao(["aluno"])
+async def validar_dados_renovacao(
+    request: Request,
+    usuario_logado: dict = None,
+    # Dados Pessoais
+    nome: str = Form(...),
+    cpf: str = Form(...),
+    data_nascimento: str = Form(...),
+    telefone: str = Form(...),
+    email: str = Form(...),
+    logradouro: str = Form(...),
+    numero: str = Form(...),
+    complemento: Optional[str] = Form(None),
+    bairro: str = Form(...),
+    cidade: str = Form(...),
+    estado: str = Form(...),
+    cep: str = Form(...),
+    # Dados Acadêmicos
+    curso: str = Form(...),
+    matricula: str = Form(...),
+    ano_ingresso: int = Form(...),
+    ano_conclusao_previsto: int = Form(...),
+    # Dados Financeiros
+    pessoas_residencia: int = Form(...),
+    renda_percapita: str = Form(...),
+    bolsa_pesquisa: str = Form(...),
+    cad_unico: str = Form(...),
+    bolsa_familia: str = Form(...)
+):
+    """
+    Endpoint para validar dados da Etapa 1 de Renovação usando o DTO Pydantic.
+    Retorna JSON com os erros de validação (se houver).
+    """
+    from fastapi.responses import JSONResponse
+    
+    try:
+        # 1. Mapear renda_percapita de categoria para valor numérico
+        mapa_renda = {
+            "menor_1": 1412.0,      # 1 salário mínimo
+            "ate_1_5": 2118.0,      # 1,5 salário mínimo
+            "maior_1_5": 2500.0     # Valor representativo acima de 1,5
+        }
+        renda_valor = mapa_renda.get(renda_percapita, 0.0)
+        
+        # Tentar criar o DTO apenas com os dados da Etapa 1
+        # Os campos de auxílios serão vazios pois não são obrigatórios
+        dados_validados = RenovacaoDTO(
+            nome=nome,
+            cpf=cpf,
+            data_nascimento=data_nascimento,
+            telefone=telefone,
+            email=email,
+            logradouro=logradouro,
+            numero=numero,
+            complemento=complemento,
+            bairro=bairro,
+            cidade=cidade,
+            estado=estado,
+            cep=cep,
+            curso=curso,
+            matricula=matricula,
+            ano_ingresso=ano_ingresso,
+            ano_conclusao_previsto=ano_conclusao_previsto,
+            pessoas_residencia=pessoas_residencia,
+            renda_percapita=renda_valor,
+            bolsa_pesquisa=bolsa_pesquisa,
+            cad_unico=cad_unico,
+            bolsa_familia=bolsa_familia,
+            # Campos opcionais de auxílios (não validados nesta etapa)
+            auxilios=[],
+            tipo_transporte=None,
+            tipo_onibus=None,
+            gasto_passagens_dia=None,
+            gasto_van_mensal=None
+        )
+        
+        # Se chegou aqui, os dados são válidos
+        return JSONResponse(
+            content={"valido": True, "mensagem": "Dados válidos!"},
+            status_code=200
+        )
+        
+    except ValidationError as e:
+        # Extrair erros de validação
+        erros = []
+        for erro in e.errors():
+            campo = erro['loc'][0] if erro['loc'] else 'campo'
+            mensagem = erro['msg']
+            tipo = erro['type']
+            
+            # Traduzir nomes de campos para português
+            traducao_campos = {
+                'nome': 'Nome Completo',
+                'cpf': 'CPF',
+                'data_nascimento': 'Data de Nascimento',
+                'telefone': 'Telefone',
+                'email': 'E-mail',
+                'logradouro': 'Logradouro',
+                'numero': 'Número',
+                'bairro': 'Bairro',
+                'cidade': 'Cidade',
+                'estado': 'Estado',
+                'cep': 'CEP',
+                'curso': 'Curso',
+                'matricula': 'Matrícula',
+                'ano_ingresso': 'Ano de Ingresso',
+                'ano_conclusao_previsto': 'Ano Previsto para Conclusão',
+                'pessoas_residencia': 'Quantas pessoas residem com você',
+                'renda_percapita': 'Renda Familiar Per Capita',
+                'bolsa_pesquisa': 'Bolsa de Pesquisa/Estágio',
+                'cad_unico': 'CAD Único',
+                'bolsa_familia': 'Bolsa Família'
+            }
+            
+            campo_traduzido = traducao_campos.get(str(campo), str(campo))
+            
+            # Personalizar mensagens de erro
+            if 'cpf' in str(campo).lower():
+                mensagem_amigavel = "CPF inválido. Por favor, verifique se digitou corretamente."
+            elif 'email' in str(campo).lower():
+                mensagem_amigavel = "E-mail inválido. Por favor, verifique o formato."
+            elif 'telefone' in str(campo).lower():
+                mensagem_amigavel = "Telefone inválido. Use o formato (00) 00000-0000."
+            elif 'cep' in str(campo).lower():
+                mensagem_amigavel = "CEP inválido. Use o formato 00000-000."
+            else:
+                mensagem_amigavel = mensagem
+            
+            erros.append({
+                'campo': str(campo),
+                'campo_traduzido': campo_traduzido,
+                'mensagem': mensagem_amigavel,
+                'tipo': tipo
+            })
+        
+        return JSONResponse(
+            content={
+                "valido": False, 
+                "erros": erros,
+                "mensagem": f"Foram encontrados {len(erros)} erro(s) de validação."
+            },
+            status_code=400
+        )
+    
+    except Exception as e:
+        return JSONResponse(
+            content={
+                "valido": False,
+                "mensagem": f"Erro ao validar dados: {str(e)}"
+            },
+            status_code=500
+        )
 
 
 @router.post("/editais/renovacao")
@@ -1017,7 +1173,7 @@ async def post_editais_renovacao(
         
         # 13. Redirecionar com mensagem de sucesso
         return RedirectResponse(
-            "/aluno/editais?msg=Renovação enviada com sucesso!", 
+            "/aluno/editais?msg=✓ Renovação enviada com sucesso! Sua solicitação de renovação foi registrada e está em análise. Acompanhe as atualizações no sistema.", 
             status_code=303
         )
         

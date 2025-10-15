@@ -88,6 +88,26 @@ def confirmar_recebimento(id_recebimento: int, comprovante_transporte: Optional[
         cursor.execute(CONFIRMAR_RECEBIMENTO, (comprovante_transporte, comprovante_moradia, id_recebimento))
         return cursor.rowcount > 0
 
+def confirmar_recebimentos_mes(id_aluno: int, mes_referencia: str, ano_referencia: int, 
+                                comprovante_transporte: Optional[str] = None, 
+                                comprovante_moradia: Optional[str] = None) -> bool:
+    """Confirma todos os recebimentos de um aluno em um determinado mês"""
+    with get_connection() as conn:
+        cursor = conn.cursor()
+        
+        # Confirmar todos os recebimentos do mês
+        cursor.execute(CONFIRMAR_RECEBIMENTOS_MES, (id_aluno, mes_referencia, ano_referencia))
+        
+        # Atualizar comprovante de transporte se fornecido
+        if comprovante_transporte:
+            cursor.execute(ATUALIZAR_COMPROVANTE_TRANSPORTE, (comprovante_transporte, id_aluno, mes_referencia, ano_referencia))
+        
+        # Atualizar comprovante de moradia se fornecido
+        if comprovante_moradia:
+            cursor.execute(ATUALIZAR_COMPROVANTE_MORADIA, (comprovante_moradia, id_aluno, mes_referencia, ano_referencia))
+        
+        return cursor.rowcount > 0
+
 def obter_por_aluno(id_aluno: int) -> list[dict]:
     with get_connection() as conn:
         cursor = conn.cursor()
@@ -95,17 +115,24 @@ def obter_por_aluno(id_aluno: int) -> list[dict]:
         rows = cursor.fetchall()
         recebimentos = []
         for row in rows:
+            # Processar a string de detalhes dos auxílios
+            auxilios = []
+            if row["auxilios_detalhes"]:
+                for aux_info in row["auxilios_detalhes"].split('|'):
+                    tipo, valor, id_rec = aux_info.split(':')
+                    auxilios.append({
+                        'tipo_auxilio': tipo,
+                        'valor': float(valor),
+                        'id_recebimento': int(id_rec)
+                    })
+            
             recebimento = {
-                'id_recebimento': row["id_recebimento"],
-                'id_auxilio': row["id_auxilio"],
                 'mes_referencia': row["mes_referencia"],
                 'ano_referencia': row["ano_referencia"],
-                'valor': row["valor"],
+                'valor_total': row["valor_total"],
                 'data_recebimento': row["data_recebimento"],
                 'status': row["status"],
-                'observacoes': row["observacoes"],
-                'tipo_auxilio': row["tipo_auxilio"],
-                'edital_titulo': row["edital_titulo"]
+                'auxilios': auxilios
             }
             recebimentos.append(recebimento)
         return recebimentos
