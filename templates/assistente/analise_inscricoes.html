@@ -160,144 +160,59 @@
                     <thead>
                         <tr>
                             <th>Aluno</th>
-                            <th>Edital</th>
-                            <th>Tipo de Auxílio</th>
-                            <th>Data da Inscrição</th>
-                            <th>Status</th>
-                            <th>Renda Per Capita</th>
-                            <th>Ações</th>
+                            <th class="text-center">Matrícula</th>
+                            <th class="text-center">Edital</th>
+                            <th class="text-center">Data da Inscrição</th>
+                            <th class="text-center">Status</th>
+                            <th class="text-center">Ações</th>
                         </tr>
                     </thead>
                     <tbody id="tabelaInscricoes">
-                        <tr data-inscricao-id="1">
-                            <td>
-                                <div class="aluno-info">
-                                    <div class="aluno-nome">João Silva dos Santos</div>
-                                    <small class="text-muted">Matrícula: 20251234567</small>
-                                </div>
+                        {% if inscricoes %}
+                            {% for inscricao in inscricoes %}
+                        <tr data-inscricao-id="{{ inscricao.id_inscricao }}">
+                            <td>{{ inscricao.aluno_nome }}</td>
+                            <td class="text-center">{{ inscricao.aluno_matricula }}</td>
+                            <td class="text-center">
+                                <span class="edital-badge">{{ inscricao.edital_titulo }}</span>
                             </td>
-                            <td>
-                                <span class="edital-badge">001/2025</span>
-                            </td>
-                            <td>Auxílio Transporte</td>
-                            <td>15/03/2025</td>
-                            <td>
+                            <td class="text-center">{{ inscricao.data_inscricao if inscricao.data_inscricao else 'N/A' }}</td>
+                            <td class="text-center">
+                                {% if inscricao.status == 'pendente' %}
                                 <span class="status-badge status-pendente">
                                     <i class="bi bi-clock me-1"></i>Pendente
                                 </span>
+                                {% elif inscricao.status == 'deferido' %}
+                                <span class="status-badge status-deferido">
+                                    <i class="bi bi-check-circle me-1"></i>Deferido
+                                </span>
+                                {% elif inscricao.status == 'indeferido' %}
+                                <span class="status-badge status-indeferido">
+                                    <i class="bi bi-x-circle me-1"></i>Indeferido
+                                </span>
+                                {% else %}
+                                <span class="status-badge status-pendente">
+                                    <i class="bi bi-clock me-1"></i>{{ inscricao.status|title }}
+                                </span>
+                                {% endif %}
                             </td>
-                            <td>R$ 256,80</td>
-                            <td>
+                            <td class="text-center">
                                 <div class="action-buttons">
-                                    <button class="btn btn-sm btn-outline-primary" title="Ver Detalhes" onclick="visualizarDetalhes(1)">
+                                    <button class="btn btn-sm btn-outline-primary" title="Ver Detalhes" onclick="visualizarDetalhes({{ inscricao.id_inscricao }})">
                                         <i class="bi bi-eye"></i> Ver Detalhes
                                     </button>
                                 </div>
                             </td>
                         </tr>
-                        <tr data-inscricao-id="2">
-                            <td>
-                                <div class="aluno-info">
-                                    <div class="aluno-nome">Maria Santos Oliveira</div>
-                                    <small class="text-muted">Matrícula: 20251234568</small>
-                                </div>
-                            </td>
-                            <td>
-                                <span class="edital-badge">002/2025</span>
-                            </td>
-                            <td>Auxílio Material Didático</td>
-                            <td>20/03/2025</td>
-                            <td>
-                                <span class="status-badge status-pendente">
-                                    <i class="bi bi-clock me-1"></i>Pendente
-                                </span>
-                            </td>
-                            <td>R$ 342,15</td>
-                            <td>
-                                <div class="action-buttons">
-                                    <button class="btn btn-sm btn-outline-primary" title="Ver Detalhes" onclick="visualizarDetalhes(2)">
-                                        <i class="bi bi-eye"></i> Ver Detalhes
-                                    </button>
-                                </div>
+                            {% endfor %}
+                        {% else %}
+                        <tr>
+                            <td colspan="6" class="text-center py-5">
+                                <i class="bi bi-inbox" style="font-size: 3rem; color: #ccc;"></i>
+                                <p class="text-muted mt-3">Nenhuma inscrição encontrada para análise.</p>
                             </td>
                         </tr>
-                        <tr data-inscricao-id="3">
-                            <td>
-                                <div class="aluno-info">
-                                    <div class="aluno-nome">Pedro Oliveira Costa</div>
-                                    <small class="text-muted">Matrícula: 20251234569</small>
-                                </div>
-                            </td>
-                            <td>
-                                <span class="edital-badge">001/2025</span>
-                            </td>
-                            <td>Auxílio Alimentação</td>
-                            <td>18/03/2025</td>
-                            <td>
-                                <span class="status-badge status-pendente">
-                                    <i class="bi bi-clock me-1"></i>Pendente
-                                </span>
-                            </td>
-                            <td>R$ 189,45</td>
-                            <td>
-                                <div class="action-buttons">
-                                    <button class="btn btn-sm btn-outline-primary" title="Ver Detalhes" onclick="visualizarDetalhes(3)">
-                                        <i class="bi bi-eye"></i> Ver Detalhes
-                                    </button>
-                                </div>
-                            </td>
-                        </tr>
-                        <tr data-inscricao-id="4">
-                            <td>
-                                <div class="aluno-info">
-                                    <div class="aluno-nome">Ana Carolina Souza</div>
-                                    <small class="text-muted">Matrícula: 20251234570</small>
-                                </div>
-                            </td>
-                            <td>
-                                <span class="edital-badge">003/2025</span>
-                            </td>
-                            <td>Auxílio Transporte</td>
-                            <td>22/03/2025</td>
-                            <td>
-                                <span class="status-badge status-pendente">
-                                    <i class="bi bi-clock me-1"></i>Pendente
-                                </span>
-                            </td>
-                            <td>R$ 675,90</td>
-                            <td>
-                                <div class="action-buttons">
-                                    <button class="btn btn-sm btn-outline-primary" title="Ver Detalhes" onclick="visualizarDetalhes(4)">
-                                        <i class="bi bi-eye"></i> Ver Detalhes
-                                    </button>
-                                </div>
-                            </td>
-                        </tr>
-                        <tr data-inscricao-id="5">
-                            <td>
-                                <div class="aluno-info">
-                                    <div class="aluno-nome">Carlos Henrique Lima</div>
-                                    <small class="text-muted">Matrícula: 20251234571</small>
-                                </div>
-                            </td>
-                            <td>
-                                <span class="edital-badge">002/2025</span>
-                            </td>
-                            <td>Auxílio Material Didático</td>
-                            <td>25/03/2025</td>
-                            <td>
-                                <span class="status-badge status-pendente">
-                                    <i class="bi bi-clock me-1"></i>Pendente
-                                </span>
-                            </td>
-                            <td>R$ 298,75</td>
-                            <td>
-                                <div class="action-buttons">
-                                    <button class="btn btn-sm btn-outline-primary" title="Ver Detalhes" onclick="visualizarDetalhes(5)">
-                                        <i class="bi bi-eye"></i> Ver Detalhes
-                                    </button>
-                                </div>
-                            </td>
+                        {% endif %}
                         </tr>
                     </tbody>
                 </table>
@@ -306,31 +221,39 @@
             <div class="card-footer">
                 <div class="row align-items-center">
                     <div class="col-md-6">
-                        <span class="text-muted">Mostrando 1 a 5 de 127 inscrições</span>
+                        <span class="text-muted">
+                            {% if inscricoes %}
+                                Mostrando {{ ((pagina_atual - 1) * 10) + 1 }} a {{ ((pagina_atual - 1) * 10) + inscricoes|length }} de {{ total_inscricoes }} inscrições
+                            {% else %}
+                                Nenhuma inscrição encontrada
+                            {% endif %}
+                        </span>
                     </div>
                     <div class="col-md-6">
                         <nav aria-label="Navegação da tabela">
                             <ul class="pagination pagination-sm justify-content-end mb-0">
-                                <li class="page-item disabled">
-                                    <a class="page-link" href="#" tabindex="-1">Anterior</a>
+                                <li class="page-item {% if not tem_anterior %}disabled{% endif %}">
+                                    <a class="page-link" href="{% if tem_anterior %}/assistente/analise-inscricoes?pagina={{ pagina_atual - 1 }}{% else %}#{% endif %}" tabindex="-1">Anterior</a>
                                 </li>
+                                
+                                {% for p in range(1, total_paginas + 1) %}
+                                    {% if p == pagina_atual %}
                                 <li class="page-item active">
-                                    <a class="page-link" href="#">1</a>
+                                    <a class="page-link" href="#">{{ p }}</a>
                                 </li>
+                                    {% elif p <= 3 or p > total_paginas - 3 or (p >= pagina_atual - 1 and p <= pagina_atual + 1) %}
                                 <li class="page-item">
-                                    <a class="page-link" href="#">2</a>
+                                    <a class="page-link" href="/assistente/analise-inscricoes?pagina={{ p }}">{{ p }}</a>
                                 </li>
-                                <li class="page-item">
-                                    <a class="page-link" href="#">3</a>
-                                </li>
+                                    {% elif p == 4 or p == total_paginas - 3 %}
                                 <li class="page-item">
                                     <span class="page-link">...</span>
                                 </li>
-                                <li class="page-item">
-                                    <a class="page-link" href="#">26</a>
-                                </li>
-                                <li class="page-item">
-                                    <a class="page-link" href="#">Próximo</a>
+                                    {% endif %}
+                                {% endfor %}
+                                
+                                <li class="page-item {% if not tem_proximo %}disabled{% endif %}">
+                                    <a class="page-link" href="{% if tem_proximo %}/assistente/analise-inscricoes?pagina={{ pagina_atual + 1 }}{% else %}#{% endif %}">Próximo</a>
                                 </li>
                             </ul>
                         </nav>
