@@ -62,8 +62,7 @@
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.06);
 }
 
-.search-box .form-label,
-.filter-section .form-label {
+.search-box .form-label {
     color: var(--ifes-dark-gray);
     font-weight: 600;
     margin-bottom: 10px;
@@ -92,32 +91,6 @@
 .search-box .btn:hover {
     background: var(--ifes-light-green);
     border-color: var(--ifes-light-green);
-}
-
-.filter-section .form-select {
-    border: 1px solid #e1e5e9;
-    border-radius: 10px;
-    padding: 12px 15px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
-}
-
-.filter-section .form-select:focus {
-    border-color: var(--ifes-green);
-    box-shadow: 0 0 0 0.2rem rgba(46, 125, 50, 0.25);
-}
-
-/* ===== SEARCH RESULT CARD ===== */
-.search-result-card .card {
-    border: 2px solid var(--ifes-green);
-    border-radius: 15px;
-    box-shadow: 0 6px 20px rgba(46, 125, 50, 0.15);
-}
-
-.search-result-card .card-header {
-    background: linear-gradient(135deg, var(--ifes-green), var(--ifes-light-green));
-    color: white;
-    border-bottom: none;
-    padding: 15px 25px;
 }
 
 /* ===== ADMINS LIST CARD ===== */
@@ -309,28 +282,6 @@
     font-weight: 600;
 }
 
-/* ===== CARDS DE INFORMAÇÃO ===== */
-.info-card {
-    background: linear-gradient(135deg, white 0%, #f8fff8 100%);
-    border-radius: 15px;
-    padding: 20px;
-    border-left: 4px solid var(--ifes-green);
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.06);
-    margin-bottom: 20px;
-}
-
-.info-card h6 {
-    color: var(--ifes-green);
-    font-weight: 700;
-    margin-bottom: 10px;
-}
-
-.info-card p {
-    color: #666;
-    margin-bottom: 0;
-    font-size: 0.95rem;
-}
-
 /* ===== ALERTAS CUSTOMIZADOS ===== */
 .alert-warning {
     background-color: var(--light-orange);
@@ -418,30 +369,4 @@
 .pagination .page-item.active .page-link {
     background-color: var(--ifes-green);
     border-color: var(--ifes-green);
-}
-
-/* ===== LOADING STATES ===== */
-.loading {
-    opacity: 0.6;
-    pointer-events: none;
-}
-
-.spinner-border-sm {
-    width: 1rem;
-    height: 1rem;
-}
-
-/* ===== TOOLTIPS PERSONALIZADOS ===== */
-.tooltip-inner {
-    background-color: var(--ifes-dark-gray);
-    border-radius: 8px;
-    font-size: 0.8rem;
-}
-
-.bs-tooltip-top .tooltip-arrow::before {
-    border-top-color: var(--ifes-dark-gray);
-}
-
-.bs-tooltip-bottom .tooltip-arrow::before {
-    border-bottom-color: var(--ifes-dark-gray);
 }
