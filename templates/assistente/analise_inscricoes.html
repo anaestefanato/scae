@@ -163,10 +163,34 @@
                     </thead>
                     <tbody id="tabelaInscricoes">
                         {% if inscricoes %}
-                            {% for inscricao in inscricoes %}
-                        <tr data-inscricao-id="{{ inscricao.id_inscricao }}">
-                            <td>{{ inscricao.aluno_nome }}</td>
-                            <td class="text-center">{{ inscricao.aluno_matricula }}</td>
+                                {% for inscricao in inscricoes %}
+                            <tr data-inscricao-id="{{ inscricao.id_inscricao }}"
+                                data-aluno-nome="{{ inscricao.aluno_nome|e }}"
+                                data-aluno-matricula="{{ inscricao.aluno_matricula|e }}"
+                                data-aluno-curso="{{ inscricao.aluno_curso|e if inscricao.aluno_curso is defined else '' }}"
+                                data-aluno-periodo="{{ inscricao.aluno_periodo|e if inscricao.aluno_periodo is defined else '' }}"
+                                data-aluno-email="{{ inscricao.aluno_email|e if inscricao.aluno_email is defined else '' }}"
+                                data-aluno-telefone="{{ inscricao.aluno_telefone|e if inscricao.aluno_telefone is defined else '' }}"
+                                data-edital="{{ inscricao.edital_titulo|e }}"
+                                data-data-inscricao="{{ inscricao.data_inscricao|formatar_data }}"
+                                data-status="{{ inscricao.status|e }}"
+                                data-renda="{{ inscricao.renda_per_capita if inscricao.renda_per_capita is defined else '' }}"
+                                data-familia="{{ inscricao.composicao_familiar if inscricao.composicao_familiar is defined else '' }}"
+                                data-pessoas-residencia="{{ inscricao.pessoas_residencia if inscricao.pessoas_residencia is defined else (inscricao.quantidade_pessoas if inscricao.quantidade_pessoas is defined else '') }}"
+                                data-renda-percapita="{{ inscricao.renda_percapita if inscricao.renda_percapita is defined else (inscricao.renda_per_capita if inscricao.renda_per_capita is defined else '') }}"
+                                data-ano-ingresso="{{ inscricao.ano_ingresso if inscricao.ano_ingresso is defined else '' }}"
+                                data-ano-conclusao="{{ inscricao.ano_conclusao_previsto if inscricao.ano_conclusao_previsto is defined else '' }}"
+                                data-cad-unico="{{ inscricao.cad_unico if inscricao.cad_unico is defined else '' }}"
+                                data-bolsa-familia="{{ inscricao.bolsa_familia if inscricao.bolsa_familia is defined else '' }}"
+                                data-auxilios="{% if inscricao.auxilios %}{{ inscricao.auxilios|join('||')|e }}{% elif inscricao.auxilios_renovacao %}{{ inscricao.auxilios_renovacao|join('||')|e }}{% elif inscricao.auxilios_novos %}{{ inscricao.auxilios_novos|join('||')|e }}{% else %}{% endif %}"
+                                data-tipo-transporte="{% if inscricao.auxilio_transporte and inscricao.auxilio_transporte.tipo_transporte %}{{ inscricao.auxilio_transporte.tipo_transporte|e }}{% elif inscricao.tipo_transporte %}{{ inscricao.tipo_transporte|e }}{% else %}{% endif %}"
+                                data-gasto-passagens-dia="{% if inscricao.auxilio_transporte and inscricao.auxilio_transporte.gasto_passagens_dia %}{{ inscricao.auxilio_transporte.gasto_passagens_dia }}{% elif inscricao.gasto_passagens_dia %}{{ inscricao.gasto_passagens_dia }}{% else %}{% endif %}"
+                                data-gasto-van-mensal="{% if inscricao.auxilio_transporte and inscricao.auxilio_transporte.gasto_van_mensal %}{{ inscricao.auxilio_transporte.gasto_van_mensal }}{% elif inscricao.gasto_van_mensal %}{{ inscricao.gasto_van_mensal }}{% else %}{% endif %}"
+                                data-observacoes="{{ inscricao.observacoes|e if inscricao.observacoes is defined else '' }}"
+                                data-docs="{% if inscricao.documentos %}{{ inscricao.documentos|join('||')|e }}{% else %}{% endif %}"
+                                data-tipo-inscricao="{{ inscricao.tipo_inscricao|default('primeira') }}">
+                                <td class="aluno-nome">{{ inscricao.aluno_nome }}</td>
+                                <td class="text-center">{{ inscricao.aluno_matricula }}</td>
                             <td class="text-center">
                                 <span class="edital-badge">{{ inscricao.edital_titulo }}</span>
                             </td>
@@ -192,7 +216,7 @@
                             </td>
                             <td class="text-center">
                                 <div class="action-buttons">
-                                    <button class="btn btn-sm btn-outline-primary" title="Ver Detalhes" onclick="visualizarDetalhes({{ inscricao.id_inscricao }})">
+                                    <button class="btn btn-sm btn-outline-primary" title="Ver Detalhes" onclick="visualizarDetalhes('{{ inscricao.id_inscricao }}')">
                                         <i class="bi bi-eye"></i> Ver Detalhes
                                     </button>
                                 </div>
@@ -378,6 +402,18 @@
                             <div class="mb-2">
                                 <strong>Composição Familiar:</strong> <span id="inscricaoFamilia">4 pessoas</span>
                             </div>
+                            <div class="mb-2">
+                                <strong>Pessoas na Residência:</strong> <span id="inscricaoPessoas">-</span>
+                            </div>
+                            <div class="mb-2">
+                                <strong>Renda (categoria):</strong> <span id="inscricaoRendaCategoria">-</span>
+                            </div>
+                            <div class="mb-2">
+                                <strong>CAD Único:</strong> <span id="inscricaoCad">-</span>
+                            </div>
+                            <div class="mb-2">
+                                <strong>Recebe Bolsa Família:</strong> <span id="inscricaoBolsaFamilia">-</span>
+                            </div>
                         </div>
                     </div>
                     
@@ -387,30 +423,7 @@
                         <div class="col-12">
                             <h6 class="mb-3">Documentos Enviados</h6>
                             <div class="list-group">
-                                <div class="list-group-item d-flex justify-content-between align-items-center">
-                                    <span><i class="bi bi-file-earmark-pdf text-danger me-2"></i>Comprovante de Renda</span>
-                                    <button class="btn btn-sm btn-outline-primary">
-                                        <i class="bi bi-eye"></i> Visualizar
-                                    </button>
-                                </div>
-                                <div class="list-group-item d-flex justify-content-between align-items-center">
-                                    <span><i class="bi bi-file-earmark-pdf text-danger me-2"></i>Declaração de Composição Familiar</span>
-                                    <button class="btn btn-sm btn-outline-primary">
-                                        <i class="bi bi-eye"></i> Visualizar
-                                    </button>
-                                </div>
-                                <div class="list-group-item d-flex justify-content-between align-items-center">
-                                    <span><i class="bi bi-file-earmark-pdf text-danger me-2"></i>Comprovante de Matrícula</span>
-                                    <button class="btn btn-sm btn-outline-primary">
-                                        <i class="bi bi-eye"></i> Visualizar
-                                    </button>
-                                </div>
-                                <div class="list-group-item d-flex justify-content-between align-items-center">
-                                    <span><i class="bi bi-file-earmark-pdf text-danger me-2"></i>Declaração de Transporte</span>
-                                    <button class="btn btn-sm btn-outline-primary">
-                                        <i class="bi bi-eye"></i> Visualizar
-                                    </button>
-                                </div>
+                                <!-- itens serão preenchidos dinamicamente -->
                             </div>
                         </div>
                     </div>
@@ -421,7 +434,30 @@
                         <div class="col-12">
                             <h6 class="mb-3">Observações do Aluno</h6>
                             <div class="bg-light p-3 rounded">
-                                <p class="mb-0">Preciso do auxílio transporte para conseguir frequentar as aulas, pois moro em uma cidade vizinha e dependo de transporte público. Minha família possui renda baixa e este auxílio seria fundamental para minha permanência no curso.</p>
+                                <div id="inscricaoObservacoesContainer">
+                                    <p class="mb-0" id="inscricaoObservacoes">Preciso do auxílio transporte para conseguir frequentar as aulas, pois moro em uma cidade vizinha e dependo de transporte público. Minha família possui renda baixa e este auxílio seria fundamental para minha permanência no curso.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <hr class="my-4">
+
+                    <div class="row">
+                        <div class="col-12">
+                            <h6 class="mb-3">Auxílios e Detalhes de Transporte</h6>
+                            <div class="mb-2">
+                                <strong>Auxílios Solicitados:</strong>
+                                <div id="inscricaoAuxilios" class="mt-2">-</div>
+                            </div>
+                            <div class="mb-2">
+                                <strong>Tipo de Transporte:</strong> <span id="inscricaoTipoTransporte">-</span>
+                            </div>
+                            <div class="mb-2">
+                                <strong>Gasto médio com passagens (dia):</strong> <span id="inscricaoGastoPassagens">-</span>
+                            </div>
+                            <div class="mb-2">
+                                <strong>Gasto médio van (mensal):</strong> <span id="inscricaoGastoVan">-</span>
                             </div>
                         </div>
                     </div>
@@ -500,7 +536,7 @@
     <script src="/static/js/dashboard_assistente.js"></script>
     <script src="/static/js/analise_inscricoes.js"></script>
 
-    <script>
+                    <script>
         // Variável global para armazenar o ID da inscrição atual
         let currentInscricaoId = null;
 
@@ -527,7 +563,7 @@
             const buscarAluno = document.getElementById('buscarAluno');
             const btnLimparFiltros = document.getElementById('limparFiltros');
 
-            // Função para aplicar filtros
+                // Função para aplicar filtros
             function aplicarFiltros() {
                 const editalSelecionado = filtroEdital.value;
                 const statusSelecionado = filtroStatus.value;
@@ -567,10 +603,10 @@
                         }
                     }
 
-                    // Filtro por busca de nome
+                    // Filtro por busca de nome (usa dados fornecidos pelo servidor via dataset)
                     if (termoBusca && mostrarLinha) {
-                        const nomeAluno = linha.querySelector('.aluno-nome').textContent.toLowerCase();
-                        const matricula = linha.querySelector('.text-muted').textContent.toLowerCase();
+                        const nomeAluno = (linha.dataset.alunoNome || '').toLowerCase();
+                        const matricula = (linha.dataset.alunoMatricula || '').toLowerCase();
                         if (!nomeAluno.includes(termoBusca) && !matricula.includes(termoBusca)) {
                             mostrarLinha = false;
                         }
@@ -581,7 +617,7 @@
                         linha.style.display = '';
                         linhasVisiveis.push({
                             elemento: linha,
-                            data: linha.querySelector('td:nth-child(4)').textContent.trim() // Data da inscrição
+                            data: linha.dataset.dataInscricao || linha.querySelector('td:nth-child(4)').textContent.trim()
                         });
                     } else {
                         linha.style.display = 'none';
@@ -790,8 +826,116 @@
         // Função para visualizar detalhes (deve ser chamada pelos botões da tabela)
         function visualizarDetalhes(inscricaoId) {
             currentInscricaoId = inscricaoId;
-            // Aqui você pode carregar os detalhes da inscrição específica
-            // Por enquanto, apenas abre o modal
+            const row = document.querySelector(`tr[data-inscricao-id="${inscricaoId}"]`);
+            if (!row) {
+                const modalFallback = new bootstrap.Modal(document.getElementById('detalhesModal'));
+                modalFallback.show();
+                return;
+            }
+
+            // Preencher campos do modal a partir dos data-* (fornecidos pelo servidor via Jinja2)
+            document.getElementById('alunoNome').textContent = row.dataset.alunoNome || '';
+            document.getElementById('alunoMatricula').textContent = row.dataset.alunoMatricula || '';
+            document.getElementById('alunoCurso').textContent = row.dataset.alunoCurso || '';
+            document.getElementById('alunoPeriodo').textContent = row.dataset.alunoPeriodo || '';
+            document.getElementById('alunoEmail').textContent = row.dataset.alunoEmail || '';
+            document.getElementById('alunoTelefone').textContent = row.dataset.alunoTelefone || '';
+
+            document.getElementById('inscricaoEdital').textContent = row.dataset.edital || '';
+            document.getElementById('inscricaoData').textContent = row.dataset.dataInscricao || '';
+
+            const statusSpan = document.getElementById('inscricaoStatus');
+            const status = row.dataset.status || '';
+            statusSpan.className = '';
+            statusSpan.classList.add('badge');
+            if (status === 'deferido') {
+                statusSpan.classList.add('bg-success');
+                statusSpan.innerHTML = 'Deferido';
+            } else if (status === 'indeferido') {
+                statusSpan.classList.add('bg-danger');
+                statusSpan.innerHTML = 'Indeferido';
+            } else if (status === 'pendente') {
+                statusSpan.classList.add('bg-warning');
+                statusSpan.innerHTML = 'Pendente';
+            } else {
+                statusSpan.classList.add('bg-secondary');
+                statusSpan.innerHTML = status ? status.charAt(0).toUpperCase() + status.slice(1) : '';
+            }
+
+            document.getElementById('inscricaoRenda').textContent = row.dataset.renda ? `R$ ${row.dataset.renda}` : '';
+            document.getElementById('inscricaoFamilia').textContent = row.dataset.familia || '';
+            document.getElementById('inscricaoPessoas').textContent = row.dataset.pessoasResidencia || '';
+            document.getElementById('inscricaoRendaCategoria').textContent = row.dataset.rendaPercapita || row.dataset.rendaPercapita || (row.dataset.renda ? 'R$ ' + row.dataset.renda : '');
+            document.getElementById('inscricaoCad').textContent = row.dataset.cadUnico || '';
+            document.getElementById('inscricaoBolsaFamilia').textContent = row.dataset.bolsaFamilia || '';
+
+            // Tipo de inscrição (primeira / renovação)
+            const tipo = row.dataset.tipoInscricao || 'primeira';
+            // acrescenta informação no título do edital (sem alterar estética)
+            const editalEl = document.getElementById('inscricaoEdital');
+            if (editalEl) {
+                editalEl.textContent = (row.dataset.edital || '') + ' - ' + (tipo === 'renovacao' ? 'Renovação' : 'Primeira Inscrição');
+            }
+
+            // Observações
+            document.querySelector('#detalhesConteudo #inscricaoObservacoes')?.remove();
+            const obs = row.dataset.observacoes || '';
+            const obsContainer = document.createElement('div');
+            obsContainer.id = 'inscricaoObservacoes';
+            obsContainer.className = 'bg-light p-3 rounded';
+            obsContainer.innerHTML = `<p class="mb-0">${obs}</p>`;
+            // localizar a área de observações original e substituir o conteúdo
+            const obsParent = document.querySelector('#detalhesConteudo .row:last-of-type .col-12');
+            if (obsParent) {
+                const existing = obsParent.querySelector('.bg-light');
+                if (existing) existing.remove();
+                obsParent.appendChild(obsContainer);
+            }
+
+            // Documentos
+            const docsRaw = row.dataset.docs || '';
+            const docsListGroup = document.querySelector('#detalhesConteudo .list-group');
+            if (docsListGroup) {
+                // limpar itens existentes
+                docsListGroup.innerHTML = '';
+                if (docsRaw) {
+                    const docs = docsRaw.split('||');
+                    docs.forEach(doc => {
+                        const item = document.createElement('div');
+                        item.className = 'list-group-item d-flex justify-content-between align-items-center';
+                        const nameSpan = document.createElement('span');
+                        nameSpan.innerHTML = `<i class="bi bi-file-earmark-pdf text-danger me-2"></i>${doc}`;
+                        const btn = document.createElement('button');
+                        btn.className = 'btn btn-sm btn-outline-primary';
+                        btn.innerHTML = '<i class="bi bi-eye"></i> Visualizar';
+                        // btn can be wired to open the actual file if URL provided in data-docs-urls in future
+                        item.appendChild(nameSpan);
+                        item.appendChild(btn);
+                        docsListGroup.appendChild(item);
+                    });
+                } else {
+                    const none = document.createElement('div');
+                    none.className = 'list-group-item text-muted';
+                    none.textContent = 'Nenhum documento enviado.';
+                    docsListGroup.appendChild(none);
+                }
+            }
+
+            // Preencher auxílios e detalhes de transporte
+            const auxRaw = row.dataset.auxilios || '';
+            const auxContainer = document.getElementById('inscricaoAuxilios');
+            if (auxContainer) {
+                auxContainer.innerHTML = '-';
+                if (auxRaw) {
+                    const auxs = auxRaw.split('||');
+                    auxContainer.innerHTML = auxs.map(a => `<span class="badge bg-secondary me-1">${a}</span>`).join(' ');
+                }
+            }
+
+            document.getElementById('inscricaoTipoTransporte').textContent = row.dataset.tipoTransporte || '-';
+            document.getElementById('inscricaoGastoPassagens').textContent = row.dataset.gastoPassagensDia ? `R$ ${row.dataset.gastoPassagensDia}` : '-';
+            document.getElementById('inscricaoGastoVan').textContent = row.dataset.gastoVanMensal ? `R$ ${row.dataset.gastoVanMensal}` : '-';
+
             const modal = new bootstrap.Modal(document.getElementById('detalhesModal'));
             modal.show();
         }

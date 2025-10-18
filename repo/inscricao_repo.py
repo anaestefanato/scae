@@ -208,8 +208,41 @@ def obter_inscricoes_para_analise(pagina: int = 1, limite: int = 10, filtro_edit
             e.data_encerramento,
             u.nome as aluno_nome,
             u.matricula as aluno_matricula,
+            u.email as aluno_email,
+            al.telefone as aluno_telefone,
+            al.curso as aluno_curso,
+            al.ano_ingresso as aluno_ano_ingresso,
+            al.ano_conclusao_previsto as aluno_ano_conclusao,
+            al.quantidade_pessoas as aluno_pessoas_residencia,
+            al.renda_per_capita as aluno_renda_percapita,
+            al.cad_unico as aluno_cad_unico,
+            al.bolsa_familia as aluno_bolsa_familia,
+            al.cpf as aluno_cpf,
+            al.data_nascimento as aluno_data_nascimento,
+            al.cep as aluno_cep,
+            al.cidade as aluno_cidade,
+            al.bairro as aluno_bairro,
+            al.rua as aluno_rua,
+            al.numero as aluno_numero,
+            al.complemento as aluno_complemento,
+            al.nome_banco as aluno_nome_banco,
+            al.agencia_bancaria as aluno_agencia_bancaria,
+            al.numero_conta_bancaria as aluno_numero_conta_bancaria,
+            al.renda_familiar as aluno_renda_familiar,
+            al.situacao_moradia as aluno_situacao_moradia,
+            al.bolsa_pesquisa as aluno_bolsa_pesquisa,
             a.tipo_auxilio,
             a.valor_mensal,
+            at.tipo_transporte as at_tipo_transporte,
+            at.tipo_onibus as at_tipo_onibus,
+            at.gasto_passagens_dia as at_gasto_passagens_dia,
+            at.gasto_van_mensal as at_gasto_van_mensal,
+            at.urlCompResidencia as at_urlCompResidencia,
+            at.urlPasseEscolarFrente as at_urlPasseEscolarFrente,
+            at.urlPasseEscolarVerso as at_urlPasseEscolarVerso,
+            at.urlComprovanteRecarga as at_urlComprovanteRecarga,
+            at.urlComprovantePassagens as at_urlComprovantePassagens,
+            at.urlContratoTransporte as at_urlContratoTransporte,
             CASE 
                 WHEN DATE(e.data_encerramento) <= DATE('now', '+7 days') THEN 'Alta'
                 WHEN DATE(e.data_encerramento) <= DATE('now', '+15 days') THEN 'Média'
@@ -217,8 +250,10 @@ def obter_inscricoes_para_analise(pagina: int = 1, limite: int = 10, filtro_edit
             END as prioridade
         FROM inscricao i
         INNER JOIN edital e ON i.id_edital = e.id_edital
-        INNER JOIN usuario u ON i.id_aluno = u.id_usuario
+    INNER JOIN usuario u ON i.id_aluno = u.id_usuario
+    LEFT JOIN aluno al ON u.id_usuario = al.id_usuario
         LEFT JOIN auxilio a ON i.id_inscricao = a.id_inscricao
+        LEFT JOIN auxilio_transporte at ON at.id_auxilio_transporte = a.id_auxilio
         WHERE {where_sql}
         ORDER BY {order_sql}
         LIMIT ? OFFSET ?
@@ -227,9 +262,31 @@ def obter_inscricoes_para_analise(pagina: int = 1, limite: int = 10, filtro_edit
         params_list.extend([limite, offset])
         cursor.execute(sql_list, params_list)
         rows = cursor.fetchall()
-        
+
         inscricoes = []
         for row in rows:
+            # build documentos list from available urls
+            documentos = []
+            if "urlDocumentoIdentificacao" in row.keys() and row["urlDocumentoIdentificacao"]:
+                documentos.append(row["urlDocumentoIdentificacao"])
+            if "urlDeclaracaoRenda" in row.keys() and row["urlDeclaracaoRenda"]:
+                documentos.append(row["urlDeclaracaoRenda"])
+            if "urlTermoResponsabilidade" in row.keys() and row["urlTermoResponsabilidade"]:
+                documentos.append(row["urlTermoResponsabilidade"])
+            # auxilio_transporte documents
+            if "at_urlCompResidencia" in row.keys() and row["at_urlCompResidencia"]:
+                documentos.append(row["at_urlCompResidencia"])
+            if "at_urlPasseEscolarFrente" in row.keys() and row["at_urlPasseEscolarFrente"]:
+                documentos.append(row["at_urlPasseEscolarFrente"])
+            if "at_urlPasseEscolarVerso" in row.keys() and row["at_urlPasseEscolarVerso"]:
+                documentos.append(row["at_urlPasseEscolarVerso"])
+            if "at_urlComprovanteRecarga" in row.keys() and row["at_urlComprovanteRecarga"]:
+                documentos.append(row["at_urlComprovanteRecarga"])
+            if "at_urlComprovantePassagens" in row.keys() and row["at_urlComprovantePassagens"]:
+                documentos.append(row["at_urlComprovantePassagens"])
+            if "at_urlContratoTransporte" in row.keys() and row["at_urlContratoTransporte"]:
+                documentos.append(row["at_urlContratoTransporte"])
+
             inscricao = {
                 'id_inscricao': row["id_inscricao"],
                 'id_aluno': row["id_aluno"],
@@ -243,12 +300,47 @@ def obter_inscricoes_para_analise(pagina: int = 1, limite: int = 10, filtro_edit
                 'data_encerramento': row["data_encerramento"],
                 'aluno_nome': row["aluno_nome"],
                 'aluno_matricula': row["aluno_matricula"],
-                'tipo_auxilio': row["tipo_auxilio"] if "tipo_auxilio" in row else "Não especificado",
-                'valor_mensal': row["valor_mensal"] if "valor_mensal" in row else 0,
-                'prioridade': row["prioridade"]
+                'aluno_email': row["aluno_email"] if "aluno_email" in row.keys() else None,
+                'aluno_telefone': row["aluno_telefone"] if "aluno_telefone" in row.keys() else None,
+                'aluno_curso': row["aluno_curso"] if "aluno_curso" in row.keys() else None,
+                'aluno_ano_ingresso': row["aluno_ano_ingresso"] if "aluno_ano_ingresso" in row.keys() else None,
+                'aluno_ano_conclusao': row["aluno_ano_conclusao"] if "aluno_ano_conclusao" in row.keys() else None,
+                'aluno_pessoas_residencia': row["aluno_pessoas_residencia"] if "aluno_pessoas_residencia" in row.keys() else None,
+                'aluno_renda_percapita': row["aluno_renda_percapita"] if "aluno_renda_percapita" in row.keys() else None,
+                'aluno_cad_unico': row["aluno_cad_unico"] if "aluno_cad_unico" in row.keys() else None,
+                'aluno_bolsa_familia': row["aluno_bolsa_familia"] if "aluno_bolsa_familia" in row.keys() else None,
+                'aluno_auxilios': row["aluno_auxilios"] if "aluno_auxilios" in row.keys() else None,
+                # aliases expected by the template
+                'aluno_periodo': row["aluno_periodo"] if "aluno_periodo" in row.keys() else None,
+                'renda_per_capita': row["aluno_renda_percapita"] if "aluno_renda_percapita" in row.keys() else (row["renda_per_capita"] if "renda_per_capita" in row.keys() else None),
+                'composicao_familiar': row["composicao_familiar"] if "composicao_familiar" in row.keys() else None,
+                'pessoas_residencia': row["aluno_pessoas_residencia"] if "aluno_pessoas_residencia" in row.keys() else (row["quantidade_pessoas"] if "quantidade_pessoas" in row.keys() else None),
+                'quantidade_pessoas': row["aluno_pessoas_residencia"] if "aluno_pessoas_residencia" in row.keys() else (row["quantidade_pessoas"] if "quantidade_pessoas" in row.keys() else None),
+                'renda_percapita': row["aluno_renda_percapita"] if "aluno_renda_percapita" in row.keys() else None,
+                'ano_ingresso': row["aluno_ano_ingresso"] if "aluno_ano_ingresso" in row.keys() else None,
+                'ano_conclusao_previsto': row["aluno_ano_conclusao"] if "aluno_ano_conclusao" in row.keys() else None,
+                'cad_unico': row["aluno_cad_unico"] if "aluno_cad_unico" in row.keys() else None,
+                'bolsa_familia': row["aluno_bolsa_familia"] if "aluno_bolsa_familia" in row.keys() else None,
+                'auxilios': row["aluno_auxilios"] if "aluno_auxilios" in row.keys() else None,
+                'tipo_auxilio': row["tipo_auxilio"] if "tipo_auxilio" in row.keys() else "Não especificado",
+                'valor_mensal': row["valor_mensal"] if "valor_mensal" in row.keys() else 0,
+                'prioridade': row["prioridade"],
+                # transporte / auxilio_transporte fields
+                'auxilio_transporte_tipo': row["at_tipo_transporte"] if "at_tipo_transporte" in row.keys() else None,
+                'auxilio_transporte_tipo_onibus': row["at_tipo_onibus"] if "at_tipo_onibus" in row.keys() else None,
+                'gasto_passagens_dia': row["at_gasto_passagens_dia"] if "at_gasto_passagens_dia" in row.keys() else None,
+                'gasto_van_mensal': row["at_gasto_van_mensal"] if "at_gasto_van_mensal" in row.keys() else None,
+                'at_urlCompResidencia': row["at_urlCompResidencia"] if "at_urlCompResidencia" in row.keys() else None,
+                'at_urlPasseEscolarFrente': row["at_urlPasseEscolarFrente"] if "at_urlPasseEscolarFrente" in row.keys() else None,
+                'at_urlPasseEscolarVerso': row["at_urlPasseEscolarVerso"] if "at_urlPasseEscolarVerso" in row.keys() else None,
+                'at_urlComprovanteRecarga': row["at_urlComprovanteRecarga"] if "at_urlComprovanteRecarga" in row.keys() else None,
+                'at_urlComprovantePassagens': row["at_urlComprovantePassagens"] if "at_urlComprovantePassagens" in row.keys() else None,
+                'at_urlContratoTransporte': row["at_urlContratoTransporte"] if "at_urlContratoTransporte" in row.keys() else None,
+                # aggregated documentos
+                'documentos': documentos,
             }
             inscricoes.append(inscricao)
-        
+
         return inscricoes, total
     
 
