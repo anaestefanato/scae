@@ -82,6 +82,12 @@ SET valor_mensal = ?
 WHERE id_auxilio = ?
 """
 
+ATUALIZAR_MOTIVO_INDEFERIMENTO = """
+UPDATE auxilio
+SET motivo_indeferimento = ?
+WHERE id_auxilio = ?
+"""
+
 OBTER_AUXILIOS_POR_INSCRICAO = """
 SELECT
     a.id_auxilio,
@@ -92,7 +98,8 @@ SELECT
     a.data_inicio,
     a.data_fim,
     a.tipo_auxilio,
-    a.status_auxilio
+    a.status_auxilio,
+    a.motivo_indeferimento
 FROM auxilio a
 WHERE a.id_inscricao = ?
 ORDER BY a.tipo_auxilio
@@ -109,6 +116,7 @@ SELECT
     a.data_fim,
     a.tipo_auxilio,
     a.status_auxilio,
+    a.motivo_indeferimento,
     e.titulo as edital_titulo,
     i.status as status_inscricao
 FROM auxilio a

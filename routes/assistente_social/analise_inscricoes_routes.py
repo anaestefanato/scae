@@ -159,17 +159,18 @@ async def indeferir_auxilio(request: Request, usuario_logado: dict = None):
             )
         
         # Atualizar status do auxílio
-        sucesso = auxilio_repo.atualizar_status_auxilio(id_auxilio, 'indeferido')
+        sucesso_status = auxilio_repo.atualizar_status_auxilio(id_auxilio, 'indeferido')
+        sucesso_motivo = auxilio_repo.atualizar_motivo_indeferimento(id_auxilio, motivo)
         
-        if sucesso:
-            # TODO: Salvar o motivo em uma tabela de justificativas
+        if sucesso_status and sucesso_motivo:
             return JSONResponse(
                 status_code=200,
                 content={
                     "success": True, 
                     "message": "Auxílio indeferido com sucesso",
                     "id_auxilio": id_auxilio,
-                    "status": "indeferido"
+                    "status": "indeferido",
+                    "motivo": motivo
                 }
             )
         else:

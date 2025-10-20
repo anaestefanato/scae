@@ -100,7 +100,8 @@ def obter_por_aluno(id_aluno: int) -> list[dict]:
                 'data_fim': row["data_fim"],
                 'edital_titulo': row["edital_titulo"],
                 'status_inscricao': row["status_inscricao"],
-                'status_auxilio': row["status_auxilio"] if "status_auxilio" in row.keys() else "pendente"
+                'status_auxilio': row["status_auxilio"] if "status_auxilio" in row.keys() else "pendente",
+                'motivo_indeferimento': row["motivo_indeferimento"] if "motivo_indeferimento" in row.keys() else None
             }
             auxilios.append(auxilio)
         return auxilios
@@ -125,6 +126,16 @@ def atualizar_valor_auxilio(id_auxilio: int, valor_mensal: float) -> bool:
         cursor.execute(ATUALIZAR_VALOR, (valor_mensal, id_auxilio))
         return cursor.rowcount > 0
 
+def atualizar_motivo_indeferimento(id_auxilio: int, motivo: str) -> bool:
+    """Atualiza o motivo de indeferimento de um auxílio específico"""
+    if not motivo or not motivo.strip():
+        return False
+    
+    with get_connection() as conn:
+        cursor = conn.cursor()
+        cursor.execute(ATUALIZAR_MOTIVO_INDEFERIMENTO, (motivo.strip(), id_auxilio))
+        return cursor.rowcount > 0
+
 def obter_auxilios_por_inscricao(id_inscricao: int) -> list[dict]:
     """Obtém todos os auxílios de uma inscrição com seus status individuais"""
     with get_connection() as conn:
@@ -142,7 +153,8 @@ def obter_auxilios_por_inscricao(id_inscricao: int) -> list[dict]:
                 'valor_mensal': row["valor_mensal"],
                 'data_inicio': row["data_inicio"],
                 'data_fim': row["data_fim"],
-                'status_auxilio': row["status_auxilio"] if "status_auxilio" in row.keys() else "pendente"
+                'status_auxilio': row["status_auxilio"] if "status_auxilio" in row.keys() else "pendente",
+                'motivo_indeferimento': row["motivo_indeferimento"] if "motivo_indeferimento" in row.keys() else None
             }
             auxilios.append(auxilio)
         return auxilios
