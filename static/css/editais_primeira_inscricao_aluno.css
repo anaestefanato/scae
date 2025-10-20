@@ -293,7 +293,7 @@ body {
 .progress-steps {
     display: flex;
     justify-content: space-between;
-    margin-bottom: 2rem;
+    margin-bottom: 3.5rem;
     position: relative;
     width: 100%;
     max-width: 100%;

@@ -213,13 +213,16 @@
                         <input type="number" class="form-control {% if campo_erro == 'pessoas_residencia' %}is-invalid{% endif %}" id="pessoas_residencia" name="pessoas_residencia" min="0" placeholder="Ex: 3" value="{{ aluno.quantidade_pessoas if aluno and aluno.quantidade_pessoas else '' }}" required>
                     </div>
                     <div>
-                        <label for="renda_percapita" class="form-label required-field">Renda Familiar Per Capita</label>
-                        <select class="form-control {% if campo_erro == 'renda_percapita' %}is-invalid{% endif %}" id="renda_percapita" name="renda_percapita" required>
-                            <option value="">Selecione...</option>
-                            <option value="menor_1" {% if aluno and aluno.renda_per_capita and aluno.renda_per_capita <= 1412 %}selected{% endif %}>Menor ou igual a 1 salário mínimo</option>
-                            <option value="ate_1_5" {% if aluno and aluno.renda_per_capita and aluno.renda_per_capita > 1412 and aluno.renda_per_capita <= 2118 %}selected{% endif %}>Até 1,5 salário mínimo</option>
-                            <option value="maior_1_5" {% if aluno and aluno.renda_per_capita and aluno.renda_per_capita > 2118 %}selected{% endif %}>Maior que 1,5 salário mínimo</option>
-                        </select>
+                        <label for="renda_percapita" class="form-label required-field">Renda Familiar Per Capita (R$)</label>
+                        <input type="number" 
+                               class="form-control {% if campo_erro == 'renda_percapita' %}is-invalid{% endif %}" 
+                               id="renda_percapita" 
+                               name="renda_percapita" 
+                               step="0.01" 
+                               min="0" 
+                               placeholder="0.00"
+                               value="{{ aluno.renda_per_capita if aluno and aluno.renda_per_capita else '' }}"
+                               required>
                     </div>
                 </div>
 

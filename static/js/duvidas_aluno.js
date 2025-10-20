@@ -101,31 +101,6 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 });
 
-// Função para enviar nova pergunta
-function submitQuestion() {
-    const form = document.getElementById('newQuestionForm');
-    const category = document.getElementById('questionCategory').value;
-    const title = document.getElementById('questionTitle').value;
-    const details = document.getElementById('questionDetails').value;
-
-    if (!category || !title || !details) {
-        alert('Por favor, preencha todos os campos.');
-        return;
-    }
-
-    // Aqui você pode adicionar a lógica para enviar a pergunta para o backend
-    // Por enquanto, apenas mostraremos uma mensagem de sucesso
-    alert('Sua pergunta foi enviada com sucesso! Em breve a equipe responderá.');
-    
-    // Fecha o modal usando Bootstrap 5
-    const modalElement = document.getElementById('newQuestionModal');
-    const modal = bootstrap.Modal.getInstance(modalElement) || new bootstrap.Modal(modalElement);
-    modal.hide();
-    
-    // Limpa o formulário
-    form.reset();
-}
-
 // Funções para os filtros e controles da página
 function clearFilters() {
     document.getElementById('filterCategory').value = 'todas';
@@ -162,17 +137,24 @@ function searchQuestions() {
 
 function expandAll() {
     const collapseElements = document.querySelectorAll('.accordion-collapse');
-    collapseElements.forEach(collapse => {
-        const bsCollapse = new bootstrap.Collapse(collapse, { show: true });
+    collapseElements.forEach(element => {
+        element.classList.add('show');
+        const button = document.querySelector(`[data-bs-target="#${element.id}"]`);
+        if (button) {
+            button.classList.remove('collapsed');
+            button.setAttribute('aria-expanded', 'true');
+        }
     });
 }
 
 function collapseAll() {
     const collapseElements = document.querySelectorAll('.accordion-collapse.show');
-    collapseElements.forEach(collapse => {
-        const bsCollapse = bootstrap.Collapse.getInstance(collapse);
-        if (bsCollapse) {
-            bsCollapse.hide();
+    collapseElements.forEach(element => {
+        element.classList.remove('show');
+        const button = document.querySelector(`[data-bs-target="#${element.id}"]`);
+        if (button) {
+            button.classList.add('collapsed');
+            button.setAttribute('aria-expanded', 'false');
         }
     });
 }

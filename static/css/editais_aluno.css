@@ -213,6 +213,37 @@ body, .main-content, .container, .card, .table, h2, h3, h4, h5, h6, .btn, .form-
     color: white;
 }
 
+/* Botão Inscreva-se - Cor Chamativa */
+.btn-inscrever {
+    background: linear-gradient(135deg, #E53935 0%, #EF5350 100%);
+    color: white;
+    border: none;
+    font-weight: 700;
+    font-size: 1.05rem;
+    padding: 0.875rem 1.5rem;
+    border-radius: 12px;
+    box-shadow: 0 6px 20px rgba(229, 57, 53, 0.4);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.btn-inscrever:hover {
+    background: linear-gradient(135deg, #C62828 0%, #E53935 100%);
+    box-shadow: 0 8px 30px rgba(229, 57, 53, 0.5);
+    transform: translateY(-3px);
+    color: white;
+}
+
+.btn-inscrever:active {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 15px rgba(229, 57, 53, 0.4);
+}
+
+.btn-inscrever i {
+    font-size: 1.1rem;
+}
+
 .btn-info {
     background: linear-gradient(135deg, #1976D2 0%, #2196F3 100%);
     color: white;
