@@ -171,21 +171,42 @@
                                 data-aluno-periodo="{{ inscricao.aluno_periodo|e if inscricao.aluno_periodo is defined else '' }}"
                                 data-aluno-email="{{ inscricao.aluno_email|e if inscricao.aluno_email is defined else '' }}"
                                 data-aluno-telefone="{{ inscricao.aluno_telefone|e if inscricao.aluno_telefone is defined else '' }}"
+                                data-cpf="{{ inscricao.aluno_cpf if inscricao.aluno_cpf is defined else '' }}"
+                                data-data-nascimento="{{ inscricao.aluno_data_nascimento if inscricao.aluno_data_nascimento is defined else '' }}"
+                                data-logradouro="{{ inscricao.aluno_rua if inscricao.aluno_rua is defined else '' }}"
+                                data-numero="{{ inscricao.aluno_numero if inscricao.aluno_numero is defined else '' }}"
+                                data-complemento="{{ inscricao.aluno_complemento|e if inscricao.aluno_complemento is defined else '' }}"
+                                data-bairro="{{ inscricao.aluno_bairro if inscricao.aluno_bairro is defined else '' }}"
+                                data-cidade="{{ inscricao.aluno_cidade if inscricao.aluno_cidade is defined else '' }}"
+                                data-estado="{{ inscricao.aluno_estado if inscricao.aluno_estado is defined else '' }}"
+                                data-cep="{{ inscricao.aluno_cep if inscricao.aluno_cep is defined else '' }}"
                                 data-edital="{{ inscricao.edital_titulo|e }}"
                                 data-data-inscricao="{{ inscricao.data_inscricao|formatar_data }}"
                                 data-status="{{ inscricao.status|e }}"
                                 data-renda="{{ inscricao.renda_per_capita if inscricao.renda_per_capita is defined else '' }}"
                                 data-familia="{{ inscricao.composicao_familiar if inscricao.composicao_familiar is defined else '' }}"
                                 data-pessoas-residencia="{{ inscricao.pessoas_residencia if inscricao.pessoas_residencia is defined else (inscricao.quantidade_pessoas if inscricao.quantidade_pessoas is defined else '') }}"
-                                data-renda-percapita="{{ inscricao.renda_percapita if inscricao.renda_percapita is defined else (inscricao.renda_per_capita if inscricao.renda_per_capita is defined else '') }}"
-                                data-ano-ingresso="{{ inscricao.ano_ingresso if inscricao.ano_ingresso is defined else '' }}"
-                                data-ano-conclusao="{{ inscricao.ano_conclusao_previsto if inscricao.ano_conclusao_previsto is defined else '' }}"
-                                data-cad-unico="{{ inscricao.cad_unico if inscricao.cad_unico is defined else '' }}"
-                                data-bolsa-familia="{{ inscricao.bolsa_familia if inscricao.bolsa_familia is defined else '' }}"
-                                data-auxilios="{% if inscricao.auxilios %}{{ inscricao.auxilios|join('||')|e }}{% elif inscricao.auxilios_renovacao %}{{ inscricao.auxilios_renovacao|join('||')|e }}{% elif inscricao.auxilios_novos %}{{ inscricao.auxilios_novos|join('||')|e }}{% else %}{% endif %}"
-                                data-tipo-transporte="{% if inscricao.auxilio_transporte and inscricao.auxilio_transporte.tipo_transporte %}{{ inscricao.auxilio_transporte.tipo_transporte|e }}{% elif inscricao.tipo_transporte %}{{ inscricao.tipo_transporte|e }}{% else %}{% endif %}"
-                                data-gasto-passagens-dia="{% if inscricao.auxilio_transporte and inscricao.auxilio_transporte.gasto_passagens_dia %}{{ inscricao.auxilio_transporte.gasto_passagens_dia }}{% elif inscricao.gasto_passagens_dia %}{{ inscricao.gasto_passagens_dia }}{% else %}{% endif %}"
-                                data-gasto-van-mensal="{% if inscricao.auxilio_transporte and inscricao.auxilio_transporte.gasto_van_mensal %}{{ inscricao.auxilio_transporte.gasto_van_mensal }}{% elif inscricao.gasto_van_mensal %}{{ inscricao.gasto_van_mensal }}{% else %}{% endif %}"
+                                data-renda-percapita="{{ inscricao.aluno_renda_percapita if inscricao.aluno_renda_percapita is defined else '' }}"
+                                data-ano-ingresso="{{ inscricao.aluno_ano_ingresso if inscricao.aluno_ano_ingresso is defined else '' }}"
+                                data-ano-conclusao="{{ inscricao.aluno_ano_conclusao if inscricao.aluno_ano_conclusao is defined else '' }}"
+                                data-bolsa-pesquisa="{{ inscricao.aluno_bolsa_pesquisa if inscricao.aluno_bolsa_pesquisa is defined else '' }}"
+                                data-cad-unico="{{ inscricao.aluno_cad_unico if inscricao.aluno_cad_unico is defined else '' }}"
+                                data-bolsa-familia="{{ inscricao.aluno_bolsa_familia if inscricao.aluno_bolsa_familia is defined else '' }}"
+                                data-auxilios="{% if inscricao.auxilios_lista %}{{ inscricao.auxilios_lista|join('||')|e }}{% else %}{% endif %}"
+                                data-tipo-transporte="{% if inscricao.auxilio_transporte_tipo %}{{ inscricao.auxilio_transporte_tipo|e }}{% else %}{% endif %}"
+                                data-tipo-onibus="{% if inscricao.auxilio_transporte_tipo_onibus %}{{ inscricao.auxilio_transporte_tipo_onibus|e }}{% else %}{% endif %}"
+                                data-gasto-passagens-dia="{% if inscricao.gasto_passagens_dia %}{{ inscricao.gasto_passagens_dia }}{% else %}{% endif %}"
+                                data-gasto-van-mensal="{% if inscricao.gasto_van_mensal %}{{ inscricao.gasto_van_mensal }}{% else %}{% endif %}"
+                                data-moradia-comp-residencia-fixa="{% if inscricao.am_url_comp_residencia_fixa %}{{ inscricao.am_url_comp_residencia_fixa|e }}{% else %}{% endif %}"
+                                data-moradia-comp-residencia-alugada="{% if inscricao.am_url_comp_residencia_alugada %}{{ inscricao.am_url_comp_residencia_alugada|e }}{% else %}{% endif %}"
+                                data-moradia-contrato-aluguel-campus="{% if inscricao.am_url_contrato_aluguel_cid_campus %}{{ inscricao.am_url_contrato_aluguel_cid_campus|e }}{% else %}{% endif %}"
+                                data-moradia-contrato-aluguel-natal="{% if inscricao.am_url_contrato_aluguel_cid_natal %}{{ inscricao.am_url_contrato_aluguel_cid_natal|e }}{% else %}{% endif %}"
+                                data-transporte-comp-residencia="{% if inscricao.at_urlCompResidencia %}{{ inscricao.at_urlCompResidencia|e }}{% else %}{% endif %}"
+                                data-transporte-passe-escolar-frente="{% if inscricao.at_urlPasseEscolarFrente %}{{ inscricao.at_urlPasseEscolarFrente|e }}{% else %}{% endif %}"
+                                data-transporte-passe-escolar-verso="{% if inscricao.at_urlPasseEscolarVerso %}{{ inscricao.at_urlPasseEscolarVerso|e }}{% else %}{% endif %}"
+                                data-transporte-comprovante-recarga="{% if inscricao.at_urlComprovanteRecarga %}{{ inscricao.at_urlComprovanteRecarga|e }}{% else %}{% endif %}"
+                                data-transporte-comprovante-passagens="{% if inscricao.at_urlComprovantePassagens %}{{ inscricao.at_urlComprovantePassagens|e }}{% else %}{% endif %}"
+                                data-transporte-contrato="{% if inscricao.at_urlContratoTransporte %}{{ inscricao.at_urlContratoTransporte|e }}{% else %}{% endif %}"
                                 data-observacoes="{{ inscricao.observacoes|e if inscricao.observacoes is defined else '' }}"
                                 data-docs="{% if inscricao.documentos %}{{ inscricao.documentos|join('||')|e }}{% else %}{% endif %}"
                                 data-tipo-inscricao="{{ inscricao.tipo_inscricao|default('primeira') }}">
@@ -362,171 +383,158 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body" id="detalhesConteudo">
-                    <!-- Conteúdo será carregado dinamicamente -->
-                    <div class="row">
-                        <div class="col-md-6">
-                            <h6 class="mb-3">Dados do Aluno</h6>
-                            <div class="mb-2">
-                                <strong>Nome:</strong> <span id="alunoNome">João Silva dos Santos</span>
-                            </div>
-                            <div class="mb-2">
-                                <strong>Matrícula:</strong> <span id="alunoMatricula">20251234567</span>
-                            </div>
-                            <div class="mb-2">
-                                <strong>Curso:</strong> <span id="alunoCurso">Técnico em Informática</span>
-                            </div>
-                            <div class="mb-2">
-                                <strong>Período:</strong> <span id="alunoPeriodo">3º Período</span>
-                            </div>
-                            <div class="mb-2">
-                                <strong>E-mail:</strong> <span id="alunoEmail">joao.silva@estudante.ifes.edu.br</span>
-                            </div>
-                            <div class="mb-2">
-                                <strong>Telefone:</strong> <span id="alunoTelefone">(27) 99999-9999</span>
-                            </div>
+                    <!-- Informações da Inscrição -->
+                    <div class="card mb-3">
+                        <div class="card-header" style="background-color: #2E7D32; color: white;">
+                            <h6 class="mb-0"><i class="bi bi-file-earmark-text me-2"></i>Informações da Inscrição</h6>
                         </div>
-                        <div class="col-md-6">
-                            <h6 class="mb-3">Dados da Inscrição</h6>
-                            <div class="mb-2">
-                                <strong>Edital:</strong> <span id="inscricaoEdital">001/2025 - Auxílio Transporte</span>
-                            </div>
-                            <div class="mb-2">
-                                <strong>Data de Inscrição:</strong> <span id="inscricaoData">15/03/2025</span>
-                            </div>
-                            <div class="mb-2">
-                                <strong>Status Atual:</strong> <span id="inscricaoStatus" class="badge bg-warning">Pendente</span>
-                            </div>
-                            <div class="mb-2">
-                                <strong>Renda Per Capita:</strong> <span id="inscricaoRenda">R$ 256,80</span>
-                            </div>
-                            <div class="mb-2">
-                                <strong>Composição Familiar:</strong> <span id="inscricaoFamilia">4 pessoas</span>
-                            </div>
-                            <div class="mb-2">
-                                <strong>Pessoas na Residência:</strong> <span id="inscricaoPessoas">-</span>
-                            </div>
-                            <div class="mb-2">
-                                <strong>Renda (categoria):</strong> <span id="inscricaoRendaCategoria">-</span>
-                            </div>
-                            <div class="mb-2">
-                                <strong>CAD Único:</strong> <span id="inscricaoCad">-</span>
-                            </div>
-                            <div class="mb-2">
-                                <strong>Recebe Bolsa Família:</strong> <span id="inscricaoBolsaFamilia">-</span>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <hr class="my-4">
-                    
-                    <div class="row">
-                        <div class="col-12">
-                            <h6 class="mb-3">Documentos Enviados</h6>
-                            <div class="list-group">
-                                <!-- itens serão preenchidos dinamicamente -->
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <hr class="my-4">
-                    
-                    <div class="row">
-                        <div class="col-12">
-                            <h6 class="mb-3">Observações do Aluno</h6>
-                            <div class="bg-light p-3 rounded">
-                                <div id="inscricaoObservacoesContainer">
-                                    <p class="mb-0" id="inscricaoObservacoes">Preciso do auxílio transporte para conseguir frequentar as aulas, pois moro em uma cidade vizinha e dependo de transporte público. Minha família possui renda baixa e este auxílio seria fundamental para minha permanência no curso.</p>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="mb-2"><strong>Edital:</strong> <span id="inscricaoEdital">-</span></div>
+                                    <div class="mb-2"><strong>Data de Inscrição:</strong> <span id="inscricaoData">-</span></div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="mb-2"><strong>Tipo:</strong> <span id="inscricaoTipo">-</span></div>
+                                    <div class="mb-2"><strong>Status:</strong> <span id="inscricaoStatus" class="badge bg-warning">-</span></div>
                                 </div>
                             </div>
                         </div>
                     </div>
                     
-                    <hr class="my-4">
+                    <!-- Dados Pessoais -->
+                    <div class="card mb-3">
+                        <div class="card-header" style="background-color: #f8f9fa; border-left: 4px solid #2E7D32;">
+                            <h6 class="mb-0 text-dark"><i class="bi bi-person-circle me-2"></i>Dados Pessoais</h6>
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="mb-2"><strong>Nome Completo:</strong> <span id="alunoNome">-</span></div>
+                                    <div class="mb-2"><strong>CPF:</strong> <span id="alunoCpf">-</span></div>
+                                    <div class="mb-2"><strong>Data de Nascimento:</strong> <span id="alunoDataNascimento">-</span></div>
+                                    <div class="mb-2"><strong>E-mail:</strong> <span id="alunoEmail">-</span></div>
+                                    <div class="mb-2"><strong>Telefone:</strong> <span id="alunoTelefone">-</span></div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="mb-2"><strong>Logradouro:</strong> <span id="inscricaoLogradouro">-</span></div>
+                                    <div class="mb-2"><strong>Número:</strong> <span id="inscricaoNumero">-</span></div>
+                                    <div class="mb-2"><strong>Complemento:</strong> <span id="inscricaoComplemento">-</span></div>
+                                    <div class="mb-2"><strong>Bairro:</strong> <span id="inscricaoBairro">-</span></div>
+                                    <div class="mb-2"><strong>Cidade/Estado:</strong> <span id="inscricaoCidadeEstado">-</span></div>
+                                    <div class="mb-2"><strong>CEP:</strong> <span id="inscricaoCep">-</span></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
 
-                    <div class="row">
-                        <div class="col-12">
-                            <h6 class="mb-3">Auxílios e Detalhes de Transporte</h6>
-                            <div class="mb-2">
-                                <strong>Auxílios Solicitados:</strong>
-                                <div id="inscricaoAuxilios" class="mt-2">-</div>
+                    <!-- Dados Acadêmicos -->
+                    <div class="card mb-3">
+                        <div class="card-header" style="background-color: #f8f9fa; border-left: 4px solid #2E7D32;">
+                            <h6 class="mb-0 text-dark"><i class="bi bi-mortarboard me-2"></i>Dados Acadêmicos</h6>
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="mb-2"><strong>Matrícula:</strong> <span id="alunoMatricula">-</span></div>
+                                    <div class="mb-2"><strong>Curso:</strong> <span id="alunoCurso">-</span></div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="mb-2"><strong>Ano de Ingresso:</strong> <span id="alunoAnoIngresso">-</span></div>
+                                    <div class="mb-2"><strong>Ano de Conclusão Previsto:</strong> <span id="alunoAnoConclusao">-</span></div>
+                                </div>
                             </div>
-                            <div class="mb-2">
-                                <strong>Tipo de Transporte:</strong> <span id="inscricaoTipoTransporte">-</span>
+                        </div>
+                    </div>
+
+                    <!-- Dados Financeiros -->
+                    <div class="card mb-3">
+                        <div class="card-header" style="background-color: #f8f9fa; border-left: 4px solid #2E7D32;">
+                            <h6 class="mb-0 text-dark"><i class="bi bi-cash-stack me-2"></i>Dados Socioeconômicos</h6>
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="mb-2"><strong>Pessoas na Residência:</strong> <span id="inscricaoPessoas">-</span></div>
+                                    <div class="mb-2"><strong>Renda Per Capita:</strong> <span id="inscricaoRenda">-</span></div>
+                                    <div class="mb-2"><strong>Recebe Bolsa de Pesquisa:</strong> <span id="inscricaoBolsaPesquisa">-</span></div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="mb-2"><strong>Cadastrado no CAD Único:</strong> <span id="inscricaoCad">-</span></div>
+                                    <div class="mb-2"><strong>Recebe Bolsa Família:</strong> <span id="inscricaoBolsaFamilia">-</span></div>
+                                </div>
                             </div>
-                            <div class="mb-2">
-                                <strong>Gasto médio com passagens (dia):</strong> <span id="inscricaoGastoPassagens">-</span>
+                        </div>
+                    </div>
+
+                    <!-- Auxílios Solicitados -->
+                    <div class="card mb-3">
+                        <div class="card-header" style="background-color: #2E7D32; color: white;">
+                            <h6 class="mb-0"><i class="bi bi-gift me-2"></i>Auxílios Solicitados</h6>
+                        </div>
+                        <div class="card-body">
+                            <div id="inscricaoAuxiliosContainer">
+                                <p class="text-muted mb-0">Carregando auxílios...</p>
                             </div>
-                            <div class="mb-2">
-                                <strong>Gasto médio van (mensal):</strong> <span id="inscricaoGastoVan">-</span>
+                        </div>
+                    </div>
+
+                    <!-- Seção: Auxílio Transporte (exibida dinamicamente) -->
+                    <div class="card mb-3 border-success" id="secaoTransporte" style="display: none;">
+                        <div class="card-header" style="background-color: #e8f5e9; border-left: 4px solid #2E7D32;">
+                            <h6 class="mb-0 text-dark"><i class="bi bi-bus-front me-2 text-success"></i>Detalhes do Auxílio Transporte</h6>
+                        </div>
+                        <div class="card-body">
+                            <div class="row mb-3">
+                                <div class="col-md-6">
+                                    <div class="mb-2"><strong>Tipo de Transporte:</strong> <span id="transporteTipo">-</span></div>
+                                    <div class="mb-2"><strong>Tipo(s) de Ônibus:</strong> <span id="transporteTipoOnibus">-</span></div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="mb-2"><strong>Gasto Diário (Passagens):</strong> <span id="transporteGastoDia">-</span></div>
+                                    <div class="mb-2"><strong>Gasto Mensal (Van):</strong> <span id="transporteGastoMensal">-</span></div>
+                                </div>
+                            </div>
+                            <hr>
+                            <h6 class="mb-3 text-success"><i class="bi bi-paperclip me-2"></i>Documentos Específicos de Transporte</h6>
+                            <div class="list-group" id="docsTransporte">
+                                <div class="list-group-item text-muted">Nenhum documento específico enviado</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Seção: Auxílio Moradia (exibida dinamicamente) -->
+                    <div class="card mb-3 border-success" id="secaoMoradia" style="display: none;">
+                        <div class="card-header" style="background-color: #e8f5e9; border-left: 4px solid #2E7D32;">
+                            <h6 class="mb-0 text-dark"><i class="bi bi-house-door me-2 text-success"></i>Detalhes do Auxílio Moradia</h6>
+                        </div>
+                        <div class="card-body">
+                            <h6 class="mb-3 text-success"><i class="bi bi-paperclip me-2"></i>Documentos Específicos de Moradia</h6>
+                            <div class="list-group" id="docsMoradia">
+                                <div class="list-group-item text-muted">Nenhum documento específico enviado</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Documentos Obrigatórios Gerais -->
+                    <div class="card mb-3">
+                        <div class="card-header" style="background-color: #f8f9fa; border-left: 4px solid #2E7D32;">
+                            <h6 class="mb-0 text-dark"><i class="bi bi-file-earmark-check me-2"></i>Documentos Obrigatórios</h6>
+                        </div>
+                        <div class="card-body">
+                            <div class="list-group" id="docsObrigatorios">
+                                <div class="list-group-item text-muted">Nenhum documento enviado</div>
                             </div>
                         </div>
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
-                    
-                    <!-- Seção de Indeferimento (inicialmente oculta) -->
-                    <div id="secaoIndeferimento" style="display: none;" class="w-100 mt-3 mb-3">
-                        <div class="border p-3 rounded bg-light">
-                            <h6 class="text-danger mb-3">
-                                <i class="bi bi-exclamation-triangle me-2"></i>Indeferir Inscrição
-                            </h6>
-                            <div class="mb-3">
-                                <label for="motivoIndeferimento" class="form-label">Motivo do Indeferimento <span class="text-danger">*</span></label>
-                                <textarea class="form-control" id="motivoIndeferimento" rows="3" 
-                                    placeholder="Digite o motivo detalhado do indeferimento da inscrição..."></textarea>
-                            </div>
-                            <div class="alert alert-info">
-                                <i class="bi bi-info-circle me-2"></i>
-                                <strong>Importante:</strong> O aluno poderá entrar com recurso contra esta decisão até <strong>7 dias</strong> após a notificação.
-                            </div>
-                            <div class="d-flex gap-2 justify-content-end">
-                                <button type="button" class="btn btn-outline-secondary" id="cancelarIndeferimento">
-                                    <i class="bi bi-x me-1"></i>Cancelar
-                                </button>
-                                <button type="button" class="btn btn-danger" id="confirmarIndeferimento">
-                                    <i class="bi bi-check-lg me-1"></i>Confirmar Indeferimento
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <!-- Seção de Deferimento (inicialmente oculta) -->
-                    <div id="secaoDeferimento" style="display: none;" class="w-100 mt-3 mb-3">
-                        <div class="border p-3 rounded bg-light">
-                            <h6 class="text-success mb-3">
-                                <i class="bi bi-check-circle me-2"></i>Deferir Inscrição
-                            </h6>
-                            <div class="alert alert-success">
-                                <i class="bi bi-info-circle me-2"></i>
-                                <strong>Confirmação:</strong> Tem certeza que deseja <strong>deferir</strong> esta inscrição? 
-                                O aluno será notificado sobre a aprovação e o auxílio será processado.
-                            </div>
-                            <div class="mb-3">
-                                <label for="observacoesDeferimento" class="form-label">Observações (opcional)</label>
-                                <textarea class="form-control" id="observacoesDeferimento" rows="2" 
-                                    placeholder="Adicione observações sobre o deferimento, se necessário..."></textarea>
-                            </div>
-                            <div class="d-flex gap-2 justify-content-end">
-                                <button type="button" class="btn btn-outline-secondary" id="cancelarDeferimento">
-                                    <i class="bi bi-x me-1"></i>Cancelar
-                                </button>
-                                <button type="button" class="btn btn-success" id="confirmarDeferimento">
-                                    <i class="bi bi-check-lg me-1"></i>Confirmar Deferimento
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <!-- Botões principais -->
-                    <div id="botoesIniciais">
-                        <button type="button" class="btn btn-danger" id="indeferirInscricao">
-                            <i class="bi bi-x-lg me-1"></i>Indeferir
-                        </button>
-                        <button type="button" class="btn btn-success" id="deferirInscricao">
-                            <i class="bi bi-check-lg me-1"></i>Deferir
-                        </button>
-                    </div>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                        <i class="bi bi-x-circle me-1"></i>Fechar
+                    </button>
+                    <button type="button" class="btn btn-success btn-lg" id="salvarDecisoes" onclick="salvarTodasDecisoes()" disabled>
+                        <i class="bi bi-check-circle me-2"></i>Salvar Decisões
+                    </button>
                 </div>
             </div>
         </div>
@@ -539,23 +547,24 @@
                     <script>
         // Variável global para armazenar o ID da inscrição atual
         let currentInscricaoId = null;
+        // Armazenar decisões pendentes
+        let decisoesPendentes = {
+            deferir: {}, // {id_auxilio: {nome: string, valor_mensal: number}}
+            indeferir: {} // {id_auxilio: {nome: string, motivo: string}}
+        };
 
         // Controlar funcionalidades do modal de decisão
         document.addEventListener('DOMContentLoaded', function() {
-            const btnDeferir = document.getElementById('deferirInscricao');
-            const btnIndeferir = document.getElementById('indeferirInscricao');
-            const secaoDeferimento = document.getElementById('secaoDeferimento');
-            const secaoIndeferimento = document.getElementById('secaoIndeferimento');
-            const botoesIniciais = document.getElementById('botoesIniciais');
+            // Limpar decisões pendentes quando o modal for fechado
+            const detalhesModal = document.getElementById('detalhesModal');
+            if (detalhesModal) {
+                detalhesModal.addEventListener('hidden.bs.modal', function() {
+                    decisoesPendentes.deferir = {};
+                    decisoesPendentes.indeferir = {};
+                    atualizarContadorDecisoes();
+                });
+            }
             
-            // Botões de cancelar
-            const btnCancelarDeferimento = document.getElementById('cancelarDeferimento');
-            const btnCancelarIndeferimento = document.getElementById('cancelarIndeferimento');
-            
-            // Botões de confirmar
-            const btnConfirmarDeferimento = document.getElementById('confirmarDeferimento');
-            const btnConfirmarIndeferimento = document.getElementById('confirmarIndeferimento');
-
             // Elementos dos filtros
             const filtroEdital = document.getElementById('filtroEdital');
             const filtroStatus = document.getElementById('filtroStatus');
@@ -709,97 +718,498 @@
 
             // Aplicar filtros iniciais
             aplicarFiltros();
-
-            // Função para resetar o modal
-            function resetarModal() {
-                secaoDeferimento.style.display = 'none';
-                secaoIndeferimento.style.display = 'none';
-                botoesIniciais.style.display = 'block';
-                document.getElementById('motivoIndeferimento').value = '';
-                document.getElementById('observacoesDeferimento').value = '';
-            }
-
-            // Botão Deferir - Mostrar seção de confirmação
-            if (btnDeferir) {
-                btnDeferir.addEventListener('click', function() {
-                    botoesIniciais.style.display = 'none';
-                    secaoDeferimento.style.display = 'block';
-                    secaoIndeferimento.style.display = 'none';
-                });
-            }
-
-            // Botão Indeferir - Mostrar seção de motivo
-            if (btnIndeferir) {
-                btnIndeferir.addEventListener('click', function() {
-                    botoesIniciais.style.display = 'none';
-                    secaoIndeferimento.style.display = 'block';
-                    secaoDeferimento.style.display = 'none';
-                    // Focar no campo de motivo
-                    setTimeout(() => {
-                        document.getElementById('motivoIndeferimento').focus();
-                    }, 100);
-                });
-            }
-
-            // Cancelar Deferimento
-            if (btnCancelarDeferimento) {
-                btnCancelarDeferimento.addEventListener('click', function() {
-                    resetarModal();
-                });
-            }
-
-            // Cancelar Indeferimento
-            if (btnCancelarIndeferimento) {
-                btnCancelarIndeferimento.addEventListener('click', function() {
-                    resetarModal();
-                });
-            }
-
-            // Confirmar Deferimento
-            if (btnConfirmarDeferimento) {
-                btnConfirmarDeferimento.addEventListener('click', function() {
-                    const observacoes = document.getElementById('observacoesDeferimento').value;
-                    
-                    // Atualizar status na tabela
-                    atualizarStatusNaTabela(currentInscricaoId, 'deferir');
-                    
-                    console.log('Inscrição deferida - ID:', currentInscricaoId);
-                    console.log('Observações:', observacoes);
-                    
-                    alert('Inscrição deferida com sucesso!');
-                    bootstrap.Modal.getInstance(document.getElementById('detalhesModal')).hide();
-                    resetarModal();
-                });
-            }
-
-            // Confirmar Indeferimento
-            if (btnConfirmarIndeferimento) {
-                btnConfirmarIndeferimento.addEventListener('click', function() {
-                    const motivo = document.getElementById('motivoIndeferimento').value.trim();
-                    
-                    if (!motivo) {
-                        alert('Por favor, digite o motivo do indeferimento.');
-                        document.getElementById('motivoIndeferimento').focus();
-                        return;
-                    }
-                    
-                    // Atualizar status na tabela
-                    atualizarStatusNaTabela(currentInscricaoId, 'indeferir');
-                    
-                    console.log('Inscrição indeferida - ID:', currentInscricaoId);
-                    console.log('Motivo:', motivo);
-                    
-                    alert('Inscrição indeferida com sucesso!');
-                    bootstrap.Modal.getInstance(document.getElementById('detalhesModal')).hide();
-                    resetarModal();
-                });
-            }
-
-            // Reset modal ao fechar
-            document.getElementById('detalhesModal').addEventListener('hidden.bs.modal', function() {
-                resetarModal();
-            });
         });
+
+        // Função para carregar os auxílios da inscrição
+        async function carregarAuxilios(inscricaoId) {
+            try {
+                const response = await fetch(`/assistente/analise-inscricoes/auxilios/${inscricaoId}`);
+                const data = await response.json();
+                
+                if (data.success && data.auxilios && data.auxilios.length > 0) {
+                    const container = document.getElementById('inscricaoAuxiliosContainer');
+                    container.innerHTML = '';
+                    
+                    data.auxilios.forEach(auxilio => {
+                        const auxilioCard = criarCardAuxilio(auxilio);
+                        container.appendChild(auxilioCard);
+                    });
+                } else {
+                    document.getElementById('inscricaoAuxiliosContainer').innerHTML = 
+                        '<p class="text-muted mb-0">Nenhum auxílio solicitado</p>';
+                }
+            } catch (error) {
+                console.error('Erro ao carregar auxílios:', error);
+                document.getElementById('inscricaoAuxiliosContainer').innerHTML = 
+                    '<p class="text-danger mb-0">Erro ao carregar auxílios</p>';
+            }
+        }
+
+        // Função para criar card de auxílio com botões de decisão
+        function criarCardAuxilio(auxilio) {
+            const div = document.createElement('div');
+            div.className = 'border rounded p-3 mb-3';
+            div.id = `auxilio-${auxilio.id_auxilio}`;
+            
+            let icone = 'gift';
+            let nomeExibicao = auxilio.tipo_auxilio;
+            let corBorda = '#2E7D32';
+            
+            const tipoNormalizado = auxilio.tipo_auxilio.toLowerCase();
+            if (tipoNormalizado.includes('transporte')) {
+                icone = 'bus-front';
+                nomeExibicao = 'Auxílio Transporte';
+            } else if (tipoNormalizado.includes('moradia')) {
+                icone = 'house-door';
+                nomeExibicao = 'Auxílio Moradia';
+            } else if (tipoNormalizado.includes('alimenta')) {
+                icone = 'egg-fried';
+                nomeExibicao = 'Auxílio Alimentação';
+            } else if (tipoNormalizado.includes('material')) {
+                icone = 'book';
+                nomeExibicao = 'Auxílio Material Didático';
+            }
+            
+            let statusBadge = '';
+            let conteudoAcao = '';
+            
+            const status = auxilio.status_auxilio || 'pendente';
+            
+            if (status === 'deferido') {
+                statusBadge = '<span class="badge bg-success ms-2"><i class="bi bi-check-circle me-1"></i>Deferido</span>';
+                corBorda = '#28a745';
+                conteudoAcao = `<p class="mb-0 mt-2 small"><strong>Valor mensal concedido:</strong> <span class="text-success fw-bold">R$ ${parseFloat(auxilio.valor_mensal).toFixed(2)}</span></p>`;
+            } else if (status === 'indeferido') {
+                statusBadge = '<span class="badge bg-danger ms-2"><i class="bi bi-x-circle me-1"></i>Indeferido</span>';
+                corBorda = '#dc3545';
+            } else {
+                // Status pendente - mostrar campo de valor e botões de ação
+                statusBadge = '<span class="badge bg-warning text-dark ms-2"><i class="bi bi-clock me-1"></i>Pendente</span>';
+                conteudoAcao = `
+                    <div class="mt-3" id="acoes-${auxilio.id_auxilio}">
+                        <div class="mb-3">
+                            <label class="form-label small fw-bold">
+                                <i class="bi bi-currency-dollar me-1"></i>Valor Mensal a Conceder (R$)
+                                <span class="text-danger">*</span>
+                            </label>
+                            <input type="number" 
+                                   class="form-control form-control-sm" 
+                                   id="valor-${auxilio.id_auxilio}"
+                                   placeholder="Ex: 250.00" 
+                                   step="0.01" 
+                                   min="0.01">
+                            <div class="form-text small">Digite o valor mensal que será concedido ao aluno</div>
+                        </div>
+                        <div class="d-flex gap-2 justify-content-end">
+                            <button class="btn btn-sm btn-outline-danger" onclick="marcarParaIndeferir(${auxilio.id_auxilio}, '${nomeExibicao}')">
+                                <i class="bi bi-x-lg me-1"></i>Indeferir
+                            </button>
+                            <button class="btn btn-sm btn-outline-success" onclick="marcarParaDeferir(${auxilio.id_auxilio}, '${nomeExibicao}')">
+                                <i class="bi bi-check-lg me-1"></i>Marcar para Deferir
+                            </button>
+                        </div>
+                    </div>
+                `;
+            }
+            
+            div.style.borderLeft = `4px solid ${corBorda}`;
+            div.innerHTML = `
+                <div>
+                    <h6 class="mb-1">
+                        <i class="bi bi-${icone} text-success me-2"></i>
+                        ${nomeExibicao}
+                        ${statusBadge}
+                    </h6>
+                    <p class="text-muted mb-0 small">${auxilio.descricao || ''}</p>
+                    ${conteudoAcao}
+                </div>
+            `;
+            
+            return div;
+        }
+
+        // Função para marcar auxílio para deferimento
+        function marcarParaDeferir(idAuxilio, nomeAuxilio) {
+            const inputValor = document.getElementById(`valor-${idAuxilio}`);
+            
+            if (!inputValor) {
+                alert('Erro: Campo de valor não encontrado!');
+                return;
+            }
+            
+            const valorMensal = parseFloat(inputValor.value);
+            
+            if (!inputValor.value || isNaN(valorMensal) || valorMensal <= 0) {
+                alert('Por favor, digite um valor mensal válido maior que zero!');
+                inputValor.focus();
+                return;
+            }
+            
+            // Remover de indeferir se estava lá
+            if (decisoesPendentes.indeferir[idAuxilio]) {
+                delete decisoesPendentes.indeferir[idAuxilio];
+            }
+            
+            // Adicionar à lista de deferimentos
+            decisoesPendentes.deferir[idAuxilio] = {
+                id_auxilio: idAuxilio,
+                nome: nomeAuxilio,
+                valor_mensal: valorMensal
+            };
+            
+            // Aplicar visual feedback
+            aplicarFeedbackVisual(idAuxilio, 'deferir');
+            atualizarContadorDecisoes();
+            
+            // Esconder campo de valor e mostrar badge de marcado
+            const acoesDiv = document.getElementById(`acoes-${idAuxilio}`);
+            if (acoesDiv) {
+                acoesDiv.innerHTML = `
+                    <div class="alert alert-success mb-0">
+                        <div class="d-flex justify-content-between align-items-start">
+                            <div>
+                                <strong><i class="bi bi-check-circle me-1"></i>Marcado para Deferimento</strong>
+                                <p class="mb-0 mt-2 small"><strong>Valor mensal:</strong> <span class="text-success fw-bold">R$ ${valorMensal.toFixed(2)}</span></p>
+                            </div>
+                            <button class="btn btn-sm btn-outline-secondary" onclick="cancelarDeferimento(${idAuxilio})">
+                                <i class="bi bi-arrow-counterclockwise me-1"></i>Desfazer
+                            </button>
+                        </div>
+                    </div>
+                `;
+            }
+        }
+
+        // Função para cancelar deferimento e voltar ao estado original
+        function cancelarDeferimento(idAuxilio) {
+            // Remover da lista de deferimentos
+            if (decisoesPendentes.deferir[idAuxilio]) {
+                delete decisoesPendentes.deferir[idAuxilio];
+            }
+            
+            // Recarregar o auxílio para restaurar o estado original
+            carregarAuxilios(currentInscricaoId);
+            atualizarContadorDecisoes();
+        }
+
+        // Função para marcar auxílio para indeferimento
+        function marcarParaIndeferir(idAuxilio, nomeAuxilio) {
+            // Verificar se já existe campo de motivo ou criar
+            let campoMotivo = document.getElementById(`motivo-${idAuxilio}`);
+            
+            if (!campoMotivo) {
+                // Criar campo de motivo dinamicamente
+                const acoesDiv = document.getElementById(`acoes-${idAuxilio}`);
+                if (!acoesDiv) return;
+                
+                // Criar div para o campo de motivo
+                const motivoDiv = document.createElement('div');
+                motivoDiv.className = 'mb-3 p-3 bg-danger-subtle border border-danger rounded';
+                motivoDiv.innerHTML = `
+                    <label class="form-label small fw-bold text-danger">
+                        <i class="bi bi-exclamation-triangle me-1"></i>Motivo do Indeferimento
+                        <span class="text-danger">*</span>
+                    </label>
+                    <textarea class="form-control form-control-sm" 
+                              id="motivo-${idAuxilio}"
+                              rows="3" 
+                              placeholder="Digite o motivo pelo qual este auxílio será indeferido..."
+                              required></textarea>
+                    <div class="form-text small">Explique claramente por que o auxílio não pode ser concedido</div>
+                    <div class="d-flex gap-2 justify-content-end mt-2">
+                        <button class="btn btn-sm btn-secondary" onclick="cancelarIndeferimento(${idAuxilio})">
+                            <i class="bi bi-x-lg me-1"></i>Cancelar
+                        </button>
+                        <button class="btn btn-sm btn-danger" onclick="confirmarIndeferimento(${idAuxilio}, '${nomeAuxilio}')">
+                            <i class="bi bi-check-lg me-1"></i>Confirmar Indeferimento
+                        </button>
+                    </div>
+                `;
+                
+                // Inserir antes dos botões originais
+                const botoesOriginais = acoesDiv.querySelector('.d-flex.gap-2');
+                if (botoesOriginais) {
+                    botoesOriginais.style.display = 'none'; // Esconder botões originais
+                }
+                
+                acoesDiv.insertBefore(motivoDiv, acoesDiv.firstChild);
+                
+                // Focar no textarea
+                setTimeout(() => {
+                    document.getElementById(`motivo-${idAuxilio}`).focus();
+                }, 100);
+                
+                return;
+            }
+            
+            // Se o campo já existe, focar nele
+            campoMotivo.focus();
+        }
+
+        // Função para confirmar o indeferimento com o motivo digitado
+        function confirmarIndeferimento(idAuxilio, nomeAuxilio) {
+            const campoMotivo = document.getElementById(`motivo-${idAuxilio}`);
+            
+            if (!campoMotivo) {
+                alert('Erro: Campo de motivo não encontrado!');
+                return;
+            }
+            
+            const motivo = campoMotivo.value.trim();
+            
+            if (!motivo) {
+                alert('Por favor, digite o motivo do indeferimento!');
+                campoMotivo.focus();
+                return;
+            }
+            
+            // Remover de deferir se estava lá
+            if (decisoesPendentes.deferir[idAuxilio]) {
+                delete decisoesPendentes.deferir[idAuxilio];
+            }
+            
+            // Adicionar à lista de indeferimentos
+            decisoesPendentes.indeferir[idAuxilio] = {
+                id_auxilio: idAuxilio,
+                nome: nomeAuxilio,
+                motivo: motivo
+            };
+            
+            // Aplicar visual feedback
+            aplicarFeedbackVisual(idAuxilio, 'indeferir');
+            atualizarContadorDecisoes();
+            
+            // Esconder campo de motivo e mostrar badge de marcado
+            const acoesDiv = document.getElementById(`acoes-${idAuxilio}`);
+            if (acoesDiv) {
+                acoesDiv.innerHTML = `
+                    <div class="alert alert-danger mb-0">
+                        <div class="d-flex justify-content-between align-items-start">
+                            <div>
+                                <strong><i class="bi bi-x-circle me-1"></i>Marcado para Indeferimento</strong>
+                                <p class="mb-0 mt-2 small"><strong>Motivo:</strong> ${motivo}</p>
+                            </div>
+                            <button class="btn btn-sm btn-outline-secondary" onclick="cancelarIndeferimento(${idAuxilio})">
+                                <i class="bi bi-arrow-counterclockwise me-1"></i>Desfazer
+                            </button>
+                        </div>
+                    </div>
+                `;
+            }
+        }
+
+        // Função para cancelar indeferimento e voltar ao estado original
+        function cancelarIndeferimento(idAuxilio) {
+            // Remover da lista de indeferimentos
+            if (decisoesPendentes.indeferir[idAuxilio]) {
+                delete decisoesPendentes.indeferir[idAuxilio];
+            }
+            
+            // Recarregar o auxílio para restaurar o estado original
+            carregarAuxilios(currentInscricaoId);
+            atualizarContadorDecisoes();
+        }
+
+        // Função para aplicar feedback visual nas decisões marcadas
+        function aplicarFeedbackVisual(idAuxilio, tipo) {
+            const card = document.getElementById(`auxilio-${idAuxilio}`);
+            if (!card) return;
+            
+            // Remover classes anteriores
+            card.classList.remove('border-success', 'border-danger', 'bg-success-subtle', 'bg-danger-subtle');
+            
+            if (tipo === 'deferir') {
+                card.classList.add('border-success', 'bg-success-subtle');
+                card.style.borderWidth = '2px';
+            } else if (tipo === 'indeferir') {
+                card.classList.add('border-danger', 'bg-danger-subtle');
+                card.style.borderWidth = '2px';
+            }
+        }
+
+        // Função para atualizar contador de decisões pendentes
+        function atualizarContadorDecisoes() {
+            const totalDeferir = Object.keys(decisoesPendentes.deferir).length;
+            const totalIndeferir = Object.keys(decisoesPendentes.indeferir).length;
+            const total = totalDeferir + totalIndeferir;
+            
+            const btnSalvar = document.getElementById('salvarDecisoes');
+            if (btnSalvar) {
+                if (total > 0) {
+                    btnSalvar.innerHTML = `<i class="bi bi-check-circle me-2"></i>Salvar Decisões (${total})`;
+                    btnSalvar.disabled = false;
+                } else {
+                    btnSalvar.innerHTML = '<i class="bi bi-check-circle me-2"></i>Salvar Decisões';
+                    btnSalvar.disabled = true;
+                }
+            }
+        }
+
+        // Função para salvar todas as decisões pendentes
+        async function salvarTodasDecisoes() {
+            const totalDeferir = Object.keys(decisoesPendentes.deferir).length;
+            const totalIndeferir = Object.keys(decisoesPendentes.indeferir).length;
+            const total = totalDeferir + totalIndeferir;
+            
+            if (total === 0) {
+                alert('Nenhuma decisão foi marcada!');
+                return;
+            }
+            
+            // Mostrar resumo e pedir confirmação
+            let resumo = `Você está prestes a salvar ${total} decisão(ões):\n\n`;
+            if (totalDeferir > 0) {
+                resumo += `✓ Deferimentos: ${totalDeferir}\n`;
+            }
+            if (totalIndeferir > 0) {
+                resumo += `✗ Indeferimentos: ${totalIndeferir}\n`;
+            }
+            resumo += `\nDeseja confirmar todas essas decisões?`;
+            
+            if (!confirm(resumo)) {
+                return;
+            }
+            
+            let sucessos = 0;
+            let erros = 0;
+            const errosDetalhados = [];
+            
+            // Processar deferimentos
+            for (const [idAuxilio, dados] of Object.entries(decisoesPendentes.deferir)) {
+                try {
+                    const response = await fetch('/assistente/analise-inscricoes/deferir-auxilio', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({
+                            id_auxilio: parseInt(idAuxilio),
+                            valor_mensal: dados.valor_mensal,
+                            observacoes: ''
+                        })
+                    });
+                    
+                    const data = await response.json();
+                    
+                    if (data.success) {
+                        sucessos++;
+                    } else {
+                        erros++;
+                        errosDetalhados.push(`${dados.nome}: ${data.message || 'Erro desconhecido'}`);
+                    }
+                } catch (error) {
+                    console.error('Erro ao deferir auxílio:', error);
+                    erros++;
+                    errosDetalhados.push(`${dados.nome}: Erro de conexão`);
+                }
+            }
+            
+            // Processar indeferimentos
+            for (const [idAuxilio, dados] of Object.entries(decisoesPendentes.indeferir)) {
+                try {
+                    const response = await fetch('/assistente/analise-inscricoes/indeferir-auxilio', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({
+                            id_auxilio: parseInt(idAuxilio),
+                            motivo: dados.motivo
+                        })
+                    });
+                    
+                    const data = await response.json();
+                    
+                    if (data.success) {
+                        sucessos++;
+                    } else {
+                        erros++;
+                        errosDetalhados.push(`${dados.nome}: ${data.message || 'Erro desconhecido'}`);
+                    }
+                } catch (error) {
+                    console.error('Erro ao indeferir auxílio:', error);
+                    erros++;
+                    errosDetalhados.push(`${dados.nome}: Erro de conexão`);
+                }
+            }
+            
+            // Limpar decisões pendentes
+            decisoesPendentes.deferir = {};
+            decisoesPendentes.indeferir = {};
+            
+            // Recarregar lista de auxílios
+            await carregarAuxilios(currentInscricaoId);
+            
+            // Mostrar resultado
+            let mensagem = `Processamento concluído!\n\n`;
+            mensagem += `✓ Sucessos: ${sucessos}\n`;
+            if (erros > 0) {
+                mensagem += `✗ Erros: ${erros}\n\n`;
+                mensagem += `Detalhes dos erros:\n${errosDetalhados.join('\n')}`;
+            }
+            
+            alert(mensagem);
+            atualizarContadorDecisoes();
+        }
+
+        // Função para deferir auxílio via API
+        async function deferirAuxilio(idAuxilio, valorMensal) {
+            try {
+                const response = await fetch('/assistente/analise-inscricoes/deferir-auxilio', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        id_auxilio: idAuxilio,
+                        valor_mensal: valorMensal,
+                        observacoes: ''
+                    })
+                });
+                
+                const data = await response.json();
+                
+                if (data.success) {
+                    alert('Auxílio deferido com sucesso!\nValor mensal: R$ ' + valorMensal.toFixed(2));
+                    // Recarregar os auxílios
+                    await carregarAuxilios(currentInscricaoId);
+                } else {
+                    alert('Erro ao deferir auxílio: ' + (data.message || 'Erro desconhecido'));
+                }
+            } catch (error) {
+                console.error('Erro ao deferir auxílio:', error);
+                alert('Erro ao deferir auxílio. Por favor, tente novamente.');
+            }
+        }
+
+        // Função para indeferir auxílio via API
+        async function indeferirAuxilio(idAuxilio, motivo) {
+            try {
+                const response = await fetch('/assistente/analise-inscricoes/indeferir-auxilio', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        id_auxilio: idAuxilio,
+                        motivo: motivo
+                    })
+                });
+                
+                const data = await response.json();
+                
+                if (data.success) {
+                    alert('Auxílio indeferido com sucesso!');
+                    // Recarregar os auxílios
+                    await carregarAuxilios(currentInscricaoId);
+                } else {
+                    alert('Erro ao indeferir auxílio: ' + (data.message || 'Erro desconhecido'));
+                }
+            } catch (error) {
+                console.error('Erro ao indeferir auxílio:', error);
+                alert('Erro ao indeferir auxílio. Por favor, tente novamente.');
+            }
+        }
 
         // Função para atualizar o status na tabela
         function atualizarStatusNaTabela(inscricaoId, decisao) {
@@ -826,6 +1236,12 @@
         // Função para visualizar detalhes (deve ser chamada pelos botões da tabela)
         function visualizarDetalhes(inscricaoId) {
             currentInscricaoId = inscricaoId;
+            
+            // Resetar decisões pendentes ao abrir o modal
+            decisoesPendentes.deferir = {};
+            decisoesPendentes.indeferir = {};
+            atualizarContadorDecisoes();
+            
             const row = document.querySelector(`tr[data-inscricao-id="${inscricaoId}"]`);
             if (!row) {
                 const modalFallback = new bootstrap.Modal(document.getElementById('detalhesModal'));
@@ -833,111 +1249,256 @@
                 return;
             }
 
-            // Preencher campos do modal a partir dos data-* (fornecidos pelo servidor via Jinja2)
-            document.getElementById('alunoNome').textContent = row.dataset.alunoNome || '';
-            document.getElementById('alunoMatricula').textContent = row.dataset.alunoMatricula || '';
-            document.getElementById('alunoCurso').textContent = row.dataset.alunoCurso || '';
-            document.getElementById('alunoPeriodo').textContent = row.dataset.alunoPeriodo || '';
-            document.getElementById('alunoEmail').textContent = row.dataset.alunoEmail || '';
-            document.getElementById('alunoTelefone').textContent = row.dataset.alunoTelefone || '';
+            // === DADOS PESSOAIS ===
+            document.getElementById('alunoNome').textContent = row.dataset.alunoNome || '-';
+            document.getElementById('alunoCpf').textContent = row.dataset.cpf || '-';
+            document.getElementById('alunoDataNascimento').textContent = row.dataset.dataNascimento || '-';
+            document.getElementById('alunoEmail').textContent = row.dataset.alunoEmail || '-';
+            document.getElementById('alunoTelefone').textContent = row.dataset.alunoTelefone || '-';
+            
+            // Preencher campos de endereço individuais
+            document.getElementById('inscricaoLogradouro').textContent = row.dataset.logradouro || '-';
+            document.getElementById('inscricaoNumero').textContent = row.dataset.numero || '-';
+            document.getElementById('inscricaoComplemento').textContent = row.dataset.complemento || '-';
+            document.getElementById('inscricaoBairro').textContent = row.dataset.bairro || '-';
+            
+            // Cidade e Estado juntos
+            const cidadeEstado = (row.dataset.cidade && row.dataset.estado) 
+                ? `${row.dataset.cidade}/${row.dataset.estado}` 
+                : (row.dataset.cidade || row.dataset.estado || '-');
+            document.getElementById('inscricaoCidadeEstado').textContent = cidadeEstado;
+            document.getElementById('inscricaoCep').textContent = row.dataset.cep || '-';
 
-            document.getElementById('inscricaoEdital').textContent = row.dataset.edital || '';
-            document.getElementById('inscricaoData').textContent = row.dataset.dataInscricao || '';
+            // === DADOS ACADÊMICOS ===
+            document.getElementById('alunoMatricula').textContent = row.dataset.alunoMatricula || '-';
+            document.getElementById('alunoCurso').textContent = row.dataset.alunoCurso || '-';
+            document.getElementById('alunoAnoIngresso').textContent = row.dataset.anoIngresso || '-';
+            document.getElementById('alunoAnoConclusao').textContent = row.dataset.anoConclusao || '-';
+
+            // === DADOS FINANCEIROS ===
+            document.getElementById('inscricaoPessoas').textContent = row.dataset.pessoasResidencia || '-';
+            document.getElementById('inscricaoRenda').textContent = row.dataset.rendaPercapita ? `R$ ${parseFloat(row.dataset.rendaPercapita).toFixed(2)}` : (row.dataset.renda ? `R$ ${row.dataset.renda}` : '-');
+            document.getElementById('inscricaoBolsaPesquisa').textContent = row.dataset.bolsaPesquisa || '-';
+            document.getElementById('inscricaoCad').textContent = row.dataset.cadUnico || '-';
+            document.getElementById('inscricaoBolsaFamilia').textContent = row.dataset.bolsaFamilia || '-';
+
+            // === INFORMAÇÕES DA INSCRIÇÃO ===
+            const tipo = row.dataset.tipoInscricao || 'primeira';
+            const tipoTexto = tipo === 'renovacao' ? 'Renovação' : 'Primeira Inscrição';
+            document.getElementById('inscricaoEdital').textContent = (row.dataset.edital || '-') + ' - ' + tipoTexto;
+            document.getElementById('inscricaoTipo').textContent = tipoTexto;
+            document.getElementById('inscricaoData').textContent = row.dataset.dataInscricao || '-';
 
             const statusSpan = document.getElementById('inscricaoStatus');
             const status = row.dataset.status || '';
-            statusSpan.className = '';
-            statusSpan.classList.add('badge');
+            statusSpan.className = 'badge';
             if (status === 'deferido') {
                 statusSpan.classList.add('bg-success');
-                statusSpan.innerHTML = 'Deferido';
+                statusSpan.textContent = 'Deferido';
             } else if (status === 'indeferido') {
                 statusSpan.classList.add('bg-danger');
-                statusSpan.innerHTML = 'Indeferido';
+                statusSpan.textContent = 'Indeferido';
             } else if (status === 'pendente') {
-                statusSpan.classList.add('bg-warning');
-                statusSpan.innerHTML = 'Pendente';
+                statusSpan.classList.add('bg-warning', 'text-dark');
+                statusSpan.textContent = 'Pendente';
             } else {
                 statusSpan.classList.add('bg-secondary');
-                statusSpan.innerHTML = status ? status.charAt(0).toUpperCase() + status.slice(1) : '';
+                statusSpan.textContent = status ? status.charAt(0).toUpperCase() + status.slice(1) : '-';
             }
 
-            document.getElementById('inscricaoRenda').textContent = row.dataset.renda ? `R$ ${row.dataset.renda}` : '';
-            document.getElementById('inscricaoFamilia').textContent = row.dataset.familia || '';
-            document.getElementById('inscricaoPessoas').textContent = row.dataset.pessoasResidencia || '';
-            document.getElementById('inscricaoRendaCategoria').textContent = row.dataset.rendaPercapita || row.dataset.rendaPercapita || (row.dataset.renda ? 'R$ ' + row.dataset.renda : '');
-            document.getElementById('inscricaoCad').textContent = row.dataset.cadUnico || '';
-            document.getElementById('inscricaoBolsaFamilia').textContent = row.dataset.bolsaFamilia || '';
+            // === AUXÍLIOS SOLICITADOS ===
+            // Agora carregamos os auxílios via API
+            carregarAuxilios(inscricaoId);
 
-            // Tipo de inscrição (primeira / renovação)
-            const tipo = row.dataset.tipoInscricao || 'primeira';
-            // acrescenta informação no título do edital (sem alterar estética)
-            const editalEl = document.getElementById('inscricaoEdital');
-            if (editalEl) {
-                editalEl.textContent = (row.dataset.edital || '') + ' - ' + (tipo === 'renovacao' ? 'Renovação' : 'Primeira Inscrição');
+            // Obter lista de auxílios da row para usar nas seções de transporte/moradia
+            const auxRaw = row.dataset.auxilios || '';
+            let auxiliosList = [];
+            if (auxRaw) {
+                auxiliosList = auxRaw.split('||').filter(Boolean);
             }
 
-            // Observações
-            document.querySelector('#detalhesConteudo #inscricaoObservacoes')?.remove();
-            const obs = row.dataset.observacoes || '';
-            const obsContainer = document.createElement('div');
-            obsContainer.id = 'inscricaoObservacoes';
-            obsContainer.className = 'bg-light p-3 rounded';
-            obsContainer.innerHTML = `<p class="mb-0">${obs}</p>`;
-            // localizar a área de observações original e substituir o conteúdo
-            const obsParent = document.querySelector('#detalhesConteudo .row:last-of-type .col-12');
-            if (obsParent) {
-                const existing = obsParent.querySelector('.bg-light');
-                if (existing) existing.remove();
-                obsParent.appendChild(obsContainer);
-            }
+            // === SEÇÃO AUXÍLIO TRANSPORTE ===
+            const secaoTransporte = document.getElementById('secaoTransporte');
+            const temTransporte = auxiliosList.some(aux => aux.toLowerCase().includes('transporte'));
+            if (temTransporte) {
+                secaoTransporte.style.display = 'block';
+                
+                document.getElementById('transporteTipo').textContent = row.dataset.tipoTransporte || '-';
+                
+                const tipoOnibusRaw = row.dataset.tipoOnibus || '';
+                if (tipoOnibusRaw) {
+                    const tipos = tipoOnibusRaw.split('||').filter(Boolean);
+                    document.getElementById('transporteTipoOnibus').textContent = tipos.join(', ');
+                } else {
+                    document.getElementById('transporteTipoOnibus').textContent = '-';
+                }
+                
+                document.getElementById('transporteGastoDia').textContent = row.dataset.gastoPassagensDia ? 
+                    `R$ ${parseFloat(row.dataset.gastoPassagensDia).toFixed(2)}` : '-';
+                document.getElementById('transporteGastoMensal').textContent = row.dataset.gastoVanMensal ? 
+                    `R$ ${parseFloat(row.dataset.gastoVanMensal).toFixed(2)}` : '-';
 
-            // Documentos
-            const docsRaw = row.dataset.docs || '';
-            const docsListGroup = document.querySelector('#detalhesConteudo .list-group');
-            if (docsListGroup) {
-                // limpar itens existentes
-                docsListGroup.innerHTML = '';
-                if (docsRaw) {
-                    const docs = docsRaw.split('||');
-                    docs.forEach(doc => {
+                // Documentos específicos de transporte
+                const docsTransporteContainer = document.getElementById('docsTransporte');
+                docsTransporteContainer.innerHTML = '';
+                
+                const docsTransporte = [
+                    { url: row.dataset.transporteCompResidencia, label: 'Comprovante de Residência' },
+                    { url: row.dataset.transportePasseEscolarFrente, label: 'Passe Escolar (Frente)' },
+                    { url: row.dataset.transportePasseEscolarVerso, label: 'Passe Escolar (Verso)' },
+                    { url: row.dataset.transporteComprovanteRecarga, label: 'Comprovante de Recarga' },
+                    { url: row.dataset.transporteComprovantePassagens, label: 'Comprovante de Passagens' },
+                    { url: row.dataset.transporteContrato, label: 'Contrato de Transporte' }
+                ];
+                
+                const docsTransporteEnviados = docsTransporte.filter(doc => doc.url && doc.url.trim() !== '');
+                
+                if (docsTransporteEnviados.length > 0) {
+                    docsTransporteEnviados.forEach(doc => {
                         const item = document.createElement('div');
                         item.className = 'list-group-item d-flex justify-content-between align-items-center';
-                        const nameSpan = document.createElement('span');
-                        nameSpan.innerHTML = `<i class="bi bi-file-earmark-pdf text-danger me-2"></i>${doc}`;
-                        const btn = document.createElement('button');
-                        btn.className = 'btn btn-sm btn-outline-primary';
-                        btn.innerHTML = '<i class="bi bi-eye"></i> Visualizar';
-                        // btn can be wired to open the actual file if URL provided in data-docs-urls in future
-                        item.appendChild(nameSpan);
-                        item.appendChild(btn);
-                        docsListGroup.appendChild(item);
+                        item.innerHTML = `
+                            <span><i class="bi bi-file-earmark-pdf text-danger me-2"></i>${doc.label}</span>
+                            <button class="btn btn-sm btn-outline-primary" onclick="visualizarDocumento('${doc.url}')">
+                                <i class="bi bi-eye"></i> Visualizar
+                            </button>
+                        `;
+                        docsTransporteContainer.appendChild(item);
                     });
                 } else {
-                    const none = document.createElement('div');
-                    none.className = 'list-group-item text-muted';
-                    none.textContent = 'Nenhum documento enviado.';
-                    docsListGroup.appendChild(none);
+                    docsTransporteContainer.innerHTML = '<div class="list-group-item text-muted">Nenhum documento específico enviado</div>';
                 }
+            } else {
+                secaoTransporte.style.display = 'none';
             }
 
-            // Preencher auxílios e detalhes de transporte
-            const auxRaw = row.dataset.auxilios || '';
-            const auxContainer = document.getElementById('inscricaoAuxilios');
-            if (auxContainer) {
-                auxContainer.innerHTML = '-';
-                if (auxRaw) {
-                    const auxs = auxRaw.split('||');
-                    auxContainer.innerHTML = auxs.map(a => `<span class="badge bg-secondary me-1">${a}</span>`).join(' ');
+            // === SEÇÃO AUXÍLIO MORADIA ===
+            const secaoMoradia = document.getElementById('secaoMoradia');
+            const temMoradia = auxiliosList.some(aux => aux.toLowerCase().includes('moradia'));
+            if (temMoradia) {
+                secaoMoradia.style.display = 'block';
+                
+                // Popular documentos específicos de moradia
+                const docsMoradiaContainer = document.getElementById('docsMoradia');
+                docsMoradiaContainer.innerHTML = '';
+                
+                const docsMoradia = [
+                    { url: row.dataset.moradiaCompResidenciaFixa, label: 'Comprovante de Residência Fixa' },
+                    { url: row.dataset.moradiaCompResidenciaAlugada, label: 'Comprovante de Residência Alugada' },
+                    { url: row.dataset.moradiaContratoAluguelCampus, label: 'Contrato de Aluguel (Cidade do Campus)' },
+                    { url: row.dataset.moradiaContratoAluguelNatal, label: 'Contrato de Aluguel (Cidade Natal)' }
+                ];
+                
+                const docsEnviados = docsMoradia.filter(doc => doc.url && doc.url.trim() !== '');
+                
+                if (docsEnviados.length > 0) {
+                    docsEnviados.forEach(doc => {
+                        const item = document.createElement('div');
+                        item.className = 'list-group-item d-flex justify-content-between align-items-center';
+                        item.innerHTML = `
+                            <span><i class="bi bi-file-earmark-pdf text-danger me-2"></i>${doc.label}</span>
+                            <button class="btn btn-sm btn-outline-primary" onclick="visualizarDocumento('${doc.url}')">
+                                <i class="bi bi-eye"></i> Visualizar
+                            </button>
+                        `;
+                        docsMoradiaContainer.appendChild(item);
+                    });
+                } else {
+                    docsMoradiaContainer.innerHTML = '<div class="list-group-item text-muted">Nenhum documento específico enviado</div>';
                 }
+            } else {
+                secaoMoradia.style.display = 'none';
             }
 
-            document.getElementById('inscricaoTipoTransporte').textContent = row.dataset.tipoTransporte || '-';
-            document.getElementById('inscricaoGastoPassagens').textContent = row.dataset.gastoPassagensDia ? `R$ ${row.dataset.gastoPassagensDia}` : '-';
-            document.getElementById('inscricaoGastoVan').textContent = row.dataset.gastoVanMensal ? `R$ ${row.dataset.gastoVanMensal}` : '-';
+            // === DOCUMENTOS OBRIGATÓRIOS GERAIS ===
+            const docsRaw = row.dataset.docs || '';
+            popularDocsObrigatorios('docsObrigatorios', docsRaw);
 
+            // Abrir modal
             const modal = new bootstrap.Modal(document.getElementById('detalhesModal'));
             modal.show();
+        }
+
+        // Função auxiliar para popular documentos específicos
+        function popularDocsEspecificos(containerId, docsRaw, palavrasChave) {
+            const container = document.getElementById(containerId);
+            container.innerHTML = '';
+            
+            if (!docsRaw) {
+                container.innerHTML = '<div class="list-group-item text-muted">Nenhum documento específico enviado</div>';
+                return;
+            }
+
+            const docs = docsRaw.split('||').filter(Boolean);
+            const docsEspecificos = docs.filter(doc => {
+                const docLower = doc.toLowerCase();
+                return palavrasChave.some(palavra => docLower.includes(palavra));
+            });
+
+            if (docsEspecificos.length > 0) {
+                docsEspecificos.forEach(doc => {
+                    const item = document.createElement('div');
+                    item.className = 'list-group-item d-flex justify-content-between align-items-center';
+                    item.innerHTML = `
+                        <span><i class="bi bi-file-earmark-pdf text-danger me-2"></i>${extrairNomeArquivo(doc)}</span>
+                        <button class="btn btn-sm btn-outline-primary" onclick="visualizarDocumento('${doc}')">
+                            <i class="bi bi-eye"></i> Visualizar
+                        </button>
+                    `;
+                    container.appendChild(item);
+                });
+            } else {
+                container.innerHTML = '<div class="list-group-item text-muted">Nenhum documento específico enviado</div>';
+            }
+        }
+
+        // Função auxiliar para popular documentos obrigatórios gerais
+        function popularDocsObrigatorios(containerId, docsRaw) {
+            const container = document.getElementById(containerId);
+            container.innerHTML = '';
+            
+            if (!docsRaw) {
+                container.innerHTML = '<div class="list-group-item text-muted">Nenhum documento enviado</div>';
+                return;
+            }
+
+            const docs = docsRaw.split('||').filter(Boolean);
+            // Filtrar docs gerais (excluir os específicos de auxílios)
+            const palavrasExcluir = ['transporte', 'onibus', 'van', 'passag', 'cartao', 'moradia', 'aluguel', 'contrato'];
+            const docsGerais = docs.filter(doc => {
+                const docLower = doc.toLowerCase();
+                return !palavrasExcluir.some(palavra => docLower.includes(palavra));
+            });
+
+            if (docsGerais.length > 0) {
+                docsGerais.forEach(doc => {
+                    const item = document.createElement('div');
+                    item.className = 'list-group-item d-flex justify-content-between align-items-center';
+                    item.innerHTML = `
+                        <span><i class="bi bi-file-earmark-pdf text-danger me-2"></i>${extrairNomeArquivo(doc)}</span>
+                        <button class="btn btn-sm btn-outline-primary" onclick="visualizarDocumento('${doc}')">
+                            <i class="bi bi-eye"></i> Visualizar
+                        </button>
+                    `;
+                    container.appendChild(item);
+                });
+            } else {
+                container.innerHTML = '<div class="list-group-item text-muted">Nenhum documento obrigatório enviado</div>';
+            }
+        }
+
+        // Função auxiliar para extrair nome do arquivo
+        function extrairNomeArquivo(caminho) {
+            if (!caminho) return 'Documento';
+            const partes = caminho.split('/');
+            return partes[partes.length - 1] || 'Documento';
+        }
+
+        // Função para visualizar documento (será implementada)
+        function visualizarDocumento(caminhoDoc) {
+            if (caminhoDoc) {
+                window.open(caminhoDoc, '_blank');
+            }
         }
     </script>
 

@@ -221,6 +221,7 @@ def obter_inscricoes_para_analise(pagina: int = 1, limite: int = 10, filtro_edit
             al.data_nascimento as aluno_data_nascimento,
             al.cep as aluno_cep,
             al.cidade as aluno_cidade,
+            al.estado as aluno_estado,
             al.bairro as aluno_bairro,
             al.rua as aluno_rua,
             al.numero as aluno_numero,
@@ -243,6 +244,10 @@ def obter_inscricoes_para_analise(pagina: int = 1, limite: int = 10, filtro_edit
             at.urlComprovanteRecarga as at_urlComprovanteRecarga,
             at.urlComprovantePassagens as at_urlComprovantePassagens,
             at.urlContratoTransporte as at_urlContratoTransporte,
+            am.url_comp_residencia_fixa as am_url_comp_residencia_fixa,
+            am.url_comp_residencia_alugada as am_url_comp_residencia_alugada,
+            am.url_contrato_aluguel_cid_campus as am_url_contrato_aluguel_cid_campus,
+            am.url_contrato_aluguel_cid_natal as am_url_contrato_aluguel_cid_natal,
             CASE 
                 WHEN DATE(e.data_encerramento) <= DATE('now', '+7 days') THEN 'Alta'
                 WHEN DATE(e.data_encerramento) <= DATE('now', '+15 days') THEN 'Média'
@@ -254,6 +259,7 @@ def obter_inscricoes_para_analise(pagina: int = 1, limite: int = 10, filtro_edit
     LEFT JOIN aluno al ON u.id_usuario = al.id_usuario
         LEFT JOIN auxilio a ON i.id_inscricao = a.id_inscricao
         LEFT JOIN auxilio_transporte at ON at.id_auxilio_transporte = a.id_auxilio
+        LEFT JOIN auxilio_moradia am ON am.id_auxilio_moradia = a.id_auxilio
         WHERE {where_sql}
         ORDER BY {order_sql}
         LIMIT ? OFFSET ?
@@ -264,7 +270,38 @@ def obter_inscricoes_para_analise(pagina: int = 1, limite: int = 10, filtro_edit
         rows = cursor.fetchall()
 
         inscricoes = []
+        inscricoes_dict = {}
+        
         for row in rows:
+            id_inscricao = row["id_inscricao"]
+            
+            # Se a inscrição já foi processada, adicionar o auxílio e atualizar campos específicos
+            if id_inscricao in inscricoes_dict:
+                if row["tipo_auxilio"] and row["tipo_auxilio"] not in inscricoes_dict[id_inscricao]['auxilios_lista']:
+                    inscricoes_dict[id_inscricao]['auxilios_lista'].append(row["tipo_auxilio"])
+                
+                # Atualizar campos de transporte se não estiverem preenchidos e esta linha tem dados
+                if row["at_tipo_transporte"] and not inscricoes_dict[id_inscricao].get("auxilio_transporte_tipo"):
+                    inscricoes_dict[id_inscricao]["auxilio_transporte_tipo"] = row["at_tipo_transporte"]
+                    inscricoes_dict[id_inscricao]["auxilio_transporte_tipo_onibus"] = row["at_tipo_onibus"] if "at_tipo_onibus" in row.keys() else None
+                    inscricoes_dict[id_inscricao]["gasto_passagens_dia"] = row["at_gasto_passagens_dia"] if "at_gasto_passagens_dia" in row.keys() else None
+                    inscricoes_dict[id_inscricao]["gasto_van_mensal"] = row["at_gasto_van_mensal"] if "at_gasto_van_mensal" in row.keys() else None
+                    # Documentos de transporte
+                    inscricoes_dict[id_inscricao]["at_urlCompResidencia"] = row["at_urlCompResidencia"] if "at_urlCompResidencia" in row.keys() else None
+                    inscricoes_dict[id_inscricao]["at_urlPasseEscolarFrente"] = row["at_urlPasseEscolarFrente"] if "at_urlPasseEscolarFrente" in row.keys() else None
+                    inscricoes_dict[id_inscricao]["at_urlPasseEscolarVerso"] = row["at_urlPasseEscolarVerso"] if "at_urlPasseEscolarVerso" in row.keys() else None
+                    inscricoes_dict[id_inscricao]["at_urlComprovanteRecarga"] = row["at_urlComprovanteRecarga"] if "at_urlComprovanteRecarga" in row.keys() else None
+                    inscricoes_dict[id_inscricao]["at_urlComprovantePassagens"] = row["at_urlComprovantePassagens"] if "at_urlComprovantePassagens" in row.keys() else None
+                    inscricoes_dict[id_inscricao]["at_urlContratoTransporte"] = row["at_urlContratoTransporte"] if "at_urlContratoTransporte" in row.keys() else None
+                
+                # Atualizar campos de moradia se não estiverem preenchidos e esta linha tem dados
+                if row["am_url_comp_residencia_fixa"] and not inscricoes_dict[id_inscricao].get("am_url_comp_residencia_fixa"):
+                    inscricoes_dict[id_inscricao]["am_url_comp_residencia_fixa"] = row["am_url_comp_residencia_fixa"]
+                    inscricoes_dict[id_inscricao]["am_url_comp_residencia_alugada"] = row["am_url_comp_residencia_alugada"] if "am_url_comp_residencia_alugada" in row.keys() else None
+                    inscricoes_dict[id_inscricao]["am_url_contrato_aluguel_cid_campus"] = row["am_url_contrato_aluguel_cid_campus"] if "am_url_contrato_aluguel_cid_campus" in row.keys() else None
+                    inscricoes_dict[id_inscricao]["am_url_contrato_aluguel_cid_natal"] = row["am_url_contrato_aluguel_cid_natal"] if "am_url_contrato_aluguel_cid_natal" in row.keys() else None
+                
+                continue
             # build documentos list from available urls
             documentos = []
             if "urlDocumentoIdentificacao" in row.keys() and row["urlDocumentoIdentificacao"]:
@@ -286,6 +323,20 @@ def obter_inscricoes_para_analise(pagina: int = 1, limite: int = 10, filtro_edit
                 documentos.append(row["at_urlComprovantePassagens"])
             if "at_urlContratoTransporte" in row.keys() and row["at_urlContratoTransporte"]:
                 documentos.append(row["at_urlContratoTransporte"])
+            # auxilio_moradia documents
+            if "am_url_comp_residencia_fixa" in row.keys() and row["am_url_comp_residencia_fixa"]:
+                documentos.append(row["am_url_comp_residencia_fixa"])
+            if "am_url_comp_residencia_alugada" in row.keys() and row["am_url_comp_residencia_alugada"]:
+                documentos.append(row["am_url_comp_residencia_alugada"])
+            if "am_url_contrato_aluguel_cid_campus" in row.keys() and row["am_url_contrato_aluguel_cid_campus"]:
+                documentos.append(row["am_url_contrato_aluguel_cid_campus"])
+            if "am_url_contrato_aluguel_cid_natal" in row.keys() and row["am_url_contrato_aluguel_cid_natal"]:
+                documentos.append(row["am_url_contrato_aluguel_cid_natal"])
+
+            # Criar lista de auxílios
+            auxilios_lista = []
+            if row["tipo_auxilio"]:
+                auxilios_lista.append(row["tipo_auxilio"])
 
             inscricao = {
                 'id_inscricao': row["id_inscricao"],
@@ -309,6 +360,16 @@ def obter_inscricoes_para_analise(pagina: int = 1, limite: int = 10, filtro_edit
                 'aluno_renda_percapita': row["aluno_renda_percapita"] if "aluno_renda_percapita" in row.keys() else None,
                 'aluno_cad_unico': row["aluno_cad_unico"] if "aluno_cad_unico" in row.keys() else None,
                 'aluno_bolsa_familia': row["aluno_bolsa_familia"] if "aluno_bolsa_familia" in row.keys() else None,
+                'aluno_bolsa_pesquisa': row["aluno_bolsa_pesquisa"] if "aluno_bolsa_pesquisa" in row.keys() else None,
+                'aluno_cpf': row["aluno_cpf"] if "aluno_cpf" in row.keys() else None,
+                'aluno_data_nascimento': row["aluno_data_nascimento"] if "aluno_data_nascimento" in row.keys() else None,
+                'aluno_cep': row["aluno_cep"] if "aluno_cep" in row.keys() else None,
+                'aluno_cidade': row["aluno_cidade"] if "aluno_cidade" in row.keys() else None,
+                'aluno_estado': row["aluno_estado"] if "aluno_estado" in row.keys() else None,
+                'aluno_bairro': row["aluno_bairro"] if "aluno_bairro" in row.keys() else None,
+                'aluno_rua': row["aluno_rua"] if "aluno_rua" in row.keys() else None,
+                'aluno_numero': row["aluno_numero"] if "aluno_numero" in row.keys() else None,
+                'aluno_complemento': row["aluno_complemento"] if "aluno_complemento" in row.keys() else None,
                 'aluno_auxilios': row["aluno_auxilios"] if "aluno_auxilios" in row.keys() else None,
                 # aliases expected by the template
                 'aluno_periodo': row["aluno_periodo"] if "aluno_periodo" in row.keys() else None,
@@ -336,11 +397,20 @@ def obter_inscricoes_para_analise(pagina: int = 1, limite: int = 10, filtro_edit
                 'at_urlComprovanteRecarga': row["at_urlComprovanteRecarga"] if "at_urlComprovanteRecarga" in row.keys() else None,
                 'at_urlComprovantePassagens': row["at_urlComprovantePassagens"] if "at_urlComprovantePassagens" in row.keys() else None,
                 'at_urlContratoTransporte': row["at_urlContratoTransporte"] if "at_urlContratoTransporte" in row.keys() else None,
+                # moradia / auxilio_moradia fields
+                'am_url_comp_residencia_fixa': row["am_url_comp_residencia_fixa"] if "am_url_comp_residencia_fixa" in row.keys() else None,
+                'am_url_comp_residencia_alugada': row["am_url_comp_residencia_alugada"] if "am_url_comp_residencia_alugada" in row.keys() else None,
+                'am_url_contrato_aluguel_cid_campus': row["am_url_contrato_aluguel_cid_campus"] if "am_url_contrato_aluguel_cid_campus" in row.keys() else None,
+                'am_url_contrato_aluguel_cid_natal': row["am_url_contrato_aluguel_cid_natal"] if "am_url_contrato_aluguel_cid_natal" in row.keys() else None,
                 # aggregated documentos
                 'documentos': documentos,
+                'auxilios_lista': auxilios_lista,
             }
-            inscricoes.append(inscricao)
+            inscricoes_dict[id_inscricao] = inscricao
 
+        # Converter dict para lista
+        inscricoes = list(inscricoes_dict.values())
+        
         return inscricoes, total
     
 

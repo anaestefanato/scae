@@ -31,93 +31,89 @@
     <!-- Conteúdo principal -->
     <div class="row">
         <div class="col-12">
-            {% if inscricoes %}
-                {% for inscricao in inscricoes %}
+            {% if inscricoes_com_auxilios %}
+                {% for id_inscricao, dados_inscricao in inscricoes_com_auxilios.items() %}
                 <div class="card mb-4 shadow-sm">
                     <div class="card-header bg-light">
                         <div class="d-flex justify-content-between align-items-center">
                             <h5 class="mb-0">
                                 <i class="bi bi-file-earmark-text me-2 text-primary"></i>
-                                {{ inscricao.edital_titulo or 'Edital sem título' }}
+                                {{ dados_inscricao.edital_titulo }}
                             </h5>
-                            <span class="status-badge status-{{ inscricao.status.lower() }}">
-                                {% if inscricao.status == 'pendente' %}
-                                    <i class="bi bi-clock me-1"></i>Aguardando análise
-                                {% elif inscricao.status == 'deferido' %}
-                                    <i class="bi bi-check-circle me-1"></i>Deferido
-                                {% elif inscricao.status == 'indeferido' %}
-                                    <i class="bi bi-x-circle me-1"></i>Indeferido
-                                {% else %}
-                                    {{ inscricao.status }}
-                                {% endif %}
+                            <span class="badge bg-info">
+                                <i class="bi bi-gift me-1"></i>{{ dados_inscricao.auxilios|length }} auxílio(s)
                             </span>
                         </div>
                     </div>
                     <div class="card-body">
-                        <div class="row mb-4">
-                            <div class="col-md-6">
-                                <h6 class="text-muted mb-3">Informações da Inscrição</h6>
-                                <p><strong>Tipo de Auxílio:</strong> 
-                                    {% if inscricao.tipo_auxilio %}
-                                        {% if inscricao.tipo_auxilio == 'auxilio alimentacao' %}
+                        <h6 class="text-muted mb-3">
+                            <i class="bi bi-list-check me-2"></i>Auxílios Solicitados
+                        </h6>
+                        
+                        {% for auxilio in dados_inscricao.auxilios %}
+                        <div class="border rounded p-3 mb-3 {% if auxilio.status_auxilio == 'deferido' %}border-success bg-success-subtle{% elif auxilio.status_auxilio == 'indeferido' %}border-danger bg-danger-subtle{% else %}border-warning bg-warning-subtle{% endif %}">
+                            <div class="d-flex justify-content-between align-items-start">
+                                <div class="flex-grow-1">
+                                    <h6 class="mb-2">
+                                        {% if auxilio.tipo_auxilio == 'auxilio alimentacao' %}
                                             <i class="bi bi-cup-hot me-1 text-warning"></i>Auxílio Alimentação
-                                        {% elif inscricao.tipo_auxilio == 'auxilio transporte' %}
+                                        {% elif auxilio.tipo_auxilio == 'auxilio transporte' %}
                                             <i class="bi bi-bus-front me-1 text-info"></i>Auxílio Transporte
-                                        {% elif inscricao.tipo_auxilio == 'auxilio moradia' %}
+                                        {% elif auxilio.tipo_auxilio == 'auxilio moradia' %}
                                             <i class="bi bi-house me-1 text-success"></i>Auxílio Moradia
-                                        {% elif inscricao.tipo_auxilio == 'auxilio material' %}
+                                        {% elif auxilio.tipo_auxilio == 'auxilio material' %}
                                             <i class="bi bi-book me-1 text-primary"></i>Auxílio Material Didático
                                         {% else %}
-                                            <i class="bi bi-gift me-1"></i>{{ inscricao.tipo_auxilio|title }}
+                                            <i class="bi bi-gift me-1"></i>{{ auxilio.tipo_auxilio|title }}
+                                        {% endif %}
+                                    </h6>
+                                    
+                                    {% if auxilio.status_auxilio == 'deferido' %}
+                                        <p class="mb-1">
+                                            <span class="badge bg-success">
+                                                <i class="bi bi-check-circle me-1"></i>DEFERIDO
+                                            </span>
+                                        </p>
+                                        <p class="mb-0 mt-2">
+                                            <strong>Valor mensal concedido:</strong> 
+                                            <span class="text-success fw-bold fs-5">R$ {{ "%.2f"|format(auxilio.valor_mensal) }}</span>
+                                        </p>
+                                        <p class="mb-0 small text-muted mt-1">
+                                            <i class="bi bi-calendar-event me-1"></i>
+                                            Vigência: {{ auxilio.data_inicio|formatar_data }} até {{ auxilio.data_fim|formatar_data }}
+                                        </p>
+                                    {% elif auxilio.status_auxilio == 'indeferido' %}
+                                        <p class="mb-1">
+                                            <span class="badge bg-danger">
+                                                <i class="bi bi-x-circle me-1"></i>INDEFERIDO
+                                            </span>
+                                        </p>
+                                        {% if auxilio.motivo_indeferimento %}
+                                        <div class="alert alert-danger mt-2 mb-0 py-2">
+                                            <small>
+                                                <strong><i class="bi bi-info-circle me-1"></i>Motivo:</strong><br>
+                                                {{ auxilio.motivo_indeferimento }}
+                                            </small>
+                                        </div>
                                         {% endif %}
                                     {% else %}
-                                        Não especificado
-                                    {% endif %}
-                                </p>
-                                <p><strong>Valor Previsto:</strong> 
-                                    {% if inscricao.valor_mensal %}
-                                        <span class="text-success fw-bold">R$ {{ "%.2f"|format(inscricao.valor_mensal) }}</span>
-                                    {% else %}
-                                        <span class="text-muted">A definir</span>
-                                    {% endif %}
-                                </p>
-                                <p><strong>Data de Inscrição:</strong> 
-                                    <span class="text-muted">{{ inscricao.data_inscricao }}</span>
-                                </p>
-                            </div>
-                            <div class="col-md-6">
-                                <h6 class="text-muted mb-3">Documentos Enviados</h6>
-                                <div class="list-group list-group-flush">
-                                    {% if inscricao.urlDocumentoIdentificacao %}
-                                    <div class="list-group-item border-0 px-0">
-                                        <i class="bi bi-check-circle text-success me-2"></i>Documento de identificação
-                                    </div>
-                                    {% endif %}
-                                    {% if inscricao.urlDeclaracaoRenda %}
-                                    <div class="list-group-item border-0 px-0">
-                                        <i class="bi bi-check-circle text-success me-2"></i>Declaração de renda
-                                    </div>
-                                    {% endif %}
-                                    {% if inscricao.urlTermoResponsabilidade %}
-                                    <div class="list-group-item border-0 px-0">
-                                        <i class="bi bi-check-circle text-success me-2"></i>Termo de responsabilidade
-                                    </div>
+                                        <p class="mb-0">
+                                            <span class="badge bg-warning text-dark">
+                                                <i class="bi bi-clock me-1"></i>AGUARDANDO ANÁLISE
+                                            </span>
+                                        </p>
+                                        <p class="mb-0 small text-muted mt-2">
+                                            Seu pedido está em análise pela assistência social.
+                                        </p>
                                     {% endif %}
                                 </div>
                             </div>
                         </div>
+                        {% endfor %}
                         
-                        <div class="row">
-                            <div class="col-12">
-                                <h6 class="text-muted mb-3">
-                                    <i class="bi bi-clock-history me-2"></i>Linha do Tempo
-                                </h6>
-                                <ul class="timeline">
-                                    <li class="timeline-item completed">
-                                        <span class="timeline-date">{{ inscricao.data_inscricao }}</span>
-                                        <span class="timeline-content">Inscrição submetida</span>
-                                    </li>
-                                    <li class="timeline-item {% if inscricao.status == 'pendente' %}active{% elif inscricao.status in ['deferido', 'indeferido'] %}completed{% endif %}">
+                    </div>
+                </div>
+                {% endfor %}
                                         <span class="timeline-date">
                                             {% if inscricao.status == 'pendente' %}
                                                 Em andamento
@@ -162,10 +158,6 @@
                         {% endif %}
                     </div>
                 </div>
-                {% if not loop.last %}
-                <hr class="my-4">
-                {% endif %}
-                {% endfor %}
             {% else %}
                 <div class="card border-0 shadow-sm">
                     <div class="card-body text-center py-5">
