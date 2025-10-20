@@ -99,7 +99,51 @@ def obter_por_aluno(id_aluno: int) -> list[dict]:
                 'data_inicio': row["data_inicio"],
                 'data_fim': row["data_fim"],
                 'edital_titulo': row["edital_titulo"],
-                'status_inscricao': row["status_inscricao"]
+                'status_inscricao': row["status_inscricao"],
+                'status_auxilio': row["status_auxilio"] if "status_auxilio" in row.keys() else "pendente"
             }
             auxilios.append(auxilio)
         return auxilios
+
+def atualizar_status_auxilio(id_auxilio: int, status: str) -> bool:
+    """Atualiza o status de um auxílio específico"""
+    if status not in ['pendente', 'deferido', 'indeferido']:
+        return False
+    
+    with get_connection() as conn:
+        cursor = conn.cursor()
+        cursor.execute(ATUALIZAR_STATUS, (status, id_auxilio))
+        return cursor.rowcount > 0
+
+def atualizar_valor_auxilio(id_auxilio: int, valor_mensal: float) -> bool:
+    """Atualiza o valor mensal de um auxílio específico"""
+    if valor_mensal <= 0:
+        return False
+    
+    with get_connection() as conn:
+        cursor = conn.cursor()
+        cursor.execute(ATUALIZAR_VALOR, (valor_mensal, id_auxilio))
+        return cursor.rowcount > 0
+
+def obter_auxilios_por_inscricao(id_inscricao: int) -> list[dict]:
+    """Obtém todos os auxílios de uma inscrição com seus status individuais"""
+    with get_connection() as conn:
+        cursor = conn.cursor()
+        cursor.execute(OBTER_AUXILIOS_POR_INSCRICAO, (id_inscricao,))
+        rows = cursor.fetchall()
+        auxilios = []
+        for row in rows:
+            auxilio = {
+                'id_auxilio': row["id_auxilio"],
+                'id_edital': row["id_edital"],
+                'id_inscricao': row["id_inscricao"],
+                'tipo_auxilio': row["tipo_auxilio"],
+                'descricao': row["descricao"],
+                'valor_mensal': row["valor_mensal"],
+                'data_inicio': row["data_inicio"],
+                'data_fim': row["data_fim"],
+                'status_auxilio': row["status_auxilio"] if "status_auxilio" in row.keys() else "pendente"
+            }
+            auxilios.append(auxilio)
+        return auxilios
+

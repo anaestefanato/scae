@@ -474,7 +474,7 @@
                         </div>
                         <div class="card-body">
                             <div id="inscricaoAuxiliosContainer">
-                                <p class="text-muted mb-0">Nenhum auxílio solicitado</p>
+                                <p class="text-muted mb-0">Carregando auxílios...</p>
                             </div>
                         </div>
                     </div>
@@ -529,70 +529,12 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
-                    
-                    <!-- Seção de Indeferimento (inicialmente oculta) -->
-                    <div id="secaoIndeferimento" style="display: none;" class="w-100 mt-3 mb-3">
-                        <div class="border p-3 rounded bg-light">
-                            <h6 class="text-danger mb-3">
-                                <i class="bi bi-exclamation-triangle me-2"></i>Indeferir Inscrição
-                            </h6>
-                            <div class="mb-3">
-                                <label for="motivoIndeferimento" class="form-label">Motivo do Indeferimento <span class="text-danger">*</span></label>
-                                <textarea class="form-control" id="motivoIndeferimento" rows="3" 
-                                    placeholder="Digite o motivo detalhado do indeferimento da inscrição..."></textarea>
-                            </div>
-                            <div class="alert alert-info">
-                                <i class="bi bi-info-circle me-2"></i>
-                                <strong>Importante:</strong> O aluno poderá entrar com recurso contra esta decisão até <strong>7 dias</strong> após a notificação.
-                            </div>
-                            <div class="d-flex gap-2 justify-content-end">
-                                <button type="button" class="btn btn-outline-secondary" id="cancelarIndeferimento">
-                                    <i class="bi bi-x me-1"></i>Cancelar
-                                </button>
-                                <button type="button" class="btn btn-danger" id="confirmarIndeferimento">
-                                    <i class="bi bi-check-lg me-1"></i>Confirmar Indeferimento
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <!-- Seção de Deferimento (inicialmente oculta) -->
-                    <div id="secaoDeferimento" style="display: none;" class="w-100 mt-3 mb-3">
-                        <div class="border p-3 rounded bg-light">
-                            <h6 class="text-success mb-3">
-                                <i class="bi bi-check-circle me-2"></i>Deferir Inscrição
-                            </h6>
-                            <div class="alert alert-success">
-                                <i class="bi bi-info-circle me-2"></i>
-                                <strong>Confirmação:</strong> Tem certeza que deseja <strong>deferir</strong> esta inscrição? 
-                                O aluno será notificado sobre a aprovação e o auxílio será processado.
-                            </div>
-                            <div class="mb-3">
-                                <label for="observacoesDeferimento" class="form-label">Observações (opcional)</label>
-                                <textarea class="form-control" id="observacoesDeferimento" rows="2" 
-                                    placeholder="Adicione observações sobre o deferimento, se necessário..."></textarea>
-                            </div>
-                            <div class="d-flex gap-2 justify-content-end">
-                                <button type="button" class="btn btn-outline-secondary" id="cancelarDeferimento">
-                                    <i class="bi bi-x me-1"></i>Cancelar
-                                </button>
-                                <button type="button" class="btn btn-success" id="confirmarDeferimento">
-                                    <i class="bi bi-check-lg me-1"></i>Confirmar Deferimento
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <!-- Botões principais -->
-                    <div id="botoesIniciais">
-                        <button type="button" class="btn btn-danger" id="indeferirInscricao">
-                            <i class="bi bi-x-lg me-1"></i>Indeferir
-                        </button>
-                        <button type="button" class="btn btn-success" id="deferirInscricao">
-                            <i class="bi bi-check-lg me-1"></i>Deferir
-                        </button>
-                    </div>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                        <i class="bi bi-x-circle me-1"></i>Fechar
+                    </button>
+                    <button type="button" class="btn btn-success btn-lg" id="salvarDecisoes" onclick="salvarTodasDecisoes()" disabled>
+                        <i class="bi bi-check-circle me-2"></i>Salvar Decisões
+                    </button>
                 </div>
             </div>
         </div>
@@ -605,23 +547,24 @@
                     <script>
         // Variável global para armazenar o ID da inscrição atual
         let currentInscricaoId = null;
+        // Armazenar decisões pendentes
+        let decisoesPendentes = {
+            deferir: {}, // {id_auxilio: {nome: string, valor_mensal: number}}
+            indeferir: {} // {id_auxilio: {nome: string, motivo: string}}
+        };
 
         // Controlar funcionalidades do modal de decisão
         document.addEventListener('DOMContentLoaded', function() {
-            const btnDeferir = document.getElementById('deferirInscricao');
-            const btnIndeferir = document.getElementById('indeferirInscricao');
-            const secaoDeferimento = document.getElementById('secaoDeferimento');
-            const secaoIndeferimento = document.getElementById('secaoIndeferimento');
-            const botoesIniciais = document.getElementById('botoesIniciais');
+            // Limpar decisões pendentes quando o modal for fechado
+            const detalhesModal = document.getElementById('detalhesModal');
+            if (detalhesModal) {
+                detalhesModal.addEventListener('hidden.bs.modal', function() {
+                    decisoesPendentes.deferir = {};
+                    decisoesPendentes.indeferir = {};
+                    atualizarContadorDecisoes();
+                });
+            }
             
-            // Botões de cancelar
-            const btnCancelarDeferimento = document.getElementById('cancelarDeferimento');
-            const btnCancelarIndeferimento = document.getElementById('cancelarIndeferimento');
-            
-            // Botões de confirmar
-            const btnConfirmarDeferimento = document.getElementById('confirmarDeferimento');
-            const btnConfirmarIndeferimento = document.getElementById('confirmarIndeferimento');
-
             // Elementos dos filtros
             const filtroEdital = document.getElementById('filtroEdital');
             const filtroStatus = document.getElementById('filtroStatus');
@@ -775,97 +718,498 @@
 
             // Aplicar filtros iniciais
             aplicarFiltros();
-
-            // Função para resetar o modal
-            function resetarModal() {
-                secaoDeferimento.style.display = 'none';
-                secaoIndeferimento.style.display = 'none';
-                botoesIniciais.style.display = 'block';
-                document.getElementById('motivoIndeferimento').value = '';
-                document.getElementById('observacoesDeferimento').value = '';
-            }
-
-            // Botão Deferir - Mostrar seção de confirmação
-            if (btnDeferir) {
-                btnDeferir.addEventListener('click', function() {
-                    botoesIniciais.style.display = 'none';
-                    secaoDeferimento.style.display = 'block';
-                    secaoIndeferimento.style.display = 'none';
-                });
-            }
-
-            // Botão Indeferir - Mostrar seção de motivo
-            if (btnIndeferir) {
-                btnIndeferir.addEventListener('click', function() {
-                    botoesIniciais.style.display = 'none';
-                    secaoIndeferimento.style.display = 'block';
-                    secaoDeferimento.style.display = 'none';
-                    // Focar no campo de motivo
-                    setTimeout(() => {
-                        document.getElementById('motivoIndeferimento').focus();
-                    }, 100);
-                });
-            }
-
-            // Cancelar Deferimento
-            if (btnCancelarDeferimento) {
-                btnCancelarDeferimento.addEventListener('click', function() {
-                    resetarModal();
-                });
-            }
-
-            // Cancelar Indeferimento
-            if (btnCancelarIndeferimento) {
-                btnCancelarIndeferimento.addEventListener('click', function() {
-                    resetarModal();
-                });
-            }
-
-            // Confirmar Deferimento
-            if (btnConfirmarDeferimento) {
-                btnConfirmarDeferimento.addEventListener('click', function() {
-                    const observacoes = document.getElementById('observacoesDeferimento').value;
-                    
-                    // Atualizar status na tabela
-                    atualizarStatusNaTabela(currentInscricaoId, 'deferir');
-                    
-                    console.log('Inscrição deferida - ID:', currentInscricaoId);
-                    console.log('Observações:', observacoes);
-                    
-                    alert('Inscrição deferida com sucesso!');
-                    bootstrap.Modal.getInstance(document.getElementById('detalhesModal')).hide();
-                    resetarModal();
-                });
-            }
-
-            // Confirmar Indeferimento
-            if (btnConfirmarIndeferimento) {
-                btnConfirmarIndeferimento.addEventListener('click', function() {
-                    const motivo = document.getElementById('motivoIndeferimento').value.trim();
-                    
-                    if (!motivo) {
-                        alert('Por favor, digite o motivo do indeferimento.');
-                        document.getElementById('motivoIndeferimento').focus();
-                        return;
-                    }
-                    
-                    // Atualizar status na tabela
-                    atualizarStatusNaTabela(currentInscricaoId, 'indeferir');
-                    
-                    console.log('Inscrição indeferida - ID:', currentInscricaoId);
-                    console.log('Motivo:', motivo);
-                    
-                    alert('Inscrição indeferida com sucesso!');
-                    bootstrap.Modal.getInstance(document.getElementById('detalhesModal')).hide();
-                    resetarModal();
-                });
-            }
-
-            // Reset modal ao fechar
-            document.getElementById('detalhesModal').addEventListener('hidden.bs.modal', function() {
-                resetarModal();
-            });
         });
+
+        // Função para carregar os auxílios da inscrição
+        async function carregarAuxilios(inscricaoId) {
+            try {
+                const response = await fetch(`/assistente/analise-inscricoes/auxilios/${inscricaoId}`);
+                const data = await response.json();
+                
+                if (data.success && data.auxilios && data.auxilios.length > 0) {
+                    const container = document.getElementById('inscricaoAuxiliosContainer');
+                    container.innerHTML = '';
+                    
+                    data.auxilios.forEach(auxilio => {
+                        const auxilioCard = criarCardAuxilio(auxilio);
+                        container.appendChild(auxilioCard);
+                    });
+                } else {
+                    document.getElementById('inscricaoAuxiliosContainer').innerHTML = 
+                        '<p class="text-muted mb-0">Nenhum auxílio solicitado</p>';
+                }
+            } catch (error) {
+                console.error('Erro ao carregar auxílios:', error);
+                document.getElementById('inscricaoAuxiliosContainer').innerHTML = 
+                    '<p class="text-danger mb-0">Erro ao carregar auxílios</p>';
+            }
+        }
+
+        // Função para criar card de auxílio com botões de decisão
+        function criarCardAuxilio(auxilio) {
+            const div = document.createElement('div');
+            div.className = 'border rounded p-3 mb-3';
+            div.id = `auxilio-${auxilio.id_auxilio}`;
+            
+            let icone = 'gift';
+            let nomeExibicao = auxilio.tipo_auxilio;
+            let corBorda = '#2E7D32';
+            
+            const tipoNormalizado = auxilio.tipo_auxilio.toLowerCase();
+            if (tipoNormalizado.includes('transporte')) {
+                icone = 'bus-front';
+                nomeExibicao = 'Auxílio Transporte';
+            } else if (tipoNormalizado.includes('moradia')) {
+                icone = 'house-door';
+                nomeExibicao = 'Auxílio Moradia';
+            } else if (tipoNormalizado.includes('alimenta')) {
+                icone = 'egg-fried';
+                nomeExibicao = 'Auxílio Alimentação';
+            } else if (tipoNormalizado.includes('material')) {
+                icone = 'book';
+                nomeExibicao = 'Auxílio Material Didático';
+            }
+            
+            let statusBadge = '';
+            let conteudoAcao = '';
+            
+            const status = auxilio.status_auxilio || 'pendente';
+            
+            if (status === 'deferido') {
+                statusBadge = '<span class="badge bg-success ms-2"><i class="bi bi-check-circle me-1"></i>Deferido</span>';
+                corBorda = '#28a745';
+                conteudoAcao = `<p class="mb-0 mt-2 small"><strong>Valor mensal concedido:</strong> <span class="text-success fw-bold">R$ ${parseFloat(auxilio.valor_mensal).toFixed(2)}</span></p>`;
+            } else if (status === 'indeferido') {
+                statusBadge = '<span class="badge bg-danger ms-2"><i class="bi bi-x-circle me-1"></i>Indeferido</span>';
+                corBorda = '#dc3545';
+            } else {
+                // Status pendente - mostrar campo de valor e botões de ação
+                statusBadge = '<span class="badge bg-warning text-dark ms-2"><i class="bi bi-clock me-1"></i>Pendente</span>';
+                conteudoAcao = `
+                    <div class="mt-3" id="acoes-${auxilio.id_auxilio}">
+                        <div class="mb-3">
+                            <label class="form-label small fw-bold">
+                                <i class="bi bi-currency-dollar me-1"></i>Valor Mensal a Conceder (R$)
+                                <span class="text-danger">*</span>
+                            </label>
+                            <input type="number" 
+                                   class="form-control form-control-sm" 
+                                   id="valor-${auxilio.id_auxilio}"
+                                   placeholder="Ex: 250.00" 
+                                   step="0.01" 
+                                   min="0.01">
+                            <div class="form-text small">Digite o valor mensal que será concedido ao aluno</div>
+                        </div>
+                        <div class="d-flex gap-2 justify-content-end">
+                            <button class="btn btn-sm btn-outline-danger" onclick="marcarParaIndeferir(${auxilio.id_auxilio}, '${nomeExibicao}')">
+                                <i class="bi bi-x-lg me-1"></i>Indeferir
+                            </button>
+                            <button class="btn btn-sm btn-outline-success" onclick="marcarParaDeferir(${auxilio.id_auxilio}, '${nomeExibicao}')">
+                                <i class="bi bi-check-lg me-1"></i>Marcar para Deferir
+                            </button>
+                        </div>
+                    </div>
+                `;
+            }
+            
+            div.style.borderLeft = `4px solid ${corBorda}`;
+            div.innerHTML = `
+                <div>
+                    <h6 class="mb-1">
+                        <i class="bi bi-${icone} text-success me-2"></i>
+                        ${nomeExibicao}
+                        ${statusBadge}
+                    </h6>
+                    <p class="text-muted mb-0 small">${auxilio.descricao || ''}</p>
+                    ${conteudoAcao}
+                </div>
+            `;
+            
+            return div;
+        }
+
+        // Função para marcar auxílio para deferimento
+        function marcarParaDeferir(idAuxilio, nomeAuxilio) {
+            const inputValor = document.getElementById(`valor-${idAuxilio}`);
+            
+            if (!inputValor) {
+                alert('Erro: Campo de valor não encontrado!');
+                return;
+            }
+            
+            const valorMensal = parseFloat(inputValor.value);
+            
+            if (!inputValor.value || isNaN(valorMensal) || valorMensal <= 0) {
+                alert('Por favor, digite um valor mensal válido maior que zero!');
+                inputValor.focus();
+                return;
+            }
+            
+            // Remover de indeferir se estava lá
+            if (decisoesPendentes.indeferir[idAuxilio]) {
+                delete decisoesPendentes.indeferir[idAuxilio];
+            }
+            
+            // Adicionar à lista de deferimentos
+            decisoesPendentes.deferir[idAuxilio] = {
+                id_auxilio: idAuxilio,
+                nome: nomeAuxilio,
+                valor_mensal: valorMensal
+            };
+            
+            // Aplicar visual feedback
+            aplicarFeedbackVisual(idAuxilio, 'deferir');
+            atualizarContadorDecisoes();
+            
+            // Esconder campo de valor e mostrar badge de marcado
+            const acoesDiv = document.getElementById(`acoes-${idAuxilio}`);
+            if (acoesDiv) {
+                acoesDiv.innerHTML = `
+                    <div class="alert alert-success mb-0">
+                        <div class="d-flex justify-content-between align-items-start">
+                            <div>
+                                <strong><i class="bi bi-check-circle me-1"></i>Marcado para Deferimento</strong>
+                                <p class="mb-0 mt-2 small"><strong>Valor mensal:</strong> <span class="text-success fw-bold">R$ ${valorMensal.toFixed(2)}</span></p>
+                            </div>
+                            <button class="btn btn-sm btn-outline-secondary" onclick="cancelarDeferimento(${idAuxilio})">
+                                <i class="bi bi-arrow-counterclockwise me-1"></i>Desfazer
+                            </button>
+                        </div>
+                    </div>
+                `;
+            }
+        }
+
+        // Função para cancelar deferimento e voltar ao estado original
+        function cancelarDeferimento(idAuxilio) {
+            // Remover da lista de deferimentos
+            if (decisoesPendentes.deferir[idAuxilio]) {
+                delete decisoesPendentes.deferir[idAuxilio];
+            }
+            
+            // Recarregar o auxílio para restaurar o estado original
+            carregarAuxilios(currentInscricaoId);
+            atualizarContadorDecisoes();
+        }
+
+        // Função para marcar auxílio para indeferimento
+        function marcarParaIndeferir(idAuxilio, nomeAuxilio) {
+            // Verificar se já existe campo de motivo ou criar
+            let campoMotivo = document.getElementById(`motivo-${idAuxilio}`);
+            
+            if (!campoMotivo) {
+                // Criar campo de motivo dinamicamente
+                const acoesDiv = document.getElementById(`acoes-${idAuxilio}`);
+                if (!acoesDiv) return;
+                
+                // Criar div para o campo de motivo
+                const motivoDiv = document.createElement('div');
+                motivoDiv.className = 'mb-3 p-3 bg-danger-subtle border border-danger rounded';
+                motivoDiv.innerHTML = `
+                    <label class="form-label small fw-bold text-danger">
+                        <i class="bi bi-exclamation-triangle me-1"></i>Motivo do Indeferimento
+                        <span class="text-danger">*</span>
+                    </label>
+                    <textarea class="form-control form-control-sm" 
+                              id="motivo-${idAuxilio}"
+                              rows="3" 
+                              placeholder="Digite o motivo pelo qual este auxílio será indeferido..."
+                              required></textarea>
+                    <div class="form-text small">Explique claramente por que o auxílio não pode ser concedido</div>
+                    <div class="d-flex gap-2 justify-content-end mt-2">
+                        <button class="btn btn-sm btn-secondary" onclick="cancelarIndeferimento(${idAuxilio})">
+                            <i class="bi bi-x-lg me-1"></i>Cancelar
+                        </button>
+                        <button class="btn btn-sm btn-danger" onclick="confirmarIndeferimento(${idAuxilio}, '${nomeAuxilio}')">
+                            <i class="bi bi-check-lg me-1"></i>Confirmar Indeferimento
+                        </button>
+                    </div>
+                `;
+                
+                // Inserir antes dos botões originais
+                const botoesOriginais = acoesDiv.querySelector('.d-flex.gap-2');
+                if (botoesOriginais) {
+                    botoesOriginais.style.display = 'none'; // Esconder botões originais
+                }
+                
+                acoesDiv.insertBefore(motivoDiv, acoesDiv.firstChild);
+                
+                // Focar no textarea
+                setTimeout(() => {
+                    document.getElementById(`motivo-${idAuxilio}`).focus();
+                }, 100);
+                
+                return;
+            }
+            
+            // Se o campo já existe, focar nele
+            campoMotivo.focus();
+        }
+
+        // Função para confirmar o indeferimento com o motivo digitado
+        function confirmarIndeferimento(idAuxilio, nomeAuxilio) {
+            const campoMotivo = document.getElementById(`motivo-${idAuxilio}`);
+            
+            if (!campoMotivo) {
+                alert('Erro: Campo de motivo não encontrado!');
+                return;
+            }
+            
+            const motivo = campoMotivo.value.trim();
+            
+            if (!motivo) {
+                alert('Por favor, digite o motivo do indeferimento!');
+                campoMotivo.focus();
+                return;
+            }
+            
+            // Remover de deferir se estava lá
+            if (decisoesPendentes.deferir[idAuxilio]) {
+                delete decisoesPendentes.deferir[idAuxilio];
+            }
+            
+            // Adicionar à lista de indeferimentos
+            decisoesPendentes.indeferir[idAuxilio] = {
+                id_auxilio: idAuxilio,
+                nome: nomeAuxilio,
+                motivo: motivo
+            };
+            
+            // Aplicar visual feedback
+            aplicarFeedbackVisual(idAuxilio, 'indeferir');
+            atualizarContadorDecisoes();
+            
+            // Esconder campo de motivo e mostrar badge de marcado
+            const acoesDiv = document.getElementById(`acoes-${idAuxilio}`);
+            if (acoesDiv) {
+                acoesDiv.innerHTML = `
+                    <div class="alert alert-danger mb-0">
+                        <div class="d-flex justify-content-between align-items-start">
+                            <div>
+                                <strong><i class="bi bi-x-circle me-1"></i>Marcado para Indeferimento</strong>
+                                <p class="mb-0 mt-2 small"><strong>Motivo:</strong> ${motivo}</p>
+                            </div>
+                            <button class="btn btn-sm btn-outline-secondary" onclick="cancelarIndeferimento(${idAuxilio})">
+                                <i class="bi bi-arrow-counterclockwise me-1"></i>Desfazer
+                            </button>
+                        </div>
+                    </div>
+                `;
+            }
+        }
+
+        // Função para cancelar indeferimento e voltar ao estado original
+        function cancelarIndeferimento(idAuxilio) {
+            // Remover da lista de indeferimentos
+            if (decisoesPendentes.indeferir[idAuxilio]) {
+                delete decisoesPendentes.indeferir[idAuxilio];
+            }
+            
+            // Recarregar o auxílio para restaurar o estado original
+            carregarAuxilios(currentInscricaoId);
+            atualizarContadorDecisoes();
+        }
+
+        // Função para aplicar feedback visual nas decisões marcadas
+        function aplicarFeedbackVisual(idAuxilio, tipo) {
+            const card = document.getElementById(`auxilio-${idAuxilio}`);
+            if (!card) return;
+            
+            // Remover classes anteriores
+            card.classList.remove('border-success', 'border-danger', 'bg-success-subtle', 'bg-danger-subtle');
+            
+            if (tipo === 'deferir') {
+                card.classList.add('border-success', 'bg-success-subtle');
+                card.style.borderWidth = '2px';
+            } else if (tipo === 'indeferir') {
+                card.classList.add('border-danger', 'bg-danger-subtle');
+                card.style.borderWidth = '2px';
+            }
+        }
+
+        // Função para atualizar contador de decisões pendentes
+        function atualizarContadorDecisoes() {
+            const totalDeferir = Object.keys(decisoesPendentes.deferir).length;
+            const totalIndeferir = Object.keys(decisoesPendentes.indeferir).length;
+            const total = totalDeferir + totalIndeferir;
+            
+            const btnSalvar = document.getElementById('salvarDecisoes');
+            if (btnSalvar) {
+                if (total > 0) {
+                    btnSalvar.innerHTML = `<i class="bi bi-check-circle me-2"></i>Salvar Decisões (${total})`;
+                    btnSalvar.disabled = false;
+                } else {
+                    btnSalvar.innerHTML = '<i class="bi bi-check-circle me-2"></i>Salvar Decisões';
+                    btnSalvar.disabled = true;
+                }
+            }
+        }
+
+        // Função para salvar todas as decisões pendentes
+        async function salvarTodasDecisoes() {
+            const totalDeferir = Object.keys(decisoesPendentes.deferir).length;
+            const totalIndeferir = Object.keys(decisoesPendentes.indeferir).length;
+            const total = totalDeferir + totalIndeferir;
+            
+            if (total === 0) {
+                alert('Nenhuma decisão foi marcada!');
+                return;
+            }
+            
+            // Mostrar resumo e pedir confirmação
+            let resumo = `Você está prestes a salvar ${total} decisão(ões):\n\n`;
+            if (totalDeferir > 0) {
+                resumo += `✓ Deferimentos: ${totalDeferir}\n`;
+            }
+            if (totalIndeferir > 0) {
+                resumo += `✗ Indeferimentos: ${totalIndeferir}\n`;
+            }
+            resumo += `\nDeseja confirmar todas essas decisões?`;
+            
+            if (!confirm(resumo)) {
+                return;
+            }
+            
+            let sucessos = 0;
+            let erros = 0;
+            const errosDetalhados = [];
+            
+            // Processar deferimentos
+            for (const [idAuxilio, dados] of Object.entries(decisoesPendentes.deferir)) {
+                try {
+                    const response = await fetch('/assistente/analise-inscricoes/deferir-auxilio', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({
+                            id_auxilio: parseInt(idAuxilio),
+                            valor_mensal: dados.valor_mensal,
+                            observacoes: ''
+                        })
+                    });
+                    
+                    const data = await response.json();
+                    
+                    if (data.success) {
+                        sucessos++;
+                    } else {
+                        erros++;
+                        errosDetalhados.push(`${dados.nome}: ${data.message || 'Erro desconhecido'}`);
+                    }
+                } catch (error) {
+                    console.error('Erro ao deferir auxílio:', error);
+                    erros++;
+                    errosDetalhados.push(`${dados.nome}: Erro de conexão`);
+                }
+            }
+            
+            // Processar indeferimentos
+            for (const [idAuxilio, dados] of Object.entries(decisoesPendentes.indeferir)) {
+                try {
+                    const response = await fetch('/assistente/analise-inscricoes/indeferir-auxilio', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({
+                            id_auxilio: parseInt(idAuxilio),
+                            motivo: dados.motivo
+                        })
+                    });
+                    
+                    const data = await response.json();
+                    
+                    if (data.success) {
+                        sucessos++;
+                    } else {
+                        erros++;
+                        errosDetalhados.push(`${dados.nome}: ${data.message || 'Erro desconhecido'}`);
+                    }
+                } catch (error) {
+                    console.error('Erro ao indeferir auxílio:', error);
+                    erros++;
+                    errosDetalhados.push(`${dados.nome}: Erro de conexão`);
+                }
+            }
+            
+            // Limpar decisões pendentes
+            decisoesPendentes.deferir = {};
+            decisoesPendentes.indeferir = {};
+            
+            // Recarregar lista de auxílios
+            await carregarAuxilios(currentInscricaoId);
+            
+            // Mostrar resultado
+            let mensagem = `Processamento concluído!\n\n`;
+            mensagem += `✓ Sucessos: ${sucessos}\n`;
+            if (erros > 0) {
+                mensagem += `✗ Erros: ${erros}\n\n`;
+                mensagem += `Detalhes dos erros:\n${errosDetalhados.join('\n')}`;
+            }
+            
+            alert(mensagem);
+            atualizarContadorDecisoes();
+        }
+
+        // Função para deferir auxílio via API
+        async function deferirAuxilio(idAuxilio, valorMensal) {
+            try {
+                const response = await fetch('/assistente/analise-inscricoes/deferir-auxilio', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        id_auxilio: idAuxilio,
+                        valor_mensal: valorMensal,
+                        observacoes: ''
+                    })
+                });
+                
+                const data = await response.json();
+                
+                if (data.success) {
+                    alert('Auxílio deferido com sucesso!\nValor mensal: R$ ' + valorMensal.toFixed(2));
+                    // Recarregar os auxílios
+                    await carregarAuxilios(currentInscricaoId);
+                } else {
+                    alert('Erro ao deferir auxílio: ' + (data.message || 'Erro desconhecido'));
+                }
+            } catch (error) {
+                console.error('Erro ao deferir auxílio:', error);
+                alert('Erro ao deferir auxílio. Por favor, tente novamente.');
+            }
+        }
+
+        // Função para indeferir auxílio via API
+        async function indeferirAuxilio(idAuxilio, motivo) {
+            try {
+                const response = await fetch('/assistente/analise-inscricoes/indeferir-auxilio', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        id_auxilio: idAuxilio,
+                        motivo: motivo
+                    })
+                });
+                
+                const data = await response.json();
+                
+                if (data.success) {
+                    alert('Auxílio indeferido com sucesso!');
+                    // Recarregar os auxílios
+                    await carregarAuxilios(currentInscricaoId);
+                } else {
+                    alert('Erro ao indeferir auxílio: ' + (data.message || 'Erro desconhecido'));
+                }
+            } catch (error) {
+                console.error('Erro ao indeferir auxílio:', error);
+                alert('Erro ao indeferir auxílio. Por favor, tente novamente.');
+            }
+        }
 
         // Função para atualizar o status na tabela
         function atualizarStatusNaTabela(inscricaoId, decisao) {
@@ -892,6 +1236,12 @@
         // Função para visualizar detalhes (deve ser chamada pelos botões da tabela)
         function visualizarDetalhes(inscricaoId) {
             currentInscricaoId = inscricaoId;
+            
+            // Resetar decisões pendentes ao abrir o modal
+            decisoesPendentes.deferir = {};
+            decisoesPendentes.indeferir = {};
+            atualizarContadorDecisoes();
+            
             const row = document.querySelector(`tr[data-inscricao-id="${inscricaoId}"]`);
             if (!row) {
                 const modalFallback = new bootstrap.Modal(document.getElementById('detalhesModal'));
@@ -957,45 +1307,14 @@
             }
 
             // === AUXÍLIOS SOLICITADOS ===
+            // Agora carregamos os auxílios via API
+            carregarAuxilios(inscricaoId);
+
+            // Obter lista de auxílios da row para usar nas seções de transporte/moradia
             const auxRaw = row.dataset.auxilios || '';
-            const auxContainer = document.getElementById('inscricaoAuxiliosContainer');
-            auxContainer.innerHTML = '';
-            
             let auxiliosList = [];
             if (auxRaw) {
                 auxiliosList = auxRaw.split('||').filter(Boolean);
-            }
-
-            if (auxiliosList.length > 0) {
-                const itens = auxiliosList.map(aux => {
-                    // Normalizar o nome do auxílio
-                    const auxNormalizado = aux.toLowerCase().replace(/\s+/g, ' ').trim();
-                    
-                    let icone = 'gift';
-                    let nomeExibicao = aux;
-                    
-                    if (auxNormalizado.includes('transporte')) {
-                        icone = 'bus-front';
-                        nomeExibicao = 'Auxílio Transporte';
-                    } else if (auxNormalizado.includes('moradia')) {
-                        icone = 'house-door';
-                        nomeExibicao = 'Auxílio Moradia';
-                    } else if (auxNormalizado.includes('alimenta')) {
-                        icone = 'egg-fried';
-                        nomeExibicao = 'Auxílio Alimentação';
-                    } else if (auxNormalizado.includes('material')) {
-                        icone = 'book';
-                        nomeExibicao = 'Auxílio Material Didático';
-                    }
-                    
-                    return `<div class="mb-2">
-                                <i class="bi bi-${icone} text-success me-2"></i>
-                                <span style="font-size: 1rem;">${nomeExibicao}</span>
-                            </div>`;
-                }).join('');
-                auxContainer.innerHTML = itens;
-            } else {
-                auxContainer.innerHTML = '<p class="text-muted mb-0">Nenhum auxílio solicitado</p>';
             }
 
             // === SEÇÃO AUXÍLIO TRANSPORTE ===
