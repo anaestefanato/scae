@@ -8,6 +8,8 @@ def criar_tabela() -> bool:
         with get_connection() as conn:
             cursor = conn.cursor()
             cursor.execute(CRIAR_TABELA)
+            # Ensure columns added in newer versions exist on older DB files
+            _ensure_auxilio_columns(conn)
         return True
     except Exception as e:
         print(f"Erro ao criar tabela: {e}")
@@ -158,4 +160,35 @@ def obter_auxilios_por_inscricao(id_inscricao: int) -> list[dict]:
             }
             auxilios.append(auxilio)
         return auxilios
+ 
+
+def _ensure_auxilio_columns(conn) -> None:
+    """Ensure the auxilio table contains newer columns introduced after initial schema.
+
+    This performs idempotent ALTER TABLE operations to add missing columns so
+    older database files won't raise "no such column" errors at runtime.
+    """
+    try:
+        cursor = conn.cursor()
+        cursor.execute("PRAGMA table_info(auxilio)")
+        cols = {row[1] for row in cursor.fetchall()}  # row format: (cid, name, type, ...)
+
+        # Add status_auxilio if missing
+        if 'status_auxilio' not in cols:
+            try:
+                cursor.execute("ALTER TABLE auxilio ADD COLUMN status_auxilio TEXT DEFAULT 'pendente'")
+            except Exception:
+                # best-effort: ignore if cannot add (e.g., locked or other race)
+                pass
+
+        # Add motivo_indeferimento if missing
+        if 'motivo_indeferimento' not in cols:
+            try:
+                cursor.execute("ALTER TABLE auxilio ADD COLUMN motivo_indeferimento TEXT")
+            except Exception:
+                pass
+        conn.commit()
+    except Exception:
+        # Swallow errors here to avoid breaking startup; errors will be visible in logs
+        pass
 

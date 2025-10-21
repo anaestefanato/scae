@@ -114,50 +114,6 @@
                     </div>
                 </div>
                 {% endfor %}
-                                        <span class="timeline-date">
-                                            {% if inscricao.status == 'pendente' %}
-                                                Em andamento
-                                            {% else %}
-                                                Concluído
-                                            {% endif %}
-                                        </span>
-                                        <span class="timeline-content">
-                                            {% if inscricao.status == 'pendente' %}
-                                                Em análise pela assistência social
-                                            {% elif inscricao.status == 'deferido' %}
-                                                Inscrição deferida
-                                            {% elif inscricao.status == 'indeferido' %}
-                                                Inscrição indeferida
-                                            {% endif %}
-                                        </span>
-                                    </li>
-                                    {% if inscricao.status == 'deferido' and inscricao.data_inicio %}
-                                    <li class="timeline-item {% if inscricao.data_inicio <= now().strftime('%Y-%m-%d') %}completed{% endif %}">
-                                        <span class="timeline-date">{{ inscricao.data_inicio }}</span>
-                                        <span class="timeline-content">Início do auxílio</span>
-                                    </li>
-                                    {% endif %}
-                                </ul>
-                            </div>
-                        </div>
-                        
-                        {% if inscricao.status == 'indeferido' %}
-                        <div class="row mt-4">
-                            <div class="col-12">
-                                <div class="alert alert-warning d-flex align-items-center">
-                                    <i class="bi bi-exclamation-triangle-fill me-2"></i>
-                                    <div class="flex-grow-1">
-                                        <strong>Inscrição indeferida.</strong> Você pode solicitar recurso contra esta decisão.
-                                    </div>
-                                    <a href="/aluno/acompanhar-inscricoes/recurso" class="btn btn-warning btn-sm">
-                                        <i class="bi bi-file-earmark-text me-1"></i>Solicitar Recurso
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
-                        {% endif %}
-                    </div>
-                </div>
             {% else %}
                 <div class="card border-0 shadow-sm">
                     <div class="card-body text-center py-5">
