@@ -46,16 +46,22 @@ async def get_acompanhar_inscricoes(request: Request, usuario_logado: dict = Non
     # Buscar os auxílios de cada inscrição
     auxilios_por_aluno = auxilio_repo.obter_por_aluno(usuario_logado['id'])
     
-    # Agrupar auxílios por inscrição
+    # Agrupar auxílios por inscrição, começando com todas as inscrições
     inscricoes_com_auxilios = {}
+    for inscricao in inscricoes:
+        id_inscricao = inscricao['id_inscricao']
+        inscricoes_com_auxilios[id_inscricao] = {
+            'edital_titulo': inscricao.get('edital_titulo', 'Edital sem título'),
+            'status': inscricao['status'],
+            'data_inscricao': inscricao['data_inscricao'],
+            'auxilios': []
+        }
+    
+    # Adicionar auxílios às inscrições correspondentes
     for auxilio in auxilios_por_aluno:
         id_inscricao = auxilio['id_inscricao']
-        if id_inscricao not in inscricoes_com_auxilios:
-            inscricoes_com_auxilios[id_inscricao] = {
-                'edital_titulo': auxilio.get('edital_titulo', 'Edital sem título'),
-                'auxilios': []
-            }
-        inscricoes_com_auxilios[id_inscricao]['auxilios'].append(auxilio)
+        if id_inscricao in inscricoes_com_auxilios:
+            inscricoes_com_auxilios[id_inscricao]['auxilios'].append(auxilio)
     
     response = templates.TemplateResponse("/aluno/acompanhar_inscricoes.html", {
         "request": request, 

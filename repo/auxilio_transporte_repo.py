@@ -48,6 +48,7 @@ class AuxilioTransporteRepo:
                 auxilioTransporte.urlComprovantePassagens,
                 auxilioTransporte.urlContratoTransporte
             ))
+            conn.commit()  # IMPORTANTE: commit para salvar no banco
             return id_auxilio
 
     @staticmethod

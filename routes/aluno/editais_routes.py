@@ -5,12 +5,20 @@ from typing import Optional, List
 import os
 from datetime import datetime
 from pydantic import ValidationError
+import traceback
 
-from repo import usuario_repo, inscricao_repo, aluno_repo
+def log_debug(mensagem):
+    """Escreve logs de debug em arquivo"""
+    with open("debug_auxilios.txt", "a", encoding="utf-8") as f:
+        timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        f.write(f"[{timestamp}] {mensagem}\n")
+
+from repo import usuario_repo, inscricao_repo, aluno_repo, auxilio_repo
 from repo.auxilio_transporte_repo import AuxilioTransporteRepo
 from repo.auxilio_moradia_repo import AuxilioMoradiaRepo
 from model.inscricao_model import Inscricao
 from model.aluno_model import Aluno
+from model.auxilio_model import Auxilio
 from model.auxilio_transporte_model import AuxilioTransporte
 from model.auxilio_moradia_model import AuxilioMoradia
 from dtos.primeira_inscricao_dto import PrimeiraInscricaoDTO
@@ -513,84 +521,180 @@ async def post_editais_primeira_inscricao(
             id_aluno=aluno.id_usuario,
             id_edital=1,  # Ajustar para buscar edital ativo
             data_inscricao=datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
-            status="em_analise",
+            status="pendente",
             urlDocumentoIdentificacao=doc_identificacao_path,
             urlDeclaracaoRenda=anexo_1_path,
             urlTermoResponsabilidade=anexo_3_path
         )
         id_inscricao = inscricao_repo.inserir(nova_inscricao)
+        print(f"[DEBUG] Inscrição criada com ID: {id_inscricao}")
+        print(f"[DEBUG] Auxílios selecionados: {auxilios}")
         
         # 9. Processar auxílio de transporte (se selecionado)
         if "transporte" in auxilios:
-            # Salvar documentos de transporte usando a função auxiliar
-            url_comp_residencia = await salvar_arquivo(comprovante_residencia_transporte, "comp_residencia_transporte")
-            url_passe_frente = await salvar_arquivo(passe_escolar_frente, "passe_escolar_frente")
-            url_passe_verso = await salvar_arquivo(passe_escolar_verso, "passe_escolar_verso")
-            url_comp_recarga = await salvar_arquivo(comprovante_recarga, "comp_recarga")
-            url_comp_passagens = await salvar_arquivo(comprovante_passagens, "comp_passagens")
-            url_contrato_transp = await salvar_arquivo(contrato_transporte, "contrato_transporte")
-            
-            # Processar tipo de ônibus (pode ser múltiplo)
-            tipos_onibus_str = ",".join(tipo_onibus) if tipo_onibus else None
-            
-            # Criar registro de auxílio transporte
-            auxilio_transporte = AuxilioTransporte(
-                id_auxilio=0,
-                id_edital=1,
-                id_inscricao=id_inscricao,
-                descricao=f"Auxílio Transporte - {tipo_transporte if tipo_transporte else 'Não especificado'}",
-                valor_mensal=300.0,  # Valor padrão
-                data_inicio=datetime.now().strftime("%Y-%m-%d"),
-                data_fim="",
-                tipo_auxilio="transporte",
-                tipo_transporte=tipo_transporte if tipo_transporte else "",
-                tipo_onibus=tipos_onibus_str,
-                gasto_passagens_dia=gasto_passagens_dia_tratado,
-                gasto_van_mensal=gasto_van_mensal_tratado,
-                urlCompResidencia=url_comp_residencia,
-                urlPasseEscolarFrente=url_passe_frente,
-                urlPasseEscolarVerso=url_passe_verso,
-                urlComprovanteRecarga=url_comp_recarga,
-                urlComprovantePassagens=url_comp_passagens,
-                urlContratoTransporte=url_contrato_transp
-            )
-            AuxilioTransporteRepo.inserir(auxilio_transporte)
+            try:
+                print(f"[DEBUG] Processando auxílio transporte para inscrição {id_inscricao}")
+                # Salvar documentos de transporte usando a função auxiliar
+                url_comp_residencia = await salvar_arquivo(comprovante_residencia_transporte, "comp_residencia_transporte")
+                url_passe_frente = await salvar_arquivo(passe_escolar_frente, "passe_escolar_frente")
+                url_passe_verso = await salvar_arquivo(passe_escolar_verso, "passe_escolar_verso")
+                url_comp_recarga = await salvar_arquivo(comprovante_recarga, "comp_recarga")
+                url_comp_passagens = await salvar_arquivo(comprovante_passagens, "comp_passagens")
+                url_contrato_transp = await salvar_arquivo(contrato_transporte, "contrato_transporte")
+                
+                # Processar tipo de ônibus (pode ser múltiplo)
+                tipos_onibus_str = ",".join(tipo_onibus) if tipo_onibus else None
+                
+                print(f"[DEBUG] Criando objeto AuxilioTransporte com tipo_transporte={tipo_transporte}")
+                # Criar registro de auxílio transporte
+                auxilio_transporte = AuxilioTransporte(
+                    id_auxilio=0,
+                    id_edital=1,
+                    id_inscricao=id_inscricao,
+                    descricao=f"Auxílio Transporte - {tipo_transporte if tipo_transporte else 'Não especificado'}",
+                    valor_mensal=300.0,  # Valor padrão
+                    data_inicio=datetime.now().strftime("%Y-%m-%d"),
+                    data_fim="",
+                    tipo_auxilio="auxilio transporte",
+                    tipo_transporte=tipo_transporte if tipo_transporte else "nao_informado",
+                    tipo_onibus=tipos_onibus_str,
+                    gasto_passagens_dia=gasto_passagens_dia_tratado,
+                    gasto_van_mensal=gasto_van_mensal_tratado,
+                    urlCompResidencia=url_comp_residencia,
+                    urlPasseEscolarFrente=url_passe_frente,
+                    urlPasseEscolarVerso=url_passe_verso,
+                    urlComprovanteRecarga=url_comp_recarga,
+                    urlComprovantePassagens=url_comp_passagens,
+                    urlContratoTransporte=url_contrato_transp
+                )
+                print(f"[DEBUG] Inserindo auxílio transporte no banco...")
+                log_debug(f"Tentando inserir auxílio transporte para inscrição {id_inscricao}")
+                id_aux_transp = AuxilioTransporteRepo.inserir(auxilio_transporte)
+                print(f"[DEBUG] Auxílio transporte inserido com ID: {id_aux_transp}")
+                log_debug(f"Auxílio transporte inserido com ID: {id_aux_transp}")
+            except Exception as e_transp:
+                erro_msg = f"Erro ao processar auxílio transporte: {e_transp}"
+                print(f"[ERRO] {erro_msg}")
+                print(f"[ERRO] Traceback: {traceback.format_exc()}")
+                log_debug(erro_msg)
+                log_debug(f"Traceback completo:\n{traceback.format_exc()}")
+                # Continua mesmo com erro no auxílio transporte
         
         # 10. Processar auxílio de moradia (se selecionado)
         if "moradia" in auxilios:
-            # Salvar documentos de moradia usando a função auxiliar
-            comp_res_anterior = await salvar_arquivo(comprovante_residencia_anterior, "comp_res_anterior")
-            comp_res_atual = await salvar_arquivo(comprovante_residencia_atual, "comp_res_atual")
-            contrato_alug = await salvar_arquivo(contrato_aluguel, "contrato_aluguel")
-            decl_prop = await salvar_arquivo(declaracao_proprietario, "declaracao_proprietario")
-            
-            # Criar registro de auxílio moradia
-            auxilio_moradia = AuxilioMoradia(
-                id_auxilio=0,
-                id_edital=1,
-                id_inscricao=id_inscricao,
-                descricao="Auxílio Moradia",
-                valor_mensal=400.0,  # Valor padrão
-                data_inicio=datetime.now().strftime("%Y-%m-%d"),
-                data_fim="",
-                tipo_auxilio="moradia",
-                url_comp_residencia_fixa=comp_res_anterior,
-                url_comp_residencia_alugada=comp_res_atual,
-                url_contrato_aluguel_cid_campus=contrato_alug,
-                url_contrato_aluguel_cid_natal=decl_prop
-            )
-            AuxilioMoradiaRepo.inserir(auxilio_moradia)
+            try:
+                print(f"[DEBUG] Processando auxílio moradia para inscrição {id_inscricao}")
+                # Salvar documentos de moradia usando a função auxiliar
+                comp_res_anterior = await salvar_arquivo(comprovante_residencia_anterior, "comp_res_anterior") or "nao_enviado"
+                comp_res_atual = await salvar_arquivo(comprovante_residencia_atual, "comp_res_atual") or "nao_enviado"
+                contrato_alug = await salvar_arquivo(contrato_aluguel, "contrato_aluguel") or "nao_enviado"
+                decl_prop = await salvar_arquivo(declaracao_proprietario, "declaracao_proprietario") or "nao_enviado"
+                
+                # Criar registro de auxílio moradia
+                auxilio_moradia = AuxilioMoradia(
+                    id_auxilio=0,
+                    id_edital=1,
+                    id_inscricao=id_inscricao,
+                    descricao="Auxílio Moradia",
+                    valor_mensal=400.0,  # Valor padrão
+                    data_inicio=datetime.now().strftime("%Y-%m-%d"),
+                    data_fim="",
+                    tipo_auxilio="auxilio moradia",
+                    url_comp_residencia_fixa=comp_res_anterior,
+                    url_comp_residencia_alugada=comp_res_atual,
+                    url_contrato_aluguel_cid_campus=contrato_alug,
+                    url_contrato_aluguel_cid_natal=decl_prop
+                )
+                print(f"[DEBUG] Inserindo auxílio moradia no banco...")
+                id_aux_morad = AuxilioMoradiaRepo.inserir(auxilio_moradia)
+                print(f"[DEBUG] Auxílio moradia inserido com ID: {id_aux_morad}")
+            except Exception as e_moradia:
+                print(f"[ERRO] Erro ao processar auxílio moradia: {e_moradia}")
+                print(f"[ERRO] Traceback: {traceback.format_exc()}")
+                log_debug(f"Erro auxílio moradia: {e_moradia}")
+                log_debug(f"Traceback:\n{traceback.format_exc()}")
+                # Continua mesmo com erro no auxílio moradia
         
-        # 11. Redirecionar com mensagem de sucesso
+        # 11. Processar auxílio de alimentação (se selecionado)
+        if "alimentacao" in auxilios:
+            try:
+                print(f"[DEBUG] Processando auxílio alimentação para inscrição {id_inscricao}")
+                auxilio_alimentacao = Auxilio(
+                    id_auxilio=0,
+                    id_edital=1,
+                    id_inscricao=id_inscricao,
+                    descricao="Auxílio Alimentação",
+                    valor_mensal=600.0,  # Valor padrão
+                    data_inicio=datetime.now().strftime("%Y-%m-%d"),
+                    data_fim="",
+                    tipo_auxilio="auxilio alimentacao"
+                )
+                print(f"[DEBUG] Inserindo auxílio alimentação no banco...")
+                id_aux_alim = auxilio_repo.inserir(auxilio_alimentacao)
+                print(f"[DEBUG] Auxílio alimentação inserido com ID: {id_aux_alim}")
+            except Exception as e_alim:
+                print(f"[ERRO] Erro ao processar auxílio alimentação: {e_alim}")
+                print(f"[ERRO] Traceback: {traceback.format_exc()}")
+                log_debug(f"Erro auxílio alimentação: {e_alim}")
+                log_debug(f"Traceback:\n{traceback.format_exc()}")
+                # Continua mesmo com erro no auxílio alimentação
+        
+        # 12. Processar auxílio material didático (se selecionado)
+        if "material" in auxilios:
+            try:
+                print(f"[DEBUG] Processando auxílio material para inscrição {id_inscricao}")
+                auxilio_material = Auxilio(
+                    id_auxilio=0,
+                    id_edital=1,
+                    id_inscricao=id_inscricao,
+                    descricao="Auxílio Material Didático",
+                    valor_mensal=200.0,  # Valor padrão (por semestre, mas representado mensalmente)
+                    data_inicio=datetime.now().strftime("%Y-%m-%d"),
+                    data_fim="",
+                    tipo_auxilio="auxilio material"
+                )
+                print(f"[DEBUG] Inserindo auxílio material no banco...")
+                id_aux_mat = auxilio_repo.inserir(auxilio_material)
+                print(f"[DEBUG] Auxílio material inserido com ID: {id_aux_mat}")
+            except Exception as e_mat:
+                print(f"[ERRO] Erro ao processar auxílio material: {e_mat}")
+                print(f"[ERRO] Traceback: {traceback.format_exc()}")
+                log_debug(f"Erro auxílio material: {e_mat}")
+                log_debug(f"Traceback:\n{traceback.format_exc()}")
+                # Continua mesmo com erro no auxílio material
+        
+        # 13. Redirecionar com mensagem de sucesso
         return RedirectResponse(
             "/aluno/editais?msg=✓ Primeira inscrição enviada com sucesso! Sua solicitação foi registrada e está em análise. Acompanhe as atualizações no sistema.", 
             status_code=303
         )
         
-    except Exception as e:
-        print(f"Erro ao processar inscrição: {e}")
+    except ValidationError as ve:
+        # Erro de validação do Pydantic - já tratado acima, mas capturado aqui por segurança
+        print(f"Erro de validação: {ve}")
+        primeiro_erro = ve.errors()[0]
+        mensagem_erro = primeiro_erro.get('msg', 'Dados inválidos')
         return RedirectResponse(
-            "/aluno/editais/primeira-inscricao?erro=Erro ao processar inscrição. Tente novamente.", 
+            f"/aluno/editais/primeira-inscricao?erro=Erro de validação: {mensagem_erro}", 
+            status_code=303
+        )
+    except Exception as e:
+        # Log detalhado do erro
+        print(f"Erro ao processar inscrição: {e}")
+        print(f"Traceback completo: {traceback.format_exc()}")
+        log_debug(f"ERRO GERAL na submissão: {e}")
+        log_debug(f"Traceback:\n{traceback.format_exc()}")
+        
+        # Verificar se a inscrição foi criada (para evitar duplicação)
+        erro_msg = str(e)
+        if "UNIQUE constraint failed" in erro_msg or "duplicate" in erro_msg.lower():
+            return RedirectResponse(
+                "/aluno/editais/primeira-inscricao?erro=Você já possui uma inscrição ativa neste edital.", 
+                status_code=303
+            )
+        
+        return RedirectResponse(
+            f"/aluno/editais/primeira-inscricao?erro=Erro ao processar inscrição: {str(e)[:100]}. Por favor, tente novamente.", 
             status_code=303
         )
 
@@ -1156,7 +1260,7 @@ async def post_editais_renovacao(
             id_aluno=aluno.id_usuario,
             id_edital=1,  # TODO: buscar edital ativo
             data_inscricao=datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
-            status="em_analise",
+            status="pendente",
             urlDocumentoIdentificacao=doc_identificacao_path,
             urlDeclaracaoRenda=anexo_1_path,
             urlTermoResponsabilidade=anexo_3_path
@@ -1220,7 +1324,35 @@ async def post_editais_renovacao(
             )
             AuxilioMoradiaRepo.inserir(auxilio_moradia)
         
-        # 13. Redirecionar com mensagem de sucesso
+        # 13. Processar auxílio de alimentação (renovação ou novo)
+        if "alimentacao" in auxilios_total:
+            auxilio_alimentacao = Auxilio(
+                id_auxilio=0,
+                id_edital=1,
+                id_inscricao=id_inscricao,
+                descricao="Auxílio Alimentação",
+                valor_mensal=600.0,
+                data_inicio=datetime.now().strftime("%Y-%m-%d"),
+                data_fim="",
+                tipo_auxilio="alimentacao"
+            )
+            auxilio_repo.inserir(auxilio_alimentacao)
+        
+        # 14. Processar auxílio material didático (renovação ou novo)
+        if "material" in auxilios_total:
+            auxilio_material = Auxilio(
+                id_auxilio=0,
+                id_edital=1,
+                id_inscricao=id_inscricao,
+                descricao="Auxílio Material Didático",
+                valor_mensal=200.0,
+                data_inicio=datetime.now().strftime("%Y-%m-%d"),
+                data_fim="",
+                tipo_auxilio="material"
+            )
+            auxilio_repo.inserir(auxilio_material)
+        
+        # 15. Redirecionar com mensagem de sucesso
         return RedirectResponse(
             "/aluno/editais?msg=✓ Renovação enviada com sucesso! Sua solicitação de renovação foi registrada e está em análise. Acompanhe as atualizações no sistema.", 
             status_code=303

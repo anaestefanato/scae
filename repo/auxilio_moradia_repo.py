@@ -42,6 +42,7 @@ class AuxilioMoradiaRepo:
                 auxilioMoradia.url_contrato_aluguel_cid_campus,
                 auxilioMoradia.url_contrato_aluguel_cid_natal
             ))
+            conn.commit()  # IMPORTANTE: commit para salvar no banco
             return id_auxilio
 
     @staticmethod

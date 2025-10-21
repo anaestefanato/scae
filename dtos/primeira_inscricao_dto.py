@@ -36,8 +36,8 @@ class PrimeiraInscricaoDTO(BaseModel):
     cad_unico: str
     bolsa_familia: str 
     
-    # Auxílios selecionados
-    auxilios: List[str] 
+    # Auxílios selecionados (opcional para validação parcial da etapa 1)
+    auxilios: Optional[List[str]] = None 
     
     # Dados de transporte (opcionais)
     tipo_transporte: Optional[str] 
@@ -186,6 +186,10 @@ class PrimeiraInscricaoDTO(BaseModel):
     @field_validator('auxilios')
     @classmethod
     def validar_auxilios(cls, v):
+        # Permitir None para validação parcial (etapa 1)
+        if v is None:
+            return v
+            
         if not v or len(v) == 0:
             raise ValueError('Selecione pelo menos um tipo de auxílio')
         
@@ -221,6 +225,10 @@ class PrimeiraInscricaoDTO(BaseModel):
     @model_validator(mode='after')
     def validar_dados_transporte(self):
         """Valida se os dados de transporte são obrigatórios quando o auxílio transporte é selecionado"""
+        # Só validar se auxilios foi informado (não é None)
+        if self.auxilios is None:
+            return self
+            
         if 'transporte' in self.auxilios:
             if not self.tipo_transporte:
                 raise ValueError('Tipo de transporte é obrigatório quando auxílio transporte é selecionado')
