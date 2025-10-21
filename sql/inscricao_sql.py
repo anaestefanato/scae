@@ -4,7 +4,7 @@ CREATE TABLE IF NOT EXISTS inscricao (
     id_aluno INTEGER,
     id_edital INTEGER,
     data_inscricao DATE NOT NULL,
-    status TEXT NOT NULL CHECK (status IN ('pendente', 'deferido', 'indeferido')),
+    status TEXT NOT NULL CHECK (status IN ('pendente', 'analisado', 'deferido', 'indeferido')),
     urlDocumentoIdentificacao TEXT NOT NULL,
     urlDeclaracaoRenda TEXT NOT NULL,
     urlTermoResponsabilidade TEXT NOT NULL,

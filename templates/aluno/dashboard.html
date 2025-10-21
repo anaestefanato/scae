@@ -55,23 +55,23 @@
                                     {% endif %}
                                 </span>
                                 <span class="status-badge 
-                                    {% if auxilio.status_inscricao == 'deferido' %}status-deferido
-                                    {% elif auxilio.status_inscricao == 'indeferido' %}status-indeferido
+                                    {% if auxilio.status_auxilio == 'deferido' %}status-deferido
+                                    {% elif auxilio.status_auxilio == 'indeferido' %}status-indeferido
                                     {% else %}status-pendente{% endif %}">
-                                    {% if auxilio.status_inscricao == 'deferido' %}Deferido
-                                    {% elif auxilio.status_inscricao == 'indeferido' %}Indeferido
-                                    {% elif auxilio.status_inscricao == 'em_analise' %}Em Análise
-                                    {% else %}{{ auxilio.status_inscricao|title }}{% endif %}
+                                    {% if auxilio.status_auxilio == 'deferido' %}Deferido
+                                    {% elif auxilio.status_auxilio == 'indeferido' %}Indeferido
+                                    {% elif auxilio.status_auxilio == 'em_analise' %}Em Análise
+                                    {% else %}{{ auxilio.status_auxilio|title }}{% endif %}
                                 </span>
                             </div>
                             <div class="card-body">
                                 <div class="row">
                                     <div class="col-md-6">
                                         <p><strong>Edital:</strong> {{ auxilio.edital_titulo }}</p>
-                                        <p><strong>Valor{% if auxilio.status_inscricao != 'deferido' %} Previsto{% endif %}:</strong> R$ {{ "%.2f"|format(auxilio.valor_mensal) }}</p>
+                                        <p><strong>Valor{% if auxilio.status_auxilio != 'deferido' %} Previsto{% endif %}:</strong> R$ {{ "%.2f"|format(auxilio.valor_mensal) }}</p>
                                     </div>
                                     <div class="col-md-6">
-                                        {% if auxilio.status_inscricao == 'deferido' %}
+                                        {% if auxilio.status_auxilio == 'deferido' %}
                                             <p><strong>Data de Aprovação:</strong> {{ auxilio.data_inicio }}</p>
                                             <p><strong>Vigência:</strong> {{ auxilio.data_inicio }} a {{ auxilio.data_fim }}</p>
                                         {% else %}
@@ -81,11 +81,11 @@
                                     </div>
                                 </div>
                                 <div class="d-flex justify-content-end mt-3">
-                                    {% if auxilio.status_inscricao == 'deferido' %}
+                                    {% if auxilio.status_auxilio == 'deferido' %}
                                         <button class="btn btn-sm btn-outline-success me-2" onclick="confirmarRecebimento('{{ auxilio.id_auxilio }}')">
                                             <i class="bi bi-check-circle me-1"></i>Confirmar Recebimento
                                         </button>
-                                    {% elif auxilio.status_inscricao == 'em_analise' %}
+                                    {% elif auxilio.status_auxilio == 'pendente' %}
                                         <a href="/aluno/acompanhar-inscricoes" class="btn btn-sm btn-outline-secondary me-2">
                                             <i class="bi bi-search me-1"></i>Acompanhar
                                         </a>

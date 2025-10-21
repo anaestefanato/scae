@@ -88,6 +88,22 @@ def atualizar(inscricao: Inscricao) -> bool:
         return False
 
 
+def atualizar_status(id_inscricao: int, novo_status: str) -> bool:
+    """Atualiza apenas o status de uma inscrição"""
+    try:
+        with get_connection() as conn:
+            cursor = conn.cursor()
+            cursor.execute(
+                "UPDATE inscricao SET status = ? WHERE id_inscricao = ?",
+                (novo_status, id_inscricao)
+            )
+            conn.commit()
+            return cursor.rowcount > 0
+    except Exception as e:
+        print(f"Erro ao atualizar status da inscrição {id_inscricao}:", e)
+        return False
+
+
 def excluir(id: int) -> bool:
     with get_connection() as conn:
         cursor = conn.cursor()

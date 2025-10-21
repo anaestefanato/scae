@@ -115,6 +115,11 @@ async def deferir_auxilio(request: Request, usuario_logado: dict = None):
         sucesso_status = auxilio_repo.atualizar_status_auxilio(id_auxilio, 'deferido')
         sucesso_valor = auxilio_repo.atualizar_valor_auxilio(id_auxilio, float(valor_mensal))
         
+        # Obter a inscrição relacionada e atualizar seu status para 'analisado'
+        auxilio = auxilio_repo.obter_por_id(id_auxilio)
+        if auxilio and auxilio.id_inscricao:
+            inscricao_repo.atualizar_status(auxilio.id_inscricao, 'analisado')
+        
         if sucesso_status and sucesso_valor:
             return JSONResponse(
                 status_code=200,
@@ -161,6 +166,11 @@ async def indeferir_auxilio(request: Request, usuario_logado: dict = None):
         # Atualizar status do auxílio
         sucesso_status = auxilio_repo.atualizar_status_auxilio(id_auxilio, 'indeferido')
         sucesso_motivo = auxilio_repo.atualizar_motivo_indeferimento(id_auxilio, motivo)
+        
+        # Obter a inscrição relacionada e atualizar seu status para 'analisado'
+        auxilio = auxilio_repo.obter_por_id(id_auxilio)
+        if auxilio and auxilio.id_inscricao:
+            inscricao_repo.atualizar_status(auxilio.id_inscricao, 'analisado')
         
         if sucesso_status and sucesso_motivo:
             return JSONResponse(
