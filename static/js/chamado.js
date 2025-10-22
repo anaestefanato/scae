@@ -135,22 +135,3 @@ function closeTicketFromModal() {
         closeTicket(ticketId);
     }
 }
-
-// Funções auxiliares para badges
-function getStatusBadgeClass(status) {
-    switch(status) {
-        case 'aberto': return 'bg-primary';
-        case 'em-andamento': return 'bg-warning';
-        case 'resolvido': return 'bg-success';
-        default: return 'bg-secondary';
-    }
-}
-
-function getCategoriaBadgeClass(categoria) {
-    switch(categoria) {
-        case 'erro': return 'bg-danger';
-        case 'duvida': return 'bg-info';
-        case 'outros': return 'bg-secondary';
-        default: return 'bg-light text-dark';
-    }
-}
