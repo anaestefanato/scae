@@ -207,13 +207,3 @@ function clearSearch() {
     // Atualizar contagem
     document.getElementById('assistantsCount').textContent = assistentes.length;
 }
-
-// ===== FUNÇÃO PARA EXPORTAR LISTA =====
-function exportAssistantsList() {
-    alert('Funcionalidade de exportação em desenvolvimento.');
-}
-
-// ===== FUNÇÃO PARA ATUALIZAR LISTA =====
-function refreshAssistantsList() {
-    location.reload();
-}
