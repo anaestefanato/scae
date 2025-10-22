@@ -18,7 +18,6 @@ window.totalAlunos = totalAlunosData;
 
 // ===== FUNÇÕES ALIAS (chamadas pelos botões do HTML) =====
 function viewStudent(id) { viewStudentReal(id); }
-function editStudent(id) { editStudentReal(id); }
 function deleteStudent(id) { deleteStudentReal(id); }
 function searchStudent() { searchStudentReal(); }
 function clearSearch() { clearSearchReal(); }
@@ -149,11 +148,6 @@ function viewStudentReal(id) {
     }
 }
 
-// Editar aluno
-function editStudentReal(id) {
-    window.location.href = `/admin/usuarios/aluno/editar/${id}`;
-}
-
 // Excluir aluno
 let studentToDeleteId = null;
 function deleteStudentReal(id) {
@@ -215,21 +209,20 @@ function searchStudentReal() {
         `;
     } else {
         results.forEach(aluno => {
+            const auxiliosHtml = aluno.auxilios 
+                ? aluno.auxilios.split(',').map(aux => `<span class="badge bg-success me-1">${aux.trim()}</span>`).join('')
+                : '<span class="text-muted">-</span>';
+            
             tbody.innerHTML += `
                 <tr>
                     <td style="padding: 15px;"><strong>${aluno.nome}</strong></td>
                     <td style="padding: 15px;">${aluno.matricula}</td>
                     <td style="padding: 15px;">${aluno.cpf || '-'}</td>
-                    <td style="padding: 15px;">
-                        <span class="text-muted">-</span>
-                    </td>
+                    <td style="padding: 15px;">${auxiliosHtml}</td>
                     <td style="padding: 15px;">
                         <div class="action-buttons" style="display: flex; gap: 8px; justify-content: center;">
                             <button class="btn btn-sm btn-outline-info" onclick="viewStudentReal(${aluno.id_usuario})">
                                 <i class="bi bi-eye"></i>
-                            </button>
-                            <button class="btn btn-sm btn-outline-secondary" onclick="editStudentReal(${aluno.id_usuario})">
-                                <i class="bi bi-pencil"></i>
                             </button>
                             <button class="btn btn-sm btn-outline-danger" onclick="deleteStudentReal(${aluno.id_usuario})">
                                 <i class="bi bi-trash"></i>
@@ -252,21 +245,20 @@ function clearSearchReal() {
     tbody.innerHTML = '';
     
     window.alunos.forEach(aluno => {
+        const auxiliosHtml = aluno.auxilios 
+            ? aluno.auxilios.split(',').map(aux => `<span class="badge bg-success me-1">${aux.trim()}</span>`).join('')
+            : '<span class="text-muted">-</span>';
+        
         tbody.innerHTML += `
             <tr>
                 <td style="padding: 15px;"><strong>${aluno.nome}</strong></td>
                 <td style="padding: 15px;">${aluno.matricula}</td>
                 <td style="padding: 15px;">${aluno.cpf || '-'}</td>
-                <td style="padding: 15px;">
-                    <span class="text-muted">-</span>
-                </td>
+                <td style="padding: 15px;">${auxiliosHtml}</td>
                 <td style="padding: 15px;">
                     <div class="action-buttons" style="display: flex; gap: 8px; justify-content: center;">
                         <button class="btn btn-sm btn-outline-info" onclick="viewStudentReal(${aluno.id_usuario})">
                             <i class="bi bi-eye"></i>
-                        </button>
-                        <button class="btn btn-sm btn-outline-secondary" onclick="editStudentReal(${aluno.id_usuario})">
-                            <i class="bi bi-pencil"></i>
                         </button>
                         <button class="btn btn-sm btn-outline-danger" onclick="deleteStudentReal(${aluno.id_usuario})">
                             <i class="bi bi-trash"></i>
