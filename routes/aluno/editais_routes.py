@@ -36,8 +36,11 @@ async def get_editais(request: Request, usuario_logado: dict = None):
     if not usuario_logado.get('completo', True):
         return RedirectResponse("/aluno/perfil", status_code=303)
 
+    from repo import edital_repo
     aluno = usuario_repo.obter_usuario_por_matricula(usuario_logado['matricula'])
-    response = templates.TemplateResponse("/aluno/editais.html", {"request": request, "aluno": aluno})
+    # Obter apenas editais que já foram publicados (data de publicação <= hoje)
+    editais = edital_repo.obter_editais_visiveis_alunos()
+    response = templates.TemplateResponse("/aluno/editais.html", {"request": request, "aluno": aluno, "editais": editais})
     return response
 
 @router.get("/editais/detalhes")

@@ -17,11 +17,15 @@ async def get_alunos(request: Request, usuario_logado: dict = None):
     assistente = usuario_repo.obter_usuario_por_matricula(usuario_logado['matricula'])
     
     # Buscar alunos aprovados
-    alunos = aluno_repo.obter_alunos_aprovados()
+    try:
+        alunos = aluno_repo.obter_alunos_aprovados()
+    except Exception as e:
+        print(f"Erro ao buscar alunos aprovados: {e}")
+        alunos = []
     
     # Estatísticas básicas
     total_alunos = len(alunos)
-    alunos_ativos = len([a for a in alunos if a['situacao'] == 'Ativo'])
+    alunos_ativos = len([a for a in alunos if a.get('situacao') == 'Ativo'])
     
     context = {
         "request": request, 

@@ -9,6 +9,20 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
     <link rel="stylesheet" href="/static/css/dashboard_assistente.css">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        /* Garantir que os campos de data fiquem com texto visível */
+        input[type="date"] {
+            color: #495057;
+            color-scheme: light;
+        }
+        input[type="date"]::-webkit-calendar-picker-indicator {
+            opacity: 1;
+            cursor: pointer;
+        }
+        input[type="date"]:focus {
+            color: #495057;
+        }
+    </style>
 </head>
 <body>
     <!-- Menu Toggle Button -->
@@ -105,6 +119,21 @@
                 </div>
             </div>
         </div>
+
+        <!-- Mensagens de sucesso/erro -->
+        {% if request.query_params.get('sucesso') %}
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            <i class="bi bi-check-circle-fill me-2"></i>{{ request.query_params.get('sucesso') }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+        {% endif %}
+
+        {% if request.query_params.get('erro') %}
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            <i class="bi bi-exclamation-triangle-fill me-2"></i>{{ request.query_params.get('erro') }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+        {% endif %}
 
         <div class="row">
             <div class="col-12">
@@ -290,121 +319,83 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <form id="novoEditalForm">
+                    <form id="novoEditalForm" method="post" action="/assistente/editais/publicar" enctype="multipart/form-data">
                         <div class="mb-3">
-                            <label for="categoriaDocumento" class="form-label">
-                                <i class="bi bi-folder me-1"></i>Categoria
-                            </label>
-                            <select class="form-select" id="categoriaDocumento" required>
-                                <option value="">Selecione a categoria...</option>
-                                <option value="geral">Edital Geral</option>
-                                <option value="cronograma">Cronograma</option>
-                                <option value="anexo">Anexo de Inscrição</option>
-                                <option value="resultado">Resultado (Preliminar/Final)</option>
-                            </select>
-                        </div>
-                        
-                        <div class="mb-3" id="campoTitulo">
                             <label for="tituloDocumento" class="form-label">
-                                <i class="bi bi-type me-1"></i>Título do Documento
+                                <i class="bi bi-type me-1"></i>Título do Edital
                             </label>
-                            <input type="text" class="form-control" id="tituloDocumento" placeholder="Ex: Edital Geral 001/2025" required>
+                            <input type="text" class="form-control" id="tituloDocumento" name="titulo" placeholder="Ex: Edital - Programa de Assistência Estudantil 001/2025" required>
                         </div>
                         
-                        <!-- Campos específicos para Resultados -->
-                        <div id="camposResultado" style="display: none;">
-                            <div class="row">
-                                <div class="col-md-4">
-                                    <div class="mb-3">
-                                        <label for="semestreResultado" class="form-label">
-                                            <i class="bi bi-calendar-check me-1"></i>Semestre
-                                        </label>
-                                        <select class="form-select" id="semestreResultado">
-                                            <option value="1">1º Semestre</option>
-                                            <option value="2" selected>2º Semestre</option>
-                                        </select>
-                                    </div>
+                        <!-- Período de Inscrição -->
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="dataInicioInscricao" class="form-label">
+                                        <i class="bi bi-calendar-check me-1"></i>Início do Período de Inscrição
+                                    </label>
+                                    <input type="date" class="form-control" id="dataInicioInscricao" name="data_inicio_inscricao" placeholder="Ex: 01/11/2025" required>
                                 </div>
-                                <div class="col-md-4">
-                                    <div class="mb-3">
-                                        <label for="tipoInscricaoResultado" class="form-label">
-                                            <i class="bi bi-people me-1"></i>Tipo de Inscrição
-                                        </label>
-                                        <select class="form-select" id="tipoInscricaoResultado">
-                                            <option value="primeira">1ª Participação</option>
-                                            <option value="atualizacao">Atualização</option>
-                                            <option value="renovacao">Renovação</option>
-                                        </select>
-                                    </div>
-                                </div>
-                                <div class="col-md-4">
-                                    <div class="mb-3">
-                                        <label for="tipoResultado" class="form-label">
-                                            <i class="bi bi-file-text me-1"></i>Tipo de Resultado
-                                        </label>
-                                        <select class="form-select" id="tipoResultado">
-                                            <option value="preliminar">Preliminar</option>
-                                            <option value="final">Final</option>
-                                        </select>
-                                    </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="dataFimInscricao" class="form-label">
+                                        <i class="bi bi-calendar-x me-1"></i>Fim do Período de Inscrição
+                                    </label>
+                                    <input type="date" class="form-control" id="dataFimInscricao" name="data_fim_inscricao" placeholder="Ex: 30/11/2025" required>
                                 </div>
                             </div>
                         </div>
                         
-                        <!-- Campos específicos para Anexos -->
-                        <div id="camposAnexo" style="display: none;">
-                            <div class="mb-3">
-                                <label for="numeroAnexo" class="form-label">
-                                    <i class="bi bi-hash me-1"></i>Número do Anexo
-                                </label>
-                                <select class="form-select" id="numeroAnexo">
-                                    <option value="1">Anexo I</option>
-                                    <option value="2">Anexo II</option>
-                                    <option value="3">Anexo III</option>
-                                    <option value="4">Anexo IV</option>
-                                    <option value="5">Anexo V</option>
-                                    <option value="6">Anexo VI</option>
-                                </select>
+                        <!-- Período de Vigência dos Auxílios -->
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="dataInicioVigencia" class="form-label">
+                                        <i class="bi bi-calendar-event me-1"></i>Início da Vigência dos Auxílios
+                                    </label>
+                                    <input type="date" class="form-control" id="dataInicioVigencia" name="data_inicio_vigencia" placeholder="Ex: 01/01/2026" required>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="dataFimVigencia" class="form-label">
+                                        <i class="bi bi-calendar-range me-1"></i>Fim da Vigência dos Auxílios
+                                    </label>
+                                    <input type="date" class="form-control" id="dataFimVigencia" name="data_fim_vigencia" placeholder="Ex: 30/06/2026" required>
+                                </div>
                             </div>
                         </div>
                         
                         <div class="mb-3">
                             <label for="dataPublicacao" class="form-label">
-                                <i class="bi bi-calendar-event me-1"></i>Data de Publicação
+                                <i class="bi bi-calendar-event me-1"></i>Data de Publicação do Edital
                             </label>
-                            <input type="date" class="form-control" id="dataPublicacao" required>
+                            <input type="date" class="form-control" id="dataPublicacao" name="data_publicacao" placeholder="Ex: 22/10/2025" required>
                         </div>
                         
                         <div class="mb-3">
                             <label for="arquivoDocumento" class="form-label">
-                                <i class="bi bi-file-pdf me-1"></i>Arquivo (PDF)
+                                <i class="bi bi-file-pdf me-1"></i>Arquivo do Edital (PDF)
                             </label>
-                            <input type="file" class="form-control" id="arquivoDocumento" accept=".pdf" required>
-                            <small class="text-muted">Apenas arquivos PDF. Tamanho máximo: 10MB</small>
+                            <input type="file" class="form-control" id="arquivoDocumento" name="arquivo" accept=".pdf" placeholder="Selecione o arquivo PDF do edital" required>
+                            <small class="text-muted">Clique para selecionar o arquivo PDF do edital (máximo 10MB)</small>
                         </div>
                         
                         <div class="mb-3">
                             <label for="descricaoDocumento" class="form-label">
-                                <i class="bi bi-card-text me-1"></i>Descrição
+                                <i class="bi bi-card-text me-1"></i>Descrição do Edital
                             </label>
-                            <textarea class="form-control" id="descricaoDocumento" rows="2" placeholder="Breve descrição do documento..."></textarea>
+                            <textarea class="form-control" id="descricaoDocumento" name="descricao" rows="3" placeholder="Ex: Edital para seleção de estudantes ao Programa de Assistência Estudantil do 1º semestre de 2026" required></textarea>
                         </div>
-                        
-                        <div class="mb-3">
-                            <div class="form-check">
-                                <input class="form-check-input" type="checkbox" id="documentoAtivo" checked>
-                                <label class="form-check-label" for="documentoAtivo">
-                                    <i class="bi bi-check-circle me-1"></i>Publicar como ativo (visível para alunos)
-                                </label>
-                            </div>
-                        </div>
+                    </form>
                     </form>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
                         <i class="bi bi-x-circle me-1"></i>Cancelar
                     </button>
-                    <button type="button" class="btn btn-success" id="publicarDocumento">
+                    <button type="submit" form="novoEditalForm" class="btn btn-success">
                         <i class="bi bi-check-circle me-1"></i>Publicar Documento
                     </button>
                 </div>
@@ -455,5 +446,49 @@
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
     <script src="/static/js/dashboard_assistente.js"></script>
+    <script>
+        // Validação apenas no submit do formulário
+        document.getElementById('novoEditalForm').addEventListener('submit', function(e) {
+            // Limpar mensagens anteriores
+            const alertasAntigos = document.querySelectorAll('.alert-validacao');
+            alertasAntigos.forEach(alerta => alerta.remove());
+            
+            let erros = [];
+            
+            // Validar datas de inscrição
+            const inicioInscricao = document.getElementById('dataInicioInscricao').value;
+            const fimInscricao = document.getElementById('dataFimInscricao').value;
+            
+            if (inicioInscricao && fimInscricao && inicioInscricao >= fimInscricao) {
+                erros.push('A data de fim da inscrição deve ser posterior à data de início');
+            }
+            
+            // Validar datas de vigência
+            const inicioVigencia = document.getElementById('dataInicioVigencia').value;
+            const fimVigencia = document.getElementById('dataFimVigencia').value;
+            
+            if (inicioVigencia && fimVigencia && inicioVigencia >= fimVigencia) {
+                erros.push('A data de fim da vigência deve ser posterior à data de início');
+            }
+            
+            // Se houver erros, mostrar e cancelar submit
+            if (erros.length > 0) {
+                e.preventDefault();
+                
+                const modalBody = document.querySelector('#novoEditalModal .modal-body');
+                const alertDiv = document.createElement('div');
+                alertDiv.className = 'alert alert-danger alert-dismissible fade show alert-validacao';
+                alertDiv.innerHTML = `
+                    <i class="bi bi-exclamation-triangle-fill me-2"></i>
+                    <strong>Erro de validação:</strong>
+                    <ul class="mb-0 mt-2">
+                        ${erros.map(erro => `<li>${erro}</li>`).join('')}
+                    </ul>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                `;
+                modalBody.insertBefore(alertDiv, modalBody.firstChild);
+            }
+        });
+    </script>
 </body>
 </html>

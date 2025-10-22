@@ -47,18 +47,32 @@ async def get_analise_inscricoes(
     assistente = usuario_repo.obter_usuario_por_matricula(usuario_logado['matricula'])
     
     # Buscar estatísticas
-    estatisticas = inscricao_repo.obter_estatisticas_analise()
+    try:
+        estatisticas = inscricao_repo.obter_estatisticas_analise()
+    except Exception as e:
+        print(f"Erro ao buscar estatísticas de análise: {e}")
+        estatisticas = {
+            'pendentes': 0,
+            'em_analise': 0,
+            'deferidas': 0,
+            'indeferidas': 0
+        }
     
     # Buscar inscrições para análise com paginação e filtros
     limite = 10
-    inscricoes, total = inscricao_repo.obter_inscricoes_para_analise(
-        pagina=pagina, 
-        limite=limite,
-        filtro_edital=edital,
-        filtro_status=status,
-        filtro_busca=busca,
-        ordenacao=ordenacao
-    )
+    try:
+        inscricoes, total = inscricao_repo.obter_inscricoes_para_analise(
+            pagina=pagina, 
+            limite=limite,
+            filtro_edital=edital,
+            filtro_status=status,
+            filtro_busca=busca,
+            ordenacao=ordenacao
+        )
+    except Exception as e:
+        print(f"Erro ao buscar inscrições para análise: {e}")
+        inscricoes = []
+        total = 0
     
     # Calcular informações de paginação
     total_paginas = math.ceil(total / limite) if total > 0 else 1
