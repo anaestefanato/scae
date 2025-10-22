@@ -17,7 +17,6 @@ def inserir(edital: Edital) -> Optional[int]:
     with get_connection() as conn:
         cursor = conn.cursor()
         cursor.execute(INSERIR, (
-            edital.id_edital,
             edital.titulo,
             edital.descricao,
             edital.data_publicacao,
@@ -27,6 +26,7 @@ def inserir(edital: Edital) -> Optional[int]:
             edital.data_fim_inscricao,
             edital.data_inicio_vigencia,
             edital.data_fim_vigencia))
+        conn.commit()
         return cursor.lastrowid
 
 def obter_todos() -> list[Edital]:

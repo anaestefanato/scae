@@ -68,25 +68,30 @@ async def publicar_edital(
                 status="ativo"
             )
         except ValidationError as e:
-            # Pegar primeira mensagem de erro
+            # Pegar primeira mensagem de erro e limpar o prefixo "Value error,"
             erro_msg = e.errors()[0]['msg']
+            if erro_msg.startswith('Value error, '):
+                erro_msg = erro_msg.replace('Value error, ', '')
+            from urllib.parse import quote
             return RedirectResponse(
-                f"/assistente/editais?erro={erro_msg}",
+                f"/assistente/editais?erro={quote(erro_msg)}&modal=abrir&titulo={quote(titulo)}&descricao={quote(descricao)}&data_publicacao={data_publicacao}&data_inicio_inscricao={data_inicio_inscricao}&data_fim_inscricao={data_fim_inscricao}&data_inicio_vigencia={data_inicio_vigencia}&data_fim_vigencia={data_fim_vigencia}",
                 status_code=status.HTTP_303_SEE_OTHER
             )
         
         # 2. Validar arquivo
         if not arquivo or not arquivo.filename:
+            from urllib.parse import quote
             return RedirectResponse(
-                "/assistente/editais?erro=Nenhum arquivo foi enviado",
+                f"/assistente/editais?erro=Nenhum arquivo foi enviado&modal=abrir&titulo={quote(titulo)}&descricao={quote(descricao)}&data_publicacao={data_publicacao}&data_inicio_inscricao={data_inicio_inscricao}&data_fim_inscricao={data_fim_inscricao}&data_inicio_vigencia={data_inicio_vigencia}&data_fim_vigencia={data_fim_vigencia}",
                 status_code=status.HTTP_303_SEE_OTHER
             )
         
         # 3. Validar tipo de arquivo
         tipos_permitidos = ["application/pdf"]
         if arquivo.content_type not in tipos_permitidos:
+            from urllib.parse import quote
             return RedirectResponse(
-                "/assistente/editais?erro=Apenas arquivos PDF são permitidos",
+                f"/assistente/editais?erro=Apenas arquivos PDF são permitidos&modal=abrir&titulo={quote(titulo)}&descricao={quote(descricao)}&data_publicacao={data_publicacao}&data_inicio_inscricao={data_inicio_inscricao}&data_fim_inscricao={data_fim_inscricao}&data_inicio_vigencia={data_inicio_vigencia}&data_fim_vigencia={data_fim_vigencia}",
                 status_code=status.HTTP_303_SEE_OTHER
             )
         
@@ -94,8 +99,9 @@ async def publicar_edital(
         conteudo_arquivo = await arquivo.read()
         tamanho_max = 10 * 1024 * 1024  # 10MB
         if len(conteudo_arquivo) > tamanho_max:
+            from urllib.parse import quote
             return RedirectResponse(
-                "/assistente/editais?erro=Arquivo excede o tamanho máximo de 10MB",
+                f"/assistente/editais?erro=Arquivo excede o tamanho máximo de 10MB&modal=abrir&titulo={quote(titulo)}&descricao={quote(descricao)}&data_publicacao={data_publicacao}&data_inicio_inscricao={data_inicio_inscricao}&data_fim_inscricao={data_fim_inscricao}&data_inicio_vigencia={data_inicio_vigencia}&data_fim_vigencia={data_fim_vigencia}",
                 status_code=status.HTTP_303_SEE_OTHER
             )
         
@@ -147,8 +153,10 @@ async def publicar_edital(
             )
     
     except Exception as e:
+        import traceback
         print(f"Erro ao publicar edital: {e}")
+        print(f"Traceback completo:\n{traceback.format_exc()}")
         return RedirectResponse(
-            f"/assistente/editais?erro=Erro ao processar publicação",
+            f"/assistente/editais?erro=Erro ao processar publicação: {str(e)}",
             status_code=status.HTTP_303_SEE_OTHER
         )

@@ -319,6 +319,9 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
+                    <!-- Área para mensagens de erro do servidor -->
+                    <div id="erroModalContainer"></div>
+                    
                     <form id="novoEditalForm" method="post" action="/assistente/editais/publicar" enctype="multipart/form-data">
                         <div class="mb-3">
                             <label for="tituloDocumento" class="form-label">
@@ -447,8 +450,59 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
     <script src="/static/js/dashboard_assistente.js"></script>
     <script>
+        // Detectar se deve abrir o modal com dados preenchidos
+        document.addEventListener('DOMContentLoaded', function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const deveAbrirModal = urlParams.get('modal');
+            const erro = urlParams.get('erro');
+            
+            if (deveAbrirModal === 'abrir') {
+                // Esconder o alerta de erro do topo da página
+                const alertaTopo = document.querySelector('.alert-danger');
+                if (alertaTopo) {
+                    alertaTopo.style.display = 'none';
+                }
+                
+                // Preencher os campos com os valores da URL
+                const titulo = urlParams.get('titulo');
+                const descricao = urlParams.get('descricao');
+                const dataPublicacao = urlParams.get('data_publicacao');
+                const dataInicioInscricao = urlParams.get('data_inicio_inscricao');
+                const dataFimInscricao = urlParams.get('data_fim_inscricao');
+                const dataInicioVigencia = urlParams.get('data_inicio_vigencia');
+                const dataFimVigencia = urlParams.get('data_fim_vigencia');
+                
+                if (titulo) document.getElementById('tituloDocumento').value = decodeURIComponent(titulo);
+                if (descricao) document.getElementById('descricaoDocumento').value = decodeURIComponent(descricao);
+                if (dataPublicacao) document.getElementById('dataPublicacao').value = dataPublicacao;
+                if (dataInicioInscricao) document.getElementById('dataInicioInscricao').value = dataInicioInscricao;
+                if (dataFimInscricao) document.getElementById('dataFimInscricao').value = dataFimInscricao;
+                if (dataInicioVigencia) document.getElementById('dataInicioVigencia').value = dataInicioVigencia;
+                if (dataFimVigencia) document.getElementById('dataFimVigencia').value = dataFimVigencia;
+                
+                // Mostrar erro dentro do modal se houver
+                if (erro) {
+                    const erroContainer = document.getElementById('erroModalContainer');
+                    const alertDiv = document.createElement('div');
+                    alertDiv.className = 'alert alert-danger alert-dismissible fade show mb-3';
+                    alertDiv.innerHTML = `
+                        <i class="bi bi-exclamation-triangle-fill me-2"></i>
+                        <strong>Erro:</strong> ${decodeURIComponent(erro)}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                    `;
+                    erroContainer.appendChild(alertDiv);
+                }
+                
+                // Abrir o modal
+                const modal = new bootstrap.Modal(document.getElementById('novoEditalModal'));
+                modal.show();
+            }
+        });
+
         // Validação apenas no submit do formulário
-        document.getElementById('novoEditalForm').addEventListener('submit', function(e) {
+        const form = document.getElementById('novoEditalForm');
+        if (form) {
+            form.addEventListener('submit', function(e) {
             // Limpar mensagens anteriores
             const alertasAntigos = document.querySelectorAll('.alert-validacao');
             alertasAntigos.forEach(alerta => alerta.remove());
@@ -475,9 +529,10 @@
             if (erros.length > 0) {
                 e.preventDefault();
                 
-                const modalBody = document.querySelector('#novoEditalModal .modal-body');
+                const erroContainer = document.getElementById('erroModalContainer');
+                erroContainer.innerHTML = ''; // Limpar erros anteriores
                 const alertDiv = document.createElement('div');
-                alertDiv.className = 'alert alert-danger alert-dismissible fade show alert-validacao';
+                alertDiv.className = 'alert alert-danger alert-dismissible fade show alert-validacao mb-3';
                 alertDiv.innerHTML = `
                     <i class="bi bi-exclamation-triangle-fill me-2"></i>
                     <strong>Erro de validação:</strong>
@@ -486,9 +541,10 @@
                     </ul>
                     <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
                 `;
-                modalBody.insertBefore(alertDiv, modalBody.firstChild);
+                erroContainer.appendChild(alertDiv);
             }
         });
+        }
     </script>
 </body>
 </html>

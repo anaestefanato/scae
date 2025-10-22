@@ -13,9 +13,9 @@ data_fim_vigencia DATE)
 """
 
 INSERIR = """
-INSERT INTO edital (id_edital, titulo, descricao, data_publicacao, arquivo, status, 
+INSERT INTO edital (titulo, descricao, data_publicacao, arquivo, status, 
 data_inicio_inscricao, data_fim_inscricao, data_inicio_vigencia, data_fim_vigencia) 
-VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
 """
 
 OBTER_TODOS = """

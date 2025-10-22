@@ -1,4 +1,4 @@
-from pydantic import BaseModel, Field, field_validator
+from pydantic import BaseModel, Field, field_validator, ConfigDict
 from datetime import datetime
 from typing import Optional
 
@@ -6,9 +6,14 @@ from typing import Optional
 class EditalDTO(BaseModel):
     """DTO para criação/publicação de edital"""
     
+    model_config = ConfigDict(
+        str_min_length=1,
+        str_strip_whitespace=True
+    )
+    
     # Dados principais
-    titulo: str = Field(..., min_length=10, max_length=200)
-    descricao: str = Field(..., min_length=20, max_length=1000)
+    titulo: str
+    descricao: str
     data_publicacao: str
     
     # Período de inscrição
@@ -25,8 +30,8 @@ class EditalDTO(BaseModel):
     @field_validator('titulo')
     @classmethod
     def validar_titulo(cls, v):
-        if not v or len(v.strip()) < 10:
-            raise ValueError('Título deve ter pelo menos 10 caracteres')
+        if not v or len(v.strip()) < 5:
+            raise ValueError('Título deve ter pelo menos 5 caracteres')
         
         if len(v.strip()) > 200:
             raise ValueError('Título não pode exceder 200 caracteres')
@@ -36,8 +41,8 @@ class EditalDTO(BaseModel):
     @field_validator('descricao')
     @classmethod
     def validar_descricao(cls, v):
-        if not v or len(v.strip()) < 20:
-            raise ValueError('Descrição deve ter pelo menos 20 caracteres')
+        if not v or len(v.strip()) < 10:
+            raise ValueError('Descrição deve ter pelo menos 10 caracteres')
         
         if len(v.strip()) > 1000:
             raise ValueError('Descrição não pode exceder 1000 caracteres')
