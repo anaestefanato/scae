@@ -83,7 +83,7 @@ SELECT
     i.urlTermoResponsabilidade,
     e.titulo as edital_titulo,
     e.data_publicacao,
-    e.data_encerramento,
+    e.data_fim_inscricao,
     a.id_auxilio,
     a.tipo_auxilio,
     a.valor_mensal,

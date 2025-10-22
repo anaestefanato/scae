@@ -130,7 +130,7 @@ def obter_por_aluno(id_aluno: int) -> list[dict]:
                 'urlTermoResponsabilidade': row["urlTermoResponsabilidade"],
                 'edital_titulo': row["edital_titulo"],
                 'data_publicacao': row["data_publicacao"],
-                'data_encerramento': row["data_encerramento"],
+                'data_fim_inscricao': row["data_fim_inscricao"],
                 'id_auxilio': row["id_auxilio"],
                 'tipo_auxilio': row["tipo_auxilio"],
                 'valor_mensal': row["valor_mensal"],
