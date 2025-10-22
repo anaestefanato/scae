@@ -1,89 +1,55 @@
 /* ==========================================
    GERENCIAR ADMINISTRADORES - JAVASCRIPT
-   Dados dinâmicos carregados via Jinja2
    ========================================== */
 
-// ===== CARREGAR DADOS DO HTML =====
-// Buscar dados dos administradores do atributo data-administradores
-const mainContent = document.getElementById('mainContent');
-const administradores = mainContent ? JSON.parse(mainContent.getAttribute('data-administradores') || '[]') : [];
-
 document.addEventListener('DOMContentLoaded', function() {
-    // ===== INICIALIZAÇÃO =====
-    initializeAdminManagement();
+    // Configurar eventos dos formulários
+    setupFormValidation();
+    console.log('Sistema de gerenciamento de administradores inicializado');
 });
 
 // ===== VARIÁVEIS GLOBAIS =====
-let selectedAdminId = null;
-
-// ===== INICIALIZAÇÃO =====
-function initializeAdminManagement() {
-    // Configurar tooltips
-    var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
-    var tooltipList = tooltipTriggerList.map(function(tooltipTriggerEl) {
-        return new bootstrap.Tooltip(tooltipTriggerEl);
-    });
-    
-    // Configurar eventos dos formulários
-    setupFormValidation();
-    
-    console.log('Sistema de gerenciamento de administradores inicializado');
-}
+let adminToDeleteId = null;
 
 // ===== BUSCAR ADMINISTRADOR =====
 function searchAdmin() {
     const searchTerm = document.getElementById('searchAdmin').value.trim().toLowerCase();
     
     if (!searchTerm) {
-        // Se não há termo de busca, mostrar todos
         location.reload();
         return;
     }
     
-    // Buscar administrador por nome, matrícula ou email
-    const results = administradores.filter(a => 
-        a.nome.toLowerCase().includes(searchTerm) ||
-        a.matricula.toLowerCase().includes(searchTerm) ||
-        a.email.toLowerCase().includes(searchTerm)
-    );
+    // Buscar na tabela existente
+    const rows = document.querySelectorAll('#adminsTableBody tr');
+    let visibleCount = 0;
     
-    // Atualizar tabela com resultados
-    const tbody = document.getElementById('adminsTableBody');
-    tbody.innerHTML = '';
-    
-    if (results.length === 0) {
-        tbody.innerHTML = `
-            <tr>
-                <td colspan="4" class="text-center text-muted py-4">
-                    <i class="bi bi-search fs-1 d-block mb-2"></i>
-                    Nenhum administrador encontrado com "${searchTerm}"
-                </td>
-            </tr>
-        `;
-    } else {
-        results.forEach(administrador => {
-            tbody.innerHTML += `
-                <tr>
-                    <td><strong>${administrador.nome}</strong></td>
-                    <td>${administrador.email}</td>
-                    <td>${administrador.matricula}</td>
-                    <td>
-                        <div class="action-buttons">
-                            <button class="btn btn-sm btn-outline-info" onclick="viewAdmin(${administrador.id_usuario})" title="Visualizar">
-                                <i class="bi bi-eye"></i>
-                            </button>
-                            <button class="btn btn-sm btn-outline-danger" onclick="deleteAdmin(${administrador.id_usuario})" title="Excluir">
-                                <i class="bi bi-trash"></i>
-                            </button>
-                        </div>
-                    </td>
-                </tr>
-            `;
-        });
-    }
+    rows.forEach(row => {
+        const text = row.textContent.toLowerCase();
+        if (text.includes(searchTerm)) {
+            row.style.display = '';
+            visibleCount++;
+        } else {
+            row.style.display = 'none';
+        }
+    });
     
     // Atualizar contagem
-    document.getElementById('adminsCount').textContent = results.length;
+    document.getElementById('adminsCount').textContent = visibleCount;
+    
+    // Mostrar mensagem se não houver resultados
+    if (visibleCount === 0) {
+        const tbody = document.getElementById('adminsTableBody');
+        const emptyRow = document.createElement('tr');
+        emptyRow.id = 'noResultsRow';
+        emptyRow.innerHTML = `
+            <td colspan="4" class="text-center text-muted py-4">
+                <i class="bi bi-search fs-1 d-block mb-2"></i>
+                Nenhum administrador encontrado com "${searchTerm}"
+            </td>
+        `;
+        tbody.appendChild(emptyRow);
+    }
 }
 
 // ===== LIMPAR BUSCA =====
@@ -91,92 +57,87 @@ function clearSearch() {
     // Limpar campo de busca
     document.getElementById('searchAdmin').value = '';
     
-    // Mostrar todos os administradores novamente
-    const tbody = document.getElementById('adminsTableBody');
-    tbody.innerHTML = '';
+    // Remover linha de "sem resultados" se existir
+    const noResultsRow = document.getElementById('noResultsRow');
+    if (noResultsRow) {
+        noResultsRow.remove();
+    }
     
-    administradores.forEach(administrador => {
-        tbody.innerHTML += `
-            <tr>
-                <td><strong>${administrador.nome}</strong></td>
-                <td>${administrador.email}</td>
-                <td>${administrador.matricula}</td>
-                <td>
-                    <div class="action-buttons">
-                        <button class="btn btn-sm btn-outline-info" onclick="viewAdmin(${administrador.id_usuario})" title="Visualizar">
-                            <i class="bi bi-eye"></i>
-                        </button>
-                        <button class="btn btn-sm btn-outline-danger" onclick="deleteAdmin(${administrador.id_usuario})" title="Excluir">
-                            <i class="bi bi-trash"></i>
-                        </button>
-                    </div>
-                </td>
-            </tr>
-        `;
+    // Mostrar todas as linhas novamente
+    const rows = document.querySelectorAll('#adminsTableBody tr');
+    rows.forEach(row => {
+        row.style.display = '';
     });
     
-    // Atualizar contagem
-    document.getElementById('adminsCount').textContent = administradores.length;
+    // Restaurar contagem original
+    const totalRows = document.querySelectorAll('#adminsTableBody tr:not(#noResultsRow)').length;
+    document.getElementById('adminsCount').textContent = totalRows;
 }
 
 // ===== VISUALIZAR ADMINISTRADOR =====
 function viewAdmin(adminId) {
-    console.log('Visualizar admin:', adminId);
-
+    // Buscar dados da linha correspondente na tabela
+    const rows = document.querySelectorAll('#adminsTableBody tr');
+    let adminData = null;
     
-    // Buscar o administrador pelo id (comparação flexível para string e número)
-    const administrador = administradores.find(a => a.id_usuario == adminId);
-    
-    if (administrador) {
-        // Preencher os campos do modal
-        document.getElementById('viewNome').textContent = administrador.nome || '';
-        document.getElementById('viewMatricula').textContent = administrador.matricula || '';
-        document.getElementById('viewEmail').textContent = administrador.email || '';
-        
-        // Determinar o tipo de perfil
-        let perfil = 'Administrador';
-        if (administrador.tipo_admin === 'super') {
-            perfil = 'Super Administrador';
+    rows.forEach(row => {
+        const viewButton = row.querySelector(`button[onclick*="viewAdmin('${adminId}')"]`);
+        if (viewButton) {
+            const cells = row.querySelectorAll('td');
+            adminData = {
+                nome: cells[0].textContent.trim(),
+                email: cells[1].textContent.trim(),
+                matricula: cells[2].textContent.trim()
+            };
         }
-        document.getElementById('viewPerfil').textContent = perfil;
+    });
+    
+    if (adminData) {
+        // Preencher os campos do modal
+        document.getElementById('viewNome').textContent = adminData.nome;
+        document.getElementById('viewMatricula').textContent = adminData.matricula;
+        document.getElementById('viewEmail').textContent = adminData.email;
+        document.getElementById('viewPerfil').textContent = 'Administrador';
         
         // Abrir o modal
         const modal = new bootstrap.Modal(document.getElementById('viewAdminModal'));
         modal.show();
     } else {
-        console.error('Administrador não encontrado:', adminId);
-        console.log('IDs disponíveis:', administradores.map(a => a.id_usuario));
         alert('Erro ao carregar dados do administrador.');
     }
 }
 
-// ===== EDITAR ADMINISTRADOR =====
-function editAdmin(adminId) {
-    console.log('Editar admin:', adminId);
-    alert(`Funcionalidade de edição do admin ID ${adminId} será implementada.`);
-}
-
 // ===== EXCLUIR ADMINISTRADOR =====
-let adminToDeleteId = null;
-
 function deleteAdmin(adminId) {
-    // Buscar o administrador pelo id (comparação flexível para string e número)
-    const administrador = administradores.find(a => a.id_usuario == adminId);
+    // Guardar o ID para exclusão
+    adminToDeleteId = adminId;
     
-    if (administrador) {
-        // Guardar o ID para exclusão
-        adminToDeleteId = adminId;
-        
+    // Buscar dados da linha correspondente na tabela
+    const rows = document.querySelectorAll('#adminsTableBody tr');
+    let adminData = null;
+    
+    rows.forEach(row => {
+        const deleteButton = row.querySelector(`button[onclick*="deleteAdmin('${adminId}')"]`);
+        if (deleteButton) {
+            const cells = row.querySelectorAll('td');
+            adminData = {
+                nome: cells[0].textContent.trim(),
+                email: cells[1].textContent.trim(),
+                matricula: cells[2].textContent.trim()
+            };
+        }
+    });
+    
+    if (adminData) {
         // Preencher informações no modal
-        document.getElementById('deleteAdminName').textContent = administrador.nome;
-        document.getElementById('deleteAdminMatricula').textContent = administrador.matricula;
-        document.getElementById('deleteAdminEmail').textContent = administrador.email;
+        document.getElementById('deleteAdminName').textContent = adminData.nome;
+        document.getElementById('deleteAdminMatricula').textContent = adminData.matricula;
+        document.getElementById('deleteAdminEmail').textContent = adminData.email;
         
         // Abrir o modal
         const modal = new bootstrap.Modal(document.getElementById('deleteAdminModal'));
         modal.show();
     } else {
-        console.error('Administrador não encontrado:', adminId);
         alert('Erro ao buscar dados do administrador.');
     }
 }
@@ -197,13 +158,11 @@ function confirmDeleteAdmin() {
 
 // ===== EXPORTAR LISTA =====
 function exportAdminsList() {
-    console.log('Exportar lista de administradores');
     alert('Funcionalidade de exportação será implementada.');
 }
 
 // ===== ATUALIZAR LISTA =====
 function refreshAdminsList() {
-    console.log('Atualizando lista de administradores');
     location.reload();
 }
 
@@ -232,8 +191,9 @@ document.addEventListener('keydown', function(event) {
     
     // Escape para limpar busca
     if (event.key === 'Escape') {
-        clearSearch();
+        const searchField = document.getElementById('searchAdmin');
+        if (searchField && searchField.value) {
+            clearSearch();
+        }
     }
 });
-
-console.log('Sistema de gerenciamento de administradores carregado com sucesso!');
