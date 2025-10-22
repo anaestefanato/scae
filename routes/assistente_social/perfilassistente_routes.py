@@ -18,8 +18,17 @@ async def get_inicio(request: Request, usuario_logado: dict = None):
     assistente = usuario_repo.obter_usuario_por_matricula(usuario_logado['matricula'])
     
     # Buscar estatísticas do dashboard
-    estatisticas = obter_estatisticas_dashboard()
-    if not estatisticas:
+    try:
+        estatisticas = obter_estatisticas_dashboard()
+        if not estatisticas:
+            estatisticas = {
+                'editais_ativos': 0,
+                'inscricoes_pendentes': 0,
+                'alunos_beneficiados': 0,
+                'valor_total_mensal': 0.0
+            }
+    except Exception as e:
+        print(f"Erro ao buscar estatísticas: {e}")
         estatisticas = {
             'editais_ativos': 0,
             'inscricoes_pendentes': 0,
@@ -28,11 +37,19 @@ async def get_inicio(request: Request, usuario_logado: dict = None):
         }
 
     # Buscar quantidade de recursos pendentes
-    recursos_pendentes = contar_pendentes()
+    try:
+        recursos_pendentes = contar_pendentes()
+    except Exception as e:
+        print(f"Erro ao contar recursos pendentes: {e}")
+        recursos_pendentes = 0
 
     # Buscar inscrições para análise (primeiros 5)
-    from repo.inscricao_repo import obter_inscricoes_para_analise
-    inscricoes_analise, _ = obter_inscricoes_para_analise(pagina=1, limite=5)
+    try:
+        from repo.inscricao_repo import obter_inscricoes_para_analise
+        inscricoes_analise, _ = obter_inscricoes_para_analise(pagina=1, limite=5)
+    except Exception as e:
+        print(f"Erro ao buscar inscrições para análise: {e}")
+        inscricoes_analise = []
 
     context = {
         "request": request,

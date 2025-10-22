@@ -17,13 +17,16 @@ def inserir(edital: Edital) -> Optional[int]:
     with get_connection() as conn:
         cursor = conn.cursor()
         cursor.execute(INSERIR, (
-            edital.id_edital,
             edital.titulo,
             edital.descricao,
             edital.data_publicacao,
-            edital.data_encerramento,
             edital.arquivo,
-            edital.status))
+            edital.status,
+            edital.data_inicio_inscricao,
+            edital.data_fim_inscricao,
+            edital.data_inicio_vigencia,
+            edital.data_fim_vigencia))
+        conn.commit()
         return cursor.lastrowid
 
 def obter_todos() -> list[Edital]:
@@ -37,9 +40,12 @@ def obter_todos() -> list[Edital]:
                 titulo=row["titulo"],
                 descricao=row["descricao"],
                 data_publicacao=row["data_publicacao"],
-                data_encerramento=row["data_encerramento"],
                 arquivo=row["arquivo"],
-                status=row["status"])
+                status=row["status"],
+                data_inicio_inscricao=row["data_inicio_inscricao"],
+                data_fim_inscricao=row["data_fim_inscricao"],
+                data_inicio_vigencia=row["data_inicio_vigencia"],
+                data_fim_vigencia=row["data_fim_vigencia"])
             for row in rows]
         return editais
 
@@ -55,9 +61,12 @@ def obter_por_id(id: int) -> Optional[Edital]:
             titulo=row["titulo"],
             descricao=row["descricao"],
             data_publicacao=row["data_publicacao"],
-            data_encerramento=row["data_encerramento"],
             arquivo=row["arquivo"],
-            status=row["status"]
+            status=row["status"],
+            data_inicio_inscricao=row["data_inicio_inscricao"],
+            data_fim_inscricao=row["data_fim_inscricao"],
+            data_inicio_vigencia=row["data_inicio_vigencia"],
+            data_fim_vigencia=row["data_fim_vigencia"]
         )
         return edital
 
@@ -67,9 +76,12 @@ def atualizar(edital: Edital) -> bool:
         cursor.execute(ATUALIZAR, (
             edital.titulo,
             edital.descricao,
-            edital.data_encerramento,
             edital.arquivo,
             edital.status,
+            edital.data_inicio_inscricao,
+            edital.data_fim_inscricao,
+            edital.data_inicio_vigencia,
+            edital.data_fim_vigencia,
             edital.id_edital
         ))
         conn.commit()
@@ -94,10 +106,38 @@ def obter_editais_abertos() -> list[dict]:
                 'titulo': row["titulo"],
                 'descricao': row["descricao"],
                 'data_publicacao': row["data_publicacao"],
-                'data_encerramento': row["data_encerramento"],
                 'arquivo': row["arquivo"],
                 'status': row["status"],
+                'data_inicio_inscricao': row["data_inicio_inscricao"],
+                'data_fim_inscricao': row["data_fim_inscricao"],
+                'data_inicio_vigencia': row["data_inicio_vigencia"],
+                'data_fim_vigencia': row["data_fim_vigencia"],
                 'valor_medio': row["valor_medio"] or 0.0
             }
             editais.append(edital)
+        return editais
+
+def obter_editais_visiveis_alunos() -> list[Edital]:
+    """
+    Retorna apenas editais que devem ser visíveis para alunos.
+    Critérios: status ativo e data de publicação <= data atual
+    """
+    from datetime import date
+    with get_connection() as conn:
+        cursor = conn.cursor()
+        cursor.execute(OBTER_EDITAIS_VISIVEIS_ALUNOS, (date.today().strftime('%Y-%m-%d'),))
+        rows = cursor.fetchall()
+        editais = [
+            Edital(
+                id_edital=row["id_edital"],
+                titulo=row["titulo"],
+                descricao=row["descricao"],
+                data_publicacao=row["data_publicacao"],
+                arquivo=row["arquivo"],
+                status=row["status"],
+                data_inicio_inscricao=row["data_inicio_inscricao"],
+                data_fim_inscricao=row["data_fim_inscricao"],
+                data_inicio_vigencia=row["data_inicio_vigencia"],
+                data_fim_vigencia=row["data_fim_vigencia"])
+            for row in rows]
         return editais
