@@ -114,34 +114,34 @@
                             {% for edital in editais_abertos %}
                             <div class="card">
                                 <div class="card-header">
-                                    {% if 'alimenta' in edital.titulo.lower() %}
+                                    {% if 'alimenta' in edital['titulo'].lower() %}
                                         <i class="bi bi-cup-hot me-2"></i>
-                                    {% elif 'transporte' in edital.titulo.lower() %}
+                                    {% elif 'transporte' in edital['titulo'].lower() %}
                                         <i class="bi bi-bus-front me-2"></i>
-                                    {% elif 'moradia' in edital.titulo.lower() %}
+                                    {% elif 'moradia' in edital['titulo'].lower() %}
                                         <i class="bi bi-house me-2"></i>
-                                    {% elif 'material' in edital.titulo.lower() or 'didático' in edital.titulo.lower() %}
+                                    {% elif 'material' in edital['titulo'].lower() or 'didático' in edital['titulo'].lower() %}
                                         <i class="bi bi-book me-2"></i>
                                     {% else %}
                                         <i class="bi bi-file-earmark-text me-2"></i>
                                     {% endif %}
-                                    {{ edital.titulo }}
+                                    {{ edital['titulo'] }}
                                 </div>
                                 <div class="card-body">
-                                    <p><strong>Período de Inscrição:</strong> {{ edital.data_publicacao }} a {{ edital.data_encerramento }}</p>
-                                    {% if edital.valor_medio > 0 %}
-                                        <p><strong>Valor do Auxílio:</strong> R$ {{ "%.2f"|format(edital.valor_medio) }}</p>
+                                    <p><strong>Período de Inscrição:</strong> {{ edital['data_inicio_inscricao'] }} a {{ edital['data_fim_inscricao'] }}</p>
+                                    {% if edital['valor_medio'] and edital['valor_medio'] > 0 %}
+                                        <p><strong>Valor Médio do Auxílio:</strong> R$ {{ "%.2f"|format(edital['valor_medio']) }}</p>
                                     {% endif %}
-                                    <p><strong>Descrição:</strong> {{ edital.descricao }}</p>
-                                    {% if edital.arquivo %}
+                                    <p><strong>Descrição:</strong> {{ edital['descricao'] }}</p>
+                                    {% if edital['arquivo'] %}
                                         <p><strong>Edital:</strong> 
-                                            <a href="{{ edital.arquivo }}" target="_blank" class="text-decoration-none">
+                                            <a href="/static/uploads/{{ edital['arquivo'] }}" target="_blank" class="text-decoration-none">
                                                 <i class="bi bi-download me-1"></i>Baixar Edital
                                             </a>
                                         </p>
                                     {% endif %}
                                     <div class="d-flex justify-content-end mt-3">
-                                        <a href="/aluno/inscricao/{{ edital.id_edital }}" class="btn btn-success">
+                                        <a href="/aluno/editais" class="btn btn-success">
                                             <i class="bi bi-plus-circle me-1"></i>Inscrever-se
                                         </a>
                                     </div>

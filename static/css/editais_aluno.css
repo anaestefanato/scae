@@ -139,8 +139,8 @@ body, .main-content, .container, .card, .table, h2, h3, h4, h5, h6, .btn, .form-
     border-radius: 15px;
     border-left: 5px solid var(--ifes-green);
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
-    padding: 2rem;
-    margin-bottom: 2rem;
+    padding: 1.5rem;
+    margin-bottom: 1.5rem;
     transition: all 0.3s ease;
 }
 
@@ -149,32 +149,33 @@ body, .main-content, .container, .card, .table, h2, h3, h4, h5, h6, .btn, .form-
     transform: translateY(-2px);
 }
 
-.edital-card h3 {
+.edital-card h5 {
     color: var(--ifes-green);
     margin-bottom: 1rem;
-    font-size: 1.4rem;
+    font-size: 1.2rem;
     font-weight: 600;
     font-family: 'Poppins', sans-serif;
 }
 
 .edital-card .section-title {
     display: block;
-    margin-bottom: 1rem;
+    margin-bottom: 0.5rem;
+    margin-top: 0.5rem;
     color: var(--ifes-green);
-    font-size: 1.1rem;
+    font-size: 0.95rem;
     font-weight: 600;
     font-family: 'Poppins', sans-serif;
 }
 
 .edital-card ul {
     padding-left: 1.5rem;
-    margin-bottom: 1.5rem;
+    margin-bottom: 1rem;
 }
 
 .edital-card ul li {
-    margin-bottom: 0.5rem;
-    font-size: 1rem;
-    line-height: 1.5;
+    margin-bottom: 0.4rem;
+    font-size: 0.95rem;
+    line-height: 1.4;
 }
 
 .edital-card ul li a {
@@ -187,6 +188,12 @@ body, .main-content, .container, .card, .table, h2, h3, h4, h5, h6, .btn, .form-
 .edital-card ul li a:hover {
     color: var(--ifes-light-green);
     text-decoration: underline;
+}
+
+.edital-card p {
+    font-size: 0.95rem;
+    line-height: 1.5;
+    color: #555;
 }
 
 /* ===== BOTÕES ===== */

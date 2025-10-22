@@ -5,7 +5,7 @@
 
 {% block head %}
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="/static/css/editais_aluno.css?v=2025102002">
+    <link rel="stylesheet" href="/static/css/editais_aluno.css?v=2025102003">
 {% endblock %}
 
 {% block content %}
@@ -22,209 +22,230 @@
         </div>
     </div>
 
-    <!-- Filtros por Ano/Categoria -->
+    <!-- Mensagens de sucesso/erro -->
+    {% if request.query_params.get('sucesso') %}
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+        <i class="bi bi-check-circle-fill me-2"></i>{{ request.query_params.get('sucesso') }}
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+    {% endif %}
+
+    {% if request.query_params.get('erro') %}
+    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        <i class="bi bi-exclamation-triangle-fill me-2"></i>{{ request.query_params.get('erro') }}
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+    {% endif %}
+
+    <!-- Documentos e Anexos Disponíveis -->
     <div class="card mb-4">
         <div class="card-header">
-            <i class="bi bi-funnel me-2"></i>Filtros de Editais
+            <h5 class="mb-0"><i class="bi bi-files-fill me-2"></i>Documentos e Anexos para Inscrição</h5>
         </div>
         <div class="card-body">
-            <div class="edital-tabs">
-                <button class="edital-tab active">Edital 2025</button>
-                <button class="edital-tab">Editais 2024</button>
-                <button class="edital-tab">Editais 2023</button>
-                <button class="edital-tab">Editais 2022</button>
-                <button class="edital-tab">Editais 2021</button>
-                <button class="edital-tab">Editais 2020</button>
-                <button class="edital-tab">Assistência Estudantil</button>
-                <button class="edital-tab">Todas as Páginas</button>
+            <div class="row">
+                <div class="col-md-4 mb-3">
+                    <div class="d-flex flex-column p-3 bg-light rounded h-100">
+                        <h6 class="mb-2"><i class="bi bi-file-earmark-text text-primary me-2"></i>Anexo I - Formulário Socioeconômico</h6>
+                        <small class="text-muted mb-3">Formulário completo de análise socioeconômica para inscrição no programa.</small>
+                        <div class="mt-auto">
+                            <a class="btn btn-sm btn-outline-primary me-2" href="/static/docs/2025/ANEXO_I_2025.pdf" target="_blank" title="Visualizar Anexo I">
+                                <i class="bi bi-eye"></i> Visualizar
+                            </a>
+                            <a class="btn btn-sm btn-outline-info" href="/static/docs/2025/ANEXO_I_2025.pdf" download title="Baixar Anexo I">
+                                <i class="bi bi-download"></i> Baixar
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4 mb-3">
+                    <div class="d-flex flex-column p-3 bg-light rounded h-100">
+                        <h6 class="mb-2"><i class="bi bi-file-earmark-text text-primary me-2"></i>Anexo V - Declaração de Composição Familiar</h6>
+                        <small class="text-muted mb-3">Declaração detalhada da composição e renda familiar.</small>
+                        <div class="mt-auto">
+                            <a class="btn btn-sm btn-outline-primary me-2" href="/static/docs/2025/ANEXO_V_2025.pdf" target="_blank" title="Visualizar Anexo V">
+                                <i class="bi bi-eye"></i> Visualizar
+                            </a>
+                            <a class="btn btn-sm btn-outline-info" href="/static/docs/2025/ANEXO_V_2025.pdf" download title="Baixar Anexo V">
+                                <i class="bi bi-download"></i> Baixar
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4 mb-3">
+                    <div class="d-flex flex-column p-3 bg-light rounded h-100">
+                        <h6 class="mb-2"><i class="bi bi-file-earmark-text text-primary me-2"></i>Anexo VI - Termo de Compromisso</h6>
+                        <small class="text-muted mb-3">Termo de compromisso para participação no programa de assistência estudantil.</small>
+                        <div class="mt-auto">
+                            <a class="btn btn-sm btn-outline-primary me-2" href="/static/docs/2025/ANEXO_VI_2025.pdf" target="_blank" title="Visualizar Anexo VI">
+                                <i class="bi bi-eye"></i> Visualizar
+                            </a>
+                            <a class="btn btn-sm btn-outline-info" href="/static/docs/2025/ANEXO_VI_2025.pdf" download title="Baixar Anexo VI">
+                                <i class="bi bi-download"></i> Baixar
+                            </a>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
 
     <!-- Lista de Editais -->
-    <div class="row">
-        <div class="col-12">
-            <h4 class="mb-4">Editais Disponíveis</h4>
-            
-            <div class="edital-list">
-                <div class="edital-card">
-                    <h3><i class="bi bi-file-earmark-text me-2"></i>Edital - Programa de Assistência Estudantil 2025</h3>
-                    
-                    <div class="row">
-                        <div class="col-md-8">
-                            <span class="section-title">Documentos e Anexos Disponíveis</span>
-                            <ul>
-                                <li><a href="#" onclick="downloadAnexo('Anexo I')"><i class="bi bi-download me-2"></i>Anexo I - Formulário de Inscrição</a></li>
-                                <li><a href="#" onclick="downloadAnexo('Anexo III')"><i class="bi bi-download me-2"></i>Anexo III - Documentação Necessária</a></li>
-                                <li><a href="#" onclick="downloadAnexo('Anexo IV')"><i class="bi bi-download me-2"></i>Anexo IV - Critérios de Avaliação</a></li>
-                                <li><a href="#" onclick="downloadAnexo('Anexo V')"><i class="bi bi-download me-2"></i>Anexo V - Termo de Compromisso</a></li>
-                                <li><a href="#" onclick="downloadAnexo('Anexo VI')"><i class="bi bi-download me-2"></i>Anexo VI - Cronograma Detalhado</a></li>
-                            </ul>
+    <h4 class="mb-4">Editais Publicados</h4>
+    
+    {% if editais %}
+        <div class="edital-list">
+            {% for edital in editais %}
+            <div class="edital-card mb-4">
+                <div class="row align-items-start">
+                    <div class="col-md-8">
+                        <h5 class="mb-3"><i class="bi bi-file-earmark-text me-2"></i>{{ edital.titulo }}</h5>
+                                
+                                <span class="section-title">Descrição</span>
+                                <p class="mb-3">{{ edital.descricao }}</p>
+                                
+                                <span class="section-title">Documento do Edital</span>
+                                <ul class="mb-3">
+                                    <li>
+                                        <a href="/static/{{ edital.arquivo }}" target="_blank">
+                                            <i class="bi bi-file-earmark-pdf text-danger me-2"></i>{{ edital.titulo }} - Edital Completo
+                                        </a>
+                                        <a href="/static/{{ edital.arquivo }}" download class="ms-3 text-decoration-none">
+                                            <i class="bi bi-download me-1"></i>Baixar PDF
+                                        </a>
+                                    </li>
+                                </ul>
+                                
+                                {% if edital.data_inicio_inscricao and edital.data_fim_inscricao %}
+                                <span class="section-title">Período de Inscrição</span>
+                                <p class="mb-2">
+                                    <i class="bi bi-calendar-event me-2"></i>
+                                    {% set data_inicio = edital.data_inicio_inscricao.split('-') %}
+                                    {% set data_fim = edital.data_fim_inscricao.split('-') %}
+                                    De {{ data_inicio[2] }}/{{ data_inicio[1] }}/{{ data_inicio[0] }} até {{ data_fim[2] }}/{{ data_fim[1] }}/{{ data_fim[0] }}
+                                </p>
+                                {% endif %}
+                                
+                                {% if edital.data_inicio_vigencia and edital.data_fim_vigencia %}
+                                <span class="section-title">Vigência dos Auxílios</span>
+                                <p class="mb-2">
+                                    <i class="bi bi-calendar-range me-2"></i>
+                                    {% set data_inicio_vig = edital.data_inicio_vigencia.split('-') %}
+                                    {% set data_fim_vig = edital.data_fim_vigencia.split('-') %}
+                                    De {{ data_inicio_vig[2] }}/{{ data_inicio_vig[1] }}/{{ data_inicio_vig[0] }} até {{ data_fim_vig[2] }}/{{ data_fim_vig[1] }}/{{ data_fim_vig[0] }}
+                                </p>
+                                {% endif %}
+                            </div>
                             
-                            <span class="section-title">Resultados Publicados</span>
-                            <ul>
-                                <li><a href="#" onclick="downloadAnexo('Resultado preliminar (renovação)')"><i class="bi bi-file-earmark-check me-2"></i>Resultado preliminar (renovação)</a></li>
-                                <li><a href="#" onclick="downloadAnexo('Resultado final (renovação)')"><i class="bi bi-file-earmark-check me-2"></i>Resultado final (renovação)</a></li>
-                                <li><a href="#" onclick="downloadAnexo('Resultado preliminar (atualização)')"><i class="bi bi-file-earmark-check me-2"></i>Resultado preliminar (atualização)</a></li>
-                                <li><a href="#" onclick="downloadAnexo('Resultado preliminar (1º participação)')"><i class="bi bi-file-earmark-check me-2"></i>Resultado preliminar (1º participação)</a></li>
-                                <li><a href="#" onclick="downloadAnexo('Resultado final (atualização)')"><i class="bi bi-file-earmark-check me-2"></i>Resultado final (atualização)</a></li>
-                                <li><a href="#" onclick="downloadAnexo('Resultado final (1º participação)')"><i class="bi bi-file-earmark-check me-2"></i>Resultado final (1º participação)</a></li>
-                                <li><a href="#" onclick="downloadAnexo('Resultado final (atualização retificado)')"><i class="bi bi-file-earmark-check me-2"></i>Resultado final (atualização retificado)</a></li>
-                                <li><a href="#" onclick="downloadAnexo('Resultado final (1º participação retificado)')"><i class="bi bi-file-earmark-check me-2"></i>Resultado final (1º participação retificado)</a></li>
-                            </ul>
-                        </div>
-                        
-                        <div class="col-md-4">
-                            <div class="card">
-                                <div class="card-header">
-                                    <i class="bi bi-info-circle me-2"></i>Informações do Edital
-                                </div>
-                                <div class="card-body">
-                                    <p><strong>Ano:</strong> 2025</p>
-                                    <p><strong>Status:</strong> <span class="badge bg-success">Ativo</span></p>
-                                    <p><strong>Tipo:</strong> Assistência Estudantil</p>
-                                    <p><strong>Modalidades:</strong></p>
-                                    <ul class="mb-3">
-                                        <li>Auxílio Alimentação</li>
-                                        <li>Auxílio Transporte</li>
-                                        <li>Auxílio Moradia</li>
-                                        <li>Material Didático</li>
-                                    </ul>
-                                    
-                                    <div class="d-grid gap-2">
-                                        <button class="btn btn-inscrever" data-bs-toggle="modal" data-bs-target="#modalDetalhes" onclick="mostrarDetalhesEdital('Edital 2025', 'Edital completo para programas de assistência estudantil do ano de 2025.')">
-                                            <i class="bi bi-pencil-square me-2"></i>Inscreva-se
-                                        </button>
+                            <div class="col-md-4">
+                                <div class="card" style="height: fit-content;">
+                                    <div class="card-header">
+                                        <i class="bi bi-info-circle me-2"></i>Informações do Edital
+                                    </div>
+                                    <div class="card-body" style="padding: 1rem;">
+                                        <p class="mb-2"><strong>Data de Publicação:</strong><br>
+                                            {% set data_pub = edital.data_publicacao.split('-') %}
+                                            {{ data_pub[2] }}/{{ data_pub[1] }}/{{ data_pub[0] }}
+                                        </p>
+                                        <p class="mb-2"><strong>Status:</strong><br>
+                                            {% if edital.status == 'ativo' %}
+                                                <span class="badge bg-success">Ativo</span>
+                                            {% else %}
+                                                <span class="badge bg-secondary">Inativo</span>
+                                            {% endif %}
+                                        </p>
+                                        
+                        {% if edital.inscricoes_abertas %}
+                            <p class="mb-4"><strong>Inscrições:</strong><br>
+                                <span class="badge bg-success">
+                                    <i class="bi bi-check-circle me-1"></i>Abertas
+                                </span>
+                            </p>
+                        {% elif edital.inscricoes_futuras %}
+                            <p class="mb-4"><strong>Inscrições:</strong><br>
+                                <span class="badge bg-info text-dark">
+                                    <i class="bi bi-clock me-1"></i>Em Breve
+                                </span>
+                            </p>
+                        {% elif edital.inscricoes_encerradas %}
+                            <p class="mb-4"><strong>Inscrições:</strong><br>
+                                <span class="badge bg-warning text-dark">
+                                    <i class="bi bi-exclamation-circle me-1"></i>Encerradas
+                                </span>
+                            </p>
+                        {% endif %}                                        <div class="d-grid gap-2">
+                                            {% if edital.inscricoes_abertas %}
+                                                <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#modalInscricao{{ edital.id_edital }}">
+                                                    <i class="bi bi-pencil-square me-2"></i>Inscreva-se
+                                                </button>
+                                            {% elif edital.inscricoes_futuras %}
+                                                <button class="btn btn-secondary" disabled>
+                                                    <i class="bi bi-clock me-2"></i>Inscrições em Breve
+                                                </button>
+                                            {% else %}
+                                                <button class="btn btn-secondary" disabled>
+                                                    <i class="bi bi-lock me-2"></i>Inscrições Encerradas
+                                                </button>
+                                            {% endif %}
+                                            
+                                            <a href="/static/{{ edital.arquivo }}" download class="btn btn-outline-info btn-sm">
+                                                <i class="bi bi-download me-2"></i>Baixar Edital
+                                            </a>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                </div>
-
-                <!-- Card adicional para editais anteriores (exemplo) -->
-                <div class="edital-card" style="display: none;">
-                    <h3><i class="bi bi-file-earmark-text me-2"></i>Edital - Programa de Assistência Estudantil 2024</h3>
                     
-                    <div class="row">
-                        <div class="col-md-8">
-                            <span class="section-title">Arquivo do Edital 2024</span>
-                            <ul>
-                                <li><a href="#" onclick="downloadAnexo('Edital Completo 2024')"><i class="bi bi-download me-2"></i>Edital Completo 2024</a></li>
-                                <li><a href="#" onclick="downloadAnexo('Resultados Finais 2024')"><i class="bi bi-file-earmark-check me-2"></i>Resultados Finais 2024</a></li>
-                            </ul>
-                        </div>
-                        
-                        <div class="col-md-4">
-                            <div class="card">
-                                <div class="card-header">
-                                    <i class="bi bi-archive me-2"></i>Edital Arquivado
+                    <!-- Modal de Inscrição para cada edital -->
+                    <div class="modal fade" id="modalInscricao{{ edital.id_edital }}" tabindex="-1" aria-labelledby="modalInscricaoLabel{{ edital.id_edital }}" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="modalInscricaoLabel{{ edital.id_edital }}">
+                                        <i class="bi bi-pencil-square me-2"></i>Inscrever-se no Edital
+                                    </h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                 </div>
-                                <div class="card-body">
-                                    <p><strong>Ano:</strong> 2024</p>
-                                    <p><strong>Status:</strong> <span class="badge bg-secondary">Finalizado</span></p>
-                                    <p><strong>Tipo:</strong> Assistência Estudantil</p>
+                                <div class="modal-body">
+                                    <h6>{{ edital.titulo }}</h6>
+                                    <p class="text-muted">{{ edital.descricao }}</p>
                                     
-                                    <div class="d-grid gap-2">
-                                        <button class="btn btn-detalhes" data-bs-toggle="modal" data-bs-target="#modalDetalhes" onclick="mostrarDetalhesEdital('Edital 2024', 'Edital arquivado do ano de 2024.')">
-                                            <i class="bi bi-eye me-2"></i>Ver Detalhes
-                                        </button>
+                                    <div class="alert alert-info">
+                                        <i class="bi bi-info-circle me-2"></i>
+                                        Escolha o tipo de inscrição:
                                     </div>
+                                    
+                                    <div class="d-flex flex-column gap-3 mt-4">
+                                        <a href="/aluno/editais/primeira-inscricao" class="btn btn-success">
+                                            <i class="bi bi-person-plus me-2"></i>Primeira Inscrição
+                                        </a>
+                                        <a href="/aluno/editais/renovacao" class="btn btn-info">
+                                            <i class="bi bi-arrow-repeat me-2"></i>Renovação
+                                        </a>
+                                    </div>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                                        <i class="bi bi-x-circle me-2"></i>Fechar
+                                    </button>
                                 </div>
                             </div>
                         </div>
                     </div>
+                    {% endfor %}
                 </div>
-            </div>
-        </div>
-    </div>
+            {% else %}
+                <div class="alert alert-info">
+                    <i class="bi bi-info-circle me-2"></i>
+                    Nenhum edital publicado no momento. Aguarde novas publicações.
+                </div>
+            {% endif %}
 </div>
 
-    <!-- Modal Detalhes Edital -->
-    <div class="modal fade" id="modalDetalhes" tabindex="-1">
-        <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title">Detalhes do Edital 2025</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                </div>
-                <div class="modal-body">
-                    <p>Aqui estão as informações detalhadas do edital selecionado.</p>
-                    <div class="d-flex gap-3 mt-4">
-                        <a href="/aluno/editais/primeira-inscricao" class="btn btn-success">Primeira inscrição</a>
-                        <a href="/aluno/editais/renovacao" class="btn btn-info">Renovação</a>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-
-<!-- Modal de Detalhes do Edital -->
-<div class="modal fade" id="modalDetalhes" tabindex="-1" aria-labelledby="modalDetalhesLabel" aria-hidden="true">
-    <div class="modal-dialog modal-lg">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="modalDetalhesLabel">
-                    <i class="bi bi-file-earmark-text me-2"></i>Detalhes do Edital
-                </h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <div id="detalhesConteudo">
-                    <div class="row">
-                        <div class="col-md-6">
-                            <h6 class="text-success mb-3">Informações Gerais</h6>
-                            <p><strong>Título:</strong> <span id="detalheTitulo">-</span></p>
-                            <p><strong>Ano:</strong> <span id="detalheAno">-</span></p>
-                            <p><strong>Status:</strong> <span id="detalheStatus">-</span></p>
-                            <p><strong>Tipo:</strong> <span id="detalheTipo">-</span></p>
-                        </div>
-                        <div class="col-md-6">
-                            <h6 class="text-success mb-3">Prazos Importantes</h6>
-                            <p><strong>Período de Inscrições:</strong> 01/02/2025 a 28/02/2025</p>
-                            <p><strong>Resultado Preliminar:</strong> 15/03/2025</p>
-                            <p><strong>Período de Recursos:</strong> 16/03/2025 a 20/03/2025</p>
-                            <p><strong>Resultado Final:</strong> 30/03/2025</p>
-                        </div>
-                    </div>
-                    
-                    <hr>
-                    
-                    <h6 class="text-success mb-3">Descrição</h6>
-                    <p id="detalheDescricao">-</p>
-                    
-                    <h6 class="text-success mb-3">Modalidades de Auxílio</h6>
-                    <ul class="list-unstyled">
-                        <li><i class="bi bi-check-circle-fill text-success me-2"></i>Auxílio Alimentação - R$ 600,00/mês</li>
-                        <li><i class="bi bi-check-circle-fill text-success me-2"></i>Auxílio Transporte - R$ 300,00/mês</li>
-                        <li><i class="bi bi-check-circle-fill text-success me-2"></i>Auxílio Moradia - R$ 400,00/mês</li>
-                        <li><i class="bi bi-check-circle-fill text-success me-2"></i>Material Didático - R$ 200,00/semestre</li>
-                    </ul>
-                    
-                    <h6 class="text-success mb-3">Requisitos Principais</h6>
-                    <ul>
-                        <li>Estar regularmente matriculado</li>
-                        <li>Renda familiar per capita até 1,5 salário mínimo</li>
-                        <li>Não ter sido beneficiado em outros programas simultâneos</li>
-                        <li>Apresentar documentação completa e atualizada</li>
-                    </ul>
-                </div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
-                    <i class="bi bi-x-circle me-2"></i>Fechar
-                </button>
-                <button type="button" class="btn btn-success">
-                    <i class="bi bi-download me-2"></i>Baixar Edital Completo
-                </button>
-            </div>
-        </div>
-    </div>
-</div>
 
 <script src="/static/js/toast-manager.js"></script>
-<script src="/static/js/editais_aluno.js"></script>
 <script>
     // Handler para mensagens de sucesso/erro via URL params
     document.addEventListener('DOMContentLoaded', function() {
@@ -248,3 +269,4 @@
     });
 </script>
 {% endblock %}
+

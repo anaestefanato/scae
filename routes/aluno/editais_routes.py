@@ -37,10 +37,70 @@ async def get_editais(request: Request, usuario_logado: dict = None):
         return RedirectResponse("/aluno/perfil", status_code=303)
 
     from repo import edital_repo
+    from datetime import date
+    
     aluno = usuario_repo.obter_usuario_por_matricula(usuario_logado['matricula'])
-    # Obter apenas editais que já foram publicados (data de publicação <= hoje)
-    editais = edital_repo.obter_editais_visiveis_alunos()
-    response = templates.TemplateResponse("/aluno/editais.html", {"request": request, "aluno": aluno, "editais": editais})
+    
+    # Obter todos os editais visíveis (publicados e ativos)
+    todos_editais = edital_repo.obter_editais_visiveis_alunos()
+    
+    # Determinar se cada edital está dentro do período de inscrição
+    hoje = date.today()
+    editais_com_status = []
+    
+    for edital in todos_editais:
+        edital_dict = {
+            'id_edital': edital.id_edital,
+            'titulo': edital.titulo,
+            'descricao': edital.descricao,
+            'data_publicacao': edital.data_publicacao,
+            'arquivo': edital.arquivo,
+            'status': edital.status,
+            'data_inicio_inscricao': edital.data_inicio_inscricao,
+            'data_fim_inscricao': edital.data_fim_inscricao,
+            'data_inicio_vigencia': edital.data_inicio_vigencia,
+            'data_fim_vigencia': edital.data_fim_vigencia,
+            'inscricoes_abertas': False,
+            'inscricoes_futuras': False,
+            'inscricoes_encerradas': False
+        }
+        
+        # Verificar se está no período de inscrição
+        if edital.data_inicio_inscricao and edital.data_fim_inscricao:
+            try:
+                data_inicio = datetime.strptime(edital.data_inicio_inscricao, '%Y-%m-%d').date()
+                data_fim = datetime.strptime(edital.data_fim_inscricao, '%Y-%m-%d').date()
+                
+                if hoje < data_inicio:
+                    edital_dict['inscricoes_futuras'] = True
+                elif hoje > data_fim:
+                    edital_dict['inscricoes_encerradas'] = True
+                else:
+                    edital_dict['inscricoes_abertas'] = True
+            except:
+                edital_dict['inscricoes_abertas'] = False
+        
+        editais_com_status.append(edital_dict)
+    
+    # Ordenar editais: primeiro os com inscrições abertas, depois futuros, depois encerrados
+    def ordenar_editais(edital):
+        if edital['inscricoes_abertas']:
+            return (0, edital['data_fim_inscricao'])  # Inscrições abertas primeiro, ordenados por data fim
+        elif edital['inscricoes_futuras']:
+            return (1, edital['data_inicio_inscricao'])  # Inscrições futuras em segundo, ordenados por data início
+        else:
+            return (2, edital['data_publicacao'])  # Encerradas por último, ordenados por data publicação
+    
+    editais_com_status.sort(key=ordenar_editais)
+    
+    response = templates.TemplateResponse(
+        "/aluno/editais.html", 
+        {
+            "request": request, 
+            "aluno": aluno, 
+            "editais": editais_com_status
+        }
+    )
     return response
 
 @router.get("/editais/detalhes")
