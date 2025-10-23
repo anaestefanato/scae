@@ -13,7 +13,7 @@ def log_debug(mensagem):
         timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         f.write(f"[{timestamp}] {mensagem}\n")
 
-from repo import usuario_repo, inscricao_repo, aluno_repo, auxilio_repo
+from repo import usuario_repo, inscricao_repo, aluno_repo, auxilio_repo, edital_repo
 from repo.auxilio_transporte_repo import AuxilioTransporteRepo
 from repo.auxilio_moradia_repo import AuxilioMoradiaRepo
 from model.inscricao_model import Inscricao
@@ -121,6 +121,13 @@ async def get_editais_primeira_inscricao(request: Request, usuario_logado: dict 
 
     aluno = aluno_repo.obter_por_matricula(usuario_logado['matricula'])
     
+    # Buscar edital ativo para inscrição
+    editais_visiveis = edital_repo.obter_editais_visiveis_alunos()
+    edital_ativo = editais_visiveis[0] if editais_visiveis else None
+    
+    if not edital_ativo:
+        return RedirectResponse("/aluno/editais?erro=Não há editais abertos para inscrição no momento.", status_code=303)
+    
     # Buscar inscrição existente (se houver)
     inscricoes = inscricao_repo.obter_por_aluno(aluno.id_usuario)
     inscricao_existente = inscricoes[0] if inscricoes else None
@@ -134,7 +141,8 @@ async def get_editais_primeira_inscricao(request: Request, usuario_logado: dict 
             "request": request, 
             "aluno": aluno,
             "campo_erro": campo_erro,
-            "inscricao": inscricao_existente
+            "inscricao": inscricao_existente,
+            "edital": edital_ativo
         }
     )
     return response
@@ -541,7 +549,19 @@ async def post_editais_primeira_inscricao(
         
         aluno_repo.atualizar(aluno)
         
-        # 5. Criar diretório para upload de arquivos
+        # 5. Buscar edital ativo para inscrição
+        editais_visiveis = edital_repo.obter_editais_visiveis_alunos()
+        edital_ativo = editais_visiveis[0] if editais_visiveis else None
+        
+        if not edital_ativo:
+            return RedirectResponse(
+                "/aluno/editais?erro=Não há editais abertos para inscrição no momento.", 
+                status_code=303
+            )
+        
+        id_edital_ativo = edital_ativo.id_edital
+        
+        # 6. Criar diretório para upload de arquivos
         upload_dir = os.path.join("static", "uploads", "inscricoes", str(aluno.id_usuario))
         os.makedirs(upload_dir, exist_ok=True)
         
@@ -578,11 +598,10 @@ async def post_editais_primeira_inscricao(
         anexo_3_path = await salvar_arquivo(anexo_3, "anexo_3")
         
         # 8. Criar inscrição
-        # TODO: Buscar edital ativo - por enquanto usando id_edital = 1
         nova_inscricao = Inscricao(
             id_inscricao=0,
             id_aluno=aluno.id_usuario,
-            id_edital=1,  # Ajustar para buscar edital ativo
+            id_edital=id_edital_ativo,  # Usando edital ativo encontrado
             data_inscricao=datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
             status="pendente",
             urlDocumentoIdentificacao=doc_identificacao_path,
@@ -590,7 +609,7 @@ async def post_editais_primeira_inscricao(
             urlTermoResponsabilidade=anexo_3_path
         )
         id_inscricao = inscricao_repo.inserir(nova_inscricao)
-        print(f"[DEBUG] Inscrição criada com ID: {id_inscricao}")
+        print(f"[DEBUG] Inscrição criada com ID: {id_inscricao} para edital {id_edital_ativo}")
         print(f"[DEBUG] Auxílios selecionados: {auxilios}")
         
         # 9. Processar auxílio de transporte (se selecionado)
@@ -612,7 +631,7 @@ async def post_editais_primeira_inscricao(
                 # Criar registro de auxílio transporte
                 auxilio_transporte = AuxilioTransporte(
                     id_auxilio=0,
-                    id_edital=1,
+                    id_edital=id_edital_ativo,
                     id_inscricao=id_inscricao,
                     descricao=f"Auxílio Transporte - {tipo_transporte if tipo_transporte else 'Não especificado'}",
                     valor_mensal=300.0,  # Valor padrão
@@ -656,7 +675,7 @@ async def post_editais_primeira_inscricao(
                 # Criar registro de auxílio moradia
                 auxilio_moradia = AuxilioMoradia(
                     id_auxilio=0,
-                    id_edital=1,
+                    id_edital=id_edital_ativo,
                     id_inscricao=id_inscricao,
                     descricao="Auxílio Moradia",
                     valor_mensal=400.0,  # Valor padrão
@@ -684,7 +703,7 @@ async def post_editais_primeira_inscricao(
                 print(f"[DEBUG] Processando auxílio alimentação para inscrição {id_inscricao}")
                 auxilio_alimentacao = Auxilio(
                     id_auxilio=0,
-                    id_edital=1,
+                    id_edital=id_edital_ativo,
                     id_inscricao=id_inscricao,
                     descricao="Auxílio Alimentação",
                     valor_mensal=600.0,  # Valor padrão
@@ -708,7 +727,7 @@ async def post_editais_primeira_inscricao(
                 print(f"[DEBUG] Processando auxílio material para inscrição {id_inscricao}")
                 auxilio_material = Auxilio(
                     id_auxilio=0,
-                    id_edital=1,
+                    id_edital=id_edital_ativo,
                     id_inscricao=id_inscricao,
                     descricao="Auxílio Material Didático",
                     valor_mensal=200.0,  # Valor padrão (por semestre, mas representado mensalmente)
@@ -1109,7 +1128,19 @@ async def post_editais_renovacao(
         gasto_passagens_dia_tratado = converter_para_float(gasto_passagens_dia)
         gasto_van_mensal_tratado = converter_para_float(gasto_van_mensal)
         
-        # 2. Combinar auxílios de renovação e novos
+        # 2. Buscar edital ativo para renovação
+        editais_visiveis = edital_repo.obter_editais_visiveis_alunos()
+        edital_ativo = editais_visiveis[0] if editais_visiveis else None
+        
+        if not edital_ativo:
+            return RedirectResponse(
+                "/aluno/editais?erro=Não há editais abertos para renovação no momento.", 
+                status_code=303
+            )
+        
+        id_edital_ativo = edital_ativo.id_edital
+        
+        # 3. Combinar auxílios de renovação e novos
         auxilios_total = list(set(auxilios_renovacao + auxilios_novos))
         
         # 3. Validar dados do formulário usando o DTO
@@ -1321,7 +1352,7 @@ async def post_editais_renovacao(
         nova_inscricao = Inscricao(
             id_inscricao=0,
             id_aluno=aluno.id_usuario,
-            id_edital=1,  # TODO: buscar edital ativo
+            id_edital=id_edital_ativo,  # Usando edital ativo encontrado
             data_inscricao=datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
             status="pendente",
             urlDocumentoIdentificacao=doc_identificacao_path,
@@ -1344,7 +1375,7 @@ async def post_editais_renovacao(
             
             auxilio_transporte = AuxilioTransporte(
                 id_auxilio=0,
-                id_edital=1,
+                id_edital=id_edital_ativo,
                 id_inscricao=id_inscricao,
                 descricao=f"Auxílio Transporte - Renovação - {tipo_transporte if tipo_transporte else 'Não especificado'}",
                 valor_mensal=300.0,
@@ -1373,7 +1404,7 @@ async def post_editais_renovacao(
             
             auxilio_moradia = AuxilioMoradia(
                 id_auxilio=0,
-                id_edital=1,
+                id_edital=id_edital_ativo,
                 id_inscricao=id_inscricao,
                 descricao="Auxílio Moradia - Renovação",
                 valor_mensal=400.0,
@@ -1391,7 +1422,7 @@ async def post_editais_renovacao(
         if "alimentacao" in auxilios_total:
             auxilio_alimentacao = Auxilio(
                 id_auxilio=0,
-                id_edital=1,
+                id_edital=id_edital_ativo,
                 id_inscricao=id_inscricao,
                 descricao="Auxílio Alimentação",
                 valor_mensal=600.0,
@@ -1405,7 +1436,7 @@ async def post_editais_renovacao(
         if "material" in auxilios_total:
             auxilio_material = Auxilio(
                 id_auxilio=0,
-                id_edital=1,
+                id_edital=id_edital_ativo,
                 id_inscricao=id_inscricao,
                 descricao="Auxílio Material Didático",
                 valor_mensal=200.0,

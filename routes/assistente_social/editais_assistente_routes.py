@@ -22,12 +22,56 @@ async def get_editais_assistente(request: Request, usuario_logado: dict = None):
     Permite visualizar, publicar e gerenciar editais, cronogramas, anexos e resultados.
     """
     assistente = usuario_repo.obter_usuario_por_matricula(usuario_logado['matricula'])
-    editais = edital_repo.obter_todos()
+    editais_raw = edital_repo.obter_todos()
+    
+    # Adicionar flags de status de inscrição para cada edital
+    from datetime import datetime
+    from dataclasses import asdict
+    editais = []
+    editais_ativos = 0
+    inscricoes_abertas = 0
+    
+    for edital_obj in editais_raw:
+        # Converter dataclass para dict
+        edital_dict = asdict(edital_obj)
+        
+        # Verificar status de inscrições baseado nas datas
+        hoje = datetime.now().date()
+        
+        inscricoes_abertas_flag = False
+        inscricoes_encerradas_flag = False
+        inscricoes_futuras_flag = False
+        
+        if edital_dict.get('data_inicio_inscricao') and edital_dict.get('data_fim_inscricao'):
+            data_inicio = datetime.strptime(edital_dict['data_inicio_inscricao'], '%Y-%m-%d').date()
+            data_fim = datetime.strptime(edital_dict['data_fim_inscricao'], '%Y-%m-%d').date()
+            
+            if hoje < data_inicio:
+                inscricoes_futuras_flag = True
+            elif data_inicio <= hoje <= data_fim:
+                inscricoes_abertas_flag = True
+                if edital_dict.get('status') == 'ativo':
+                    inscricoes_abertas += 1
+            else:
+                inscricoes_encerradas_flag = True
+        
+        # Contar editais ativos
+        if edital_dict.get('status') == 'ativo':
+            editais_ativos += 1
+        
+        # Adicionar flags ao dicionário
+        edital_dict['inscricoes_abertas'] = inscricoes_abertas_flag
+        edital_dict['inscricoes_encerradas'] = inscricoes_encerradas_flag
+        edital_dict['inscricoes_futuras'] = inscricoes_futuras_flag
+        
+        editais.append(edital_dict)
     
     context = {
         "request": request,
         "assistente": assistente,
-        "editais": editais
+        "editais": editais,
+        "editais_ativos": editais_ativos,
+        "inscricoes_abertas": inscricoes_abertas
     }
     
     response = templates.TemplateResponse("/assistente/editais_assist.html", context)
@@ -158,5 +202,169 @@ async def publicar_edital(
         print(f"Traceback completo:\n{traceback.format_exc()}")
         return RedirectResponse(
             f"/assistente/editais?erro=Erro ao processar publicação: {str(e)}",
+            status_code=status.HTTP_303_SEE_OTHER
+        )
+
+
+@router.post("/editais/editar")
+@requer_autenticacao("assistente")
+async def editar_edital(
+    request: Request,
+    id_edital: int = Form(...),
+    titulo: str = Form(...),
+    descricao: str = Form(...),
+    data_inicio_inscricao: str = Form(...),
+    data_fim_inscricao: str = Form(...),
+    data_inicio_vigencia: str = Form(...),
+    data_fim_vigencia: str = Form(...),
+    status: str = Form(None),
+    usuario_logado: dict = None
+):
+    """
+    Edita um edital existente.
+    """
+    try:
+        # Buscar edital existente
+        edital_atual = edital_repo.obter_por_id(id_edital)
+        if not edital_atual:
+            return RedirectResponse(
+                "/assistente/editais?erro=Edital não encontrado",
+                status_code=status.HTTP_303_SEE_OTHER
+            )
+        
+        # Determinar status (checkbox retorna None quando desmarcado)
+        novo_status = "ativo" if status else "inativo"
+        
+        # Criar edital atualizado
+        edital_atualizado = Edital(
+            id_edital=id_edital,
+            titulo=titulo,
+            descricao=descricao,
+            data_publicacao=edital_atual.data_publicacao,  # Mantém a data original
+            arquivo=edital_atual.arquivo,  # Mantém o arquivo original
+            status=novo_status,
+            data_inicio_inscricao=data_inicio_inscricao,
+            data_fim_inscricao=data_fim_inscricao,
+            data_inicio_vigencia=data_inicio_vigencia,
+            data_fim_vigencia=data_fim_vigencia
+        )
+        
+        # Atualizar no banco
+        sucesso = edital_repo.atualizar(edital_atualizado)
+        
+        if sucesso:
+            return RedirectResponse(
+                "/assistente/editais?sucesso=Edital atualizado com sucesso",
+                status_code=status.HTTP_303_SEE_OTHER
+            )
+        else:
+            return RedirectResponse(
+                "/assistente/editais?erro=Erro ao atualizar edital",
+                status_code=status.HTTP_303_SEE_OTHER
+            )
+    
+    except Exception as e:
+        import traceback
+        print(f"Erro ao editar edital: {e}")
+        print(f"Traceback completo:\n{traceback.format_exc()}")
+        return RedirectResponse(
+            f"/assistente/editais?erro=Erro ao processar edição: {str(e)}",
+            status_code=status.HTTP_303_SEE_OTHER
+        )
+
+
+@router.post("/editais/excluir")
+@requer_autenticacao("assistente")
+async def excluir_edital(
+    request: Request,
+    id_edital: int = Form(...),
+    usuario_logado: dict = None
+):
+    """
+    Exclui um edital do sistema.
+    """
+    try:
+        # Buscar edital para obter caminho do arquivo
+        edital = edital_repo.obter_por_id(id_edital)
+        if not edital:
+            return RedirectResponse(
+                "/assistente/editais?erro=Edital não encontrado",
+                status_code=status.HTTP_303_SEE_OTHER
+            )
+        
+        # Excluir do banco
+        sucesso = edital_repo.excluir(id_edital)
+        
+        if sucesso:
+            # Tentar excluir o arquivo físico (opcional - não falha se não conseguir)
+            try:
+                caminho_arquivo = edital.arquivo.replace("/static/", "static/")
+                if os.path.exists(caminho_arquivo):
+                    os.remove(caminho_arquivo)
+            except Exception as e:
+                print(f"Aviso: Não foi possível excluir arquivo físico: {e}")
+            
+            return RedirectResponse(
+                "/assistente/editais?sucesso=Edital excluído com sucesso",
+                status_code=status.HTTP_303_SEE_OTHER
+            )
+        else:
+            return RedirectResponse(
+                "/assistente/editais?erro=Erro ao excluir edital",
+                status_code=status.HTTP_303_SEE_OTHER
+            )
+    
+    except Exception as e:
+        import traceback
+        print(f"Erro ao excluir edital: {e}")
+        print(f"Traceback completo:\n{traceback.format_exc()}")
+        return RedirectResponse(
+            f"/assistente/editais?erro=Erro ao processar exclusão: {str(e)}",
+            status_code=status.HTTP_303_SEE_OTHER
+        )
+
+
+@router.post("/editais/alterar-visibilidade")
+@requer_autenticacao("assistente")
+async def alterar_visibilidade_edital(
+    request: Request,
+    id_edital: int = Form(...),
+    status: str = Form(...),
+    usuario_logado: dict = None
+):
+    """
+    Altera apenas a visibilidade de um edital (ativo/inativo).
+    """
+    try:
+        # Buscar edital existente
+        edital = edital_repo.obter_por_id(id_edital)
+        if not edital:
+            return RedirectResponse(
+                "/assistente/editais?erro=Edital não encontrado",
+                status_code=status.HTTP_303_SEE_OTHER
+            )
+        
+        # Atualizar apenas o status
+        edital.status = status
+        sucesso = edital_repo.atualizar(edital)
+        
+        if sucesso:
+            msg = "Edital agora está visível para os alunos" if status == "ativo" else "Edital foi ocultado dos alunos"
+            return RedirectResponse(
+                f"/assistente/editais?sucesso={msg}",
+                status_code=status.HTTP_303_SEE_OTHER
+            )
+        else:
+            return RedirectResponse(
+                "/assistente/editais?erro=Erro ao alterar visibilidade",
+                status_code=status.HTTP_303_SEE_OTHER
+            )
+    
+    except Exception as e:
+        import traceback
+        print(f"Erro ao alterar visibilidade: {e}")
+        print(f"Traceback completo:\n{traceback.format_exc()}")
+        return RedirectResponse(
+            f"/assistente/editais?erro=Erro ao processar alteração: {str(e)}",
             status_code=status.HTTP_303_SEE_OTHER
         )

@@ -151,7 +151,11 @@ WHERE i.status = 'pendente'
 OBTER_ESTATISTICAS_DASHBOARD = """
 SELECT 
     (SELECT COALESCE(COUNT(*), 0) FROM edital WHERE status = 'ativo') as editais_ativos,
-    (SELECT COALESCE(COUNT(*), 0) FROM inscricao WHERE status = 'pendente') as inscricoes_pendentes,
+    (SELECT COALESCE(COUNT(*), 0) 
+     FROM inscricao i
+     INNER JOIN edital e ON i.id_edital = e.id_edital
+     INNER JOIN usuario u ON i.id_aluno = u.id_usuario
+     WHERE i.status = 'pendente') as inscricoes_pendentes,
     (SELECT COALESCE(COUNT(DISTINCT i.id_aluno), 0) FROM inscricao i WHERE i.status = 'deferido') as alunos_beneficiados,
     (SELECT COALESCE(SUM(a.valor_mensal), 0.0) FROM auxilio a 
      INNER JOIN inscricao i ON a.id_inscricao = i.id_inscricao 

@@ -17,9 +17,15 @@
 }
 
 /* ===== BODY E FONT ===== */
-h/* ===== BOTÕES ESPECÍFICOS ===== */
-/* Botão redondo de notificação */astro-login {
+body,
+body *,
+h1, h2, h3, h4, h5, h6,
+.card, .btn, .modal, .sidebar,
+p, span, div, a, label, input, textarea, select {
     font-family: 'Poppins', Arial, Helvetica, sans-serif !important;
+}
+
+body {
     background-color: #f0f7f0 !important;
 }
 

@@ -1,13 +1,18 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, Request
 from fastapi.staticfiles import StaticFiles
+from fastapi.responses import JSONResponse
 import uvicorn
 from starlette.middleware.sessions import SessionMiddleware
 import secrets
+import logging
+import traceback
+
+logging.basicConfig(level=logging.DEBUG)
 from routes import public
 from routes.admin import analisar_cadastro_routes, editaisadmin_routes, pagamentos_routes, perfiladmin_routes, relatoriosadmin_routes, responder_chamado_routes, usuarios_routes
 from routes.aluno import acompanhar_inscricoes_routes, dados_cadastrais_routes, duvidas_frequentes_routes, editais_routes, notificacao_routes, perfilaluno_routes, recebimentos_routes, suporte_routes
 from repo import administrador_repo, aluno_repo, assistente_social_repo, auxilio_moradia_repo, auxilio_repo, auxilio_transporte_repo, chamado_repo, duvida_edital_repo, edital_repo, inscricao_repo, notificacao_repo, recurso_repo, resposta_chamado_repo, usuario_repo, recebimento_repo
-from routes.assistente_social import alunos_routes, analise_inscricoes_routes, analise_recurso_routes, perfilassistente_routes, entrevistas_routes, relatorios_routes, agenda_routes, editais_assistente_routes, mensagens_routes
+from routes.assistente_social import alunos_routes, analise_inscricoes_routes, analise_recurso_routes, perfilassistente_routes, entrevistas_routes, relatorios_routes, agenda_routes, editais_assistente_routes
 from util import seed_db
 
 usuario_repo.criar_tabela()
@@ -35,6 +40,16 @@ app = FastAPI()
 app.mount("/static", StaticFiles(directory="static"), name="static")
 # Gerar chave secreta (em produção, use variável de ambiente!)
 SECRET_KEY = "f0983404657523e010e3c1cafb3e61be"
+
+# Handler de exceções global
+@app.exception_handler(Exception)
+async def global_exception_handler(request: Request, exc: Exception):
+    logging.error(f"Erro global capturado: {exc}")
+    logging.error(traceback.format_exc())
+    return JSONResponse(
+        status_code=500,
+        content={"detail": f"Internal server error: {str(exc)}"}
+    )
 
 # Adicionar middleware de sessão
 app.add_middleware(
@@ -71,7 +86,6 @@ app.include_router(entrevistas_routes.router, prefix="/assistente")
 app.include_router(relatorios_routes.router, prefix="/assistente")
 app.include_router(agenda_routes.router, prefix="/assistente")
 app.include_router(editais_assistente_routes.router, prefix="/assistente")
-app.include_router(mensagens_routes.router, prefix="/assistente")
 
 if __name__ == "__main__":
     uvicorn.run(app="main:app", host="127.0.0.1", port=8000, reload=True)

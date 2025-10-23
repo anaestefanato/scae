@@ -1,0 +1,13 @@
+[2025-10-22 22:39:06] Tentando inserir auxílio transporte para inscrição 10
+[2025-10-22 22:39:06] Auxílio transporte inserido com ID: 9
+[2025-10-22 23:32:34] ERRO GERAL na submissão: UNIQUE constraint failed: usuario.email
+[2025-10-22 23:32:34] Traceback:
+Traceback (most recent call last):
+  File "C:\Users\Usuario\Desktop\casa\scae\routes\aluno\editais_routes.py", line 550, in post_editais_primeira_inscricao
+    aluno_repo.atualizar(aluno)
+  File "C:\Users\Usuario\Desktop\casa\scae\repo\aluno_repo.py", line 349, in atualizar
+    usuario_repo.atualizar(usuario)
+  File "C:\Users\Usuario\Desktop\casa\scae\repo\usuario_repo.py", line 190, in atualizar
+    cursor.execute(ATUALIZAR, (usuario.nome, usuario.matricula, usuario.email, usuario.id_usuario))
+sqlite3.IntegrityError: UNIQUE constraint failed: usuario.email
+

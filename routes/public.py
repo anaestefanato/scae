@@ -38,11 +38,14 @@ async def post_login(
     senha: str = Form(...),
     redirect: str = Form(None)
 ):
+    logger.info(f"Tentativa de login para matricula: {matricula}")
     dados_formulario = {"matricula": matricula}
     try:
         login_dto = LoginDTO(matricula=matricula, senha=senha)
+        logger.info(f"DTO criado com sucesso")
     
-        usuario = usuario_repo.obter_usuario_por_matricula(login_dto.matricula) 
+        usuario = usuario_repo.obter_usuario_por_matricula(login_dto.matricula)
+        logger.info(f"Usuario obtido: {usuario.nome if usuario else 'Nao encontrado'}")
         
         if not usuario or not verificar_senha(login_dto.senha, usuario.senha):
             return templates.TemplateResponse(
@@ -60,6 +63,7 @@ async def post_login(
                 )
         
         # Criar sessão
+        logger.info(f"Criando sessão para usuario: {usuario.nome}")
         usuario_dict = {
             "id": usuario.id_usuario,
             "nome": usuario.nome,
@@ -69,7 +73,9 @@ async def post_login(
             "foto": usuario.foto,
             "completo": aluno_repo.possui_cadastro_completo(usuario.id_usuario) if usuario.perfil == "aluno" else True
         }
+        logger.info(f"Dict do usuario criado: {usuario_dict}")
         criar_sessao(request, usuario_dict)
+        logger.info(f"Sessão criada com sucesso")
         
         # Redirecionar
         if redirect:
@@ -102,9 +108,10 @@ async def post_login(
         })
     
     except Exception as e:
+        logger.error(f"Erro no login: {str(e)}", exc_info=True)
         return templates.TemplateResponse(
             "publicas/login.html",
-            {"request": request, "erro": str(e), **dados_formulario}
+            {"request": request, "erro": f"Erro ao fazer login: {str(e)}", **dados_formulario}
         )
        
 

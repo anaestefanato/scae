@@ -43,11 +43,18 @@ def criar_sessao(request: Request, usuario: dict) -> None:
         request: Objeto Request do FastAPI
         usuario: Dicionário com dados do usuário
     """
+    import logging
+    logger = logging.getLogger(__name__)
+    
+    logger.info(f"Tentando criar sessão. Tem atributo session? {hasattr(request, 'session')}")
     if hasattr(request, 'session'):
         # Remove senha da sessão por segurança
         usuario_sessao = usuario.copy()
         usuario_sessao.pop('senha', None)
         request.session['usuario'] = usuario_sessao
+        logger.info(f"Sessão criada com sucesso para {usuario_sessao.get('nome')}")
+    else:
+        logger.error("Request não tem atributo 'session'!")
 
 
 def destruir_sessao(request: Request) -> None:

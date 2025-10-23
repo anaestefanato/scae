@@ -177,7 +177,7 @@
         <div class="welcome-banner mb-4">
             <div class="row align-items-center">
                 <div class="col-md-8">
-                    <h4 class="mb-3">Gerenciamento de Editais</h4>
+                    <h4 class="mb-3"><i class="bi bi-gear-fill me-2"></i>Gerenciamento de Editais</h4>
                     <p class="mb-0">Publique, edite e controle a visibilidade de editais, anexos e documentos para os alunos.</p>
                 </div>
                 <div class="col-md-4 text-end">
@@ -203,6 +203,38 @@
         </div>
         {% endif %}
 
+        <!-- Estatísticas Rápidas -->
+        <div class="row mb-4">
+            <div class="col-md-3">
+                <div class="stats-card text-center">
+                    <i class="bi bi-file-earmark-text text-success" style="font-size: 2.5rem;"></i>
+                    <h3 class="mt-2 mb-0">{{ editais|length }}</h3>
+                    <p class="text-muted mb-0">Editais Publicados</p>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="stats-card text-center">
+                    <i class="bi bi-eye text-primary" style="font-size: 2.5rem;"></i>
+                    <h3 class="mt-2 mb-0">{{ editais_ativos }}</h3>
+                    <p class="text-muted mb-0">Editais Visíveis</p>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="stats-card text-center">
+                    <i class="bi bi-pencil-square text-warning" style="font-size: 2.5rem;"></i>
+                    <h3 class="mt-2 mb-0">{{ inscricoes_abertas }}</h3>
+                    <p class="text-muted mb-0">Inscrições Abertas</p>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="stats-card text-center">
+                    <i class="bi bi-files text-info" style="font-size: 2.5rem;"></i>
+                    <h3 class="mt-2 mb-0">5</h3>
+                    <p class="text-muted mb-0">Anexos Disponíveis</p>
+                </div>
+            </div>
+        </div>
+
         <!-- Tabs de Navegação -->
         <ul class="nav nav-tabs mb-4" id="editalTabs" role="tablist">
             <li class="nav-item" role="presentation">
@@ -226,52 +258,9 @@
         <div class="tab-content" id="editalTabsContent">
             <!-- Tab: Editais Publicados -->
             <div class="tab-pane fade show active" id="editais" role="tabpanel">
-                <!-- Filtro de Ano -->
-                <div class="mb-4">
-                    <style>
-                        .year-filter-group {
-                            display: flex;
-                            gap: 10px;
-                            flex-wrap: wrap;
-                        }
-                        .filter-year-btn {
-                            padding: 10px 20px;
-                            border: 2px solid #28a745;
-                            background-color: white;
-                            color: #28a745;
-                            border-radius: 8px;
-                            font-weight: 500;
-                            transition: all 0.3s ease;
-                            cursor: pointer;
-                        }
-                        .filter-year-btn:hover {
-                            background-color: #e8f5e9;
-                            transform: translateY(-2px);
-                            box-shadow: 0 4px 8px rgba(40, 167, 69, 0.2);
-                        }
-                        .filter-year-btn.active {
-                            background-color: #28a745;
-                            color: white;
-                            box-shadow: 0 4px 12px rgba(40, 167, 69, 0.3);
-                        }
-                        .filter-year-btn.active:hover {
-                            background-color: #218838;
-                        }
-                    </style>
-                    <h5 class="mb-3"><i class="bi bi-funnel me-2"></i>Filtrar por Ano</h5>
-                    <div class="year-filter-group">
-                        <button type="button" class="filter-year-btn active" data-year="2025" onclick="filterByYear(2025)">2025</button>
-                        <button type="button" class="filter-year-btn" data-year="2024" onclick="filterByYear(2024)">2024</button>
-                        <button type="button" class="filter-year-btn" data-year="2023" onclick="filterByYear(2023)">2023</button>
-                        <button type="button" class="filter-year-btn" data-year="2022" onclick="filterByYear(2022)">2022</button>
-                        <button type="button" class="filter-year-btn" data-year="2021" onclick="filterByYear(2021)">2021</button>
-                        <button type="button" class="filter-year-btn" data-year="2020" onclick="filterByYear(2020)">2020</button>
-                    </div>
-                </div>
-
                 {% if editais %}
                     {% for edital in editais %}
-                    <div class="card edital-card mb-3" data-year="{{ edital.data_publicacao.split('-')[0] }}">
+                    <div class="card edital-card mb-3">
                         <div class="card-body">
                             <div class="row align-items-center">
                                 <div class="col-md-7">
@@ -800,50 +789,6 @@
                 form.appendChild(inputStatus);
                 document.body.appendChild(form);
                 form.submit();
-            }
-        }
-        
-        // Função para filtrar editais por ano
-        function filterByYear(year) {
-            // Atualizar botões ativos
-            document.querySelectorAll('.filter-year-btn').forEach(btn => {
-                btn.classList.remove('active');
-            });
-            document.querySelector(`[data-year="${year}"]`).classList.add('active');
-            
-            // Filtrar cards de editais
-            const editalCards = document.querySelectorAll('.edital-card');
-            let visibleCount = 0;
-            
-            editalCards.forEach(card => {
-                const cardYear = card.getAttribute('data-year');
-                if (cardYear === year.toString()) {
-                    card.style.display = 'block';
-                    visibleCount++;
-                } else {
-                    card.style.display = 'none';
-                }
-            });
-            
-            // Mostrar mensagem se não houver editais no ano selecionado
-            const noEditaisMsg = document.getElementById('noEditaisMessage');
-            if (noEditaisMsg) {
-                noEditaisMsg.remove();
-            }
-            
-            if (visibleCount === 0) {
-                const alertDiv = document.createElement('div');
-                alertDiv.id = 'noEditaisMessage';
-                alertDiv.className = 'alert alert-info';
-                alertDiv.innerHTML = '<i class="bi bi-info-circle me-2"></i>Nenhum edital encontrado para o ano selecionado.';
-                
-                const container = document.querySelector('#editais');
-                const firstCard = container.querySelector('.edital-card');
-                if (firstCard) {
-                    firstCard.parentNode.insertBefore(alertDiv, firstCard);
-                } else {
-                    container.appendChild(alertDiv);
-                }
             }
         }
     </script>

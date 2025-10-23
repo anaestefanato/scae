@@ -10,47 +10,39 @@
 
 {% block content %}
 <div class="main-content" id="mainContent">
-    <!-- Header da página -->
+    <!-- Welcome Header similar to dashboard -->
     <div class="welcome-banner mb-4">
         <div class="row align-items-center">
             <div class="col-md-8">
                 <div class="d-flex align-items-center mb-3">
-                    <i class="bi bi-headset me-3 text-success" style="font-size: 2rem;"></i>
                     <h4 class="mb-0">Central de Suporte</h4>
                 </div>
+                <p>Aqui você encontra guias, tutoriais e pode abrir chamados para suporte técnico.</p>
             </div>
-        </div>
-
-        <!-- Alertas de sucesso e erro -->
-        {% if sucesso %}
-        <div class="alert alert-success alert-dismissible fade show" role="alert">
-            <i class="bi bi-check-circle me-2"></i>
-            {{ sucesso }}
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-        </div>
-        {% endif %}
-
-        {% if erro %}
-        <div class="alert alert-danger alert-dismissible fade show" role="alert">
-            <i class="bi bi-exclamation-triangle me-2"></i>
-            {{ erro }}
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-        </div>
-        {% endif %}
-
-        <!-- Header -->
-        <div class="support-header">
-            <div class="d-flex justify-content-between align-items-start">
-                <div>
-                    <h3 class="mb-2">Como podemos ajudar?</h3>
-                    <p class="mb-0">Aqui você encontra guias, tutoriais e pode abrir chamados para suporte técnico</p>
-                </div>
+            <div class="col-md-4 text-end">
                 <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#newTicketModal">
                     <i class="bi bi-plus-circle me-2"></i>Novo Chamado
                 </button>
             </div>
         </div>
     </div>
+
+    <!-- Alertas de sucesso e erro -->
+    {% if sucesso %}
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+        <i class="bi bi-check-circle me-2"></i>
+        {{ sucesso }}
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+    {% endif %}
+
+    {% if erro %}
+    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        <i class="bi bi-exclamation-triangle me-2"></i>
+        {{ erro }}
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+    {% endif %}
 
     <!-- Guias Rápidos -->
     <div class="row mb-4">

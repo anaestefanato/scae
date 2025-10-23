@@ -66,11 +66,6 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="/assistente/mensagens" class="nav-link">
-                        <i class="bi bi-envelope"></i> <span>Mensagens</span>
-                    </a>
-                </li>
-                <li class="nav-item">
                     <a href="/assistente/perfil" class="nav-link">
                         <i class="bi bi-person-circle"></i> <span>Meu Perfil</span>
                     </a>
@@ -114,7 +109,7 @@
             <div class="col-md-4">
                 <div class="stats-card card text-center py-4">
                     <div class="mb-2">
-                        <span class="rounded-circle d-inline-block" style="background: #1976d2; padding: 12px;">
+                        <span class="rounded-circle d-inline-flex align-items-center justify-content-center" style="background: #1976d2; width: 80px; height: 80px;">
                             <i class="bi bi-clipboard-data" style="font-size: 2rem; color: #fff;"></i>
                         </span>
                     </div>
@@ -125,7 +120,7 @@
             <div class="col-md-4">
                 <div class="stats-card card text-center py-4">
                     <div class="mb-2">
-                        <span class="rounded-circle d-inline-block" style="background: #ff9800; padding: 12px;">
+                        <span class="rounded-circle d-inline-flex align-items-center justify-content-center" style="background: #ff9800; width: 80px; height: 80px;">
                             <i class="bi bi-journal-text" style="font-size: 2rem; color: #fff;"></i>
                         </span>
                     </div>
@@ -136,7 +131,7 @@
             <div class="col-md-4">
                 <div class="stats-card card text-center py-4">
                     <div class="mb-2">
-                        <span class="rounded-circle d-inline-block" style="background: #388e3c; padding: 12px;">
+                        <span class="rounded-circle d-inline-flex align-items-center justify-content-center" style="background: #388e3c; width: 80px; height: 80px;">
                             <i class="bi bi-people-fill" style="font-size: 2rem; color: #fff;"></i>
                         </span>
                     </div>
@@ -171,9 +166,9 @@
                                         <td>{{ inscricao.edital_titulo }}</td>
                                         <td>{{ inscricao.data_inscricao|default('Data não informada') }}</td>
                                         <td class="text-center">
-                                            <a href="/assistente/analise-inscricoes/{{ inscricao.id_inscricao }}" class="btn btn-sm btn-outline-primary">
+                                            <button class="btn btn-sm btn-outline-primary" onclick="visualizarInscricao({{ inscricao.id_inscricao }})">
                                                 <i class="bi bi-eye"></i> Analisar
-                                            </a>
+                                            </button>
                                         </td>
                                     </tr>
                                     {% else %}
@@ -478,8 +473,270 @@
         </div>
     </div>
 
+    <!-- Modal Detalhes da Inscrição -->
+    <div class="modal fade" id="modalDetalhesInscricao" tabindex="-1" aria-labelledby="modalDetalhesLabel" aria-hidden="true">
+        <div class="modal-dialog modal-xl modal-dialog-scrollable">
+            <div class="modal-content">
+                <div class="modal-header" style="background-color: #2E7D32; color: white;">
+                    <h5 class="modal-title" id="modalDetalhesLabel">
+                        <i class="bi bi-person-card me-2"></i>Detalhes da Inscrição
+                    </h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body" id="conteudoDetalhesInscricao">
+                    <div class="text-center py-5">
+                        <div class="spinner-border text-success" role="status">
+                            <span class="visually-hidden">Carregando...</span>
+                        </div>
+                        <p class="mt-3 text-muted">Carregando informações da inscrição...</p>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                        <i class="bi bi-x-circle me-1"></i>Fechar
+                    </button>
+                    <a href="/assistente/analise-inscricoes" class="btn btn-success" id="btnIrParaAnalise">
+                        <i class="bi bi-list-check me-1"></i>Ir para Análise Completa
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
     <script src="/static/js/dashboard_assistente.js"></script>
+    <script>
+        // Função para visualizar detalhes da inscrição
+        async function visualizarInscricao(idInscricao) {
+            const modal = new bootstrap.Modal(document.getElementById('modalDetalhesInscricao'));
+            const conteudo = document.getElementById('conteudoDetalhesInscricao');
+            const btnAnalise = document.getElementById('btnIrParaAnalise');
+            
+            // Atualizar link do botão
+            btnAnalise.href = `/assistente/analise-inscricoes?inscricao=${idInscricao}`;
+            
+            // Mostrar modal com loading
+            modal.show();
+            
+            // Reset conteúdo
+            conteudo.innerHTML = `
+                <div class="text-center py-5">
+                    <div class="spinner-border text-success" role="status">
+                        <span class="visually-hidden">Carregando...</span>
+                    </div>
+                    <p class="mt-3 text-muted">Carregando informações da inscrição...</p>
+                </div>
+            `;
+            
+            try {
+                // Buscar dados completos da inscrição
+                const response = await fetch(`/assistente/analise-inscricoes/detalhes-completos/${idInscricao}`);
+                const data = await response.json();
+                
+                if (!data.success) {
+                    conteudo.innerHTML = `
+                        <div class="alert alert-danger">
+                            <i class="bi bi-exclamation-triangle me-2"></i>
+                            Erro ao carregar informações: ${data.message || 'Erro desconhecido'}
+                        </div>
+                    `;
+                    return;
+                }
+                
+                const inscricao = data.inscricao;
+                const auxilios = data.auxilios || [];
+                
+                // Formatar data
+                function formatarData(data) {
+                    if (!data) return 'Não informada';
+                    try {
+                        const d = new Date(data);
+                        return d.toLocaleDateString('pt-BR');
+                    } catch {
+                        return data;
+                    }
+                }
+                
+                // Formatar status
+                function getStatusBadge(status) {
+                    const badges = {
+                        'pendente': '<span class="badge bg-warning">Pendente</span>',
+                        'analisado': '<span class="badge bg-info">Analisado</span>',
+                        'deferido': '<span class="badge bg-success">Deferido</span>',
+                        'indeferido': '<span class="badge bg-danger">Indeferido</span>'
+                    };
+                    return badges[status] || `<span class="badge bg-secondary">${status}</span>`;
+                }
+                
+                // Montar HTML com os detalhes completos
+                let html = `
+                    <!-- Informações da Inscrição -->
+                    <div class="card mb-3">
+                        <div class="card-header" style="background-color: #2E7D32; color: white;">
+                            <h6 class="mb-0"><i class="bi bi-file-earmark-text me-2"></i>Informações da Inscrição</h6>
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="mb-2"><strong>Edital:</strong> ${inscricao.edital.titulo}</div>
+                                    <div class="mb-2"><strong>Data de Inscrição:</strong> ${formatarData(inscricao.data_inscricao)}</div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="mb-2"><strong>Status:</strong> ${getStatusBadge(inscricao.status)}</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Dados Pessoais -->
+                    <div class="card mb-3">
+                        <div class="card-header" style="background-color: #f8f9fa; border-left: 4px solid #2E7D32;">
+                            <h6 class="mb-0 text-dark"><i class="bi bi-person-circle me-2"></i>Dados Pessoais</h6>
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="mb-2"><strong>Nome Completo:</strong> ${inscricao.aluno.nome}</div>
+                                    <div class="mb-2"><strong>CPF:</strong> ${inscricao.aluno.cpf || 'Não informado'}</div>
+                                    <div class="mb-2"><strong>Data de Nascimento:</strong> ${formatarData(inscricao.aluno.data_nascimento)}</div>
+                                    <div class="mb-2"><strong>E-mail:</strong> ${inscricao.aluno.email}</div>
+                                    <div class="mb-2"><strong>Telefone:</strong> ${inscricao.aluno.telefone || 'Não informado'}</div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="mb-2"><strong>Logradouro:</strong> ${inscricao.aluno.endereco.rua || 'Não informado'}</div>
+                                    <div class="mb-2"><strong>Número:</strong> ${inscricao.aluno.endereco.numero || 'S/N'}</div>
+                                    <div class="mb-2"><strong>Complemento:</strong> ${inscricao.aluno.endereco.complemento || '-'}</div>
+                                    <div class="mb-2"><strong>Bairro:</strong> ${inscricao.aluno.endereco.bairro || 'Não informado'}</div>
+                                    <div class="mb-2"><strong>Cidade/Estado:</strong> ${inscricao.aluno.endereco.cidade || 'Não informado'}/${inscricao.aluno.endereco.estado || 'N/A'}</div>
+                                    <div class="mb-2"><strong>CEP:</strong> ${inscricao.aluno.endereco.cep || 'Não informado'}</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Dados Acadêmicos -->
+                    <div class="card mb-3">
+                        <div class="card-header" style="background-color: #f8f9fa; border-left: 4px solid #2E7D32;">
+                            <h6 class="mb-0 text-dark"><i class="bi bi-mortarboard me-2"></i>Dados Acadêmicos</h6>
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="mb-2"><strong>Matrícula:</strong> ${inscricao.aluno.matricula}</div>
+                                    <div class="mb-2"><strong>Curso:</strong> ${inscricao.aluno.curso || 'Não informado'}</div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="mb-2"><strong>Ano de Ingresso:</strong> ${inscricao.aluno.ano_ingresso || 'Não informado'}</div>
+                                    <div class="mb-2"><strong>Ano de Conclusão Previsto:</strong> ${inscricao.aluno.ano_conclusao || 'Não informado'}</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Dados Socioeconômicos -->
+                    <div class="card mb-3">
+                        <div class="card-header" style="background-color: #f8f9fa; border-left: 4px solid #2E7D32;">
+                            <h6 class="mb-0 text-dark"><i class="bi bi-cash-stack me-2"></i>Dados Socioeconômicos</h6>
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="mb-2"><strong>Pessoas na Residência:</strong> ${inscricao.aluno.dados_socioeconomicos.pessoas_residencia || 'Não informado'}</div>
+                                    <div class="mb-2"><strong>Renda Per Capita:</strong> R$ ${parseFloat(inscricao.aluno.dados_socioeconomicos.renda_percapita || 0).toFixed(2)}</div>
+                                    <div class="mb-2"><strong>Recebe Bolsa de Pesquisa:</strong> ${inscricao.aluno.dados_socioeconomicos.bolsa_pesquisa == 1 ? 'Sim' : 'Não'}</div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="mb-2"><strong>Cadastrado no CAD Único:</strong> ${inscricao.aluno.dados_socioeconomicos.cad_unico == 1 ? 'Sim' : 'Não'}</div>
+                                    <div class="mb-2"><strong>Recebe Bolsa Família:</strong> ${inscricao.aluno.dados_socioeconomicos.bolsa_familia == 1 ? 'Sim' : 'Não'}</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Auxílios Solicitados -->
+                    <div class="card mb-3">
+                        <div class="card-header" style="background-color: #2E7D32; color: white;">
+                            <h6 class="mb-0"><i class="bi bi-gift me-2"></i>Auxílios Solicitados</h6>
+                        </div>
+                        <div class="card-body">
+                `;
+                
+                if (auxilios.length > 0) {
+                    auxilios.forEach(auxilio => {
+                        const statusClass = auxilio.status_auxilio === 'deferido' ? 'success' : 
+                                          auxilio.status_auxilio === 'indeferido' ? 'danger' : 'warning';
+                        const statusText = auxilio.status_auxilio === 'deferido' ? 'Deferido' :
+                                         auxilio.status_auxilio === 'indeferido' ? 'Indeferido' : 'Pendente';
+                        
+                        html += `
+                            <div class="border rounded p-3 mb-3" style="border-left: 4px solid var(--bs-${statusClass});">
+                                <h6>
+                                    <i class="bi bi-tag me-2"></i>${auxilio.tipo_auxilio}
+                                    <span class="badge bg-${statusClass} float-end">${statusText}</span>
+                                </h6>
+                                <hr>
+                                <p class="mb-2"><strong>Descrição:</strong> ${auxilio.descricao || 'Não informada'}</p>
+                                ${auxilio.valor_mensal ? `<p class="mb-2"><strong>Valor Mensal:</strong> <span class="text-success fw-bold">R$ ${parseFloat(auxilio.valor_mensal).toFixed(2)}</span></p>` : ''}
+                                ${auxilio.motivo_indeferimento ? `
+                                    <div class="alert alert-danger mb-0 mt-2">
+                                        <strong>Motivo do Indeferimento:</strong><br>
+                                        ${auxilio.motivo_indeferimento}
+                                    </div>
+                                ` : ''}
+                            </div>
+                        `;
+                    });
+                } else {
+                    html += '<p class="text-muted mb-0">Nenhum auxílio solicitado</p>';
+                }
+                
+                html += `
+                        </div>
+                    </div>
+                    
+                    <!-- Documentos Obrigatórios -->
+                    <div class="card mb-3">
+                        <div class="card-header" style="background-color: #f8f9fa; border-left: 4px solid #2E7D32;">
+                            <h6 class="mb-0 text-dark"><i class="bi bi-file-earmark-check me-2"></i>Documentos Obrigatórios</h6>
+                        </div>
+                        <div class="card-body">
+                            <div class="list-group">
+                                ${inscricao.urlDocumentoIdentificacao ? `
+                                    <a href="${inscricao.urlDocumentoIdentificacao}" target="_blank" class="list-group-item list-group-item-action">
+                                        <i class="bi bi-file-pdf text-danger me-2"></i>Documento de Identificação
+                                        <i class="bi bi-box-arrow-up-right float-end"></i>
+                                    </a>
+                                ` : '<div class="list-group-item text-muted">Documento de Identificação - Não enviado</div>'}
+                                ${inscricao.urlDeclaracaoRenda ? `
+                                    <a href="${inscricao.urlDeclaracaoRenda}" target="_blank" class="list-group-item list-group-item-action">
+                                        <i class="bi bi-file-pdf text-danger me-2"></i>Declaração de Renda
+                                        <i class="bi bi-box-arrow-up-right float-end"></i>
+                                    </a>
+                                ` : '<div class="list-group-item text-muted">Declaração de Renda - Não enviado</div>'}
+                                ${inscricao.urlTermoResponsabilidade ? `
+                                    <a href="${inscricao.urlTermoResponsabilidade}" target="_blank" class="list-group-item list-group-item-action">
+                                        <i class="bi bi-file-pdf text-danger me-2"></i>Termo de Responsabilidade
+                                        <i class="bi bi-box-arrow-up-right float-end"></i>
+                                    </a>
+                                ` : '<div class="list-group-item text-muted">Termo de Responsabilidade - Não enviado</div>'}
+                            </div>
+                        </div>
+                    </div>
+                `;
+                
+                conteudo.innerHTML = html;
+                
+            } catch (error) {
+                console.error('Erro ao carregar inscrição:', error);
+                conteudo.innerHTML = `
+                    <div class="alert alert-danger">
+                        <i class="bi bi-x-circle me-2"></i>
+                        Erro ao carregar informações. Tente novamente.
+                    </div>
+                `;
+            }
+        }
+    </script>
 </body>
 </html>
 

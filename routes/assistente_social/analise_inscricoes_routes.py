@@ -4,7 +4,7 @@ from fastapi.templating import Jinja2Templates
 import math
 from datetime import datetime
 
-from repo import usuario_repo, inscricao_repo, auxilio_repo
+from repo import usuario_repo, inscricao_repo, auxilio_repo, recebimento_repo
 from util.auth_decorator import obter_usuario_logado, requer_autenticacao
 
 
@@ -134,6 +134,15 @@ async def deferir_auxilio(request: Request, usuario_logado: dict = None):
         if auxilio and auxilio.id_inscricao:
             inscricao_repo.atualizar_status(auxilio.id_inscricao, 'analisado')
         
+        # Gerar recebimentos automaticamente para o mês seguinte
+        from datetime import datetime
+        data_deferimento = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+        recebimento_repo.gerar_recebimentos_auxilio_deferido(
+            id_auxilio, 
+            float(valor_mensal), 
+            data_deferimento
+        )
+        
         if sucesso_status and sucesso_valor:
             return JSONResponse(
                 status_code=200,
@@ -202,6 +211,37 @@ async def indeferir_auxilio(request: Request, usuario_logado: dict = None):
                 status_code=500,
                 content={"success": False, "message": "Erro ao indeferir auxílio"}
             )
+    except Exception as e:
+        return JSONResponse(
+            status_code=500,
+            content={"success": False, "message": f"Erro: {str(e)}"}
+        )
+
+@router.get("/analise-inscricoes/detalhes-completos/{id_inscricao}")
+@requer_autenticacao("assistente")
+async def obter_detalhes_completos_inscricao(id_inscricao: int, request: Request, usuario_logado: dict = None):
+    """Endpoint para obter todos os detalhes de uma inscrição (dados pessoais, acadêmicos, documentos e auxílios)"""
+    try:
+        # Buscar inscrição completa
+        inscricao = inscricao_repo.obter_inscricao_completa(id_inscricao)
+        if not inscricao:
+            return JSONResponse(
+                status_code=404,
+                content={"success": False, "message": "Inscrição não encontrada"}
+            )
+        
+        # Buscar auxílios da inscrição
+        auxilios = auxilio_repo.obter_auxilios_por_inscricao(id_inscricao)
+        
+        # Montar resposta completa
+        return JSONResponse(
+            status_code=200,
+            content={
+                "success": True,
+                "inscricao": inscricao,
+                "auxilios": auxilios
+            }
+        )
     except Exception as e:
         return JSONResponse(
             status_code=500,

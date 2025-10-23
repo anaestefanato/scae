@@ -221,7 +221,7 @@ def obter_inscricoes_para_analise(pagina: int = 1, limite: int = 10, filtro_edit
             i.urlDeclaracaoRenda,
             i.urlTermoResponsabilidade,
             e.titulo as edital_titulo,
-            e.data_encerramento,
+            e.data_fim_inscricao as edital_data_encerramento,
             u.nome as aluno_nome,
             u.matricula as aluno_matricula,
             u.email as aluno_email,
@@ -265,8 +265,8 @@ def obter_inscricoes_para_analise(pagina: int = 1, limite: int = 10, filtro_edit
             am.url_contrato_aluguel_cid_campus as am_url_contrato_aluguel_cid_campus,
             am.url_contrato_aluguel_cid_natal as am_url_contrato_aluguel_cid_natal,
             CASE 
-                WHEN DATE(e.data_encerramento) <= DATE('now', '+7 days') THEN 'Alta'
-                WHEN DATE(e.data_encerramento) <= DATE('now', '+15 days') THEN 'Média'
+                WHEN DATE(e.data_fim_inscricao) <= DATE('now', '+7 days') THEN 'Alta'
+                WHEN DATE(e.data_fim_inscricao) <= DATE('now', '+15 days') THEN 'Média'
                 ELSE 'Baixa'
             END as prioridade
         FROM inscricao i
@@ -364,7 +364,7 @@ def obter_inscricoes_para_analise(pagina: int = 1, limite: int = 10, filtro_edit
                 'urlDeclaracaoRenda': row["urlDeclaracaoRenda"],
                 'urlTermoResponsabilidade': row["urlTermoResponsabilidade"],
                 'edital_titulo': row["edital_titulo"],
-                'data_encerramento': row["data_encerramento"],
+                'data_encerramento': row["edital_data_encerramento"],
                 'aluno_nome': row["aluno_nome"],
                 'aluno_matricula': row["aluno_matricula"],
                 'aluno_email': row["aluno_email"] if "aluno_email" in row.keys() else None,
@@ -480,3 +480,105 @@ def obter_inscricoes_recentes_dashboard() -> list[dict]:
     except Exception as e:
         print("Erro ao obter inscrições recentes para dashboard:", e)
         return []
+
+
+def obter_inscricao_completa(id_inscricao: int) -> Optional[dict]:
+    """
+    Obtém todos os dados de uma inscrição incluindo dados do aluno, edital e documentos
+    """
+    try:
+        with get_connection() as conn:
+            cursor = conn.cursor()
+            # Query para buscar dados completos da inscrição
+            query = """
+                SELECT 
+                    i.id_inscricao,
+                    i.data_inscricao,
+                    i.status,
+                    i.urlDocumentoIdentificacao,
+                    i.urlDeclaracaoRenda,
+                    i.urlTermoResponsabilidade,
+                    e.id_edital,
+                    e.titulo as edital_titulo,
+                    u.id_usuario,
+                    u.nome as aluno_nome,
+                    u.email as aluno_email,
+                    u.matricula as aluno_matricula,
+                    al.cpf as aluno_cpf,
+                    al.data_nascimento as aluno_data_nascimento,
+                    al.telefone as aluno_telefone,
+                    al.curso as aluno_curso,
+                    al.ano_ingresso as aluno_ano_ingresso,
+                    al.ano_conclusao_previsto as aluno_ano_conclusao,
+                    al.rua as aluno_rua,
+                    al.numero as aluno_numero,
+                    al.complemento as aluno_complemento,
+                    al.bairro as aluno_bairro,
+                    al.cidade as aluno_cidade,
+                    al.estado as aluno_estado,
+                    al.cep as aluno_cep,
+                    al.renda_per_capita,
+                    al.quantidade_pessoas,
+                    al.bolsa_pesquisa,
+                    al.bolsa_familia,
+                    al.cad_unico
+                FROM inscricao i
+                INNER JOIN edital e ON i.id_edital = e.id_edital
+                INNER JOIN usuario u ON i.id_aluno = u.id_usuario
+                LEFT JOIN aluno al ON u.id_usuario = al.id_usuario
+                WHERE i.id_inscricao = ?
+            """
+            
+            cursor.execute(query, (id_inscricao,))
+            row = cursor.fetchone()
+            
+            if not row:
+                return None
+            
+            # Montar dicionário com os dados
+            inscricao = {
+                'id_inscricao': row['id_inscricao'],
+                'data_inscricao': row['data_inscricao'],
+                'status': row['status'],
+                'urlDocumentoIdentificacao': row['urlDocumentoIdentificacao'],
+                'urlDeclaracaoRenda': row['urlDeclaracaoRenda'],
+                'urlTermoResponsabilidade': row['urlTermoResponsabilidade'],
+                'edital': {
+                    'id_edital': row['id_edital'],
+                    'titulo': row['edital_titulo']
+                },
+                'aluno': {
+                    'id_usuario': row['id_usuario'],
+                    'nome': row['aluno_nome'],
+                    'email': row['aluno_email'],
+                    'matricula': row['aluno_matricula'],
+                    'cpf': row['aluno_cpf'],
+                    'data_nascimento': row['aluno_data_nascimento'],
+                    'telefone': row['aluno_telefone'],
+                    'curso': row['aluno_curso'],
+                    'ano_ingresso': row['aluno_ano_ingresso'],
+                    'ano_conclusao': row['aluno_ano_conclusao'],
+                    'endereco': {
+                        'rua': row['aluno_rua'],
+                        'numero': row['aluno_numero'],
+                        'complemento': row['aluno_complemento'],
+                        'bairro': row['aluno_bairro'],
+                        'cidade': row['aluno_cidade'],
+                        'estado': row['aluno_estado'],
+                        'cep': row['aluno_cep']
+                    },
+                    'dados_socioeconomicos': {
+                        'renda_percapita': row['renda_per_capita'],
+                        'pessoas_residencia': row['quantidade_pessoas'],
+                        'bolsa_pesquisa': row['bolsa_pesquisa'],
+                        'bolsa_familia': row['bolsa_familia'],
+                        'cad_unico': row['cad_unico']
+                    }
+                }
+            }
+            
+            return inscricao
+            
+    except Exception as e:
+        print(f"Erro ao obter inscrição completa: {e}")
+        return None

@@ -294,10 +294,10 @@ def obter_estatisticas_gerais() -> dict:
         row = cursor.fetchone()
         if row:
             return {
-                'total': row['total'],
-                'abertos': row['abertos'],
-                'em_andamento': row['em_andamento'],
-                'resolvidos': row['resolvidos']
+                'total': row['total'] or 0,
+                'abertos': row['abertos'] or 0,
+                'em_andamento': row['em_andamento'] or 0,
+                'resolvidos': row['resolvidos'] or 0
             }
         return {
             'total': 0,

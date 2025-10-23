@@ -156,6 +156,92 @@ def obter_estatisticas_aluno(id_aluno: int) -> dict:
             'valor_medio': row["valor_medio"] or 0.0
         }
 
+def gerar_recebimentos_auxilio_deferido(id_auxilio: int, valor_mensal: float, data_deferimento: str) -> bool:
+    """
+    Gera recebimentos automaticamente quando um auxílio é deferido.
+    Cria recebimentos do mês seguinte ao deferimento até o fim da vigência do auxílio.
+    """
+    try:
+        from datetime import datetime
+        
+        with get_connection() as conn:
+            cursor = conn.cursor()
+            
+            # Obter informações do auxílio
+            cursor.execute("""
+                SELECT a.data_fim, a.id_inscricao, i.id_aluno
+                FROM auxilio a
+                INNER JOIN inscricao i ON a.id_inscricao = i.id_inscricao
+                WHERE a.id_auxilio = ?
+            """, (id_auxilio,))
+            
+            result = cursor.fetchone()
+            if not result:
+                print(f"Auxílio {id_auxilio} não encontrado")
+                return False
+            
+            data_fim_str = result[0]
+            
+            # Converter data de deferimento para datetime
+            data_def = datetime.strptime(data_deferimento[:10], '%Y-%m-%d')
+            
+            # Primeiro recebimento é no mês seguinte ao deferimento
+            mes_inicio = data_def.month + 1
+            ano_inicio = data_def.year
+            if mes_inicio > 12:
+                mes_inicio = 1
+                ano_inicio += 1
+            
+            # Converter data_fim para datetime
+            if data_fim_str:
+                data_fim = datetime.strptime(data_fim_str, '%Y-%m-%d')
+            else:
+                # Se não tem data fim, gerar até o final do ano
+                data_fim = datetime(ano_inicio, 12, 31)
+            
+            # Gerar recebimentos mensais
+            mes_atual = mes_inicio
+            ano_atual = ano_inicio
+            recebimentos_criados = 0
+            
+            while (ano_atual < data_fim.year) or (ano_atual == data_fim.year and mes_atual <= data_fim.month):
+                mes_ref = str(mes_atual).zfill(2)
+                
+                # Data de recebimento é dia 5 do mês
+                data_recebimento = f"{ano_atual}-{mes_ref}-05"
+                
+                # Verificar se já existe recebimento para este mês
+                cursor.execute("""
+                    SELECT COUNT(*) FROM recebimento 
+                    WHERE id_auxilio = ? AND mes_referencia = ? AND ano_referencia = ?
+                """, (id_auxilio, mes_ref, ano_atual))
+                
+                if cursor.fetchone()[0] == 0:
+                    # Inserir recebimento
+                    cursor.execute("""
+                        INSERT INTO recebimento (
+                            id_auxilio, mes_referencia, ano_referencia, 
+                            valor, data_recebimento, status, observacoes
+                        ) VALUES (?, ?, ?, ?, ?, 'pendente', 'Gerado automaticamente')
+                    """, (id_auxilio, mes_ref, ano_atual, valor_mensal, data_recebimento))
+                    recebimentos_criados += 1
+                
+                # Próximo mês
+                mes_atual += 1
+                if mes_atual > 12:
+                    mes_atual = 1
+                    ano_atual += 1
+            
+            conn.commit()
+            print(f"Gerados {recebimentos_criados} recebimentos para o auxílio {id_auxilio}")
+            return True
+            
+    except Exception as e:
+        print(f"Erro ao gerar recebimentos: {e}")
+        import traceback
+        traceback.print_exc()
+        return False
+
 def inserir_dados_exemplo() -> bool:
     """Insere dados de exemplo na tabela de recebimentos"""
     try:

@@ -226,11 +226,6 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="/assistente/mensagens" class="nav-link">
-                        <i class="bi bi-envelope"></i> <span>Mensagens</span>
-                    </a>
-                </li>
-                <li class="nav-item">
                     <a href="/assistente/perfil" class="nav-link">
                         <i class="bi bi-person-circle"></i> <span>Meu Perfil</span>
                     </a>
@@ -298,62 +293,50 @@
                             </tr>
                         </thead>
                         <tbody id="recursosTableBody">
-                            <tr>
-                                <td>Maria Silva Santos</td>
-                                <td>Auxílio Transporte</td>
-                                <td><span class="badge bg-danger">Indeferido</span></td>
-                                <td>15/09/2025</td>
-                                <td><span class="badge bg-warning text-dark">Pendente</span></td>
-                                <td>
-                                    <div class="action-buttons">
-                                        <button class="btn btn-sm btn-outline-primary" title="Ver Detalhes" data-bs-toggle="modal" data-bs-target="#detalhesRecursoModal" onclick="abrirDetalhesRecurso(this)">
-                                            <i class="bi bi-eye"></i> Ver Detalhes
-                                        </button>
-                                    </div>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>João Paulo Oliveira</td>
-                                <td>Auxílio Alimentação</td>
-                                <td><span class="badge bg-danger">Indeferido</span></td>
-                                <td>12/09/2025</td>
-                                <td><span class="badge bg-warning text-dark">Pendente</span></td>
-                                <td>
-                                    <div class="action-buttons">
-                                        <button class="btn btn-sm btn-outline-primary" title="Ver Detalhes" data-bs-toggle="modal" data-bs-target="#detalhesRecursoModal" onclick="abrirDetalhesRecurso(this)">
-                                            <i class="bi bi-eye"></i> Ver Detalhes
-                                        </button>
-                                    </div>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>Ana Carolina Mendes</td>
-                                <td>Auxílio Moradia</td>
-                                <td><span class="badge bg-danger">Indeferido</span></td>
-                                <td>10/09/2025</td>
-                                <td><span class="badge bg-warning text-dark">Pendente</span></td>
-                                <td>
-                                    <div class="action-buttons">
-                                        <button class="btn btn-sm btn-outline-primary" title="Ver Detalhes" data-bs-toggle="modal" data-bs-target="#detalhesRecursoModal" onclick="abrirDetalhesRecurso(this)">
-                                            <i class="bi bi-eye"></i> Ver Detalhes
-                                        </button>
-                                    </div>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>Carlos Eduardo Santos</td>
-                                <td>Auxílio Material Didático</td>
-                                <td><span class="badge bg-warning text-dark">Parcialmente Deferido</span></td>
-                                <td>08/09/2025</td>
-                                <td><span class="badge bg-warning text-dark">Pendente</span></td>
-                                <td>
-                                    <div class="action-buttons">
-                                        <button class="btn btn-sm btn-outline-primary" title="Ver Detalhes" data-bs-toggle="modal" data-bs-target="#detalhesRecursoModal" onclick="abrirDetalhesRecurso(this)">
-                                            <i class="bi bi-eye"></i> Ver Detalhes
-                                        </button>
-                                    </div>
-                                </td>
-                            </tr>
+                            {% if recursos and recursos|length > 0 %}
+                                {% for recurso in recursos %}
+                                <tr>
+                                    <td>{{ recurso.aluno_nome }}</td>
+                                    <td>{{ recurso.tipo_auxilio }}</td>
+                                    <td>
+                                        {% if recurso.decisao_original == 'indeferido' %}
+                                            <span class="badge bg-danger">Indeferido</span>
+                                        {% elif recurso.decisao_original == 'deferido' %}
+                                            <span class="badge bg-success">Deferido</span>
+                                        {% else %}
+                                            <span class="badge bg-warning text-dark">{{ recurso.decisao_original }}</span>
+                                        {% endif %}
+                                    </td>
+                                    <td>{{ recurso.data_envio }}</td>
+                                    <td>
+                                        {% if recurso.status == 'pendente' %}
+                                            <span class="badge bg-warning text-dark">Pendente</span>
+                                        {% elif recurso.status == 'deferido' %}
+                                            <span class="badge bg-success">Deferido</span>
+                                        {% elif recurso.status == 'indeferido' %}
+                                            <span class="badge bg-danger">Indeferido</span>
+                                        {% else %}
+                                            <span class="badge bg-secondary">{{ recurso.status }}</span>
+                                        {% endif %}
+                                    </td>
+                                    <td>
+                                        <div class="action-buttons">
+                                            <button class="btn btn-sm btn-outline-primary" title="Ver Detalhes" data-bs-toggle="modal" data-bs-target="#detalhesRecursoModal" onclick="abrirDetalhesRecurso(this)">
+                                                <i class="bi bi-eye"></i> Ver Detalhes
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            {% else %}
+                                <tr>
+                                    <td colspan="6" class="text-center py-5">
+                                        <i class="bi bi-inbox" style="font-size: 3rem; color: #ccc;"></i>
+                                        <p class="text-muted mt-3 mb-0">Nenhum recurso encontrado</p>
+                                        <small class="text-muted">Os recursos aparecerão aqui quando os alunos os enviarem</small>
+                                    </td>
+                                </tr>
+                            {% endif %}
                         </tbody>
                     </table>
                 </div>
