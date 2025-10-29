@@ -2,12 +2,13 @@ fastapi[standard]
 uvicorn[standard]
 jinja2
 python-multipart
-passlib[bcrypt]
+passlib[bcrypt]==1.7.4
+bcrypt>=3.2.0,<4.0.0
 python-jose[cryptography]
 itsdangerous
 pydantic>=2.0.0
 email-validator>=2.0.0
-
+resend
 # Dependências de teste
 pytest
 pytest-asyncio

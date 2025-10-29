@@ -9,6 +9,7 @@ from dtos.login_dto import LoginDTO
 from model.aluno_model import Aluno
 from model.usuario_model import Usuario
 from repo import aluno_repo, usuario_repo
+from util.email_service import email_service
 from util.auth_decorator import criar_sessao
 from util.security import criar_hash_senha, verificar_senha
 
@@ -192,7 +193,8 @@ async def processar_cadastro(
 
         # Processar cadastro
         id_aluno = aluno_repo.inserir(usuario)
-
+        #enviar email de boas vindas
+        email_service.enviar_boas_vindas(para_email=dados.email, para_nome=dados.nome)
         # Sucesso - Redirecionar com mensagem flash
         return templates.TemplateResponse(
         "publicas/cadastro.html",
