@@ -1,6 +1,10 @@
 import os
-import resend
 from typing import Optional
+
+try:
+    import resend
+except ImportError:
+    resend = None
 
 class EmailService:
     def __init__(self):
@@ -9,7 +13,7 @@ class EmailService:
         self.from_name = os.getenv('RESEND_FROM_NAME', 'SCAE')
 
         # Configura a API key do Resend
-        if self.api_key:
+        if self.api_key and resend is not None:
             resend.api_key = self.api_key
 
     def enviar_email(
@@ -21,6 +25,10 @@ class EmailService:
         texto: Optional[str] = None
     ) -> bool:
         """Envia e-mail via Resend.com"""
+        if resend is None:
+            print("Biblioteca 'resend' não instalada")
+            return False
+
         if not self.api_key:
             print("RESEND_API_KEY não configurada")
             return False
