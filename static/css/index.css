@@ -307,23 +307,30 @@ body {
 
 /* Estilos para o logo rotativo */
 .logo-rotativa {
+    --rotation: 0deg;
     animation: float 6s ease-in-out infinite;
     max-width: 100%;
     height: auto;
     width: 600px;
     display: block;
     margin: 0 auto;
+    will-change: transform;
+    transform: rotate(var(--rotation));
+}
+
+.logo-rotativa.scrolling {
+    animation: none;
 }
 
 @keyframes float {
     0% {
-        transform: translateY(0px);
+        transform: rotate(var(--rotation)) translateY(0px);
     }
     50% {
-        transform: translateY(-15px);
+        transform: rotate(var(--rotation)) translateY(-15px);
     }
     100% {
-        transform: translateY(0px);
+        transform: rotate(var(--rotation)) translateY(0px);
     }
 }
 

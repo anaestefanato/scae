@@ -60,7 +60,26 @@ body {
 }
 
 .logo-rotativa {
+    --rotation: 0deg;
     animation: float 6s ease-in-out infinite;
+    will-change: transform;
+    transform: rotate(var(--rotation));
+}
+
+.logo-rotativa.scrolling {
+    animation: none;
+}
+
+@keyframes float {
+    0% {
+        transform: rotate(var(--rotation)) translateY(0px);
+    }
+    50% {
+        transform: rotate(var(--rotation)) translateY(-15px);
+    }
+    100% {
+        transform: rotate(var(--rotation)) translateY(0px);
+    }
 }
 
 .wave-container {

@@ -57,11 +57,29 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 
-        window.addEventListener('scroll', function () {
-        const logo = document.querySelector('.logo-rotativa');
-        if (logo) {
-            const rotation = window.scrollY / 5; 
-            logo.style.transform = `rotate(${rotation}deg)`;
+    let scrollTimeout;
+    let ticking = false;
+    
+    window.addEventListener('scroll', function () {
+        if (!ticking) {
+            window.requestAnimationFrame(function() {
+                const logo = document.querySelector('.logo-rotativa');
+                if (logo) {
+                    const rotation = window.scrollY / 5;
+                    logo.style.setProperty('--rotation', `${rotation}deg`);
+                    
+                    // Adiciona classe durante scroll
+                    logo.classList.add('scrolling');
+                    
+                    // Remove classe após parar de rolar
+                    clearTimeout(scrollTimeout);
+                    scrollTimeout = setTimeout(() => {
+                        logo.classList.remove('scrolling');
+                    }, 150);
+                }
+                ticking = false;
+            });
+            ticking = true;
         }
     });
 });
